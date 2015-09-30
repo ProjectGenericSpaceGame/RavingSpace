@@ -1,7 +1,7 @@
 function update(){
 	ship.body.mass = 0.7;
 	ship.body.damping = 0.7;
-	
+	//pyörittää asteroideja
 	var suunta = 0;
 	asteroids.forEach(function(item){
 		if (suunta == 0){
@@ -18,6 +18,7 @@ function update(){
 	});
 	
 	//calculate deg
+	//otetaan huomioon kameran ja kentän koon erotus
 	if(ship.body.y <= 400){
 		Ycoord = (ship.body.y)-game.input.mousePointer.y;
 	} 
@@ -36,6 +37,7 @@ function update(){
     var X2 = Xcoord*Xcoord;
     var Y2 = Ycoord*Ycoord;
     var YX2 = X2+Y2;
+	//Yksikköympyrä arvoja joihin lisätään tarvittaessa edelliset
     switch(true){
     case (Xcoord > 0 && Ycoord > 0):
         deg = Math.atan(Ycoord/Xcoord);
@@ -65,8 +67,8 @@ function update(){
 	}
 	shipRot = ship.body.rotation;
 	console.log(ship.body.rotation);
-	//ship.body.rotation = (2*pi-deg)+(pi/2);
 	console.log(shipRot+"####"+deg+"###"+(2*pi-deg));
+	//Pyöristetään
 	corDeg = Math.round(((2*pi-deg)+(pi/2))*10)/10;
 	corRot = Math.round(ship.body.rotation*10)/10;
 	if(corDeg == 7.9){
@@ -78,20 +80,18 @@ function update(){
 			IntMouseTrack = corDeg; //Tallennetaan se kulma missä hiiren liike vaihtaa suuntaa
 	}
 	
-	//if(!((corDeg > corRot+(pi/2)||corDeg < corRot-(pi/2)) && moving == true)){
-		//if(!(direct == "left" && corRot < 3 && corDeg > corRot+1 && corDeg > degWas)){
-		if(corDeg > degWas && !(degWas < 2 && corDeg > 7.5 )){
-			direct = "right";
-		}
-		else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 2)){
-			direct = "left";
-		} 
+	if(corDeg > degWas && !(degWas < 2 && corDeg > 7.5 )){
+		direct = "right";
+	}
+	else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 2)){
+		direct = "left";
+	} 
 		
-		if(IntMouseTrack != -1 && corDeg > corRot && corDeg <= IntMouseTrack){
-			direct = "right";
-		} else if(IntMouseTrack != -1 && corDeg < corRot && corDeg >= IntMouseTrack){
-			direct = "left";
-		} 
+	if(IntMouseTrack != -1 && corDeg > corRot && corDeg <= IntMouseTrack){
+		direct = "right";
+	} else if(IntMouseTrack != -1 && corDeg < corRot && corDeg >= IntMouseTrack){
+		direct = "left";
+	} 
 	
 	//mikäli aluksen kulma on tavoitellussa pisteessä
 	if(corRot == corDeg){
@@ -134,6 +134,8 @@ function update(){
     if (cursors.up.isDown)
     {
         ship.body.thrust(250);
+		shipTrail.emitParticle();
+		shipTrail.emitParticle();
     }
     else if (cursors.down.isDown)
     {

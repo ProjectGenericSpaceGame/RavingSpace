@@ -8,4 +8,8 @@ function preload(){
     game.load.image('asteroid3', 'assets/sprites/VS_peli_asteroid3.png');
 	//Ladataan alus
 	game.load.image('ship', 'assets/sprites/VS_peli_ship.png');
+	//Ladataan trail-partikkelit
+	game.load.image('trail1', 'assets/particles/VS_peli_trail1.png');
+	game.load.image('trail2', 'assets/particles/VS_peli_trail2.png');
+	game.load.image('trail4', 'assets/particles/VS_peli_trail4.png');
 }

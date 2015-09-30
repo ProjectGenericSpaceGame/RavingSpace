@@ -28,3 +28,4 @@ var execTime;
 var IntMouseTrack = -1;
 var moving = false;
 var genRand;
+var shipTrail;

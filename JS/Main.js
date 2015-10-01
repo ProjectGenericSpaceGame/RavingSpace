@@ -24,7 +24,7 @@ var direct;
 var corRot;
 var corDeg;
 var flipped = false;
-var execTime;
+var execTime = 0;
 var IntMouseTrack = -1;
 var moving = false;
 var genRand;

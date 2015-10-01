@@ -1,4 +1,7 @@
 function update(){
+	
+	var benchmark = perfomance.now();
+	
 	ship.body.mass = 0.7;
 	ship.body.damping = 0.7;
 	//pyörittää asteroideja
@@ -148,5 +151,7 @@ function update(){
 	else if(cursors.right.isDown){
 		ship.body.applyForce([-Math.cos(ship.body.rotation)*10,-Math.sin(ship.body.rotation)*10],0,0);
 	}
-
+	
+	var benchmark2 = perfomance.now();
+	execTime = benchmark2-benchmark;
 }

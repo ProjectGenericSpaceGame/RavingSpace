@@ -1,6 +1,6 @@
 function update(){
 	
-	var benchmark = perfomance.now();
+	var benchmark = performance.now();
 	
 	ship.body.mass = 0.7;
 	ship.body.damping = 0.7;
@@ -152,6 +152,6 @@ function update(){
 		ship.body.applyForce([-Math.cos(ship.body.rotation)*10,-Math.sin(ship.body.rotation)*10],0,0);
 	}
 	
-	var benchmark2 = perfomance.now();
+	var benchmark2 = performance.now();
 	execTime = benchmark2-benchmark;
 }

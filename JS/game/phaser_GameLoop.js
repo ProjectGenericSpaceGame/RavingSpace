@@ -20,6 +20,9 @@ function update(){
 		
 	});
 	
+	//Calculate needed randoms
+	
+	var randNumbers = randNumber(); // Funktio palauttaa kaksi random numeroa taulukossa
 	//calculate deg
 	//otetaan huomioon kameran ja kentän koon erotus
 	if(ship.body.y <= 400){

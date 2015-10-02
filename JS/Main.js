@@ -29,3 +29,41 @@ var IntMouseTrack = -1;
 var moving = false;
 var genRand;
 var shipTrail;
+var lap;
+
+function randNumber(){
+		var randNumbers =[]; // [0] vihollinen , [1] vihollisen spawninopeus
+		var x = 0;
+	    var y = 0;
+	
+		switch(lap) {
+		case 1: do {
+			x = Math.round(Math.random() * 100) /10;
+		} while( x <= 1.0 || x >= 5.9 ); 
+			break;
+		
+		case 2: do {
+			x = Math.round(Math.random() * 100) /10;
+		} while( x <= 1.0 || x >= 4.9 ); 
+			break; 
+		
+		case 3: do {
+			x = Math.round(Math.random() * 100) /10;
+		} while( x <= 1.0 || x >= 3.9 ); 
+			break;
+		};
+	
+		randNumbers[1] = x; 
+	 
+	 // Generoi randomilla vihollisen väliltä 1 -3 
+	 do {
+		 y = Math.floor((Math.random() * 10) + 1);
+	 } while(
+		y != 1 &&
+		y != 2 &&
+		y != 3 
+	 );
+	 randNumbers[0] = y; 
+	 console.log(randNumbers[0], randNumbers[1]);
+	 return randNumbers; 
+}

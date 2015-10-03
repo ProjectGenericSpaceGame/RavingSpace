@@ -9,6 +9,10 @@ menu.stop;
 //globaalit muuttujat
 var asteroids;
 var ship;
+var enemies;
+var enemy1;
+var enemy2;
+var enemy3;
 var cursors;
 var bg;
 var Ycoord;
@@ -29,7 +33,12 @@ var IntMouseTrack = -1;
 var moving = false;
 var genRand;
 var shipTrail;
-var lap;
+var lap = 1;
+var spawnNext = "undefined";
+var waiter;
+//Väliaikaiset demomuuttujat
+//Nämä ovat esimerkiksi tietokannasta tulevia arvoja ennen kuin itse tietokantaa on tehty
+var attackInfo = "231509'302112'352713"; //jaetaan kahden sarjoihin ja kuuden sarjoihin, 23, 15, 09|30,21,12|35,27,13
 
 function randNumber(){
 		var randNumbers =[]; // [0] vihollinen , [1] vihollisen spawninopeus
@@ -67,3 +76,18 @@ function randNumber(){
 	 console.log(randNumbers[0], randNumbers[1]);
 	 return randNumbers; 
 }
+//Luodaan uusi vihollinen ja tarkistetaan onko kierros loppu
+function spawnEnemy(randNumbers){
+	if(enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false)!= null){//jos poolissa on vielä aluksia
+		enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false).reset((ship.body.x+100),ship.body.y);
+	}
+	if(enemy1.length == 0 && enemy2.length == 0 && enemy2.length == 0) //jos kaikki viholliset on tuhottu (peli käyttää destroyta)
+	{
+		lap++;
+		enemy1 = enemies.getChildAt(lap-1).getChildAt(0);//tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
+		enemy2 = enemies.getChildAt(lap-1).getChildAt(1);
+		enemy3 = enemies.getChildAt(lap-1).getChildAt(2);
+	}
+	spawnNext = true;
+}
+

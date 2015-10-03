@@ -20,9 +20,6 @@ function update(){
 		
 	});
 	
-	//Calculate needed randoms
-	
-	var randNumbers = randNumber(); // Funktio palauttaa kaksi random numeroa taulukossa
 	//calculate deg
 	//otetaan huomioon kameran ja kentän koon erotus
 	if(ship.body.y <= 400){
@@ -134,14 +131,16 @@ function update(){
 	degWas = corDeg;
 	lastRot = Math.round(ship.body.rotation*100)/100;
 	
-	text.text = String(IntMouseTrack+"+"+direct+"+"+corDeg+"+"+flipped);
+	text.text = String(IntMouseTrack+"+"+direct+"+"+corDeg+"+"+flipped+"+"+lap);
 	
 	//cursors
     if (cursors.up.isDown)
     {
         ship.body.thrust(250);
-		shipTrail.emitParticle();
-		shipTrail.emitParticle();
+		shipTrail.forEach(function(em){
+		em.emitParticle();
+		em.emitParticle();
+		});
     }
     else if (cursors.down.isDown)
     {
@@ -154,6 +153,21 @@ function update(){
 	else if(cursors.right.isDown){
 		ship.body.applyForce([-Math.cos(ship.body.rotation)*10,-Math.sin(ship.body.rotation)*10],0,0);
 	}
+	
+	//Hyökkäyksen hallinta
+	//alert(enemy1.countLiving);
+	if (spawnNext == true || spawnNext == "undefined"){
+		var randNumbers = randNumber();
+		waiter = game.time.create();
+		waiter.add((randNumbers[1]*1000),function(){
+			spawnEnemy(randNumbers);
+		},this);
+		waiter.start();
+		spawnNext = false;
+	}
+	
+	
+	
 	
 	var benchmark2 = performance.now();
 	execTime = benchmark2-benchmark;

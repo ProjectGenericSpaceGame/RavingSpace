@@ -9,6 +9,9 @@ menu.stop;
 //globaalit muuttujat
 var asteroids;
 var ship;
+var bullets;
+var fireRate = 150;
+var nextFire = 0;
 var enemies;
 var enemy1;
 var enemy2;
@@ -76,6 +79,23 @@ function randNumber(){
 	 console.log(randNumbers[0], randNumbers[1]);
 	 return randNumbers; 
 }
+
+//Ampumisfunktio
+function fire() {
+
+    if (game.time.now > nextFire && bullets.countDead() > 0)
+    {
+        nextFire = game.time.now + fireRate;
+
+        var bullet = bullets.getFirstExists(false);
+
+        bullet.reset(ship.x, ship.y);
+
+        game.physics.arcade.moveToPointer(bullet, 700);
+    }
+
+}
+
 //Luodaan uusi vihollinen ja tarkistetaan onko kierros loppu
 function spawnEnemy(randNumbers){
 	if(enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false)!= null){//jos poolissa on vielä aluksia

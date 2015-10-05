@@ -1,5 +1,6 @@
 function create(){
 	game.physics.startSystem(Phaser.Physics.P2JS);
+    game.physics.startSystem(Phaser.Physics.ARCADE);
 	
 	bg = game.add.sprite(0, 0, 'background');
 	bg.scale.setTo(1,1.1);
@@ -34,6 +35,16 @@ function create(){
 	});
 	ship.addChild(shipTrail);
 	
+    // luodaan aluksen ammusryhmä
+    bullets = game.add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    bullets.createMultiple(50, 'bullet', 0, false);
+    bullets.setAll('anchor.x', 0.5);
+    bullets.setAll('anchor.y', 0.5);
+    bullets.setAll('outOfBoundsKill', true);
+    bullets.setAll('checkWorldBounds', true);
+    
 	//käsitellään hyökkäystieto
 	attackInfo = attackInfo.split("'");
 	

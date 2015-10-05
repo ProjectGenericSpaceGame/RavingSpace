@@ -15,4 +15,6 @@ function preload(){
 	//Ladataan trail-partikkelit
 	game.load.image('trail6', 'assets/particles/VS_peli_trail6.png');
 	game.load.image('trail7', 'assets/particles/VS_peli_trail7.png');
+    //ladataan ammus
+    game.load.image('bullet', 'assets/sprites/bullet.png');
 }

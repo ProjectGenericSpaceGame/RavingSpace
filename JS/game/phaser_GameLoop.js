@@ -153,6 +153,11 @@ function update(){
 	else if(cursors.right.isDown){
 		ship.body.applyForce([-Math.cos(ship.body.rotation)*10,-Math.sin(ship.body.rotation)*10],0,0);
 	}
+    //ampuminen
+    if (game.input.activePointer.isDown)
+    {
+        fire();
+    }
 	
 	//Hyökkäyksen hallinta
 	//alert(enemy1.countLiving);

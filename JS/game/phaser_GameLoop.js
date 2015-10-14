@@ -7,6 +7,7 @@ var mainGame = function(game){
 	execTime = 0;
 	spawnNext = "undefined";
     waiter = null;
+	lastRot = 0;
 };
 mainGame.prototype = {
 	//Latausvaiheessa alustetut muuttujat tuodaan tähän 
@@ -32,7 +33,9 @@ mainGame.prototype = {
 		this.direct = "";
 		this.flipped = false;
 		this.IntMouseTrack = -1;
-		this.moving = false;
+		this.moving = "";
+
+		this.fixed = false;//dedug, to be removed
 		
 	},
 	create: function(){
@@ -113,13 +116,14 @@ mainGame.prototype = {
 		//rotation arvo yli ~7.8 tai alle ~-7.8
 		if(this.ship.body.rotation > 2*pi+(pi/2) || this.ship.body.rotation < -1*((2*pi)+(pi/2))){
 			this.ship.body.rotation = pi/2;
-			this.flipped = true;
+			//this.flipped = true;
 			//console.log("nollattu"+(2*pi));
 		}//mikäli raja-arvojen sisällä mutta negatiivinen 
 		else if(this.ship.body.rotation < pi/2){
 			this.ship.body.rotation = 2*pi-(this.ship.body.rotation*-1); 
-			this.flipped = true;
+			//this.flipped = true;
 		}
+
 		var shipRot = this.ship.body.rotation;
 		//console.log(this.ship.body.rotation);
 		//console.log(shipRot+"####"+deg+"###"+(2*pi-deg));
@@ -129,7 +133,11 @@ mainGame.prototype = {
 		if(corDeg == 7.9){
 			corDeg -= 0.1;
 		}
-		
+		if((corDeg >= 7 && degWas <= 2.4) || (corDeg <= 2.4&& degWas >= 7))
+		{
+			this.flipped = true;
+		}
+
 		//tutkitaan hiiren liikkeen suuntaa
 		if(((corDeg < degWas && this.direct == "right")
 				||(corDeg > degWas && this.direct == "left"))
@@ -149,18 +157,15 @@ mainGame.prototype = {
 		//
 		if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg <= this.IntMouseTrack){
 			this.direct = "right";
+			this.fixed = "normal fix";
 		} else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg >= this.IntMouseTrack){
 			this.direct = "left";
-		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && flipped == true){
+			this.fixed = "normal fix";
+		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && this.flipped == true){
 			this.direct = "right";
-			if(){
-
-			}
-		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && flipped == true){
-			this.direct = "left";
-			if(){
-
-			}
+			this.fixed = "flip fix";
+		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && this.flipped == true){
+			this.fixed = "normal fix";
 		}
 
 		//mikäli aluksen kulma on tavoitellussa pisteessä
@@ -169,23 +174,23 @@ mainGame.prototype = {
 			this.moving = false;
 		}
 		//Mikäli hiiri ei ole liikkeessä mutta ei myöskään tavoitteessa
-		else if(corRot != corDeg){
-			if(this.direct == "right"){
-				for(var i = 0;i<=3;i++){
-					if(corRot != corDeg){
+		else if(corRot != corDeg) {
+			if (this.direct == "right") {
+				for (var i = 0; i <= 3; i++) {
+					if (corRot != corDeg) {
 						//console.log("runned"+i);
-						this.ship.body.rotation = corRot+0.1;
+						this.ship.body.rotation = corRot + 0.1;
 					}
 					else {
 						break;
 					}
 				}
-			} 
-			else if (this.direct == "left"){
-				for(var i = 0;i<=3;i++){
-					if(corRot != corDeg){
+			}
+			else if (this.direct == "left") {
+				for (var i = 0; i <= 3; i++) {
+					if (corRot != corDeg) {
 						//console.log("runned"+i);
-						this.ship.body.rotation = corRot-0.1;
+						this.ship.body.rotation = corRot - 0.1;
 					}
 					else {
 						break;
@@ -193,12 +198,18 @@ mainGame.prototype = {
 				}
 			}
 		}
-		
+
+		if(corRot <= 7.8 && lastRot <= 2.4){
+			this.flipped = false;
+		}
+		if(corRot >= 1.6 && lastRot >= 7.0){
+			this.flipped = false;
+		}
 		//console.log(corRot+"...."+corDeg);
 		degWas = corDeg;
 		lastRot = Math.round(this.ship.body.rotation*100)/100;
 		
-		text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap);
+		text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+this.fixed);
 		text2.text = String(this.enemyAmount+"+"+this.spawnPool+"+"+this.attackInfo);
 		//cursors
 		if (this.cursors.up.isDown)

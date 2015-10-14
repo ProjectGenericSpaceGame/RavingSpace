@@ -1,7 +1,7 @@
 /**
  * Created by RAndom MC on 14/10/2015.
  */
-var settingsSubMenu = {
+var settingsSubMenu = function(game){
 
 };
 settingsSubMenu.prototype = {

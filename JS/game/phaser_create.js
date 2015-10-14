@@ -148,7 +148,7 @@ gameLoad.prototype = {
 			 this.attackInfo,
 			 enemyAmount,
 			 spawnPool,
-                         this.lap
+             this.lap
 		);
 	}
 };

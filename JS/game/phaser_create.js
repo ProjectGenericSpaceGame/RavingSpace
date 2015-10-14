@@ -10,7 +10,7 @@
 	var cursors;//
 	var bg;//
 	var text;
-        var text;
+	 var text2;
 	var shipTrail;//
 	//attackInfo = "031509'302112'352713"; //jaetaan kahden sarjoihin ja kuuden sarjoihin, 23, 15, 09|30,21,12|35,27,13
 };

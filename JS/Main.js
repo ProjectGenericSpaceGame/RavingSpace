@@ -2,15 +2,12 @@
 var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
 //Kommentoitu että käynnistää pelin demolua varten
 //game.stop();
-//Päävalikko
-var menu = new Phaser.Game(1280, 800, Phaser.AUTO, '', { preload: menu_preload, create: menu_create, update: menu_update });
-//Ettei aja päävalikkoa demoiluaikana
-menu.stop;
+
 
 //game.add.state("menuLoad", menuLoad);
 //game.add.state("mainMenu", mainMenu);
 //game.add.state("customMenu", customMenu);
-//game.add.state("settings", settings);
+//game.add.state("settings", settingsSubMenu);
 game.state.add("gameLoad", gameLoad);
 game.state.add("mainGame", mainGame);
 

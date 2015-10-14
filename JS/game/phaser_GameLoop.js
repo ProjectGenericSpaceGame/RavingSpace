@@ -26,13 +26,13 @@ mainGame.prototype = {
 		this.attackInfo = attackInfo;
 		this.enemyAmount = enemyAmount;
 		this.spawnPool = spawnPool;
-                this.lap = lap;
-                //Loput muuttujat
-                this.fireRate = 450;
-                this.direct = "";
-                this.flipped = false;
-                this.IntMouseTrack = -1;
-                this.moving = false;
+		this.lap = lap;
+		//Loput muuttujat
+		this.fireRate = 450;
+		this.direct = "";
+		this.flipped = false;
+		this.IntMouseTrack = -1;
+		this.moving = false;
 		
 	},
 	create: function(){
@@ -66,10 +66,10 @@ mainGame.prototype = {
 			}
 			
 		});
-		
+		//tutkii onko panoksia osumassa vihollisiin
 		this.game.physics.arcade.overlap(this.bullets, this.enemy1, hitDetector, null, this);
-                this.game.physics.arcade.overlap(this.bullets, this.enemy2, hitDetector, null, this);
-                this.game.physics.arcade.overlap(this.bullets, this.enemy3, hitDetector, null, this);
+		this.game.physics.arcade.overlap(this.bullets, this.enemy2, hitDetector, null, this);
+		this.game.physics.arcade.overlap(this.bullets, this.enemy3, hitDetector, null, this);
 		var Ycoord;
                 var Xcoord;
 		//calculate deg

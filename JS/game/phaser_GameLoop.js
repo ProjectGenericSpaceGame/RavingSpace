@@ -124,15 +124,20 @@ mainGame.prototype = {
 		//console.log(this.ship.body.rotation);
 		//console.log(shipRot+"####"+deg+"###"+(2*pi-deg));
 		//Pyöristetään
-		var corDeg = Math.round(((2*pi-deg)+(pi/2))*10)/10;
-		var corRot = Math.round(this.ship.body.rotation*10)/10;
+		var corDeg = Math.round(((2*pi-deg)+(pi/2))*10)/10;//hiiren arvo
+		var corRot = Math.round(this.ship.body.rotation*10)/10;//aluksen arvo
 		if(corDeg == 7.9){
 			corDeg -= 0.1;
 		}
 		
 		//tutkitaan hiiren liikkeen suuntaa
-		if(((corDeg < degWas && this.direct == "right")||(corDeg > degWas && this.direct == "left"))&& !((degWas > 7.5 && corDeg < 2)||(degWas < 2 && corDeg > 7.5))){
-				this.IntMouseTrack = corDeg; //Tallennetaan se kulma missä hiiren liike vaihtaa suuntaa
+		if(((corDeg < degWas && this.direct == "right")
+				||(corDeg > degWas && this.direct == "left"))
+			&& !((degWas > 7.5 && corDeg < 2)
+				||(degWas < 2 && corDeg > 7.5)))
+		{
+					//Tallennetaan se kulma missä hiiren liike vaihtaa suuntaa
+					this.IntMouseTrack = corDeg;
 		}
 		
 		if(corDeg > degWas && !(degWas < 2 && corDeg > 7.5 )){
@@ -141,13 +146,23 @@ mainGame.prototype = {
 		else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 2)){
 			this.direct = "left";
 		} 
-			
+		//
 		if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg <= this.IntMouseTrack){
 			this.direct = "right";
 		} else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg >= this.IntMouseTrack){
 			this.direct = "left";
-		} 
-		
+		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && flipped == true){
+			this.direct = "right";
+			if(){
+
+			}
+		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && flipped == true){
+			this.direct = "left";
+			if(){
+
+			}
+		}
+
 		//mikäli aluksen kulma on tavoitellussa pisteessä
 		if(corRot == corDeg){
 			this.ship.body.setZeroRotation();

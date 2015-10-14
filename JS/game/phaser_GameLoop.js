@@ -153,14 +153,10 @@ mainGame.prototype = {
 			this.direct = "left";
 		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && flipped == true){
 			this.direct = "right";
-			if(){
-
-			}
+			
 		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && flipped == true){
 			this.direct = "left";
-			if(){
-
-			}
+			
 		}
 
 		//mikäli aluksen kulma on tavoitellussa pisteessä

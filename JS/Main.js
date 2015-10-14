@@ -3,15 +3,15 @@ var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
 //Kommentoitu että käynnistää pelin demolua varten
 //game.stop();
 
-
-//game.add.state("menuLoad", menuLoad);
-//game.add.state("mainMenu", mainMenu);
+game.state.add('mainMenu', mainMenu);
+game.state.add('menuLoad', menuLoad);
 //game.add.state("customMenu", customMenu);
 //game.add.state("settings", settingsSubMenu);
-game.state.add("gameLoad", gameLoad);
-game.state.add("mainGame", mainGame);
+game.state.add('gameLoad', gameLoad);
+game.state.add('mainGame', mainGame);
 
-game.state.start("gameLoad");
+game.state.start('menuLoad');
+// game.state.start("gameLoad");
 /*
 //globaalit muuttujat
 var asteroids;

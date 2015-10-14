@@ -164,10 +164,9 @@ mainGame.prototype = {
 		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && this.flipped == true){
 			this.direct = "right";
 			this.fixed = "flip fix";
-		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && this.flipped == true){
+		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && this.flipped == true) {
 			this.fixed = "normal fix";
 		}
-
 		//mikäli aluksen kulma on tavoitellussa pisteessä
 		if(corRot == corDeg){
 			this.ship.body.setZeroRotation();

@@ -133,19 +133,20 @@ mainGame.prototype = {
 		if(corDeg == 7.9){
 			corDeg -= 0.1;
 		}
-		if((corDeg >= 7 && degWas <= 2.4) || (corDeg <= 2.4&& degWas >= 7))
-		{
+		if((corDeg >= 6 && degWas <= 3.0) || (corDeg <= 3 && degWas >= 6))
 			this.flipped = true;
 		}
 
 		//tutkitaan hiiren liikkeen suuntaa
 		if(((corDeg < degWas && this.direct == "right")
 				||(corDeg > degWas && this.direct == "left"))
-			&& !((degWas > 7.5 && corDeg < 2)
-				||(degWas < 2 && corDeg > 7.5)))
+			&& !((degWas > 6.0 && corDeg < 3.0)
+				||(degWas < 3.0 && corDeg > 6.0))
+            && this.flipped != true
+        )
 		{
-					//Tallennetaan se kulma missä hiiren liike vaihtaa suuntaa
-					this.IntMouseTrack = corDeg;
+            //Tallennetaan se kulma missä hiiren liike vaihtaa suuntaa
+            this.IntMouseTrack = corDeg;
 		}
 		
 		if(corDeg > degWas && !(degWas < 2 && corDeg > 7.5 )){
@@ -154,18 +155,19 @@ mainGame.prototype = {
 		else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 2)){
 			this.direct = "left";
 		} 
-		//
-		if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg <= this.IntMouseTrack){
+		//Tämä korjaa direct muuttujan jos nykyisellä suunnalla on lyhyempi matka kohteeseen kuin vaihtamalla suuntaa
+		if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg <= this.IntMouseTrack && this.flipped == false){
 			this.direct = "right";
 			this.fixed = "normal fix";
-		} else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg >= this.IntMouseTrack){
+		} else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg >= this.IntMouseTrack && this.flipped == false){
 			this.direct = "left";
 			this.fixed = "normal fix";
-		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && this.flipped == true){
+		}  else if(this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && this.flipped == true && this.direct == "left"){
 			this.direct = "right";
 			this.fixed = "flip fix";
-		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && this.flipped == true) {
-			this.fixed = "normal fix";
+		}  else if(this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && this.flipped == true && this.direct == "right") {
+			this.direct = "left";
+			this.fixed = "flip fix";
 		}
 		//mikäli aluksen kulma on tavoitellussa pisteessä
 		if(corRot == corDeg){
@@ -197,19 +199,20 @@ mainGame.prototype = {
 				}
 			}
 		}
+        text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot);
+        text2.text = String(this.enemyAmount+"+"+this.spawnPool+"+"+this.attackInfo);
 
-		if(corRot <= 7.8 && lastRot <= 2.4){
+		if(corRot >= 6.0 && lastRot <= 3.0){
 			this.flipped = false;
 		}
-		if(corRot >= 1.6 && lastRot >= 7.0){
+		if(corRot <= 3.0 && lastRot >= 6.0){
 			this.flipped = false;
 		}
 		//console.log(corRot+"...."+corDeg);
-		degWas = corDeg;
-		lastRot = Math.round(this.ship.body.rotation*100)/100;
+		degWas = (corDeg+1-1);
+		lastRot = Math.round(this.ship.body.rotation*10)/10;
 		
-		text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+this.fixed);
-		text2.text = String(this.enemyAmount+"+"+this.spawnPool+"+"+this.attackInfo);
+
 		//cursors
 		if (this.cursors.up.isDown)
 		{
@@ -269,7 +272,7 @@ mainGame.prototype = {
 				});	
 			});
 		 } 
-		
+		this.fixed = "";
 		
 		
 		

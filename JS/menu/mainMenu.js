@@ -13,10 +13,18 @@ mainMenu.prototype = {
     
     create: function(){
         
-        this.button1 = this.game.add.button(50, 50, 'menuButton', this.start, this, 1, 0, 2);
+        // tästä painikkeesta päästään peliin
+        this.playButton = this.game.add.button(400, 100, 'menuButton', this.startGame, this, 1, 0, 2);
+        //tästä asetuksiin 
+        this.settingsButton = this.game.add.button(400, 250, 'menuButton', this.start, this, 1, 0, 2);
+        // tästä pistetaulukkoon
+        this.scoresButton = this.game.add.button(400, 400, 'menuButton', this.start, this, 1, 0, 2);
+        // tästä kustomointi -valikkoon
+        this.customButton = this.game.add.button(400, 550, 'menuButton', this.start, this, 1, 0, 2);
     },
     
-    start: function(){
+    startGame: function(){
+        // kutsutaan gameLoad -tilaa
         this.game.state.start('gameLoad');
     }
 };

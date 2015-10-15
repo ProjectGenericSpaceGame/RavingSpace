@@ -12,6 +12,7 @@ menuLoad.prototype = {
             this.buttonGroup = game.add.group();
 
             // ladataan valikon elementit
+            this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
             this.game.load.image('menuButton', 'assets/placeholders/buttonplaceholder.png'); 
             this.game.load.image('menuBG', 'assets/sprites/VS_background_purple.png');    
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
@@ -27,7 +28,8 @@ menuLoad.prototype = {
         create: function(){
             
             this.menubg = this.game.add.sprite(0, 0,  'menuBG');
-            this.menubbg = this.game.add.sprite(150, 50,  'menuButtonBG');
+            this.menuheader = this.game.add.sprite(0,0, 'menuHeader');
+            this.menubbg = this.game.add.sprite(150, 100,  'menuButtonBG');
             //kutsutaan menua
             this.game.state.start('mainMenu',false,false,
                 this.playerData,

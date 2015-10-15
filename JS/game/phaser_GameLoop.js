@@ -133,7 +133,7 @@ mainGame.prototype = {
 		if(corDeg == 7.9){
 			corDeg -= 0.1;
 		}
-		if((corDeg >= 6 && degWas <= 3.0) || (corDeg <= 3 && degWas >= 6))
+		if((corDeg >= 6 && degWas <= 3.0) || (corDeg <= 3 && degWas >= 6)){
 			this.flipped = true;
 		}
 

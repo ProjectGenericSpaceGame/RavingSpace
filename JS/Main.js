@@ -5,8 +5,8 @@ var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
 
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
-//game.add.state("customMenu", customMenu);
-//game.add.state("settings", settingsSubMenu);
+//game.state.add("customMenu", customMenu);
+game.state.add("settings", settingsSubMenu);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
 

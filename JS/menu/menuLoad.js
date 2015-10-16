@@ -1,6 +1,5 @@
 // Tämä tiedosto lataa valikon elementit.
 var menuLoad = function(game){
-
 };
 
 menuLoad.prototype = {
@@ -18,11 +17,6 @@ menuLoad.prototype = {
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             game.load.image('menuNext', 'assets/placeholders/next.png');
-            
-            //tänne tulee ajaxia
-            this.playerData = {};//demo
-            //tässä kasataan jutut
-            this.surroundings = "";//demo
         },
   
         create: function(){
@@ -30,11 +24,24 @@ menuLoad.prototype = {
             this.menubg = this.game.add.sprite(0, 0,  'menuBG');
             this.menuheader = this.game.add.sprite(0,0, 'menuHeader');
             this.menubbg = this.game.add.sprite(150, 100,  'menuButtonBG');
+            //tänne tulee ajaxia
+            this.playerData = {};//demo
+            //tässä kasataan jutut
+            var surroundings = {
+                menubg:this.menubg,
+                menuheader:this.menuheader,
+                menubbg:this.menubbg
+            };//demo
+           /* this.surroundings.menubg = this.menubg;
+            this.surroundings.menuheader = this.menuheader;
+            this.surroundings.menubbg = this.menubbg;
+            */
+            this.buttonGroup = this.game.add.group();
             //kutsutaan menua
             this.game.state.start('mainMenu',false,false,
                 this.playerData,
                 this.buttonGroup,
-                this.surroundings
+                surroundings
             );
         }
 

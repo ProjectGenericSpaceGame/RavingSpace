@@ -7,6 +7,8 @@ game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
 //game.state.add("customMenu", customMenu);
 game.state.add("settings", settingsSubMenu);
+game.state.add('scores', scoresSubMenu);
+game.state.add('custom', customSubMenu);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
 

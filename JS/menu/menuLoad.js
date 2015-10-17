@@ -16,7 +16,7 @@ menuLoad.prototype = {
             this.game.load.image('menuBG', 'assets/sprites/VS_background_purple.png');    
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
-            game.load.image('menuNext', 'assets/placeholders/next.png');
+            this.game.load.image('menuNext', 'assets/placeholders/next.png');
         },
   
         create: function(){

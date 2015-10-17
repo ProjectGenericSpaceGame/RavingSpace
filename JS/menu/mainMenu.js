@@ -20,9 +20,9 @@ mainMenu.prototype = {
         //tästä asetuksiin 
         this.settingsButton = this.game.add.button(400, 250, 'menuButton', this.settingsStart, this, 1, 0, 2);
         // tästä pistetaulukkoon
-        this.scoresButton = this.game.add.button(400, 400, 'menuButton', this.start, this, 1, 0, 2);
+        this.scoresButton = this.game.add.button(400, 400, 'menuButton', this.scoresStart, this, 1, 0, 2);
         // tästä kustomointi -valikkoon
-        this.customButton = this.game.add.button(400, 550, 'menuButton', this.start, this, 1, 0, 2);
+        this.customButton = this.game.add.button(400, 550, 'menuButton', this.customStart, this, 1, 0, 2);
 
         this.buttonGroup.add(this.playButton);
         this.buttonGroup.add(this.settingsButton);
@@ -36,6 +36,20 @@ mainMenu.prototype = {
     },
     settingsStart: function(){
         this.game.state.start('settings',false,false,
+            this.playerData,
+            this.buttonGroup,
+            this.surroundings
+        );
+    },
+    scoresStart: function(){
+        this.game.state.start('scores',false,false,
+            this.playerData,
+            this.buttonGroup,
+            this.surroundings
+        );
+    },
+    customStart: function(){
+        this.game.state.start('custom',false,false,
             this.playerData,
             this.buttonGroup,
             this.surroundings

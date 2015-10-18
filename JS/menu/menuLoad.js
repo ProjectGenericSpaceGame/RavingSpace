@@ -23,6 +23,9 @@ menuLoad.prototype = {
             
             this.menubg = this.game.add.sprite(0, 0,  'menuBG');
             this.menuheader = this.game.add.sprite(0,0, 'menuHeader');
+            var logotext = this.game.add.text(550, 20, "Raving Space");
+            this.menuheader.addChild(logotext);
+            
             this.menubbg = this.game.add.sprite(150, 100,  'menuButtonBG');
             //tänne tulee ajaxia
             this.playerData = {};//demo

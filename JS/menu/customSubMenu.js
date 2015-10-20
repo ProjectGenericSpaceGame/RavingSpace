@@ -2,8 +2,10 @@ var customSubMenu = function(game){
 
 };
 customSubMenu.prototype = {
-    init:function(playerData, buttonGroup,surroundings){
+    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
+        this.globalScores = globalScores;
+        this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
         
@@ -22,10 +24,14 @@ customSubMenu.prototype = {
         this.shopButton = this.game.add.button(650, 350, 'menuButton', this.shopStart, this, 1, 0, 2);
         var text2 = this.game.add.text(150,50,"Shop");
         this.shopButton.addChild(text2);
-        // tästä painikkeesta päästään takaisin päävalikkoon
-        this.backButton = this.game.add.button(150, 600, 'menuButton', this.back, this, 1, 0, 2);
-        var text3 = this.game.add.text(150,50,"Back");
-        this.backButton.addChild(text3);
+
+        //alustetaan takaisin nappula
+        var style = { font:'25px calibri', fill:'black'};
+        this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
+        this.backButton.scale.setTo(0.08, 0.5);
+        var backText = this.game.add.text(400,20,"Back",style);
+        this.backButton.addChild(backText);
+        this.backButton.getChildAt(0).scale.setTo(10, 1.5);
 
         this.buttonGroup.add(this.wavesButton);
         this.buttonGroup.add(this.shopButton);
@@ -34,6 +40,8 @@ customSubMenu.prototype = {
     back:function(){
         this.game.state.start('mainMenu',false,false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
         );
@@ -41,6 +49,8 @@ customSubMenu.prototype = {
     shopStart:function(){
         this.game.state.start('shopMenu' ,false, false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
            

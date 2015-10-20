@@ -38,24 +38,34 @@ menuLoad.prototype = {
             
             this.menubbg = this.game.add.sprite(150, 100,  'menuButtonBG');
              this.menubbg.tint = 0x858585;
+            //alustetaan valikon otsikko ja viiva
+            this.menuLabel = this.game.add.text(600, 120, '');
+            this.menuLabel.fill = 'white';
+            this.headUnder = this.game.add.sprite(180, 170,  'menuHeader');
+            this.headUnder.scale.setTo(0.7, 0.03);
+
             //tänne tulee ajaxia
             this.playerData = {};//demo
+            this.globalScores = {};//demo
+            this.playerWaves = {}; //demo
             //tässä kasataan jutut
             var surroundings = {
                 menubg:this.menubg,
                 menuheader:this.menuheader,
-                menubbg:this.menubbg
+                menubbg:this.menubbg,
+                menuLabel:this.menuLabel,
+                headUnder:this.headUnder,
+                backButton:this.backButton
             };//demo
-           /* this.surroundings.menubg = this.menubg;
-            this.surroundings.menuheader = this.menuheader;
-            this.surroundings.menubbg = this.menubbg;
-            */
+
             this.buttonGroup = this.game.add.group();
             //kutsutaan menua
             this.game.state.start('mainMenu',false,false,
                 this.playerData,
+                this.globalScores,
+                this.playerWaves,
                 this.buttonGroup,
-                this.surroundings
+                surroundings
             );
         }
 

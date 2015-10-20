@@ -2,8 +2,10 @@ var scoresSubMenu = function(game){
 
 };
 scoresSubMenu.prototype = {
-    init:function(playerData, buttonGroup,surroundings){
+    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
+        this.globalScores = globalScores;
+        this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
     },
@@ -33,11 +35,14 @@ scoresSubMenu.prototype = {
         this.checkscoresButton = this.game.add.button(150, 450, 'menuButton', this.checkscoresStart, this, 1, 0, 2);
         var text2 = this.game.add.text(100,50,"Check own scores");
         this.checkscoresButton.addChild(text2);
-        
-        // tästä painikkeesta pääsee takaisin päävalikkoon
-        this.backButton = this.game.add.button(150, 600, 'menuButton', this.back, this, 1, 0, 2);
-        var text3 = this.game.add.text(150,50,"Back");
-        this.backButton.addChild(text3);
+
+        //alustetaan takaisin nappula
+        var style = { font:'25px calibri', fill:'black'};
+        this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
+        this.backButton.scale.setTo(0.08, 0.5);
+        var backText = this.game.add.text(400,20,"Back",style);
+        this.backButton.addChild(backText);
+        this.backButton.getChildAt(0).scale.setTo(10, 1.5);
 
         this.buttonGroup.add(this.highscoresButton);
         this.buttonGroup.add(this.finduButton);
@@ -50,6 +55,8 @@ scoresSubMenu.prototype = {
     back:function(){
         this.game.state.start('mainMenu',false,false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
         );

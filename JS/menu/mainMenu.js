@@ -5,8 +5,10 @@ var mainMenu = function(game){
 
 mainMenu.prototype = {
     
-    init:function(playerData,buttonGroup,surroundings){
+    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
+        this.globalScores = globalScores;
+        this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
         
@@ -16,6 +18,8 @@ mainMenu.prototype = {
         var self = this;
         //do some murdering
         this.buttonGroup.removeAll();
+
+
         // tästä painikkeesta päästään peliin
         this.playButton = this.game.add.button(425, 100, 'menuButton', this.startGame, this, 1, 0, 2);
         var playLabel = this.game.add.text(150,50,"Play");
@@ -46,6 +50,8 @@ mainMenu.prototype = {
     settingsStart: function(){
         this.game.state.start('settings',false,false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
         );
@@ -53,6 +59,8 @@ mainMenu.prototype = {
     scoresStart: function(){
         this.game.state.start('scores',false,false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
         );
@@ -60,6 +68,8 @@ mainMenu.prototype = {
     customStart: function(){
         this.game.state.start('custom',false,false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
         );

@@ -5,8 +5,10 @@ var settingsSubMenu = function(game){
 
 };
 settingsSubMenu.prototype = {
-    init:function(playerData, buttonGroup,surroundings){
+    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
+        this.globalScores = globalScores;
+        this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
     },
@@ -25,9 +27,14 @@ settingsSubMenu.prototype = {
         var text2 = this.game.add.text(10,10,"Account settings");
         this.accountButton.addChild(text2);
 
-        this.backButton = this.game.add.button(150, 600, 'menuButton', this.back, this, 1, 0, 2);
-        var text3 = this.game.add.text(10,10,"Back");
-        this.backButton.addChild(text3);
+
+        //alustetaan takaisin nappula
+        var style = { font:'25px calibri', fill:'black'};
+        this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
+        this.backButton.scale.setTo(0.08, 0.5);
+        var backText = this.game.add.text(400,20,"Back",style);
+        this.backButton.addChild(backText);
+        this.backButton.getChildAt(0).scale.setTo(10, 1.5);
 
         this.buttonGroup.add(this.soundButton);
         this.buttonGroup.add(this.accountButton);
@@ -42,6 +49,8 @@ settingsSubMenu.prototype = {
     back:function(){
         this.game.state.start('mainMenu',false,false,
             this.playerData,
+            this.globalScores,
+            this.playerWaves,
             this.buttonGroup,
             this.surroundings
         );

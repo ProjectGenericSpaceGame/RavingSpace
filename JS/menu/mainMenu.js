@@ -9,6 +9,7 @@ mainMenu.prototype = {
         this.playerData = playerData;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
+        
     },
     
     create: function(){

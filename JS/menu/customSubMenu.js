@@ -6,6 +6,7 @@ customSubMenu.prototype = {
         this.playerData = playerData;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
+        
     },
     preload:function(){
         //do some murdering here
@@ -35,6 +36,14 @@ customSubMenu.prototype = {
             this.playerData,
             this.buttonGroup,
             this.surroundings
+        );
+    },
+    shopStart:function(){
+        this.game.state.start('shopMenu' ,false, false,
+            this.playerData,
+            this.buttonGroup,
+            this.surroundings
+           
         );
     }
 

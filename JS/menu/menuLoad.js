@@ -29,7 +29,8 @@ menuLoad.prototype = {
         },
   
         create: function(){
-            
+            var self = this;
+
             this.menubg = this.game.add.sprite(0, 0,  'menuBG');
            
             this.menuheader = this.game.add.sprite(0,0, 'menuHeader');
@@ -45,6 +46,30 @@ menuLoad.prototype = {
             this.headUnder.scale.setTo(0.7, 0.03);
 
             //tänne tulee ajaxia
+            //var demoname = "testi1";
+            /* ------>TESTATTU JA TOIMII<------
+            var getFromDB = $.ajax({
+                method:"POST",
+                async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                url:"PHP/SQLcontroller/playerData.php",
+                data:demoname
+            });
+            getFromDB.done(function(returnValue){
+                self.playerData = JSON.parse(returnValue);
+            });
+            getFromDB.fail(function(){alert("database unreachable!")});
+            //
+            getFromDB = $.ajax({
+                method:"POST",
+                async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                url:"PHP/SQLcontroller/playerWaves.php",
+                data:demoname
+            });
+            getFromDB.done(function(returnValue){
+                self.playerWaves = JSON.parse(returnValue);
+            });
+            getFromDB.fail(function(){alert("database unreachable!")});
+            */
             this.playerData = {};//demo
             this.globalScores = {};//demo
             this.playerWaves = {}; //demo

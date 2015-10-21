@@ -1,7 +1,5 @@
 //Pelin funktio
 var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
-//Kommentoitu että käynnistää pelin demolua varten
-//game.stop();
 
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
@@ -139,4 +137,45 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship){
 	}
 	spawnNext = true;
 }
+
+
+// Resisez the game based on the window size
+
+function resizeGame() {
+
+	var windowWidth = $(window).width();
+	var windowHeight = $(window).height();
+	var widthScale = windowWidth/1280;
+	var heightScale = windowHeight/800;
+	/*if (windowWidth <= PELIMAAILMAN KOKO){
+
+		//if (game.scale > 1) game.scale = 1;
+
+		
+
+		//if (windowWidth !== game.width){				
+
+			//game.width = windowWidth*widthScale;
+			//game.height = windowHeight*heightScale;
+
+			game.camera.width = windowWidth;
+			game.camera.height = windowHeight;
+			
+			game.world.setBounds(0,0,windowWidth*widthScale,windowHeight*heightScale)
+			//game.height = windowHeight*heightScale;
+			
+
+			if (game.renderType === Phaser.WEBGL){
+
+				game.renderer.resize(windowWidth, windowHeight);
+
+			}
+
+		//}
+
+	//}*/
+	game.scale.scaleMode = 0;
+}	// By Roni 2015
+
+
 

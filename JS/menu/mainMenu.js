@@ -19,6 +19,9 @@ mainMenu.prototype = {
         //do some murdering
         this.buttonGroup.removeAll();
 
+        //otsikko
+        this.surroundings.menuLabel.text = "Main Menu";
+        this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
         // tästä painikkeesta päästään peliin
         this.playButton = this.game.add.button(425, 200, 'buttonSprite', this.loadoutStart, this, 1, 0, 2);

@@ -15,6 +15,11 @@ scoresSubMenu.prototype = {
 
     },
     create:function(){
+
+        //otsikko
+        this.surroundings.menuLabel.text = "High Scores";
+        this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
+
         // tästä painikkeesta päästään high scoreihin
         this.highscoresButton = this.game.add.button(200, 200, 'buttonSprite', this.highscoresStart, this, 1, 0, 2);
         var text1 = this.game.add.text(150,20,"High scores");

@@ -35,7 +35,7 @@ menuLoad.prototype = {
             this.menubbg = this.game.add.sprite(150, 100,  'menuButtonBG');
              this.menubbg.tint = 0x858585;
             //alustetaan valikon otsikko ja viiva
-            this.menuLabel = this.game.add.text(600, 120, '');
+            this.menuLabel = this.game.add.text(this.game.width/2, 120, '');
             this.menuLabel.fill = 'white';
             this.headUnder = this.game.add.sprite(180, 170,  'menuHeader');
             this.headUnder.scale.setTo(0.7, 0.03);

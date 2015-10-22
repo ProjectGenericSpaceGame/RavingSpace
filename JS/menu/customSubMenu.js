@@ -16,8 +16,13 @@ customSubMenu.prototype = {
 
     },
     create:function(){
+
+        //otsikko
+        this.surroundings.menuLabel.text = "Customization";
+        this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
+
         // tästä painikkeesta päästään aaltovalikkoon
-        this.wavesButton = this.game.add.button(200, 350, 'buttonSprite', this.wavesStart, this, 1, 0, 2);
+        this.wavesButton = this.game.add.button(200, 350, 'buttonSprite', this.waveCreatorStart, this, 1, 0, 2);
         var text1 = this.game.add.text(100,20,"Attack Waves");
         this.wavesButton.addChild(text1);
         //tästä painikkeesta päästään kauppaan
@@ -54,6 +59,16 @@ customSubMenu.prototype = {
             this.buttonGroup,
             this.surroundings
            
+        );
+    },
+    waveCreatorStart:function(){
+        this.game.state.start('waveMenu' ,false, false,
+            this.playerData,
+            this.globalScores,
+            this.playerWaves,
+            this.buttonGroup,
+            this.surroundings
+
         );
     }
 

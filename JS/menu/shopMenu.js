@@ -29,6 +29,7 @@ shopMenu.prototype = {
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
         //otsikko
         this.surroundings.menuLabel.text = "Shop";
+        this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
         
        
         

@@ -1,34 +1,31 @@
-/**
- * Created by RAndom MC on 14/10/2015.
- */
-var settingsSubMenu = function(game){
+// t√§st√§ valitaan aseet ja tehosteet mukaan
 
+var loadoutMenu = function(game){
+   
 };
-settingsSubMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
+
+loadoutMenu.prototype = {
+    
+        init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
+        
     },
-    preload:function(){
+    
+        preload:function(){
         //do some murdering here
         this.buttonGroup.removeAll();
 
     },
+    
     create:function(){
-        // t‰st‰ painikkeesta p‰‰st‰‰n ‰‰niin
-        this.soundButton = this.game.add.button(400, 200, 'buttonSprite', this.soundsStart, this, 1, 0, 2);
-        var text1 = this.game.add.text(10,20,"Sound settings");
-        this.soundButton.addChild(text1);
-        //t‰st‰ tilin asetuksiin
-        this.accountButton = this.game.add.button(400, 300, 'buttonSprite', this.accountStart, this, 1, 0, 2);
-        var text2 = this.game.add.text(10,20,"Account settings");
-        this.accountButton.addChild(text2);
-
-
-        //alustetaan takaisin nappula
+        this.goButton = this.game.add.button(425, 200, 'buttonSprite', this.gameStart, this, 1, 0, 2);
+        var goLabel = this.game.add.text(175,20,"Go!");
+        this.goButton.addChild(goLabel);     
+        
         var style = { font:'25px calibri', fill:'black'};
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
         this.backButton.scale.setTo(0.08, 0.5);
@@ -36,17 +33,20 @@ settingsSubMenu.prototype = {
         this.backButton.addChild(backText);
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
 
-        this.buttonGroup.add(this.soundButton);
-        this.buttonGroup.add(this.accountButton);
         this.buttonGroup.add(this.backButton);
+        this.buttonGroup.add(this.goButton);
+       
+        
     },
-    soundsStart:function(){
-
+    
+    gameStart: function(){
+        // kutsutaan gameLoad -tilaa
+        this.game.state.start('gameLoad');
+    
     },
-    accountStart:function(){
-
-    },
+ 
     back:function(){
+        // palataan takaisin p√§√§valikkoon
         this.game.state.start('mainMenu',false,false,
             this.playerData,
             this.globalScores,
@@ -55,5 +55,4 @@ settingsSubMenu.prototype = {
             this.surroundings
         );
     }
-
-};
+}

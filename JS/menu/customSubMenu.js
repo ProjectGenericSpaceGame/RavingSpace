@@ -17,12 +17,12 @@ customSubMenu.prototype = {
     },
     create:function(){
         // tästä painikkeesta päästään aaltovalikkoon
-        this.wavesButton = this.game.add.button(200, 350, 'menuButton', this.wavesStart, this, 1, 0, 2);
-        var text1 = this.game.add.text(100,50,"Attack Waves");
+        this.wavesButton = this.game.add.button(200, 350, 'buttonSprite', this.wavesStart, this, 1, 0, 2);
+        var text1 = this.game.add.text(100,20,"Attack Waves");
         this.wavesButton.addChild(text1);
         //tästä painikkeesta päästään kauppaan
-        this.shopButton = this.game.add.button(650, 350, 'menuButton', this.shopStart, this, 1, 0, 2);
-        var text2 = this.game.add.text(150,50,"Shop");
+        this.shopButton = this.game.add.button(650, 350, 'buttonSprite', this.shopStart, this, 1, 0, 2);
+        var text2 = this.game.add.text(150,20,"Shop");
         this.shopButton.addChild(text2);
 
         //alustetaan takaisin nappula

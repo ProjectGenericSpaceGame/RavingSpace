@@ -10,6 +10,7 @@ game.state.add('custom', customSubMenu);
 game.state.add('shopMenu', shopMenu);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
+game.state.add('loadoutMenu', loadoutMenu);
 
 game.state.start('menuLoad');
 // game.state.start("gameLoad");

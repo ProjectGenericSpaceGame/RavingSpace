@@ -7,16 +7,11 @@ menuLoad.prototype = {
         
     preload: function(){
         
-           
-            
-            //Luodaan ryhmä painikkeille
-          
-            
-        
 
             // ladataan valikon elementit
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
-            this.game.load.image('menuButton', 'assets/placeholders/buttonplaceholder.png'); 
+            this.game.load.image('menuButton', 'assets/placeholders/menuButton.png'); 
+            this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_purple.png');    
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
@@ -82,7 +77,8 @@ menuLoad.prototype = {
                 headUnder:this.headUnder,
                 backButton:this.backButton
             };//demo
-
+            
+            // luodaan ryhmä painikkeille. 
             this.buttonGroup = this.game.add.group();
             //kutsutaan menua
             this.game.state.start('mainMenu',false,false,

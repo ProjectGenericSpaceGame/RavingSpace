@@ -12,7 +12,6 @@ waveMenu.prototype = {
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
 
-        this.self = this;
     },
     preload:function(){
         //do some murdering here
@@ -21,7 +20,7 @@ waveMenu.prototype = {
 
     },
     create:function(){
-
+        var self = this;
         //alustetaan takaisin nappula
         var style = { font:'25px calibri', fill:'black'};
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
@@ -90,6 +89,7 @@ waveMenu.prototype = {
 
     },
     waveBrowser:function(){
+        var self = this;
         this.centerWindow.removeAll();
         //tehdään yläpalkki ja ympärys
         var g = this.game.add.graphics(0,0);
@@ -165,18 +165,44 @@ waveMenu.prototype = {
         this.waveListContainer.addChild(this.waveList);
         //and finally we create a mask so that list doesn't overflow
         var mask = this.game.add.graphics(0,0);
-        mask.beginFill(0x990000,1);
-        //mask.beginFill(0xFFFFFF,1);
+        mask.beginFill(0xFFFFFF,1);
         mask.drawRect(20,75,640,447.5);
         this.waveListContainer.addChild(mask);
         //mask.drawRect(0,522.5,680,600);
         this.waveListContainer.mask = mask;
+        this.browseWaveBtn.setFrames(1,2,2);
+
+        //this adds mouse scroll support
+        this.game.input.mouse.mouseWheelCallback = function(){
+            self.scrollListPlace(self);
+        };
     },
-    changeListPlace:function(){
+    changeListPlace:function() {
         this.waveList.y = this.dragArea.y;
-        if(this.waveList.y > 76){
+        if (this.waveList.y > 76 || this.waveList.height < 472.5) {
             this.waveList.y = 75;
             this.dragArea.y = 75;
+        } else if ((this.waveList.y+this.waveList.height) < 522.5 && this.waveList.height > 472.5) {
+            this.waveList.y = 522.5-this.waveList.height;
+            this.dragArea.y = 522.5-this.waveList.height;
+        }
+    },
+    scrollListPlace:function(self){
+        if(self.game.input.mouse.wheelDelta == 1){
+            this.waveList.y += 15;
+            this.dragArea.y += 15;
+            if (self.waveList.y > 76 || self.waveList.height < 472.5) {
+                self.waveList.y = 75;
+                self.dragArea.y = 75;
+            }
+
+        } else if(self.game.input.mouse.wheelDelta == -1){
+            this.waveList.y -= 15;
+            this.dragArea.y -= 15;
+            if ((self.waveList.y+self.waveList.height) < 522.5 && self.waveList.height > 472.5) {
+                self.waveList.y = 522.5-self.waveList.height;
+                self.dragArea.y = 522.5-self.waveList.height;
+            }
         }
     },
     back: function(){

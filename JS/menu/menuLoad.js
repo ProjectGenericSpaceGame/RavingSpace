@@ -67,7 +67,64 @@ menuLoad.prototype = {
             */
             this.playerData = {};//demo
             this.globalScores = {};//demo
-            this.playerWaves = {}; //demo
+            this.playerWaves = {"playerWaves":[
+                {
+                    "waveStruct":"101104'151207'231009",
+                    "waveStatus":"Unused",
+                    "profit":0
+                },
+                {
+                    "waveStruct":"151221'262239'322517",
+                    "waveStatus":"Unused",
+                    "profit":0
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                },
+                {
+                    "waveStruct":"103521'223459'424617",
+                    "waveStatus":"Destroyed",
+                    "profit":400
+                }
+                ]}; //demo
+            //this.playerWaves = JSON.parse(this.playerWaves);
             //tässä kasataan jutut
             var surroundings = {
                 menubg:this.menubg,

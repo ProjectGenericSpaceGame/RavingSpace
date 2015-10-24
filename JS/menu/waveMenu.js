@@ -21,6 +21,7 @@ waveMenu.prototype = {
     },
     create:function(){
         var self = this;
+        this.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
         //alustetaan takaisin nappula
         var style = { font:'25px calibri', fill:'black'};
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
@@ -86,6 +87,186 @@ waveMenu.prototype = {
         
 
     waveCreator:function(){
+
+        var self = this;
+        var style = { font:'15px calibri', fill:'black'};
+        this.centerWindow.removeAll();
+        this.browseWaveBtn.setFrames(1,0,2);
+        this.createWaveBtn.setFrames(1,2,2);
+        //aaltovalikot
+        this.wave1Btn = this.game.add.button(25,25,'buttonSprite',wave1,this,1,0,2);
+        var round1 = this.game.add.text(0,20,"Round 1",style);
+        this.wave1Btn.addChild(round1);
+        this.wave2Btn = this.game.add.button(175,25,'buttonSprite',wave2,this,1,0,2);
+        var round2 = this.game.add.text(0,20,"Round 2",style);
+        this.wave2Btn.addChild(round2);
+        this.wave3Btn = this.game.add.button(325,25,'buttonSprite',wave3,this,1,0,2);
+        var round3 = this.game.add.text(0,20,"Round 3",style);
+        this.wave3Btn.addChild(round3);
+        style = { font:'35px calibri', fill:'black'};
+        //pelaajan pisteet
+        //var points = this.game.add.text(25,475,playerData.playerData.points,style;
+        var points = this.game.add.text(475,25,"Points: "+"5500",style);//demo
+
+        //kokonaiskustannus
+        this.waveTotalCost = this.game.add.text(0,350,"Total cost: 0",style);//Tätä päivitetään calcTotal funktiossa
+        this.waveTotalCost.x = (680/2)-(this.waveTotalCost.width/2);//centerTray leveys/2 - tekstin pituus / 2
+
+        //Painike kassalle
+        this.checkoutBtn = this.game.add.button(0,450,'buttonSprite',checkOut,1,0,2);
+        this.checkoutBtn.x = (680/2)-(this.checkoutBtn.width/2);
+        var checkoutBtnText = this.game.add.text(0,20,"Checkout",style);
+        checkoutBtnText.x  = (this.checkoutBtn.width/2)-(checkoutBtnText.width/2);
+        this.checkoutBtn.addChild(checkoutBtnText);
+
+
+        //aallon kasaus
+        //style = { font:'25px calibri', fill:'black'};
+        this.subMenu = 1;
+        this.subFunctions = [wave1,wave2,wave3];
+
+        var shipName = this.game.add.text(0,0,"",style);
+        var shipAmount = this.game.add.text(0,0,"",style);
+        var fighterLine = this.game.add.group();
+        var hunterLine = this.game.add.group();
+        var commanderLine = this.game.add.group();
+        //fighter line
+        var fighterPic = this.game.add.image(25,130,'menuBack');
+        shipName = this.game.add.text(100,130,"Fighter:  50 points",style);
+        var minus = this.game.add.button(480,130,'menuBack',function() {
+            if (self.waveCreateData[self.subMenu - 1][0] > 0){
+                self.waveCreateData[self.subMenu - 1][0] -= 1;
+                self.subFunctions[self.subMenu-1]();
+            }
+        });
+        shipAmount = this.game.add.text(540,130,this.waveCreateData[this.subMenu-1][0],style);
+        var plus = this.game.add.button(570,130,'menuNext',function(){
+            self.waveCreateData[self.subMenu-1][0]+=1;
+            self.subFunctions[self.subMenu-1]();
+        });
+        fighterLine.addChild(fighterPic);
+        fighterLine.addChild(shipName);
+        fighterLine.addChild(minus);
+        fighterLine.addChild(shipAmount);
+        fighterLine.addChild(plus);
+        //hunter line
+        var hunterPic = this.game.add.image(25,200,'menuBack');
+        shipName = this.game.add.text(100,200,"Hunter:  75 points",style);
+        minus = this.game.add.button(480,200,'menuBack',function() {
+            if (self.waveCreateData[self.subMenu - 1][1] > 0){
+                self.waveCreateData[self.subMenu - 1][1] -= 1;
+                self.subFunctions[self.subMenu-1]();
+
+            }
+        });
+        shipAmount = this.game.add.text(540,200,this.waveCreateData[this.subMenu-1][1],style);
+        plus = this.game.add.button(570,200,'menuNext',function(){
+            self.waveCreateData[self.subMenu-1][1]+=1;
+            self.subFunctions[self.subMenu-1]();
+
+        });
+        hunterLine.addChild(hunterPic);
+        hunterLine.addChild(shipName);
+        hunterLine.addChild(minus);
+        hunterLine.addChild(shipAmount);
+        hunterLine.addChild(plus);
+
+        //commander line
+        var commanderPic = this.game.add.image(25,270,'menuBack');
+        shipName = this.game.add.text(100,270,"Commander:  250 points",style);
+        minus = this.game.add.button(480,270,'menuBack',function() {
+            if (self.waveCreateData[self.subMenu - 1][2] > 0){
+                self.waveCreateData[self.subMenu - 1][2] -= 1;
+                self.subFunctions[self.subMenu-1]();
+            }
+        });
+        shipAmount = this.game.add.text(540,270,this.waveCreateData[this.subMenu-1][2],style);
+        plus = this.game.add.button(570,270,'menuNext',function(){
+            self.waveCreateData[self.subMenu-1][2]+=1;
+            self.subFunctions[self.subMenu-1]();
+        });
+        commanderLine.addChild(commanderPic);
+        commanderLine.addChild(shipName);
+        commanderLine.addChild(minus);
+        commanderLine.addChild(shipAmount);
+        commanderLine.addChild(plus);
+
+        //kasataan
+        this.centerWindow.addChild(this.wave1Btn);
+        this.centerWindow.addChild(this.wave2Btn);
+        this.centerWindow.addChild(this.wave3Btn);
+        this.centerWindow.addChild(this.checkoutBtn);
+        this.centerWindow.forEach(function(btn) {//skaalataan yläpalin nappulat ja piirretään niille grafiikat
+            btn.scale.setTo(0.3, 0.5);
+            var g = self.game.add.graphics(0, 0);
+            g.lineStyle(1, 0x000000, 1);
+            g.lineTo(0, btn.height);
+            g.lineTo(btn.width, btn.height);
+            g.lineTo(btn.width, 0);
+            g.lineTo(0, 0);
+            btn.addChild(g);
+            if (btn.getChildAt(0).text != "Checkout"){
+                btn.getChildAt(0).scale.setTo(1 / 0.3, 1 / 0.5);
+                btn.getChildAt(0).x = 120;//Tämän ei pitäisi toimia näin, bugi. 120 on painikkeen koko leveys
+                btn.getChildAt(1).scale.setTo(1 / 0.3, 1 / 0.5);
+            } else {
+                btn.scale.setTo(1,1);
+                btn.getChildAt(1).scale.setTo(1 / 0.3, 1 / 0.5);
+                btn.setFrames(1,0,2);//korjaa bugin missä nappula sai jostain syystä framen 2 oletuksena
+            }
+        });
+        this.centerWindow.addChild(points);
+        this.centerWindow.addChild(fighterLine);
+        this.centerWindow.addChild(hunterLine);
+        this.centerWindow.addChild(commanderLine);
+        this.centerWindow.addChild(this.waveTotalCost);
+
+        //aaltovalikon funktiot
+        function wave1(){
+            //alert("workkii");
+            self.subMenu = 1;
+            fighterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][0];
+            hunterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][1];
+            commanderLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][2];
+            self.wave1Btn.setFrames(1,2,2);
+            self.wave2Btn.setFrames(1,0,2);
+            self.wave3Btn.setFrames(1,0,2);
+            calcTotal();
+        }
+        function wave2(){
+            self.subMenu = 2;
+            fighterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][0];
+            hunterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][1];
+            commanderLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][2];
+            self.wave1Btn.setFrames(1,0,2);
+            self.wave2Btn.setFrames(1,2,2);
+            self.wave3Btn.setFrames(1,0,2);
+            calcTotal();
+        }
+        function wave3(){
+            self.subMenu = 3;
+            fighterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][0];
+            hunterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][1];
+            commanderLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][2];
+            self.wave1Btn.setFrames(1,0,2);
+            self.wave2Btn.setFrames(1,0,2);
+            self.wave3Btn.setFrames(1,2,2);
+            calcTotal();
+        }
+        function calcTotal(){
+            //lasketaan kokonaismäärät
+            var wCD  = self.waveCreateData;//shorthand
+            wCD[3][0] = wCD[0][0]+wCD[1][0]+wCD[2][0];
+            wCD[3][1] = wCD[0][1]+wCD[1][1]+wCD[2][1];
+            wCD[3][2] = wCD[0][2]+wCD[1][2]+wCD[2][2];
+            //lasketaan kokonaiskustannus
+            var totalCost = (wCD[3][0]*50)+(wCD[3][1]*75)+(wCD[3][2]*250);
+            self.waveTotalCost.text = "Total cost: "+totalCost;
+            self.waveTotalCost.x = (680/2)-(self.waveTotalCost.width/2);//centerTray leveys/2 - tekstin pituus / 2
+        }
+        function checkOut(){
+
+        }
 
     },
     waveBrowser:function(){
@@ -171,6 +352,7 @@ waveMenu.prototype = {
         //mask.drawRect(0,522.5,680,600);
         this.waveListContainer.mask = mask;
         this.browseWaveBtn.setFrames(1,2,2);
+        this.createWaveBtn.setFrames(1,0,2);
 
         //this adds mouse scroll support
         this.game.input.mouse.mouseWheelCallback = function(){

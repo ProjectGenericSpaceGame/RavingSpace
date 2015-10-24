@@ -23,11 +23,11 @@ settingsSubMenu.prototype = {
         this.surroundings.menuLabel.text = "Settings";
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
-        // t‰st‰ painikkeesta p‰‰st‰‰n ‰‰niin
+        // t√§st√§ painikkeesta p√§√§st√§√§n √§√§niin
         this.soundButton = this.game.add.button(400, 200, 'buttonSprite', this.soundsStart, this, 1, 0, 2);
         var text1 = this.game.add.text(10,20,"Sound settings");
         this.soundButton.addChild(text1);
-        //t‰st‰ tilin asetuksiin
+        //t√§st√§ tilin asetuksiin
         this.accountButton = this.game.add.button(400, 300, 'buttonSprite', this.accountStart, this, 1, 0, 2);
         var text2 = this.game.add.text(10,20,"Account settings");
         this.accountButton.addChild(text2);

@@ -24,14 +24,14 @@ settingsSubMenu.prototype = {
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
         // tästä painikkeesta päästään ääniin
-        this.soundButton = this.game.add.button(400, 200, 'buttonSprite', this.soundsStart, this, 1, 0, 2);
+        this.soundButton = this.game.add.button(400, 200, 'buttonSprite', this.soundStart, this, 1, 0, 2);
         var text1 = this.game.add.text(10,20,"Sound settings");
         this.soundButton.addChild(text1);
+        
         //tästä tilin asetuksiin
         this.accountButton = this.game.add.button(400, 300, 'buttonSprite', this.accountStart, this, 1, 0, 2);
         var text2 = this.game.add.text(10,20,"Account settings");
         this.accountButton.addChild(text2);
-
 
         //alustetaan takaisin nappula
         var style = { font:'25px calibri', fill:'black'};
@@ -45,8 +45,14 @@ settingsSubMenu.prototype = {
         this.buttonGroup.add(this.accountButton);
         this.buttonGroup.add(this.backButton);
     },
-    soundsStart:function(){
-
+    soundStart:function(){
+        this.game.state.start('soundMenu',false,false,
+            this.playerData,
+            this.globalScores,
+            this.playerWaves,
+            this.buttonGroup,
+            this.surroundings
+        );
     },
     accountStart:function(){
 

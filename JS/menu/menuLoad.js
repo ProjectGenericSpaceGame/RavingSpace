@@ -18,6 +18,7 @@ menuLoad.prototype = {
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
             this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
+            this.game.load.image('ability1', 'assets/placeholders/ability1.png');
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             
           

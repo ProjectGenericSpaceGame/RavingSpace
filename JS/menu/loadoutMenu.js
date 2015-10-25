@@ -25,6 +25,7 @@ loadoutMenu.prototype = {
         
         this.thingsGroup = this.game.add.group();
         this.am = false;
+        this.im = false;
         
         this.surroundings.menuLabel.text = 'Loadout';
         var style = { font:'25px calibri', fill:'black'};
@@ -66,11 +67,12 @@ loadoutMenu.prototype = {
     
     selectWeapon: function(){
         console.log('Selecting weapon');
-        this.weapons = [];
+        
         this.x = 905;
         this.y = 205; 
         if (this.am == false){
             this.sweapon = this.game.add.sprite(900, 200, 'availableTray');
+            this.thingsGroup.add(this.sweapon);
             for ( var i = 0; i <= 3; i++){
                 if (this.playerData.shipData[i] == 1){
                     if(this.x > 905 + (92.5 * 2)){
@@ -78,7 +80,7 @@ loadoutMenu.prototype = {
                         this.x = 905;
                     }
                     console.log(i);
-                    this.weapons.push(this.game.add.button(this.x, this.y, 'weapon1'));
+                    this.thingsGroup.add(this.game.add.button(this.x, this.y, 'weapon1'));
                     this.x += 92.5;
                 } else {
                     console.log(i);
@@ -87,7 +89,7 @@ loadoutMenu.prototype = {
             
             this.am = true;
         } else {
-            this.sweapon.kill();
+            this.thingsGroup.removeAll();
             this.am = false;
         }
         
@@ -95,7 +97,30 @@ loadoutMenu.prototype = {
     
     selectAbility: function(){
         console.log('Selecting ability');
-        
+          this.x = 905;
+        this.y = 405; 
+        if (this.im == false){
+            this.sweapon = this.game.add.sprite(900, 400, 'availableTray');
+            this.thingsGroup.add(this.sweapon);
+            for ( var i = 4; i <= 7; i++){
+                if (this.playerData.shipData[i] == 1){
+                    if(this.x > 905 + (92.5 * 2)){
+                        this.y += 95;
+                        this.x = 905;
+                    }
+                    console.log(i);
+                    this.thingsGroup.add(this.game.add.button(this.x, this.y, 'ability1'));
+                    this.x += 92.5;
+                } else {
+                    console.log(i);
+                }
+            }
+            
+            this.im = true;
+        } else {
+            this.thingsGroup.removeAll();
+            this.im = false;
+        }
     },
     
     gameStart: function(){

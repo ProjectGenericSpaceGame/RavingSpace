@@ -41,13 +41,13 @@ menuLoad.prototype = {
             this.headUnder.scale.setTo(0.7, 0.03);
 
             //tänne tulee ajaxia
-            //var demoname = "testi1";
-            /* ------>TESTATTU JA TOIMII<------
+            var demoname = "testi1";
+            /*// ------>TESTATTU JA TOIMII<------
             var getFromDB = $.ajax({
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerData.php",
-                data:demoname
+                data:{playerName:demoname}
             });
             getFromDB.done(function(returnValue){
                 self.playerData = JSON.parse(returnValue);
@@ -58,14 +58,42 @@ menuLoad.prototype = {
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerWaves.php",
-                data:demoname
+                data:{playerName:demoname}
             });
             getFromDB.done(function(returnValue){
                 self.playerWaves = JSON.parse(returnValue);
             });
             getFromDB.fail(function(){alert("database unreachable!")});
-            */
-            this.playerData = {};//demo
+            //
+
+             getFromDB = $.ajax({
+             method:"POST",
+             async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+             url:"PHP/SQLcontroller/highScores.php"
+             });
+             getFromDB.done(function(returnValue){
+             //self.globalScores = returnValue;});
+                self.globalScores = JSON.parse(returnValue);});
+            getFromDB.fail(function(){alert("database unreachable!")});
+            //Nyt tehdään pistelistasta array vertailua varten
+            var scoreSort = [];
+            for(var i = 0;i < this.globalScores.highScores.length;i++) {
+                scoreSort.push(this.globalScores.highScores[i]);
+            }
+            scoreSort.sort(this.compare);
+            this.globalScores = scoreSort;*/
+            this.playerData = {
+                "playerData":{
+                    "playerName":"testi1",
+                    "email":"test1@testmail.io",
+                    "money":14034,
+                    "points":16045
+                },
+                "shipData":[1,0,1,0,1,1,0],
+                "playerScores":[
+                    25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
+                ]
+            };//demo
             this.globalScores = {};//demo
             this.playerWaves = {"playerWaves":[
                 {
@@ -145,6 +173,14 @@ menuLoad.prototype = {
                 this.buttonGroup,
                 surroundings
             );
+        },
+        compare:function(a,b){
+            if(a[1] == b[1]){
+                return 0;
+            } else if(a[1] < b[1]){
+                return 1;
+            }
+            return -1;
         }
 
 };

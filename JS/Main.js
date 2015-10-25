@@ -178,6 +178,12 @@ function resizeGame() {
 	//}*/
 	game.scale.scaleMode = 0;
 }	// By Roni 2015
+function formatWave(data){
+	var formatted = {"waveStruct":"","waveStatus":"Unused","profit":0};
+	var struct = ""+data[0][0]+""+data[0][1]+""+""+data[0][2]+"'"+data[1][0]+""+data[1][1]+""+""+data[1][2]+"'"+data[2][0]+""+data[2][1]+""+""+data[2][2]+"";
+    formatted.waveStruct = struct;
+    return formatted;
+}
 
 
 

@@ -105,9 +105,13 @@ waveMenu.prototype = {
         this.wave3Btn.addChild(round3);
         style = { font:'35px calibri', fill:'black'};
         //pelaajan pisteet
-        //var points = this.game.add.text(25,475,playerData.playerData.points,style;
-        var points = this.game.add.text(475,25,"Points: "+"5500",style);//demo
+        var points = this.game.add.text(515,25,this.playerData.playerData.points,style);
+        //var points = this.game.add.text(475,25,"Points: "+"5500",style);//demo
 
+        //checkoutin otsikko
+        var checkOutLabel = this.game.add.text(0,80,"Complete Wave",style);
+        checkOutLabel.x = (680/2)-(checkOutLabel.width/2);
+        checkOutLabel.visible = false;
         //kokonaiskustannus
         this.waveTotalCost = this.game.add.text(0,350,"Total cost: 0",style);//Tätä päivitetään calcTotal funktiossa
         this.waveTotalCost.x = (680/2)-(this.waveTotalCost.width/2);//centerTray leveys/2 - tekstin pituus / 2
@@ -125,29 +129,27 @@ waveMenu.prototype = {
         this.subMenu = 1;
         this.subFunctions = [wave1,wave2,wave3];
 
-        var shipName = this.game.add.text(0,0,"",style);
-        var shipAmount = this.game.add.text(0,0,"",style);
         var fighterLine = this.game.add.group();
         var hunterLine = this.game.add.group();
         var commanderLine = this.game.add.group();
         //fighter line
         var fighterPic = this.game.add.image(25,130,'menuBack');
-        shipName = this.game.add.text(100,130,"Fighter:  50 points",style);
+        var shipName = this.game.add.text(100,130,"Fighter:  50 points",style);
         var minus = this.game.add.button(480,130,'menuBack',function() {
             if (self.waveCreateData[self.subMenu - 1][0] > 0){
                 self.waveCreateData[self.subMenu - 1][0] -= 1;
                 self.subFunctions[self.subMenu-1]();
             }
         });
-        shipAmount = this.game.add.text(540,130,this.waveCreateData[this.subMenu-1][0],style);
+        var shipAmount = this.game.add.text(540,130,this.waveCreateData[this.subMenu-1][0],style);
         var plus = this.game.add.button(570,130,'menuNext',function(){
             self.waveCreateData[self.subMenu-1][0]+=1;
             self.subFunctions[self.subMenu-1]();
         });
         fighterLine.addChild(fighterPic);
         fighterLine.addChild(shipName);
-        fighterLine.addChild(minus);
         fighterLine.addChild(shipAmount);
+        fighterLine.addChild(minus);
         fighterLine.addChild(plus);
         //hunter line
         var hunterPic = this.game.add.image(25,200,'menuBack');
@@ -167,8 +169,8 @@ waveMenu.prototype = {
         });
         hunterLine.addChild(hunterPic);
         hunterLine.addChild(shipName);
-        hunterLine.addChild(minus);
         hunterLine.addChild(shipAmount);
+        hunterLine.addChild(minus);
         hunterLine.addChild(plus);
 
         //commander line
@@ -187,8 +189,8 @@ waveMenu.prototype = {
         });
         commanderLine.addChild(commanderPic);
         commanderLine.addChild(shipName);
-        commanderLine.addChild(minus);
         commanderLine.addChild(shipAmount);
+        commanderLine.addChild(minus);
         commanderLine.addChild(plus);
 
         //kasataan
@@ -209,25 +211,29 @@ waveMenu.prototype = {
                 btn.getChildAt(0).scale.setTo(1 / 0.3, 1 / 0.5);
                 btn.getChildAt(0).x = 120;//Tämän ei pitäisi toimia näin, bugi. 120 on painikkeen koko leveys
                 btn.getChildAt(1).scale.setTo(1 / 0.3, 1 / 0.5);
-            } else {
+            } else {//tämä on checkout nappula jolla eri asetukset
                 btn.scale.setTo(1,1);
                 btn.getChildAt(1).scale.setTo(1 / 0.3, 1 / 0.5);
                 btn.setFrames(1,0,2);//korjaa bugin missä nappula sai jostain syystä framen 2 oletuksena
             }
         });
-        this.centerWindow.addChild(points);
-        this.centerWindow.addChild(fighterLine);
-        this.centerWindow.addChild(hunterLine);
-        this.centerWindow.addChild(commanderLine);
+        var shipLines = this.game.add.group();
+        shipLines.addChild(fighterLine);
+        shipLines.addChild(hunterLine);
+        shipLines.addChild(commanderLine);
+        shipLines.name = "shipLines";
+        this.centerWindow.addChild(shipLines);
         this.centerWindow.addChild(this.waveTotalCost);
-
+        this.centerWindow.addChild(checkOutLabel);
+        this.centerWindow.addChild(points);
+        wave1();
         //aaltovalikon funktiot
         function wave1(){
             //alert("workkii");
             self.subMenu = 1;
-            fighterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][0];
-            hunterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][1];
-            commanderLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][2];
+            fighterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
+            hunterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][1];
+            commanderLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][2];
             self.wave1Btn.setFrames(1,2,2);
             self.wave2Btn.setFrames(1,0,2);
             self.wave3Btn.setFrames(1,0,2);
@@ -235,9 +241,9 @@ waveMenu.prototype = {
         }
         function wave2(){
             self.subMenu = 2;
-            fighterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][0];
-            hunterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][1];
-            commanderLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][2];
+            fighterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
+            hunterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][1];
+            commanderLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][2];
             self.wave1Btn.setFrames(1,0,2);
             self.wave2Btn.setFrames(1,2,2);
             self.wave3Btn.setFrames(1,0,2);
@@ -245,15 +251,30 @@ waveMenu.prototype = {
         }
         function wave3(){
             self.subMenu = 3;
-            fighterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][0];
-            hunterLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][1];
-            commanderLine.getChildAt(3).text = self.waveCreateData[self.subMenu-1][2];
+            fighterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
+            hunterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][1];
+            commanderLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][2];
             self.wave1Btn.setFrames(1,0,2);
             self.wave2Btn.setFrames(1,0,2);
             self.wave3Btn.setFrames(1,2,2);
             calcTotal();
         }
         function calcTotal(){
+            //asetetaan checkout nappulan teksti ja minus ja plus näppäinten näkyvyys. Siksi että checkout vaihtaa nämä ja tämä funktio ajetaan varmasti kun pelaaja poistuu checkoutista
+            self.checkoutBtn.getChildAt(0).text = "Checkout";
+            self.checkoutBtn.getChildAt(0).x  = (self.checkoutBtn.width/2)-(self.checkoutBtn.getChildAt(0).width/2);
+            shipLines.forEach(function(item){
+                //korjataan myös plusnäppäimen sijainti mikäli luku on kasvanut
+                item.getChildAt(item.length-1).visible = true;//minus ja plus nappulat ovat kaksi viimeistä
+                item.getChildAt(item.length-1).x = (item.getChildAt(item.length-3).x+item.getChildAt(item.length-3).width+15);//minus ja plus nappulat ovat kaksi viimeistä
+                item.getChildAt(item.length-2).visible = true;
+            });
+            checkOutLabel.visible = false;
+            fighterLine.y = 0;//Jälleen kerran..miksi näin??? Ei tämän pitäisi olla 0
+            hunterLine.y = 0;
+            commanderLine.y = 0;
+            self.waveTotalCost.y = 350;
+
             //lasketaan kokonaismäärät
             var wCD  = self.waveCreateData;//shorthand
             wCD[3][0] = wCD[0][0]+wCD[1][0]+wCD[2][0];
@@ -264,8 +285,56 @@ waveMenu.prototype = {
             self.waveTotalCost.text = "Total cost: "+totalCost;
             self.waveTotalCost.x = (680/2)-(self.waveTotalCost.width/2);//centerTray leveys/2 - tekstin pituus / 2
         }
-        function checkOut(){
+        function checkOut() {
+            if (self.checkoutBtn.getChildAt(0).text == "Checkout"){
+                self.checkoutBtn.getChildAt(0).text = "Create wave";
+                self.checkoutBtn.getChildAt(0).x = (self.checkoutBtn.width / 2) - (self.checkoutBtn.getChildAt(0).width / 2);
+                shipLines.forEach(function (item) {
+                    item.getChildAt(item.length - 1).visible = false;//minus ja plus nappulat ovat kaksi viimeistä
+                    item.getChildAt(item.length - 2).visible = false;
+                });
+                fighterLine.getChildAt(2).text = self.waveCreateData[3][0];
+                hunterLine.getChildAt(2).text = self.waveCreateData[3][1];
+                commanderLine.getChildAt(2).text = self.waveCreateData[3][2];
+                fighterLine.y += 25;
+                hunterLine.y += 25;
+                commanderLine.y += 25;
+                self.waveTotalCost.y += 25;
+                checkOutLabel.visible = true;
+                self.wave1Btn.setFrames(1,0,2);
+                self.wave2Btn.setFrames(1,0,2);
+                self.wave3Btn.setFrames(1,0,2);
+            } else {
+                if(self.playerData.playerData.points < parseInt(self.waveTotalCost.text.substring(12))){
+                    //do some animation
+                    var newstyle = { font:'35px calibri', fill:'red'};
+                    points.setStyle(newstyle);
+                    var tween = self.game.add.tween(points).to({width:points.width+20,height:points.height+20,x:points.x-10},300,"Linear",true,0,2,true);
+                    tween.onComplete.add(function(){
+                        newstyle = { font:'35px calibri', fill:'black'};
+                        points.setStyle(newstyle);
+                    },this);
+                } else {
+                    self.playerData.playerData.points -= parseInt(self.waveTotalCost.text.substring(12));
+                    var newWave = formatWave(self.waveCreateData);
+                    self.playerWaves.playerWaves.push(newWave);
+                    //Tätä php filua ei vielä ole
+                    /*var createWave = $.ajax({
+                        method:"POST",
+                        url:"PHP/SQLcontroller/update.php",
+                        data:{data:newWave,updateSection:1}
+                    });
+                    createWave.done(function(returnValue){
 
+                    });
+                    createWave.fail(function(){
+
+                    });*/
+                    self.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+                    points.text = self.playerData.playerData.points;
+                    wave1();
+                }
+            }
         }
 
     },

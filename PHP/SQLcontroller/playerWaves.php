@@ -4,8 +4,12 @@
 	$user = "H3492";
 	$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan myöhemmin hakemaan toisesta tiedostosta
 	$returnObject = "";
-	//$playerName = $_POST['playerName'];
-	$playerName = "testi1";
+	if(strlen($_POST['playerName']) > 0){
+		$playerName = $_POST['playerName'];
+		$playerName = $_POST['playerName'];
+	} else {
+		$playerName = "testi1";
+	}
 	//avataan yhteys
 	$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
 	if ($DBcon->connect_error) {

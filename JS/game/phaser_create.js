@@ -36,7 +36,7 @@ gameLoad.prototype = {
 		this.game.load.image('bullet', 'assets/sprites/bullet.png');
 	},
 	create: function(){
-                this.attackInfo = "031509'302112'352713";
+		this.attackInfo = "031509'302112'352713";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);

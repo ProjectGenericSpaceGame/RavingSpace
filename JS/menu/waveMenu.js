@@ -21,6 +21,7 @@ waveMenu.prototype = {
     },
     create:function(){
         var self = this;
+        this.tweenActive = false;
         this.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
         //alustetaan takaisin nappula
         var style = { font:'25px calibri', fill:'black'};
@@ -142,7 +143,7 @@ waveMenu.prototype = {
             }
         });
         var shipAmount = this.game.add.text(540,130,this.waveCreateData[this.subMenu-1][0],style);
-        var plus = this.game.add.button(570,130,'menuNext',function(){
+        var plus = this.game.add.button(590,130,'menuNext',function(){
             self.waveCreateData[self.subMenu-1][0]+=1;
             self.subFunctions[self.subMenu-1]();
         });
@@ -162,7 +163,7 @@ waveMenu.prototype = {
             }
         });
         shipAmount = this.game.add.text(540,200,this.waveCreateData[this.subMenu-1][1],style);
-        plus = this.game.add.button(570,200,'menuNext',function(){
+        plus = this.game.add.button(590,200,'menuNext',function(){
             self.waveCreateData[self.subMenu-1][1]+=1;
             self.subFunctions[self.subMenu-1]();
 
@@ -183,7 +184,7 @@ waveMenu.prototype = {
             }
         });
         shipAmount = this.game.add.text(540,270,this.waveCreateData[this.subMenu-1][2],style);
-        plus = this.game.add.button(570,270,'menuNext',function(){
+        plus = this.game.add.button(590,270,'menuNext',function(){
             self.waveCreateData[self.subMenu-1][2]+=1;
             self.subFunctions[self.subMenu-1]();
         });
@@ -266,7 +267,7 @@ waveMenu.prototype = {
             shipLines.forEach(function(item){
                 //korjataan myös plusnäppäimen sijainti mikäli luku on kasvanut
                 item.getChildAt(item.length-1).visible = true;//minus ja plus nappulat ovat kaksi viimeistä
-                item.getChildAt(item.length-1).x = (item.getChildAt(item.length-3).x+item.getChildAt(item.length-3).width+15);//minus ja plus nappulat ovat kaksi viimeistä
+                item.getChildAt(item.length-3).x = (((item.getChildAt(item.length-1).x)-(item.getChildAt(item.length-2).x+item.getChildAt(item.length-2).width))/2+item.getChildAt(item.length-2).x)-item.getChildAt(item.length-3).width/2+item.getChildAt(item.length-2).width;//minus ja plus nappulat ovat kaksi viimeistä
                 item.getChildAt(item.length-2).visible = true;
             });
             checkOutLabel.visible = false;
@@ -305,16 +306,18 @@ waveMenu.prototype = {
                 self.wave2Btn.setFrames(1,0,2);
                 self.wave3Btn.setFrames(1,0,2);
             } else {
-                if(self.playerData.playerData.points < parseInt(self.waveTotalCost.text.substring(12))){
+                if(self.playerData.playerData.points < parseInt(self.waveTotalCost.text.substring(12)) && self.tweenActive == false){
                     //do some animation
                     var newstyle = { font:'35px calibri', fill:'red'};
                     points.setStyle(newstyle);
+                    self.tweenActive = true;
                     var tween = self.game.add.tween(points).to({width:points.width+20,height:points.height+10,x:points.x-10},300,"Linear",true,0,2,true);
                     tween.onComplete.add(function(){
                         newstyle = { font:'35px calibri', fill:'black'};
                         points.setStyle(newstyle);
+                        self.tweenActive = false;
                     },this);
-                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0){
+                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0 && self.playerData.playerData.points > parseInt(self.waveTotalCost.text.substring(12))){
                     self.playerData.playerData.points -= parseInt(self.waveTotalCost.text.substring(12));
                     var newWave = formatWave(self.waveCreateData);
                     self.playerWaves.playerWaves.push(newWave);
@@ -333,7 +336,7 @@ waveMenu.prototype = {
                     self.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
                     points.text = self.playerData.playerData.points;
                     wave1();
-                } else {
+                } else if(parseInt(self.waveTotalCost.text.substring(12)) == 0){
                     alert("Can not create empty wave");
                 }
             }

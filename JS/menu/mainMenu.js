@@ -18,26 +18,28 @@ mainMenu.prototype = {
         var self = this;
         //do some murdering
         this.buttonGroup.removeAll();
+        var textStyle = { font: 'bold 30px Calibri'};
 
         //otsikko
         this.surroundings.menuLabel.text = "Main Menu";
+       
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
         // tästä painikkeesta päästään peliin
         this.playButton = this.game.add.button(425, 200, 'buttonSprite', this.loadoutStart, this, 1, 0, 2);
-        var playLabel = this.game.add.text(175,20,"Play");
+        var playLabel = this.game.add.text(175,20,"Play", textStyle);
         this.playButton.addChild(playLabel);
         //tästä asetuksiin 
         this.settingsButton = this.game.add.button(425, 300, 'buttonSprite', this.settingsStart, this, 1, 0, 2);
-        var settingsLabel = this.game.add.text(150,20,"Settings");
+        var settingsLabel = this.game.add.text(150,20,"Settings", textStyle);
         this.settingsButton.addChild(settingsLabel);
         // tästä pistetaulukkoon
         this.scoresButton = this.game.add.button(425, 400, 'buttonSprite', this.scoresStart, this, 1, 0, 2);
-        var scroreLabel = this.game.add.text(125,20,"High Scores");
+        var scroreLabel = this.game.add.text(125,20,"High Scores", textStyle);
         this.scoresButton.addChild(scroreLabel);
         // tästä kustomointi -valikkoon
         this.customButton = this.game.add.button(425, 500, 'buttonSprite', this.customStart, this, 1, 0, 2);
-        var customLabel = this.game.add.text(140,20,"Customize");
+        var customLabel = this.game.add.text(140,20,"Customize", textStyle);
         this.customButton.addChild(customLabel);
 
         this.buttonGroup.add(this.playButton);

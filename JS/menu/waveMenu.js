@@ -309,12 +309,12 @@ waveMenu.prototype = {
                     //do some animation
                     var newstyle = { font:'35px calibri', fill:'red'};
                     points.setStyle(newstyle);
-                    var tween = self.game.add.tween(points).to({width:points.width+20,height:points.height+20,x:points.x-10},300,"Linear",true,0,2,true);
+                    var tween = self.game.add.tween(points).to({width:points.width+20,height:points.height+10,x:points.x-10},300,"Linear",true,0,2,true);
                     tween.onComplete.add(function(){
                         newstyle = { font:'35px calibri', fill:'black'};
                         points.setStyle(newstyle);
                     },this);
-                } else {
+                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0){
                     self.playerData.playerData.points -= parseInt(self.waveTotalCost.text.substring(12));
                     var newWave = formatWave(self.waveCreateData);
                     self.playerWaves.playerWaves.push(newWave);
@@ -333,6 +333,8 @@ waveMenu.prototype = {
                     self.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
                     points.text = self.playerData.playerData.points;
                     wave1();
+                } else {
+                    alert("Can not create empty wave");
                 }
             }
         }

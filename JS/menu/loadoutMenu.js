@@ -23,8 +23,8 @@ loadoutMenu.prototype = {
     
     create:function(){
         
-        thingsGroup = this.game.add.group();
-        am = false;
+        this.thingsGroup = this.game.add.group();
+        this.am = false;
         
         this.surroundings.menuLabel.text = 'Loadout';
         var style = { font:'25px calibri', fill:'black'};
@@ -44,18 +44,18 @@ loadoutMenu.prototype = {
         this.buttonGroup.add(this.goButton);
        
         // weapon slots/ aseitten paikat
-        this.wepslot1 = this.game.add.button(450, 250, 'slot', this.selectWeapon);
-        this.wepslot2 = this.game.add.button(600, 250, 'slot', this.selectWeapon);
-        this.wepslot3 = this.game.add.button(750, 250, 'slot', this.selectWeapon);
+        this.wepslot1 = this.game.add.button(450, 250, 'slot', this.selectWeapon,this);
+        this.wepslot2 = this.game.add.button(600, 250, 'slot', this.selectWeapon,this);
+        this.wepslot3 = this.game.add.button(750, 250, 'slot', this.selectWeapon,this);
         
         this.buttonGroup.add(this.wepslot1);
         this.buttonGroup.add(this.wepslot2);
         this.buttonGroup.add(this.wepslot3);
         
         // ability slots / tehosteiden paikat
-        this.abslot1 = this.game.add.button(450, 600, 'slot', this.selectAbility);
-        this.abslot2 = this.game.add.button(600, 600, 'slot', this.selectAbility);
-        this.abslot3 = this.game.add.button(750, 600, 'slot', this.selectAbility);
+        this.abslot1 = this.game.add.button(450, 600, 'slot', this.selectAbility,this);
+        this.abslot2 = this.game.add.button(600, 600, 'slot', this.selectAbility,this);
+        this.abslot3 = this.game.add.button(750, 600, 'slot', this.selectAbility,this);
         
         this.buttonGroup.add(this.abslot1);
         this.buttonGroup.add(this.abslot2);
@@ -66,13 +66,13 @@ loadoutMenu.prototype = {
     
     selectWeapon: function(){
         console.log('Selecting weapon');
-        if (am === false){
+        if (this.am == false){
             this.sweapon = this.game.add.sprite(900, 200, 'availableTray');
-            thingsGroup.add(this.sweapon);
-            am = true;
+            this.thingsGroup.add(this.sweapon);
+            this.am = true;
         } else {
             this.sweapon.kill();
-            am = false;
+            this.am = false;
         }
     },
     
@@ -89,7 +89,7 @@ loadoutMenu.prototype = {
  
     back:function(){
         
-        thingsGroup.removeAll();
+        this.thingsGroup.removeAll();
         // palataan takaisin päävalikkoon
         this.game.state.start('mainMenu',false,false,
             this.playerData,

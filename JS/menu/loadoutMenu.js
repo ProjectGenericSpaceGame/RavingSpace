@@ -66,14 +66,31 @@ loadoutMenu.prototype = {
     
     selectWeapon: function(){
         console.log('Selecting weapon');
+        this.weapons = [];
+        this.x = 905;
+        this.y = 205; 
         if (this.am == false){
             this.sweapon = this.game.add.sprite(900, 200, 'availableTray');
-            this.thingsGroup.add(this.sweapon);
+            for ( var i = 0; i <= 3; i++){
+                if (this.playerData.shipData[i] == 1){
+                    if(this.x > 905 + (92.5 * 2)){
+                        this.y += 95;
+                        this.x = 905;
+                    }
+                    console.log(i);
+                    this.weapons.push(this.game.add.button(this.x, this.y, 'weapon1'));
+                    this.x += 92.5;
+                } else {
+                    console.log(i);
+                }
+            }
+            
             this.am = true;
         } else {
             this.sweapon.kill();
             this.am = false;
         }
+        
     },
     
     selectAbility: function(){
@@ -98,6 +115,6 @@ loadoutMenu.prototype = {
             this.buttonGroup,
             this.surroundings
         );
-       thingsGroup.removeAll();
+
     }
 }

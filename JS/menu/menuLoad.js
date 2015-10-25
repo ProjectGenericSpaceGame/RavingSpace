@@ -17,6 +17,7 @@ menuLoad.prototype = {
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
+            this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             
           
@@ -102,7 +103,7 @@ menuLoad.prototype = {
                     "money":14034,
                     "points":16045
                 },
-                "shipData":[1,0,1,0,1,1,0],
+                "shipData":[1,1,1,1,1,1,0],
                 "playerScores":[
                     25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
                 ]

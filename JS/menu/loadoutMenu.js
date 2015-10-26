@@ -149,7 +149,7 @@ loadoutMenu.prototype = {
     
     gameStart: function(){
         // kutsutaan gameLoad -tilaa
-        this.game.state.start();
+        this.game.state.start('gameLoad');
     
     },
  

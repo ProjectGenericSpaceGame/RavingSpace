@@ -20,6 +20,7 @@ menuLoad.prototype = {
             this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
             this.game.load.image('ability1', 'assets/placeholders/ability1.png');
             this.game.load.image('slot', 'assets/placeholders/slot.png');
+            //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
             
           
         },
@@ -30,7 +31,7 @@ menuLoad.prototype = {
              var nameStyle = { font: "20px Calibri", fill:"blue"};
             var headingStyle = { font: "35px Calibri", fill:"white"};
             
-
+            //this.music = game.sound.play('testi');
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
            
             this.menuheader = this.game.add.sprite(0,0, "menuHeader");

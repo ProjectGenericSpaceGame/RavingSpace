@@ -26,6 +26,8 @@ loadoutMenu.prototype = {
         this.thingsGroup = this.game.add.group();
         this.am = false;
         this.im = false;
+        this.x = 450;
+        this.ax = 450;
         
         this.surroundings.menuLabel.text = 'Loadout';
         var style = { font:'25px calibri', fill:'black'};
@@ -45,29 +47,31 @@ loadoutMenu.prototype = {
         this.buttonGroup.add(this.goButton);
        
         // weapon slots/ aseitten paikat
-        this.wepslot1 = this.game.add.button(450, 250, 'slot', this.selectWeapon,this);
-        this.wepslot2 = this.game.add.button(600, 250, 'slot', this.selectWeapon,this);
-        this.wepslot3 = this.game.add.button(750, 250, 'slot', this.selectWeapon,this);
+        for (var i = 0; i <= 2; i++){
+        this.button = this.game.add.button(this.x, 250, 'slot', this.selectWeapon,this);
+        this.button.name = 'wepslot' + i;
+        this.buttonGroup.add(this.button);
+        this.x += 150;
+        }
         
-        this.buttonGroup.add(this.wepslot1);
-        this.buttonGroup.add(this.wepslot2);
-        this.buttonGroup.add(this.wepslot3);
         
         // ability slots / tehosteiden paikat
-        this.abslot1 = this.game.add.button(450, 600, 'slot', this.selectAbility,this);
-        this.abslot2 = this.game.add.button(600, 600, 'slot', this.selectAbility,this);
-        this.abslot3 = this.game.add.button(750, 600, 'slot', this.selectAbility,this);
+        for (var i = 0; i <= 2; i++){
+        this.button = this.game.add.button(this.ax, 600, 'slot', this.selectAbility,this);
+        this.button.name = 'abslot' + i;
+        this.buttonGroup.add(this.button);
+        this.ax += 150;
+        }
         
-        this.buttonGroup.add(this.abslot1);
-        this.buttonGroup.add(this.abslot2);
-        this.buttonGroup.add(this.abslot3);
+       
+        
 
         
     },
     
-    selectWeapon: function(){
+    selectWeapon: function(button){
         console.log('Selecting weapon');
-        
+        this.prewep = button;
         this.x = 905;
         this.y = 205; 
         if (this.am == false){
@@ -79,8 +83,9 @@ loadoutMenu.prototype = {
                         this.y += 95;
                         this.x = 905;
                     }
-                    console.log(i);
-                    this.thingsGroup.add(this.game.add.button(this.x, this.y, 'weapon1'));
+                    this.button = this.game.add.button(this.x, this.y, 'weapon1', this.weppressed, this);
+                    this.button.name = 'weapon' + i;
+                    this.thingsGroup.add(this.button);
                     this.x += 92.5;
                 } else {
                     console.log(i);
@@ -95,9 +100,11 @@ loadoutMenu.prototype = {
         
     },
     
-    selectAbility: function(){
+    selectAbility: function(button){
         console.log('Selecting ability');
-          this.x = 905;
+        this.preab = button;
+    
+        this.x = 905;
         this.y = 405; 
         if (this.im == false){
             this.sweapon = this.game.add.sprite(900, 400, 'availableTray');
@@ -108,8 +115,9 @@ loadoutMenu.prototype = {
                         this.y += 95;
                         this.x = 905;
                     }
-                    console.log(i);
-                    this.thingsGroup.add(this.game.add.button(this.x, this.y, 'ability1'));
+                    this.button = this.game.add.button(this.x, this.y, 'ability1', this.abpressed, this);
+                    this.button.name = 'ability' + i;
+                    this.thingsGroup.add(this.button);
                     this.x += 92.5;
                 } else {
                     console.log(i);
@@ -123,9 +131,25 @@ loadoutMenu.prototype = {
         }
     },
     
+    weppressed: function(button){
+        var p = button;
+        var icon = this.game.add.sprite(3,3, p.key);
+        this.prewep.addChild(icon);
+        
+     }, 
+    
+    abpressed: function(button){
+        var p = button;
+        var icon = this.game.add.sprite(3,3, p.key);
+        this.preab.addChild(icon);
+        
+    },
+    
+   
+    
     gameStart: function(){
         // kutsutaan gameLoad -tilaa
-        this.game.state.start('gameLoad');
+        this.game.state.start();
     
     },
  

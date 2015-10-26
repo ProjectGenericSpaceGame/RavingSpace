@@ -12,9 +12,11 @@ soundMenu.prototype = {
     preload:function(){
         //do some murdering here
         this.buttonGroup.removeAll();
+        this.game.load.audio('testi', 'assets/sounds/testi.mp3');
 
     },
     create:function(){
+        this.music = game.sound.play('testi');
         //otsikko
         this.surroundings.menuLabel.text = "Sounds";
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
@@ -54,6 +56,18 @@ soundMenu.prototype = {
         var saveText = this.game.add.text(400,20,"Save",style);
         this.saveButton.addChild(saveText);
         this.saveButton.getChildAt(0).scale.setTo(10, 1.5);
+        
+        // master volume buttons
+        this.mastervolupButton = this.game.add.button(850,300,'menuNext', this.mastvolUp, this, 1, 0, 2);
+        this.mastervoldownButton = this.game.add.button(590,300,'menuBack', this.mastvolDown, this, 1, 0, 2);
+        
+        // music volume buttons
+        this.musicvolupButton = this.game.add.button(850,370,'menuNext', this.musicvolUp, this, 1, 0, 2);
+        this.musicvoldownButton = this.game.add.button(590,370,'menuBack', this.musicvolDown, this, 1, 0, 2);
+        
+        // effects volume buttons
+        this.fxvolupButton = this.game.add.button(850,440,'menuNext', this.fxvolUp, this, 1, 0, 2);
+        this.fxvoldownButton = this.game.add.button(590,440,'menuBack', this.fxvolDown, this, 1, 0, 2);
 
         //alustetaan takaisin nappula
         var style = { font:'25px calibri', fill:'black'};
@@ -62,7 +76,13 @@ soundMenu.prototype = {
         var backText = this.game.add.text(400,20,"Back",style);
         this.backButton.addChild(backText);
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
-
+        
+        this.buttonGroup.add(this.mastervolupButton);
+        this.buttonGroup.add(this.mastervoldownButton);
+        this.buttonGroup.add(this.musicvolupButton);
+        this.buttonGroup.add(this.musicvoldownButton);
+        this.buttonGroup.add(this.fxvolupButton);
+        this.buttonGroup.add(this.fxvoldownButton);
         this.buttonGroup.add(this.mastervolLabel);
         this.buttonGroup.add(this.musicvolLabel);
         this.buttonGroup.add(this.effectsvolLabel);
@@ -72,14 +92,34 @@ soundMenu.prototype = {
         this.buttonGroup.add(this.resetButton);
         
     },
+    // mute function
     onoff:function(){
-        if (!this.game.sound.mute) {
-        this.game.sound.mute = true;
-    } else {
-        this.game.sound.mute = false;
-    } 
-        
-    },
+        this.game.sound.mute = !this.game.sound.mute;
+        },
+    mastvolUp:function(){
+        console.log('Volume up');
+        this.game.sound.volume += 0.1;
+        },
+    mastvolDown:function(){
+        console.log('Volume down');
+        this.game.sound.volume -= 0.1;
+        },
+    musicvolUp:function(){
+        console.log('Volume up');
+        this.game.sound.volume += 0.1;
+        },
+    musicvolDown:function(){
+        console.log('Volume down');
+        this.game.sound.volume -= 0.1;
+        },
+    fxvolUp:function(){
+        console.log('Volume up');
+        this.game.sound.volume += 0.1;
+        },
+    fxvolDown:function(){
+        console.log('Volume down');
+        this.game.sound.volume -= 0.1;
+        },
     back:function(){
         this.game.state.start('settings',false,false,
             this.playerData,

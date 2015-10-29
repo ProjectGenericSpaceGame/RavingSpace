@@ -23,6 +23,8 @@ menuLoad.prototype = {
             //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
 			 this.game.load.image('minus', 'assets/menuelements/minus.png');
 			 this.game.load.image('plus', 'assets/menuelements/plus.png');
+            this.game.load.image('needle', 'assets/menuelements/needle.png');
+            this.game.load.image('slider', 'assets/menuelements/slider.png');
 			 
 			 this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
 			 this.game.load.image('commander', 'assets/sprites/hunterFinal.png');

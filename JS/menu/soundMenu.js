@@ -16,26 +16,50 @@ soundMenu.prototype = {
 
     },
     create:function(){
-        this.music = game.sound.play('testi');
+        
+        this.sound = this.game.add.audio('testi');
+        this.sound.play();
+
+        
         //otsikko
         this.surroundings.menuLabel.text = "Sounds";
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
-
+        
         // mastervolumen säädin
         this.mastervolLabel = this.game.add.text(330, 300, 'Master volume');
         this.mastervolLabel.fill = 'white';
+        this.masterslider = this.game.add.sprite(630, 310, 'slider');
+        this.masterneedle = this.game.add.sprite(800, 305, 'needle');
+        this.masterneedle.inputEnabled = true;
+        this.masterneedle.input.enableDrag();
+        this.masterneedle.input.boundsSprite = this.masterslider;
+        this.masterneedle.input.allowVerticalDrag = false;
         
         // musiikkivolumen säädin
         this.musicvolLabel = this.game.add.text(330, 370, 'Music volume');
         this.musicvolLabel.fill = 'white';
-        
+        this.musicslider = this.game.add.sprite(630, 380, 'slider');
+        this.musicneedle = this.game.add.sprite(800, 375, 'needle');
+        this.musicneedle.inputEnabled = true;
+        this.musicneedle.input.enableDrag();
+        this.musicneedle.input.boundsSprite = this.musicslider;
+        this.musicneedle.input.allowVerticalDrag = false;
+        this.musicneedle.events.onDragUpdate.add(this.musicVolume);
+
         // efektivolumen säädin
         this.effectsvolLabel = this.game.add.text(330, 440, 'Effects volume');
         this.effectsvolLabel.fill = 'white';
+        this.fxslider = this.game.add.sprite(630, 450, 'slider');
+        this.fxneedle = this.game.add.sprite(800, 445, 'needle');
+        this.fxneedle.inputEnabled = true;
+        this.fxneedle.input.enableDrag();
+        this.fxneedle.input.boundsSprite = this.fxslider;
+        this.fxneedle.input.allowVerticalDrag = false;
+
         
         // alustetaan äänten on/off painike
         var style = { font:'25px calibri', fill:'black'};
-        this.onoffButton = this.game.add.button(590, 560, 'menuHeader', this.onoff, this, 1, 0, 2);
+        this.onoffButton = this.game.add.button(590, 560, 'menuHeader', this.onoff, this);
         this.onoffButton.scale.setTo(0.08, 0.5);
         var onoffText = this.game.add.text(350,20,"On/Off",style);
         this.onoffButton.addChild(onoffText);
@@ -43,7 +67,7 @@ soundMenu.prototype = {
         
         // alustetaan äänien resetointi painike
         var style = { font:'25px calibri', fill:'black'};
-        this.resetButton = this.game.add.button(660, 620, 'menuHeader', this.reset, this, 1, 0, 2);
+        this.resetButton = this.game.add.button(660, 620, 'menuHeader', this.reset, this);
         this.resetButton.scale.setTo(0.08, 0.5);
         var resetText = this.game.add.text(400,20,"Reset",style);
         this.resetButton.addChild(resetText);
@@ -51,23 +75,11 @@ soundMenu.prototype = {
         
         // alustetaan äänien tallennus painike
         var style = { font:'25px calibri', fill:'black'};
-        this.saveButton = this.game.add.button(530, 620, 'menuHeader', this.save, this, 1, 0, 2);
+        this.saveButton = this.game.add.button(530, 620, 'menuHeader', this.save, this);
         this.saveButton.scale.setTo(0.08, 0.5);
         var saveText = this.game.add.text(400,20,"Save",style);
         this.saveButton.addChild(saveText);
         this.saveButton.getChildAt(0).scale.setTo(10, 1.5);
-        
-        // master volume buttons
-        this.mastervolupButton = this.game.add.button(850,300,'menuNext', this.mastvolUp, this, 1, 0, 2);
-        this.mastervoldownButton = this.game.add.button(590,300,'menuBack', this.mastvolDown, this, 1, 0, 2);
-        
-        // music volume buttons
-        this.musicvolupButton = this.game.add.button(850,370,'menuNext', this.musicvolUp, this, 1, 0, 2);
-        this.musicvoldownButton = this.game.add.button(590,370,'menuBack', this.musicvolDown, this, 1, 0, 2);
-        
-        // effects volume buttons
-        this.fxvolupButton = this.game.add.button(850,440,'menuNext', this.fxvolUp, this, 1, 0, 2);
-        this.fxvoldownButton = this.game.add.button(590,440,'menuBack', this.fxvolDown, this, 1, 0, 2);
 
         //alustetaan takaisin nappula
         var style = { font:'25px calibri', fill:'black'};
@@ -77,12 +89,7 @@ soundMenu.prototype = {
         this.backButton.addChild(backText);
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
         
-        this.buttonGroup.add(this.mastervolupButton);
-        this.buttonGroup.add(this.mastervoldownButton);
-        this.buttonGroup.add(this.musicvolupButton);
-        this.buttonGroup.add(this.musicvoldownButton);
-        this.buttonGroup.add(this.fxvolupButton);
-        this.buttonGroup.add(this.fxvoldownButton);
+
         this.buttonGroup.add(this.mastervolLabel);
         this.buttonGroup.add(this.musicvolLabel);
         this.buttonGroup.add(this.effectsvolLabel);
@@ -92,34 +99,15 @@ soundMenu.prototype = {
         this.buttonGroup.add(this.resetButton);
         
     },
+    musicVolume:function() {
+
+    },
+    
     // mute function
     onoff:function(){
         this.game.sound.mute = !this.game.sound.mute;
         },
-    mastvolUp:function(){
-        console.log('Volume up');
-        this.game.sound.volume += 0.1;
-        },
-    mastvolDown:function(){
-        console.log('Volume down');
-        this.game.sound.volume -= 0.1;
-        },
-    musicvolUp:function(){
-        console.log('Volume up');
-        this.game.sound.volume += 0.1;
-        },
-    musicvolDown:function(){
-        console.log('Volume down');
-        this.game.sound.volume -= 0.1;
-        },
-    fxvolUp:function(){
-        console.log('Volume up');
-        this.game.sound.volume += 0.1;
-        },
-    fxvolDown:function(){
-        console.log('Volume down');
-        this.game.sound.volume -= 0.1;
-        },
+    
     back:function(){
         this.game.state.start('settings',false,false,
             this.playerData,

@@ -21,12 +21,12 @@ scoresSubMenu.prototype = {
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
         // tästä painikkeesta päästään high scoreihin
-        this.highscoresButton = this.game.add.button(200, 200, 'buttonSprite', this.highscoresStart, this, 1, 0, 2);
+        this.highscoresButton = this.game.add.button(200, 200, 'buttonSprite', this.highscoresStart, this, 0, 1, 2);
         var text1 = this.game.add.text(150,20,"High scores");
         this.highscoresButton.addChild(text1);
         
         // tästä painikkeesta löydät omat pisteesi
-        this.finduButton = this.game.add.button(200, 300, 'buttonSprite', this.finduStart, this, 1, 0, 2);
+        this.finduButton = this.game.add.button(200, 300, 'buttonSprite', this.finduStart, this, 0, 1, 2);
         var text2 = this.game.add.text(130,20,"Find yourself");
         this.finduButton.addChild(text2);
         
@@ -37,7 +37,7 @@ scoresSubMenu.prototype = {
         //this.findnextButton = this.game.add.button(400, 350, 'menuNext', this.findnextStart, this, 1, 0, 2);
         
         // tästä painikkeesta tarkastat omat pisteesti
-        this.checkscoresButton = this.game.add.button(200, 400, 'buttonSprite', this.checkscoresStart, this, 1, 0, 2);
+        this.checkscoresButton = this.game.add.button(200, 400, 'buttonSprite', this.checkscoresStart, this, 0, 1, 2);
         var text2 = this.game.add.text(100,20,"Check own scores");
         this.checkscoresButton.addChild(text2);
 

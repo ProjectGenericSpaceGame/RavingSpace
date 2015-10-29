@@ -31,7 +31,7 @@ loadoutMenu.prototype = {
         
         this.surroundings.menuLabel.text = 'Loadout';
         var style = { font:'25px calibri', fill:'black'};
-        this.goButton = this.game.add.button(975, 680, 'buttonSprite', this.gameStart, this, 1, 0, 2);
+        this.goButton = this.game.add.button(975, 680, 'buttonSprite', this.gameStart, this, 0, 1, 2);
         this.goButton.scale.setTo(0.3, 0.9);
         var goLabel = this.game.add.text(120,20,"Go!");
         this.goButton.addChild(goLabel);

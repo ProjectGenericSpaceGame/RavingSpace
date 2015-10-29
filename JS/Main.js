@@ -1,5 +1,6 @@
 //Pelin funktio
 var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
+var rnd = game.rnd;
 
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
@@ -59,6 +60,8 @@ function randNumber(lap){
 		var randNumbers =[]; // [0] vihollinen , [1] vihollisen spawninopeus
 		var x = 0;
 	    var y = 0;
+        var spawnCoordX;
+        var spawnCoordY;
 	
 		switch(lap) {
 		case 1: do {
@@ -75,7 +78,7 @@ function randNumber(lap){
 			x = Math.round(Math.random() * 100) /10;
 		} while( x <= 1.0 || x >= 3.9 ); 
 			break;
-		};
+		}
 	
 		randNumbers[1] = x; 
 	 
@@ -87,9 +90,30 @@ function randNumber(lap){
 		y != 2 &&
 		y != 3 
 	 );
-	 randNumbers[0] = y; 
-	 console.log(randNumbers[0], randNumbers[1]);
-	 return randNumbers; 
+    randNumbers[0] = y;
+    //generoidaan random dataa vihollisen syntyä varten
+    switch(rnd.integerInRange(1,4)){
+        case 1://top
+            spawnCoordX = rnd.integerInRange(0,game.world.width);
+            spawnCoordY = -50;
+            break;
+        case 2://left
+            spawnCoordX = game.world.width+50;
+            spawnCoordY = rnd.integerInRange(0,game.world.height);
+            break;
+        case 3://bottom
+            spawnCoordX = rnd.integerInRange(0,game.world.width);
+            spawnCoordY = game.world.height+50;
+            break;
+        case 4://right
+            spawnCoordX = -50;
+            spawnCoordY = rnd.integerInRange(0,game.world.height);
+            break;
+    }
+    randNumbers[2] = spawnCoordX;
+    randNumbers[3] = spawnCoordY
+    console.log(randNumbers[0], randNumbers[1]);
+    return randNumbers;
 }
 
 //Ampumisfunktio
@@ -108,7 +132,7 @@ function fire(bullets,gun,fireRate) {
 
 }
 function hitDetector(bullet, enemy, enemyAmount,lap){
-	bullet.kill()
+	bullet.kill();
 	console.log("got this far?");
 	if((enemy.health-0.25) <= 0){
 		enemy.kill();
@@ -125,7 +149,7 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship){
 		while(repeat){
 			if (enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false) != null)
 			{
-				enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false).reset((ship.body.x+100),ship.body.y);
+				enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false).reset(randNumbers[2],randNumbers[3]);
 				spawnPool[lap-1]--;
 				repeat = false;
 			} else {

@@ -10,8 +10,8 @@ menuLoad.prototype = {
 
             // ladataan valikon elementit
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
-            this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty.png', 400, 70);
-            this.game.load.image('menuBG', 'assets/sprites/VS_background_purple.png');    
+            this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
+            this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');    
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
@@ -21,15 +21,20 @@ menuLoad.prototype = {
             this.game.load.image('ability1', 'assets/placeholders/ability1.png');
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
+			 this.game.load.image('minus', 'assets/menuelements/minus.png');
+			 this.game.load.image('plus', 'assets/menuelements/plus.png');
+			 
+			 this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
+			 this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
             
           
         },
   
         create: function(){
             var self = this;
-            var textStyle = { font: "20px Calibri"};
+            var textStyle = { font: "20px cyber"};
              var nameStyle = { font: "20px Calibri", fill:"blue"};
-            var headingStyle = { font: "35px Calibri", fill:"white"};
+            var headingStyle = { font: "35px cyber", fill:"white"};
             
             //this.music = game.sound.play('testi');
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
@@ -48,13 +53,14 @@ menuLoad.prototype = {
             this.headUnder.scale.setTo(0.7, 0.03);
             
             // logout -painiket
-            this.logout = this.game.add.button(1160, 20, "menuHeader", this.logout, this, 1, 0, 2);
-            this.logout.scale.setTo(0.08, 0.5);
-            this.logout.tint = 0xf0f0f0;
-            var logText = this.game.add.text(400,20,"Logout",textStyle);
-            this.logout.addChild(logText);
-            this.menuheader.addChild(this.logout);
-            this.logout.getChildAt(0).scale.setTo(10, 1.5);
+            this.logoutBtn = this.game.add.button(1160, 20, "menuHeader", this.logout, this, 1, 0, 2);
+            this.logoutBtn.scale.setTo(0.08, 0.5);
+            this.logoutBtn.tint = 0xf0f0f0;
+            var logText = this.game.add.text(0,22.5,"Logout",{font:"18px cyber"});
+            logText.x = (this.logoutBtn.width/2)*(1/0.08)-(logText.width*(1/0.08)/2);
+            this.logoutBtn.addChild(logText);
+            this.menuheader.addChild(this.logoutBtn);
+            this.logoutBtn.getChildAt(0).scale.setTo((1/0.08), 1.5);
 
             //tänne tulee ajaxia ja kissoja
             var demoname = "testi1";

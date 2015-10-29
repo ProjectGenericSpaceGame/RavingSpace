@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'cyber';
+  src: url('../kelmscott_roman/Arkhip_font.ttf') format('truetype');
+}
+
+.fontLoader {
+    position: absolute;
+	visibility:hidden;
+	font-family:"cyber";
+}
+* {
+	margin:0;
+}

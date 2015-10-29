@@ -1,6 +1,5 @@
 // Tämä tiedosto lataa valikon elementit.
 var menuLoad = function(game){
-   
 };
 
 menuLoad.prototype = {

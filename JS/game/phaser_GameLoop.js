@@ -6,7 +6,6 @@ var mainGame = function(game){
 	pi = Math.PI;
 	execTime = 0;
 	spawnNext = "undefined";
-    waiter = null;
 	lastRot = 0;
 };
 mainGame.prototype = {
@@ -34,6 +33,8 @@ mainGame.prototype = {
 		this.flipped = false;
 		this.IntMouseTrack = -1;
 		this.moving = "";
+		this.clips = [35,0,0,0];
+		this.reloading = false;
 
 		this.fixed = false;//dedug, to be removed
 		
@@ -199,7 +200,8 @@ mainGame.prototype = {
 				}
 			}
 		}
-        text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot);
+        //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
+        text.text = String(this.clips[0]+"+"+this.reloading);
         text2.text = String(this.enemyAmount+"+"+this.spawnPool+"+"+this.attackInfo);
 
 		if(corRot >= 6.0 && lastRot <= 3.0){
@@ -234,17 +236,24 @@ mainGame.prototype = {
 			this.ship.body.applyForce([-Math.cos(this.ship.body.rotation)*7,-Math.sin(this.ship.body.rotation)*7],0,0);
 		}
 		//ampuminen
-		if (this.game.input.activePointer.isDown)
+		if (this.game.input.activePointer.isDown && this.clips[0] > 0)
 		{
-			fire(this.bullets,this.gun,this.fireRate);
+			if(fire(this.bullets,this.gun,this.fireRate,corRot,this.ship)){
+                this.clips[0]--;
+            }
+
+
+		} else if(!this.reloading && this.clips[0] == 0){
+			this.game.time.events.add(2500,function(){this.clips[0] = 50;this.reloading = false},this);
+			//waiter.start();
+			this.reloading = true;
 		}
 		
 		//Hyökkäyksen hallinta
 		//alert(enemy1.countLiving);
 		if (spawnNext == true || spawnNext == "undefined"){
 			var randNumbers = randNumber(this.lap);
-			waiter = this.game.time.create();
-			waiter.add((randNumbers[1]*1000),function(){
+			this.game.time.events.add((randNumbers[1]*1000),function(){
 				var next = spawnEnemy(this.spawnPool,this.enemyAmount,this.enemies,this.lap,this.ship);
                                 if(next === "next"){
                                     this.lap++;
@@ -253,16 +262,16 @@ mainGame.prototype = {
                                     this.enemy3 = this.enemies.getChildAt(this.lap-1).getChildAt(2);
                                 }
 			},this);
-			waiter.start();
+			//waiter.start();
 			spawnNext = false;
 		}
 		var boundsBullet;
 		var groups = [this.enemy1,this.enemy2,this.enemy3];
                 var bullets = this.bullets;
                 var enemyAmount = this.enemyAmount;
-		for(var i = 0;i<3;i++){
+		for(var iter = 0;iter<3;iter++){
 			//console.log(i);
-			groups[i].forEachAlive(function(en){
+			groups[iter].forEachAlive(function(en){
 				bullets.forEachAlive(function(b){
 					boundsBullet = b.world;
 					var array = this.game.physics.p2.hitTest(boundsBullet,[en]);

@@ -2,6 +2,7 @@
 var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
 var rnd = game.rnd;
 
+
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
 //game.state.add("customMenu", customMenu);
@@ -16,6 +17,7 @@ game.state.add('mainGame', mainGame);
 game.state.add('loadoutMenu', loadoutMenu);
 
 game.state.start('menuLoad');
+
 // game.state.start("gameLoad");
 /*
 //globaalit muuttujat
@@ -111,13 +113,13 @@ function randNumber(lap){
             break;
     }
     randNumbers[2] = spawnCoordX;
-    randNumbers[3] = spawnCoordY
+    randNumbers[3] = spawnCoordY;
     console.log(randNumbers[0], randNumbers[1]);
     return randNumbers;
 }
 
 //Ampumisfunktio
-function fire(bullets,gun,fireRate) {
+function fire(bullets,gun,fireRate,deg,ship) {
 
     if (game.time.now > nextFire && bullets.countDead() > 0)
     {
@@ -127,7 +129,33 @@ function fire(bullets,gun,fireRate) {
 
         bullet.reset(gun.world.x, gun.world.y);
 
-        game.physics.arcade.moveToPointer(bullet, 330);
+        //game.physics.arcade.moveToPointer(bullet, 330);
+        var pointX;
+        var pointY;
+        if(deg < 1.6+pi/2){//right bottom
+            pointX = ship.x+50;
+            pointY = ship.y+(Math.tan(deg-pi/2)*50);
+        } else if(deg < 1.6+pi){//left bottom
+            pointX = ship.x-50;
+            pointY = ship.y+50/(Math.tan(deg-pi));
+        } else if(deg < 1.6+3*pi/2){//upper left
+            pointX = ship.x-50;
+            if(deg != 6.3) {
+                pointY = ship.y - (Math.tan(deg - 3 * pi / 2) * 50);
+            } else {
+                pointY = ship.y - (Math.tan(1.57) * 50);//Tästä tulisi normaalisti taniin 1.5755 joka antaa negatiivisia arvoja (1.5755 on asteina 90.1)
+            }
+
+        } else {//upper right
+            pointX = ship.x+50;
+            pointY = ship.y-50/(Math.tan(deg-pi*2));
+        }
+        game.physics.arcade.moveToXY(bullet, pointX,pointY,330);
+        //ship.body.x = pointX;
+        //ship.body.y = pointY;
+        return true;
+    } else {
+        return false;
     }
 
 }
@@ -149,7 +177,10 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship){
 		while(repeat){
 			if (enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false) != null)
 			{
-				enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false).reset(randNumbers[2],randNumbers[3]);
+				var enemy = enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false);
+                enemy.reset(randNumbers[2],randNumbers[3]);
+                if(enemy.key == "commander"){enemy.health = 2.5;}
+                //enemy.body.collideWorldBounds = false; //salli tämä rivi kun tekoäly paikallaan, estää kolmioiden lentämisen pelialueelle suurella nopeudella
 				spawnPool[lap-1]--;
 				repeat = false;
 			} else {

@@ -27,6 +27,8 @@ gameLoad.prototype = {
 		this.game.load.image('ship', 'assets/sprites/VS_peli_ship.png');
 		//ladataan viholliset
 		this.game.load.spritesheet('enemies', 'assets/sprites/enemies.png',97,113);
+		this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
+		this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
 		//this.game.load.spritesheet('enemy2', 'assets/sprites/enemies.png',97,195);
 		//this.game.load.spritesheet('enemy3', 'assets/sprites/enemies.png',195,290);
 		//Ladataan trail-partikkelit
@@ -36,6 +38,8 @@ gameLoad.prototype = {
 		this.game.load.image('bullet', 'assets/sprites/bullet.png');
 	},
 	create: function(){
+        waiter = this.game.time.create();
+
 		this.attackInfo = "031509'302112'352713";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
@@ -109,12 +113,19 @@ gameLoad.prototype = {
 			this.enemies.getChildAt(i).add(tEnemy1);
 			
 			var tEnemy2 = this.game.add.group();
-			tEnemy2.createMultiple(parseInt(this.attackInfo[i].substring(2,4)),"enemies",1);
-			this.game.physics.p2.enable(tEnemy2);
+			tEnemy2.createMultiple(parseInt(this.attackInfo[i].substring(2,4)),"hunter");
+            tEnemy2.forEach(function(enemy){
+               enemy.scale.setTo(0.4,0.4);
+            });
+            this.game.physics.p2.enable(tEnemy2);
 			this.enemies.getChildAt(i).add(tEnemy2);
 			
 			var tEnemy3 = this.game.add.group();
-			tEnemy3.createMultiple(parseInt(this.attackInfo[i].substring(4,6)),"enemies",2);
+			tEnemy3.createMultiple(parseInt(this.attackInfo[i].substring(4,6)),"commander");
+            tEnemy3.forEach(function(enemy){
+                enemy.health = 2.5;
+                enemy.scale.setTo(0.55,0.55);
+            });
 			this.game.physics.p2.enable(tEnemy3);
 			this.enemies.getChildAt(i).add(tEnemy3);
 		};

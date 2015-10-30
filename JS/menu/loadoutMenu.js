@@ -25,15 +25,30 @@ loadoutMenu.prototype = {
         
         this.thingsGroup = this.game.add.group();
         // valitut aseet ja tehosteet
-       this.selectedLoadout = [];
-        // valittujen aseiden lukumäärä
-        this.wC = 0;
-        // valittujen tehosteiden lukumäärä
-        this.aC = 4;
+        this.selectedLoadout = [];
+        // lajitellaan pelaajan ostamat aseet
+        this.availableWeapons = [];
+        for(var i = 0; i <=3; i++){
+            this.availableWeapons[i] = this.playerData.shipData[i];
+        }
+        
+        // lajitellaan pelaajan ostamat tehosteet
+        this.availableAbilities = [];
+        for(var i = 4; i <=8; i++){
+            this.availableAbilities[i-4] = this.playerData.shipData[i];
+        }
+        // näihin taulukoihin tallennetaan tieto siitä onko ase valittu. 0 = ei valittu, 1 = on valittu 
+        this.WSA = [0,0,0,0];
+        this.ASA = [0,0,0,0];
+        
+    
+        // valittujen tehosteiden lukumäärä. Pelaaja saa valita vain 2 tehostetta
+        this.aC = 0;
         // onko asevalikko olemassa
         this.am = false;
         // onko tehostevalikko olemassa
         this.im = false;
+        
         this.x = 450;
         this.ax = 450;
         
@@ -85,7 +100,7 @@ loadoutMenu.prototype = {
         this.prewep = button;
         this.x = 905;
         this.y = 205;
-        
+        var i;
         // Mikäli toinen tehostevalikko on auki se suljetaan
         if(this.im == true){
             this.thingsGroup.removeAll();
@@ -95,20 +110,38 @@ loadoutMenu.prototype = {
         if (this.am == false){
             this.sweapon = this.game.add.sprite(900, 200, 'availableTray');
             this.thingsGroup.add(this.sweapon);
-            for ( var i = 0; i <= 3; i++){
-                if (this.playerData.shipData[i] == 1){
+            
+            for (i = 0; i <= 3; i++){
+                // tarkistetaan onko pelaaja ostanut aseen
+                if (this.availableWeapons[i] == 1){
+                    // rivitellään aseet
                     if(this.x > 905 + (92.5 * 2)){
                         this.y += 95;
                         this.x = 905;
                     }
-                    if(this.selectedLoadout[i] == null){
-                    this.button = this.game.add.button(this.x, this.y, 'weapon1', this.weppressed, this);
-                    this.button.name = 'weapon' + i;
-                    this.thingsGroup.add(this.button);
-                    this.x += 92.5;
-                } }
-            }
-            
+                    // Tarkistetaanko onko painetulla asepaikalla jo lapsi
+                    if(this.prewep.hasChild === true){
+                        // jos on lapsi niin poistetaan se
+                        this.prewep.getChildAt(0).kill();
+                        this.prewep.hasChild = false;
+                        // tulostetaan nyt aseet jotka ovat vielä saatavilla
+                        for(var j = 0; j <= 3; j++){
+                            if(this.WSA[j] == 0){
+                                this.button = this.game.add.button(this.x, this.y, 'weapon' + i, this.weppressed, this);
+                                this.button.name = 'weapon' + i;
+                                this.thingsGroup.add(this.button);
+                                this.x += 92.5;
+                            }
+                        }
+                    // mikäli painetulla asepaikalla ei ole lasta tulostetaan aseita mikäli ne ovat vielä saatavilla    
+                    } if(this.WSA[i] == 0){
+                        this.button = this.game.add.button(this.x, this.y, 'weapon' + i, this.weppressed, this);
+                        this.button.name = 'weapon' + i;
+                        this.thingsGroup.add(this.button);
+                        this.x += 92.5;
+                    }
+                }
+            } 
             this.am = true;
         } else {
             this.thingsGroup.removeAll();
@@ -119,8 +152,8 @@ loadoutMenu.prototype = {
     
     selectAbility: function(button){
         //console.log("onko tehosteet olemassa "+this.im+" onko aseet olemassa "+this.am);
+        
         this.preab = button;
-    
         this.x = 905;
         this.y = 405;
         // Mikäli toinen asevalikko on auki se suljetaan
@@ -130,19 +163,20 @@ loadoutMenu.prototype = {
         }
         // Mikäli tehostevalikko ei ole auki se avataan
         if (this.im == false){
-            this.sweapon = this.game.add.sprite(900, 400, 'availableTray');
-            this.thingsGroup.add(this.sweapon);
-            for ( var i = 4; i <= 7; i++){
-                // tarkistetaan pelaajan datasta onko pelaaja avannut aseita.
-                if (this.playerData.shipData[i] == 1){
+            this.sability = this.game.add.sprite(900, 400, 'availableTray');
+            this.thingsGroup.add(this.sability);
+            
+            for ( var i = 0; i <= 3; i++){
+                // tarkistetaan saatavilla olevista tehosteista onko pelaaja avannut tehosteita.
+                if (this.availableAbilities[i] == 1){
                     // mikäli aseita on 3 vierekkäin niin 4. ase laitetaan toiselle riville. purkkakoodia.
                     if(this.x > 905 + (92.5 * 2)){
                         this.y += 95;
                         this.x = 905;
                     }
-                    if (this.selectedLoadout[i] == null){
-                    // jos on niin lisätään ne aseet valittavien aseiden listaan.
-                    this.button = this.game.add.button(this.x, this.y, 'ability1', this.abpressed, this);
+                    if (this.selectedLoadout[i+3] == null){
+                    // jos tehosteet ovat käytössä, tulostetaan niiden kuvakkeet
+                    this.button = this.game.add.button(this.x, this.y, 'ability' + i, this.abpressed, this);
                     this.button.name = 'ability' + i;
                     this.thingsGroup.add(this.button);
                     this.x += 92.5;
@@ -160,43 +194,40 @@ loadoutMenu.prototype = {
     
     weppressed: function(button){
         var p = button;
-        if(this.wC <= 2){
+        // pelaaja saa valita ainoastaa 3 asetta mukaansa.
+        
             this.selectedLoadout[this.wC] = button.name;
+            var num = button.name.replace( /^\D+/g, '');
+            console.log("tämän funktion tulos on " +num);
+            this.WSA[num] = 1;
             console.log(this.selectedLoadout[this.wC]);
-            this.wC += 1;
-        } else {
-            console.log("liikaa aseita, et voi valita enää");
-        }
+        
+        
         // Lisätään sen aseen kuvake paikkaan josta pelaaja painoi.
         var icon = this.game.add.sprite(3,3, p.key);
         this.prewep.addChild(icon);
-        p.kill();
-        this.thingsGroup.remove(p);
+        this.prewep.hasChild = true;
      }, 
     
     abpressed: function(button){
         var p = button;
         
-        if(this.aC <= 7){
-            this.selectedLoadout[this.aC] = button.name;
-            console.log(this.selectedLoadout[this.aC]);
+        // pelaaja saa valita ainoastaan 2 tehostetta mukaansa
+        if(this.aC <= 1){
+            // mikäli pelaaja ei ole vielä valinnut 2 tehostetta, lisätään valittu tehoste selectedLoadout -talukkoon 
+            // aseiden jatkoksi
+            this.selectedLoadout[this.aC + 3] = button.name;
+            console.log(this.selectedLoadout[this.aC + 3]);
             this.aC += 1;
-        } else {
-            console.log("liikaa tehosteita, et voi valita enää");
-        }
+        } 
          // Lisätään sen tehosteen kuvake paikkaan josta pelaaja painoi.
         var icon = this.game.add.sprite(3,3, p.key);
         this.preab.addChild(icon);
-        p.kill();
-        this.thingsGroup.remove(p);
     },
-    
-   
     
     gameStart: function(){
         // kutsutaan gameLoad -tilaa
         this.game.state.start('gameLoad');
-    
     },
  
     back:function(){

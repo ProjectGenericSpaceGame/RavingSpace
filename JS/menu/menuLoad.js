@@ -16,8 +16,17 @@ menuLoad.prototype = {
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
+            // aseet
+            this.game.load.image('weapon0', 'assets/placeholders/weapon0.png');
             this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
+            this.game.load.image('weapon2', 'assets/placeholders/weapon2.png');
+            this.game.load.image('weapon3', 'assets/placeholders/weapon3.png');
+            // tehosteet
+            this.game.load.image('ability0', 'assets/placeholders/ability0.png');
             this.game.load.image('ability1', 'assets/placeholders/ability1.png');
+            this.game.load.image('ability2', 'assets/placeholders/ability2.png');
+            this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+            
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
 			 this.game.load.image('minus', 'assets/menuelements/minus.png');
@@ -112,7 +121,7 @@ menuLoad.prototype = {
                     "money":14034,
                     "points":16045
                 },
-                "shipData":[1,1,1,1,1,1,0],
+                "shipData":[1,1,1,1,1,1,0,0],
                 "playerScores":[
                     25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
                 ]

@@ -211,7 +211,8 @@ mainGame.prototype = {
 			}
 		}
         //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-        text.text = String(this.clips[0]+"+"+this.reloading);
+        text.text = String(this.clips[0]+"+"+this.reloading+"+"+execTime);
+        if(execTime > 10){alert("performance issue: "+execTime);}
         text2.text = String(this.enemyAmount+"+"+this.spawnPool+"+"+this.attackInfo);
 
 		if(corRot >= 6.0 && lastRot <= 3.0){

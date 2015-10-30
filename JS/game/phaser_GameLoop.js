@@ -15,7 +15,7 @@ mainGame.prototype = {
 		this.ship = ship;//
 		this.gun = gun;//
 		this.bullets = bullets;//
-		this.enemies = enemies;;//
+		this.enemies = enemies;//
 		this.enemy1 = enemy1;//
 		this.enemy2 = enemy2;//
 		this.enemy3 = enemy3;//
@@ -45,9 +45,18 @@ mainGame.prototype = {
 		this.game.camera.follow(this.ship); 
 		this.game.physics.p2.defaultRestitution = 0.8;
 		this.game.physics.p2.enable(this.asteroids);
+        this.game.physics.p2.setImpactEvents(true);
 		this.asteroids.forEach(function(item){
 			item.body.clearCollision();
 		});
+        //this.game.physics.p2.setBounds(0,0,this.game.world.width,this.game.world.height,true,true,true,true,true);
+        this.playerCollisonGroup = this.game.physics.p2.createCollisionGroup();
+        this.enemiesCollisonGroup = this.game.physics.p2.createCollisionGroup();
+        //this.game.physics.p2.setBounds(0,0,1600,1000,true,true,true,true,true);
+        this.game.physics.p2.updateBoundsCollisionGroup();
+        this.ship.body.setCollisionGroup(this.playerCollisonGroup);
+        this.ship.body.collides([this.enemiesCollisonGroup]);
+        //this.ship.body.collideWorldBounds = true;
 	},
 	update: function(){
 		var self = this;
@@ -55,6 +64,7 @@ mainGame.prototype = {
 		var benchmark = performance.now();
 		this.ship.body.mass = 0.7;
 		this.ship.body.damping = 0.7;
+        //this.ship.body.collideWorldBounds = true;
 		//pyörittää asteroideja
 		var suunta = 0;
 		this.asteroids.forEach(function(item){
@@ -75,7 +85,7 @@ mainGame.prototype = {
 		this.game.physics.arcade.overlap(this.bullets, this.enemy2, hitDetector, null, this);
 		this.game.physics.arcade.overlap(this.bullets, this.enemy3, hitDetector, null, this);
 		var Ycoord;
-                var Xcoord;
+		var Xcoord;
 		//calculate deg
 		//otetaan huomioon kameran ja kentän koon erotus
 		if(this.ship.body.y <= 400){
@@ -128,7 +138,7 @@ mainGame.prototype = {
 		var shipRot = this.ship.body.rotation;
 		//console.log(this.ship.body.rotation);
 		//console.log(shipRot+"####"+deg+"###"+(2*pi-deg));
-		//Pyöristetään
+		//Pyöristetään ja korreloidaan
 		var corDeg = Math.round(((2*pi-deg)+(pi/2))*10)/10;//hiiren arvo
 		var corRot = Math.round(this.ship.body.rotation*10)/10;//aluksen arvo
 		if(corDeg == 7.9){
@@ -241,10 +251,8 @@ mainGame.prototype = {
 			if(fire(this.bullets,this.gun,this.fireRate,corRot,this.ship)){
                 this.clips[0]--;
             }
-
-
 		} else if(!this.reloading && this.clips[0] == 0){
-			this.game.time.events.add(2500,function(){this.clips[0] = 50;this.reloading = false},this);
+			this.game.time.events.add(3000,function(){this.clips[0] = 35;this.reloading = false},this);
 			//waiter.start();
 			this.reloading = true;
 		}
@@ -254,7 +262,7 @@ mainGame.prototype = {
 		if (spawnNext == true || spawnNext == "undefined"){
 			var randNumbers = randNumber(this.lap);
 			this.game.time.events.add((randNumbers[1]*1000),function(){
-				var next = spawnEnemy(this.spawnPool,this.enemyAmount,this.enemies,this.lap,this.ship);
+				var next = spawnEnemy(this.spawnPool,this.enemyAmount,this.enemies,this.lap,this.ship,this.playerCollisonGroup,this.enemiesCollisonGroup);
                                 if(next === "next"){
                                     this.lap++;
                                     this.enemy1 = this.enemies.getChildAt(this.lap-1).getChildAt(0);//tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
@@ -282,8 +290,36 @@ mainGame.prototype = {
 			});
 		 } 
 		this.fixed = "";
-		
-		
+		//tekoäly
+		this.enemy3.forEachAlive(function(enemy){
+            if(enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000){
+                enemy.name = "fresh";
+            } else if(enemy.name == "fresh"){
+                enemy.name = "free"
+            }
+            var dir;
+            if(enemy.body.y > 100 && enemy.body.x < this.game.world.width-100
+                && enemy.body.y > 100 && enemy.body.y < this.game.world.height-100
+                && enemy.name == "free") {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
+                enemy.body.mass = rnd.realInRange(0.8, 0.92);
+                enemy.body.damping = rnd.realInRange(0.8, 0.92);
+                dir = acquireTarget(this.ship, enemy);
+                enemy.body.rotation = dir;
+                enemy.body.thrust(60);
+                this.game.time.events.add(1000,function() {
+                    enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+                    enemy.body.mass = 0.7;
+                    enemy.body.damping = 0.7;
+                },this);
+                enemy.name = "inPlay";
+
+            } else if(enemy.name == "inPlay"){//tämä ajetaan normaalisti koko ajan
+                dir = acquireTarget(this.ship, enemy);
+                enemy.body.rotation = dir;
+                enemy.body.thrust(60);
+
+            }
+		},this);
 		
 		var benchmark2 = performance.now();
 		execTime = benchmark2-benchmark;

@@ -96,20 +96,20 @@ function randNumber(lap){
     //generoidaan random dataa vihollisen syntyä varten
     switch(rnd.integerInRange(1,4)){
         case 1://top
-            spawnCoordX = rnd.integerInRange(0,game.world.width);
+            spawnCoordX = rnd.integerInRange(100,game.world.width-100);
             spawnCoordY = -50;
             break;
         case 2://left
             spawnCoordX = game.world.width+50;
-            spawnCoordY = rnd.integerInRange(0,game.world.height);
+            spawnCoordY = rnd.integerInRange(100,game.world.height-100);
             break;
         case 3://bottom
-            spawnCoordX = rnd.integerInRange(0,game.world.width);
+            spawnCoordX = rnd.integerInRange(100,game.world.width-100);
             spawnCoordY = game.world.height+50;
             break;
         case 4://right
             spawnCoordX = -50;
-            spawnCoordY = rnd.integerInRange(0,game.world.height);
+            spawnCoordY = rnd.integerInRange(100,game.world.height-100);
             break;
     }
     randNumbers[2] = spawnCoordX;
@@ -170,7 +170,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
 	}
 }
 //Luodaan uusi vihollinen ja tarkistetaan onko kierros loppu
-function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship){
+function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
 	var randNumbers = randNumber();
 	var repeat = true;
 	if(spawnPool[lap-1] > 0){//jos poolissa on vielä aluksia
@@ -180,8 +180,10 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship){
 				var enemy = enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false);
                 enemy.reset(randNumbers[2],randNumbers[3]);
                 if(enemy.key == "commander"){enemy.health = 2.5;}
+                enemy.body.setCollisionGroup(enColGrp);
+                //enemy.body.collides([enColGrp,plrColGrp]);//törmäykset asetetaan kun vihu on päässyt pelialueelle
                 //enemy.body.collideWorldBounds = false; //salli tämä rivi kun tekoäly paikallaan, estää kolmioiden lentämisen pelialueelle suurella nopeudella
-				spawnPool[lap-1]--;
+                spawnPool[lap-1]--;
 				repeat = false;
 			} else {
 				randNumbers = randNumber();
@@ -239,6 +241,33 @@ function formatWave(data){
 	var struct = ""+data[0][0]+""+data[0][1]+""+""+data[0][2]+"'"+data[1][0]+""+data[1][1]+""+""+data[1][2]+"'"+data[2][0]+""+data[2][1]+""+""+data[2][2]+"";
     formatted.waveStruct = struct;
     return formatted;
+}
+function acquireTarget(target,enemy){
+
+	var Ycoord = enemy.body.y-target.body.y;
+	var Xcoord = target.body.x-enemy.body.x;
+    if(Xcoord == 0){Xcoord+=0.1}
+    if(Ycoord == 0){Ycoord+=0.1}
+	var degr;
+	switch(true){
+		case (Xcoord > 0 && Ycoord > 0):
+			degr = Math.atan(Ycoord/Xcoord);
+			break;
+		case (Xcoord < 0 && Ycoord > 0):
+			degr = (Math.atan(((Xcoord/Ycoord)*(0-1))))+(pi/2);
+			break;
+		case (Xcoord < 0 && Ycoord < 0):
+			degr = (Math.atan(Ycoord/Xcoord))+pi;
+			break;
+		case (Xcoord > 0 && Ycoord < 0):
+			degr = (Math.atan((Xcoord/Ycoord)*(0-1)))+((3*pi)/2);
+			break;
+		default:
+		//console.log("lol");
+	}
+    degr = pi*(2+1/2)-degr;
+    return degr;
+
 }
 
 

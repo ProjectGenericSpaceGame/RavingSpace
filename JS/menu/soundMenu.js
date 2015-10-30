@@ -29,6 +29,7 @@ soundMenu.prototype = {
         this.mastervolLabel = this.game.add.text(330, 300, 'Master volume');
         this.mastervolLabel.fill = 'white';
         this.masterslider = this.game.add.sprite(630, 310, 'slider');
+        this.masterslider.scale.setTo(1,2);
         this.masterneedle = this.game.add.sprite(800, 305, 'needle');
         this.masterneedle.inputEnabled = true;
         this.masterneedle.input.enableDrag();

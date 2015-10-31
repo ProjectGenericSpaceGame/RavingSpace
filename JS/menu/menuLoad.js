@@ -130,7 +130,13 @@ menuLoad.prototype = {
                     25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
                 ]
             };//demo
-            this.globalScores = {};//demo
+            this.globalScores = {"highScores":[["testi1",25000],["testi1",21566],["testi1",20145],["testi1",19563],["testi1",18054],["testi1",12056],["testi1",11753],["testi1",10654],["testi1",9236],["testi1",4067],["testi2",100],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi4",0],["testi4",22798],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi7",30000],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0]]};//demo
+            var scoreSort = [];
+            for(var i = 0;i < this.globalScores.highScores.length;i++) {
+                scoreSort.push(this.globalScores.highScores[i]);
+            }
+            scoreSort.sort(this.compare);
+            this.globalScores = scoreSort;
             this.playerWaves = {"playerWaves":[
                 {
                     "waveStruct":"101104'151207'231009",

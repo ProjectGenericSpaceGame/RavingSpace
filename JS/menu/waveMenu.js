@@ -352,21 +352,25 @@ waveMenu.prototype = {
         this.centerWindow.removeAll();
         //tehdään yläpalkki ja ympärys
         var g = this.game.add.graphics(0,0);
-        g.lineStyle(1,0x000000,1);
+        g.lineStyle(1,0xFFFFFF,1);
         g.moveTo(20,25);
         g.lineTo(20,522.5);
+        g.lineStyle(2,0xFFFFFF,1);
         g.lineTo(660,522.5);
+        g.lineStyle(1,0xFFFFFF,1);
         g.lineTo(660,25);
         g.lineTo(20,25);
         //yläpalkin laatikot ja teksti
         g.moveTo(20,75);
+        g.lineStyle(2,0xFFFFFF,1);
         g.lineTo(660,75);
+        g.lineStyle(1,0xFFFFFF,1);
         g.moveTo(220,25);
         g.lineTo(220,75);
         g.moveTo(440,25);
         g.lineTo(440,75);
         this.centerWindow.addChild(g);
-        var style = { font:'20px calibri', fill:'black'};
+        var style = { font:'15px cyber', fill:'white'};
         var structure = this.game.add.text(0,40,"Structure",style);
         structure.x = ((220+20)/2)-structure.width/2;
         var status = this.game.add.text(0,40,"Status",style);
@@ -386,7 +390,7 @@ waveMenu.prototype = {
         while(i < this.playerWaves.playerWaves.length){
             var row = this.game.add.group();
             var gRow = this.game.add.graphics(0,0);
-            gRow.lineStyle(1,0x000000,1);
+            gRow.lineStyle(1,0xFFFFFF,1);
             gRow.moveTo(20,50);
             gRow.lineTo(660,50);
             gRow.moveTo(220,0);

@@ -122,19 +122,23 @@ loadoutMenu.prototype = {
                     // Tarkistetaanko onko painetulla asepaikalla jo lapsi
                     if(this.prewep.hasChild === true){
                         // jos on lapsi niin poistetaan se
-                        this.prewep.getChildAt(0).kill();
+                        //this.prewep.getChildAt(0).kill();
+                        this.prewep.removeChildren(0,1);
                         this.prewep.hasChild = false;
+                        var num = this.prewep.name.replace( /^\D+/g, '');
+                        this.WSA[parseInt(num)] = 0;
                         // tulostetaan nyt aseet jotka ovat vielä saatavilla
-                        for(var j = 0; j <= 3; j++){
+                        /*for(var j = 0; j <= 3; j++){
                             if(this.WSA[j] == 0){
                                 this.button = this.game.add.button(this.x, this.y, 'weapon' + i, this.weppressed, this);
                                 this.button.name = 'weapon' + i;
                                 this.thingsGroup.add(this.button);
                                 this.x += 92.5;
                             }
-                        }
+                        }*/
                     // mikäli painetulla asepaikalla ei ole lasta tulostetaan aseita mikäli ne ovat vielä saatavilla    
-                    } if(this.WSA[i] == 0){
+                    }
+                    if(this.WSA[i] == 0){//tähän else if?
                         this.button = this.game.add.button(this.x, this.y, 'weapon' + i, this.weppressed, this);
                         this.button.name = 'weapon' + i;
                         this.thingsGroup.add(this.button);
@@ -205,6 +209,7 @@ loadoutMenu.prototype = {
         
         // Lisätään sen aseen kuvake paikkaan josta pelaaja painoi.
         var icon = this.game.add.sprite(3,3, p.key);
+        this.prewep.name = p.name;
         this.prewep.addChild(icon);
         this.prewep.hasChild = true;
      }, 

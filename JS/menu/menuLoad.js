@@ -15,6 +15,8 @@ menuLoad.prototype = {
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder2.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
+        
+            this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
             // aseet
@@ -125,7 +127,7 @@ menuLoad.prototype = {
                     "money":14034,
                     "points":16045
                 },
-                "shipData":[1,1,1,1,1,1,0,0],
+                "shipData":[1,1,1,1,1,1,1,1],
                 "playerScores":[
                     25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
                 ]

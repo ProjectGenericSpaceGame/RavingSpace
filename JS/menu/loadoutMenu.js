@@ -54,6 +54,7 @@ loadoutMenu.prototype = {
         var goLabel = this.game.add.text(120,20,"Go!");
         this.goButton.addChild(goLabel);
         this.goButton.getChildAt(0).scale.setTo(3, 1);
+        this.game.add.sprite(550,400, 'playerShip');
         
         // Back -nappula. Sitä painamalla päästään takaisin päävalikkoon
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
@@ -222,11 +223,8 @@ loadoutMenu.prototype = {
     
     gameStart: function(){
         // kutsutaan gameLoad -tilaa
-        //this.game.state.start('gameLoad');
-        console.log("valittu loadout: ");
-        for(var i  = 0; i <= 4; i++){
-            console.log(this.selectedLoadout[i]);
-        }
+        this.game.state.start('gameLoad');
+        
     },
  
     back:function(){

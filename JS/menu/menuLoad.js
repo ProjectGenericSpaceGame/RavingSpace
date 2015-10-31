@@ -15,6 +15,8 @@ menuLoad.prototype = {
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder2.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
+        
+            this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
             // aseet

@@ -53,7 +53,9 @@ loadoutMenu.prototype = {
         
         // Sivun otsake
         this.surroundings.menuLabel.text = 'Loadout';
-        var style = { font:'25px calibri', fill:'black'};
+        var styleB = { font:'25px cyber', fill:'black'};
+        var styleW = { font:'25px cyber', fill:'white'};
+
         // Go -painike. Sitä painamalla aloitetaan peli
         this.goButton = this.game.add.button(975, 680, 'buttonSprite', this.gameStart, this, 0, 1, 2);
         this.goButton.scale.setTo(0.3, 0.9);
@@ -61,15 +63,19 @@ loadoutMenu.prototype = {
         this.goButton.addChild(goLabel);
         this.goButton.getChildAt(0).scale.setTo(3, 1);
         var ship = this.game.add.sprite(550,400, 'playerShip');
+        var weapons = this.game.add.text(300, 250, 'Weapons' ,styleW);
+        var abilities = this.game.add.text(380, 600, 'Abilities' ,styleW);
         
         // Back -nappula. Sitä painamalla päästään takaisin päävalikkoon
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
         this.backButton.scale.setTo(0.08, 0.5);
-        var backText = this.game.add.text(400,20, 'Back',style);
+        var backText = this.game.add.text(300,20, 'Back',styleB);
         this.backButton.addChild(backText);
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
 
         this.buttonGroup.add(this.backButton);
+        this.buttonGroup.add(weapons);
+        this.buttonGroup.add(abilities);
         this.buttonGroup.add(this.goButton);
         this.buttonGroup.add(ship);
 

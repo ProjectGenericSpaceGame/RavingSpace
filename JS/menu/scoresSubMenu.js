@@ -271,41 +271,43 @@ scoresSubMenu.prototype = {
         }
     },
     findYourself:function(){
-        if(this.waveList == null){
-            this.highscoresStart();
-        }
-        //liuutetaan plus&minus näppäimet painikkeen alta
-        var tween2 = this.game.add.tween(this.checkScoresButton);
-        tween2.frameBased = true;
-        tween2.to({y:this.checkScoresButton.y+this.finduNavi.height},1000,"Linear",true,100);
-        var tween = this.game.add.tween(this.finduNavi);
-        tween.frameBased = true;
-        tween.to({y:this.finduNavi.y+this.finduButton.height},1000,"Linear",true,100);
-        //tutkitaan ja tallenetaan rivit joissa pelaaja esiintyy
-        var self = this;
-        this.playerScores = [];
-        this.waveList.forEach(function(row){
-            if(row.getChildAt(2).text == self.playerData.playerData.playerName){
-                this.playerScores.push(row);
+        if(this.finduNavi.y < 310) {
+            if (this.waveList == null) {
+                this.highscoresStart();
             }
-        },this);
-        //lisätään näille riveille erottuva tausta
-        for(var i = 0;i<this.playerScores.length;i++){
-            var g = this.playerScores[i].getChildAt(0);
-            g.clear();
-            g.beginFill(0x000000 ,1);
-            g.drawRect(21,1,659,49);
-            g.lineStyle(1,0xFFFFFF,1);
-            g.moveTo(20,50);
-            g.lineTo(660,50);
-            g.moveTo(220,0);
-            g.lineTo(220,50);
-            g.moveTo(440,0);
-            g.lineTo(440,50);
+            //liuutetaan plus&minus näppäimet painikkeen alta
+            var tween2 = this.game.add.tween(this.checkScoresButton);
+            tween2.frameBased = true;
+            tween2.to({y: this.checkScoresButton.y + this.finduNavi.height}, 1000, "Linear", true, 100);
+            var tween = this.game.add.tween(this.finduNavi);
+            tween.frameBased = true;
+            tween.to({y: this.finduNavi.y + this.finduButton.height}, 1000, "Linear", true, 100);
+            //tutkitaan ja tallenetaan rivit joissa pelaaja esiintyy
+            var self = this;
+            this.playerScores = [];
+            this.waveList.forEach(function (row) {
+                if (row.getChildAt(2).text == self.playerData.playerData.playerName) {
+                    this.playerScores.push(row);
+                }
+            }, this);
+            //lisätään näille riveille erottuva tausta
+            for (var i = 0; i < this.playerScores.length; i++) {
+                var g = this.playerScores[i].getChildAt(0);
+                g.clear();
+                g.beginFill(0x214052, 0.8);
+                g.drawRect(21, 1, 659, 49);
+                g.lineStyle(1, 0xFFFFFF, 1);
+                g.moveTo(20, 50);
+                g.lineTo(660, 50);
+                g.moveTo(220, 0);
+                g.lineTo(220, 50);
+                g.moveTo(440, 0);
+                g.lineTo(440, 50);
+            }
+            this.waveList.y = 75 - this.playerScores[0].y;
+            this.dragArea.y = 75 - this.playerScores[0].y;
+            this.selfScoreIter = 0;
         }
-        this.waveList.y = 75-this.playerScores[0].y;
-        this.dragArea.y = 75-this.playerScores[0].y;
-        this.selfScoreIter = 0;
     },
     findNext:function(){
         if(this.selfScoreIter < this.playerScores.length-1){

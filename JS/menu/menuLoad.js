@@ -127,7 +127,7 @@ menuLoad.prototype = {
                     "money":14034,
                     "points":16045
                 },
-                "shipData":[1,1,1,1,1,1,1,1],
+                "shipData":[1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
                 "playerScores":[
                     25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
                 ]
@@ -236,7 +236,7 @@ menuLoad.prototype = {
             }
             return -1;
         },
-        logout:function(){
+            logout:function(){
             // funktio uloskirjaukselle
             console.log("Logged out");
         }

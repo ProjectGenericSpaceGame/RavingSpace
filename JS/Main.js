@@ -1,6 +1,8 @@
 //Pelin funktio
 var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
 var rnd = game.rnd;
+const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
+const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
 
 
 game.state.add('mainMenu', mainMenu);

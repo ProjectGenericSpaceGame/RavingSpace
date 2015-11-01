@@ -27,17 +27,23 @@ loadoutMenu.prototype = {
         this.selectedLoadout = [];
         // lajitellaan pelaajan ostamat aseet
         this.availableWeapons = [];
-        for(var i = 0; i <=3; i++){
+        for(var i = 0; i <= SET_GUNS-1; i++){
             this.availableWeapons[i] = this.playerData.shipData[i];
         }
         // lajitellaan pelaajan ostamat tehosteet
         this.availableAbilities = [];
-        for(var i = 4; i <=8; i++){
-            this.availableAbilities[i-4] = this.playerData.shipData[i];
+        for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
+            this.availableAbilities[i-10] = this.playerData.shipData[i];
         }
+        this.WSA = [];
+        this.ASA = [];
         // näihin taulukoihin tallennetaan tieto siitä onko ase valittu. 0 = ei valittu, 1 = on valittu 
-        this.WSA = [0,0,0,0];
-        this.ASA = [0,0,0,0];
+        for(var g = 0;g < SET_GUNS;g++) {
+            this.WSA.push(0);
+        }
+        for(var h = 0;h < SET_ABILITIES;h++) {
+            this.ASA.push(0);
+        }
         // onko asevalikko olemassa
         this.am = false;
         // onko tehostevalikko olemassa

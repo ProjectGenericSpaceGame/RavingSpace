@@ -27,12 +27,15 @@ settingsSubMenu.prototype = {
 
         // tästä painikkeesta päästään ääniin
         this.soundButton = this.game.add.button(400, 200, 'buttonSprite', this.soundStart, this, 0, 1, 2);
+        this.soundButton.x = (this.game.width/2)-(this.soundButton.width/2);
+
         var text1 = this.game.add.text(10,20,"Sound settings", textStyle);
         text1.x = this.soundButton.width/2-text1.width/2;
         this.soundButton.addChild(text1);
         
         //tästä tilin asetuksiin
         this.accountButton = this.game.add.button(400, 300, 'buttonSprite', this.accountStart, this, 0, 1, 2);
+        this.accountButton.x = (this.game.width/2)-(this.accountButton.width/2);
         var text2 = this.game.add.text(10,20,"Account settings", textStyle);
         text2.x = this.accountButton.width/2-text2.width/2;
         this.accountButton.addChild(text2);

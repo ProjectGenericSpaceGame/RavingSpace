@@ -67,12 +67,12 @@ waveMenu.prototype = {
         // vasennavi taustapalkki
 
         this.leftTray = this.game.add.graphics(0, 0);
-        this.leftTray.beginFill(0x545C64 ,1);
+        this.leftTray.beginFill(0x545C64 ,0.6);
         this.leftTray.drawRect(170,200,217,547.5);
 
         // keskipalkki
         this.centerTray = this.game.add.graphics(0, 0);
-        this.centerTray.beginFill(0x545C64,1);
+        this.centerTray.beginFill(0x545C64,0.6);
         this.centerTray.drawRect(420,200,680,547.5);
 
         this.buttonGroup.add(this.leftTray);

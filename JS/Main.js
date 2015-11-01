@@ -1,5 +1,5 @@
 //Pelin funktio
-var game = new Phaser.Game(1280, 800, Phaser.AUTO, '');
+var game = new Phaser.Game(1280, 800, Phaser.CANVAS, '');
 var rnd = game.rnd;
 const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
@@ -116,7 +116,7 @@ function randNumber(lap){
     }
     randNumbers[2] = spawnCoordX;
     randNumbers[3] = spawnCoordY;
-    console.log(randNumbers[0], randNumbers[1]);
+    //console.log(randNumbers[0], randNumbers[1]);
     return randNumbers;
 }
 
@@ -163,7 +163,7 @@ function fire(bullets,gun,fireRate,deg,ship) {
 }
 function hitDetector(bullet, enemy, enemyAmount,lap){
 	bullet.kill();
-	console.log("got this far?");
+	//console.log("got this far?");
 	if((enemy.health-0.25) <= 0){
 		enemy.kill();
 		enemyAmount[lap-1]--;
@@ -265,7 +265,7 @@ function acquireTarget(target,enemy){
 			degr = (Math.atan((Xcoord/Ycoord)*(0-1)))+((3*pi)/2);
 			break;
 		default:
-		//console.log("lol");
+		////console.log("lol");
 	}
     degr = pi*(2+1/2)-degr;
     return degr;

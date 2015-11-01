@@ -34,8 +34,9 @@
 		'","money":'.$row['money'].
 		',"points":'.$row['points'].'},';
 	//pelaajan aluksen tiedot
-	$returnObject .= '"shipData":['.$row['wep1'].','.$row['wep2'].','.$row['wep3'].','.$row['wep4'].','.
-		$row['pwer1'].','.$row['pwer2'].','.$row['pwer3'].'],';
+	$returnObject .= '"shipData":['.
+		$row['wep1'].','.$row['wep2'].','.$row['wep3'].','.$row['wep4'].','.$row['wep5'].','.$row['wep6'].','.$row['wep7'].','.$row['wep8'].','.$row['wep9'].','.$row['wep10'].','.
+		$row['pwer1'].','.$row['pwer2'].','.$row['pwer3'].','.$row['pwer4'].','.$row['pwer5'].','.$row['pwer6'].','.$row['pwer7'].','.$row['pwer8'].','.$row['pwer9'].','.$row['pwer10'].'],';
 	$scoreID = $row['scoreID'];
 	$select = "select * from highScores where scoreID = $scoreID";
 	$query = $DBcon->query($select);

@@ -60,7 +60,7 @@ loadoutMenu.prototype = {
         var goLabel = this.game.add.text(120,20,"Go!");
         this.goButton.addChild(goLabel);
         this.goButton.getChildAt(0).scale.setTo(3, 1);
-        this.game.add.sprite(550,400, 'playerShip');
+        var ship = this.game.add.sprite(550,400, 'playerShip');
         
         // Back -nappula. Sitä painamalla päästään takaisin päävalikkoon
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
@@ -71,7 +71,8 @@ loadoutMenu.prototype = {
 
         this.buttonGroup.add(this.backButton);
         this.buttonGroup.add(this.goButton);
-       
+        this.buttonGroup.add(ship);
+
         // weapon slots/ aseitten paikat
         for (var i = 0; i <= 2; i++){
             this.button = this.game.add.button(this.x, 250, 'slot', this.selectWeapon,this);

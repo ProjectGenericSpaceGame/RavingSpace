@@ -136,7 +136,7 @@ gameLoad.prototype = {
 		var X = this.game.world.centerX;
                 var Y = this.game.world.centerY;
 		text = this.game.add.text(X, Y, "blaa",{fill:"white"});
-                text2 = this.game.add.text(X-25, Y+25, "blaa",{fill:"white"});
+		text2 = this.game.add.text(X-25, Y+25, "blaa",{fill:"white"});
 		
 		//asetetaan näppäimet
 		this.cursors = this.game.input.keyboard.addKeys( 

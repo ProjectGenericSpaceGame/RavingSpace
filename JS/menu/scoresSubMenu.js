@@ -115,13 +115,13 @@ scoresSubMenu.prototype = {
         var backText = this.game.add.text(400,20,"Back",style);
         this.backButton.addChild(backText);
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
-
+        //piirretään laatikot
         this.leftTray = this.game.add.graphics(0, 0);
-        this.leftTray.beginFill(0x545C64 ,1);
+        this.leftTray.beginFill(0x545C64 ,0.6);
         this.leftTray.drawRect(170,200,217,547.5);
 
         this.centerTray = this.game.add.graphics(0, 0);
-        this.centerTray.beginFill(0x545C64,1);
+        this.centerTray.beginFill(0x545C64,0.6);
         this.centerTray.drawRect(420,200,680,547.5);
 
         this.buttonGroup.add(this.leftTray);
@@ -140,6 +140,10 @@ scoresSubMenu.prototype = {
     highscoresStart:function(){
         var self = this;
         this.centerWindow.removeAll();
+
+        this.finduButton.setFrames(0,1,2);
+        this.highscoresButton.setFrames(0,2,2);
+        this.checkScoresButton.setFrames(0,1,2);
 
         //tehdään yläpalkki ja ympärys
         var g = this.game.add.graphics(0,0);
@@ -275,6 +279,9 @@ scoresSubMenu.prototype = {
             if (this.waveList == null) {
                 this.highscoresStart();
             }
+            this.finduButton.setFrames(0,2,2);
+            this.highscoresButton.setFrames(0,1,2);
+            this.checkScoresButton.setFrames(0,1,2);
             //liuutetaan plus&minus näppäimet painikkeen alta
             var tween2 = this.game.add.tween(this.checkScoresButton);
             tween2.frameBased = true;

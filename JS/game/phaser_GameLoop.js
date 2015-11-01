@@ -16,9 +16,9 @@ mainGame.prototype = {
 		this.gun = gun;//
 		this.bullets = bullets;//
 		this.enemies = enemies;//
-		this.enemy1 = enemy1;//
-		this.enemy2 = enemy2;//
-		this.enemy3 = enemy3;//
+		this.enemy1 = enemy1;// Asteroidin tuhoaja
+		this.enemy2 = enemy2;// Pelaajan jahtaaja
+		this.enemy3 = enemy3;// Pomoalus
 		this.cursors = cursors;//
 		this.bg = bg;//
 		this.text = text;
@@ -266,7 +266,8 @@ mainGame.prototype = {
 				var next = spawnEnemy(this.spawnPool,this.enemyAmount,this.enemies,this.lap,this.ship,this.playerCollisonGroup,this.enemiesCollisonGroup);
                                 if(next === "next"){
                                     this.lap++;
-                                    this.enemy1 = this.enemies.getChildAt(this.lap-1).getChildAt(0);//tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
+                                    this.enemy1 = this.enemies.getChildAt(this.lap-1).getChildAt(0);//tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, 
+                                    // käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
                                     this.enemy2 = this.enemies.getChildAt(this.lap-1).getChildAt(1);
                                     this.enemy3 = this.enemies.getChildAt(this.lap-1).getChildAt(2);
                                 }
@@ -291,7 +292,56 @@ mainGame.prototype = {
 			});
 		 } 
 		this.fixed = "";
-		//tekoäly
+        
+
+      
+        // Asteroidin jahtaajan tekoäly
+       this.enemy1.forEachAlive(function(enemy){
+           
+           var num;
+           
+           if(enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000){
+                enemy.name = "fresh";
+              
+            } else if(enemy.name == "fresh"){
+                var targetAsteroid = this.asteroids.getRandom();
+                num = targetAsteroid.key.replace( /^\D+/g, '');
+                if(num == 1){
+                    enemy.name = 0.1;
+                }
+                if(num == 2){
+                    enemy.name = 1.1;
+                }
+                if(num == 3){
+                    enemy.name = 2.1;
+                }
+            }
+            var dir;
+           
+            if(enemy.body.y > 100 && enemy.body.x < this.game.world.width-100
+                && enemy.body.y > 100 && enemy.body.y < this.game.world.height-100
+                && enemy.name == 0.1 || enemy.name == 1.1 || enemy.name == 2.1) {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
+                    enemy.body.mass = rnd.realInRange(0.8, 0.92);
+                    enemy.body.damping = rnd.realInRange(0.8, 0.92);
+                    var target = this.asteroids.getChildAt(enemy.name-0.1);
+                    dir = acquireTarget(target, enemy);
+                    enemy.body.rotation = dir;
+                    enemy.body.thrust(60);
+                    this.game.time.events.add(1000,function() {
+                        enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+                        enemy.body.mass = 0.7;
+                        enemy.body.damping = 0.7;
+                    },this);
+                enemy.name = enemy.name - 0.1;
+
+            }else if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 ){//tämä ajetaan normaalisti koko ajan
+                enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.name), enemy);
+                enemy.body.thrust(60);
+
+            }
+        }, this);
+
+		//Pomon tekoäly
 		this.enemy3.forEachAlive(function(enemy){
             if(enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000){
                 enemy.name = "fresh";
@@ -309,7 +359,7 @@ mainGame.prototype = {
                 enemy.body.thrust(60);
                 this.game.time.events.add(1000,function() {
                     enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
-                    enemy.body.mass = 0.7;
+                    enemy.body.mass = 5;
                     enemy.body.damping = 0.7;
                 },this);
                 enemy.name = "inPlay";
@@ -317,7 +367,7 @@ mainGame.prototype = {
             } else if(enemy.name == "inPlay"){//tämä ajetaan normaalisti koko ajan
                 dir = acquireTarget(this.ship, enemy);
                 enemy.body.rotation = dir;
-                enemy.body.thrust(60);
+                enemy.body.thrust(120);
 
             }
 		},this);

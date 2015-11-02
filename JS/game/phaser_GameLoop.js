@@ -11,7 +11,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets) {
         this.asteroids = asteroids;//
         this.ship = ship;//
         this.gun = gun;//
@@ -28,9 +28,10 @@ mainGame.prototype = {
         this.enemyAmount = enemyAmount;
         this.spawnPool = spawnPool;
         this.lap = lap;
+        this.enemyFireRates = enemyFireRates;
+        this.enemyBullets = enemyBullets;
         //Loput muuttujat
         this.fireRate = 450;
-        this.enemyFireRates = [500,500,500];
         this.direct = "";
         this.flipped = false;
         this.IntMouseTrack = -1;
@@ -215,10 +216,13 @@ mainGame.prototype = {
         }
         //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
         text.text = String(this.clips[0] + "+" + this.reloading + "+" + execTime);
+        //text.text = String("");
+		//text2.text = String("");
+		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
         if (execTime > 10) {
-            alert("performance issue: " + execTime);
+            //alert("performance issue: " + execTime);
         }
-        text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
+       
 
         if (corRot >= 6.0 && lastRot <= 3.0) {
             this.flipped = false;
@@ -368,13 +372,13 @@ mainGame.prototype = {
                 if(enemy.buffTimer <= 0) {
                     while(!inRange){
                         this.enemy1.forEach(function(en){
-                            if(this.checkRange(en.x,en.y,enemy.x,enemy.y)){
+                            if(this.checkRange(en.x,en.y,enemy.x,enemy.y,1)){
                                 inRange = true;
                                 this.tryBuff(en);
                             }
                         },this);
                         this.enemy2.forEach(function(en){
-                            if(this.checkRange(en.x,en.y)){
+                            if(this.checkRange(en.x,en.y,enemy.x,enemy.y,1)){
                                 inRange = true;
                                 this.tryBuff(en);
                             }
@@ -386,19 +390,25 @@ mainGame.prototype = {
                 }
                 enemy.buffTimer--;
 
+                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2)){
+                    enemy.body.thrust(0);
+                    enemyFire(enemy,enemy.getChildAt(enemy.children.length-1),this.enemyBullets,this.enemyFireRates[2],this.ship);
+
+                }
+
 
             }
             else if (enemy.body.y > 100 && enemy.body.x < this.game.world.width - 100
                 && enemy.body.y > 100 && enemy.body.y < this.game.world.height - 100
                 && enemy.name == "free") {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
-                enemy.body.mass = rnd.realInRange(0.8, 0.92);
-                enemy.body.damping = rnd.realInRange(0.8, 0.92);
+                enemy.body.mass = rnd.realInRange(0.8, 0.99);
+                enemy.body.damping = rnd.realInRange(0.8, 0.99);
                 dir = acquireTarget(this.ship, enemy);
                 enemy.body.rotation = dir;
                 enemy.body.thrust(60);
                 this.game.time.events.add(1000, function () {
                     enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
-                    enemy.body.mass = 5;
+                    enemy.body.mass = 1.9;
                     enemy.body.damping = 0.7;
                 }, this);
                 enemy.name = "inPlay";
@@ -417,11 +427,14 @@ mainGame.prototype = {
             console.log(wholeLoop);
         }
     },
-    checkRange: function(x,y,x2,y2){
+    checkRange: function(x,y,x2,y2,usage){
         var dist = this.game.math.distance(x,y,x2,y2);
-        if(dist < 250){
+        if(dist < 250 && usage == 1){
             return true;
-        } else {
+        } else if(dist < 285 && usage == 2){
+            return true;
+        }
+        else {
             return false;
         }
     },
@@ -429,6 +442,7 @@ mainGame.prototype = {
         if(rnd.integerInRange(0,10) == 1){
             if(en.health < 1){
                 en.health += 0.25;
+				alert("heal"+en.health);
             } else {
                 en.fireRate = this.enemyFireRates[2]-200;
                 this.game.time.events.add(5000, function(){

@@ -11,7 +11,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music) {
         this.asteroids = asteroids;//
         this.ship = ship;//
         this.gun = gun;//
@@ -30,6 +30,7 @@ mainGame.prototype = {
         this.lap = lap;
         this.enemyFireRates = enemyFireRates;
         this.enemyBullets = enemyBullets;
+        this.music = music;
         //Loput muuttujat
         this.fireRate = 450;
         this.direct = "";
@@ -62,6 +63,7 @@ mainGame.prototype = {
         this.ship.body.setCollisionGroup(this.playerCollisonGroup);
         this.ship.body.collides([this.enemiesCollisonGroup]);
         //this.ship.body.collideWorldBounds = true;
+        this.music.play();
     },
     update: function () {
         var self = this;
@@ -86,9 +88,10 @@ mainGame.prototype = {
 
         });
         //tutkii onko panoksia osumassa vihollisiin
-        this.game.physics.arcade.overlap(this.bullets, this.enemy1, hitDetector, null, this);
+        /*this.game.physics.arcade.overlap(this.bullets, this.enemy1, hitDetector, null, this);
         this.game.physics.arcade.overlap(this.bullets, this.enemy2, hitDetector, null, this);
         this.game.physics.arcade.overlap(this.bullets, this.enemy3, hitDetector, null, this);
+        this.game.physics.arcade.overlap(this.enemyBullets, this.ship, hitDetector, null, this);*/
         var Ycoord;
         var Xcoord;
         //calculate deg
@@ -215,7 +218,7 @@ mainGame.prototype = {
             }
         }
         //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-        text.text = String(this.clips[0] + "+" + this.reloading + "+" + execTime);
+        text.text = String(this.clips[0] + "+" + this.reloading + "+" + this.ship.health);
         //text.text = String("");
 		//text2.text = String("");
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
@@ -301,6 +304,13 @@ mainGame.prototype = {
                     });
                 });
             }
+            //nyt toistetaan pelaajalle
+            this.enemyBullets.forEachAlive(function(b){
+                boundsBullet = b.world;
+                if( this.game.physics.p2.hitTest(boundsBullet, [this.ship]).length > 0 && this.ship.alive){
+                    hitDetector(b, this.ship, null, null);
+                }
+            },this);
             this.frameSkip = 1;
         } else {
             this.frameSkip = 0;
@@ -367,7 +377,7 @@ mainGame.prototype = {
             if (enemy.name == "inPlay") {//tämä ajetaan normaalisti koko ajan
                 dir = acquireTarget(this.ship, enemy);
                 enemy.body.rotation = dir;
-                enemy.body.thrust(60);
+
                 var inRange = false;
                 if(enemy.buffTimer <= 0) {
                     while(!inRange){
@@ -394,6 +404,8 @@ mainGame.prototype = {
                     enemy.body.thrust(0);
                     enemyFire(enemy,enemy.getChildAt(enemy.children.length-1),this.enemyBullets,this.enemyFireRates[2],this.ship);
 
+                } else {
+                    enemy.body.thrust(60);
                 }
 
 
@@ -431,7 +443,7 @@ mainGame.prototype = {
         var dist = this.game.math.distance(x,y,x2,y2);
         if(dist < 250 && usage == 1){
             return true;
-        } else if(dist < 285 && usage == 2){
+        } else if(dist < 300 && usage == 2){
             return true;
         }
         else {
@@ -442,7 +454,7 @@ mainGame.prototype = {
         if(rnd.integerInRange(0,10) == 1){
             if(en.health < 1){
                 en.health += 0.25;
-				alert("heal"+en.health);
+                alert("heal"+en.health);
             } else {
                 en.fireRate = this.enemyFireRates[2]-200;
                 this.game.time.events.add(5000, function(){

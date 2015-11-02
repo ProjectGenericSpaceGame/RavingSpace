@@ -172,11 +172,17 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
 	}
 }
 function hitDetector(bullet, enemy, enemyAmount,lap){
-	bullet.kill();
+    bullet.kill();
 	//console.log("got this far?");
 	if((enemy.health-0.25) <= 0){
 		enemy.kill();
-		enemyAmount[lap-1]--;
+        if(enemyAmount != null) {
+            enemyAmount[lap - 1]--;
+        } else {
+            game.time.events.add(10000,function(){
+                enemy.reset(600,500,3);
+            },this);
+        }
 	} else {
 		enemy.health -= 0.25;
 	}

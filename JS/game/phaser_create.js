@@ -36,6 +36,8 @@ gameLoad.prototype = {
 		this.game.load.image('trail7', 'assets/particles/VS_peli_trail7.png');
 		//ladataan ammus
 		this.game.load.image('bullet', 'assets/sprites/bullet.png');
+        //Musiikkia
+		this.game.load.audio('soldier', 'assets/sounds/extar.opus');
 	},
 	create: function(){
         waiter = this.game.time.create();
@@ -78,6 +80,7 @@ gameLoad.prototype = {
 		});
 		this.ship.addChild(this.shipTrail);
 		this.ship.addChild(this.gun);
+        this.ship.health = 3;
 		
 		// luodaan aluksen ammusryhmä
 		this.bullets = this.game.add.group();
@@ -156,7 +159,11 @@ gameLoad.prototype = {
 		this.cursors = this.game.input.keyboard.addKeys( 
 			{ 'up': Phaser.Keyboard.W, 'down': Phaser.Keyboard.S, 'left': Phaser.Keyboard.A, 'right': Phaser.Keyboard.D } 
 		);
-                this.lap = 1;
+        //kierrosmuuttuja kertoo mikä kierros menossa
+        this.lap = 1;
+        //asetetaan ääneet
+        this.music = this.game.add.audio('soldier');
+
 		this.game.state.start("mainGame",false,false,
 			 this.asteroids,
 			 this.ship,
@@ -175,7 +182,8 @@ gameLoad.prototype = {
 			 spawnPool,
              this.lap,
             this.enemyFireRates,
-            this.enemyBullets
+            this.enemyBullets,
+            this.music
 		);
 	}
 };

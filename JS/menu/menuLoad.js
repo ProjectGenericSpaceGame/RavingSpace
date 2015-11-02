@@ -12,11 +12,11 @@ menuLoad.prototype = {
             this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');    
-            this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder2.png');
+            this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
         
-            this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship.png');
+            this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship_Old.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
             // aseet
@@ -62,7 +62,7 @@ menuLoad.prototype = {
             this.menuheader.addChild(decos);
 
             
-            this.menubbg = this.game.add.sprite(130, 80,  "menuButtonBG");
+            this.menubbg = this.game.add.sprite(150, 100,  "menuButtonBG");
             this.menubbg.tint = 0x858585;
             //alustetaan valikon otsikko ja viiva
             this.menuLabel = this.game.add.text(this.game.width/2, 120, '', headingStyle);

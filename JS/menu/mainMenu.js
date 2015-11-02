@@ -19,29 +19,31 @@ mainMenu.prototype = {
         //do some murdering
         this.buttonGroup.removeAll();
         var textStyle = { font: '30px cyber'};
-
+      
         //otsikko
         this.surroundings.menuLabel.text = "Main Menu";
        
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
         // tästä painikkeesta päästään peliin
-        this.playButton = this.game.add.button(425, 200, 'buttonSprite', this.loadoutStart, this, 0, 1, 2);
+        this.playButton = this.game.add.button(x, 200, 'buttonSprite', this.loadoutStart, this, 0, 1, 2);
+        var x = (this.game.width/2)-(this.playButton.width/2);
+        this.playButton.x = x;
         var playLabel = this.game.add.text(0,20,"Play", textStyle);
 		playLabel.x = this.playButton.width/2-playLabel.width/2;
         this.playButton.addChild(playLabel);
         //tästä asetuksiin 
-        this.settingsButton = this.game.add.button(425, 300, 'buttonSprite', this.settingsStart, this, 0, 1, 2);
+        this.settingsButton = this.game.add.button(x, 300, 'buttonSprite', this.settingsStart, this, 0, 1, 2);
         var settingsLabel = this.game.add.text(0,20,"Settings", textStyle);
 		settingsLabel.x = this.playButton.width/2-settingsLabel.width/2;
         this.settingsButton.addChild(settingsLabel);
         // tästä pistetaulukkoon
-        this.scoresButton = this.game.add.button(425, 400, 'buttonSprite', this.scoresStart, this, 0, 1, 2);
+        this.scoresButton = this.game.add.button(x, 400, 'buttonSprite', this.scoresStart, this, 0, 1, 2);
         var scoreLabel = this.game.add.text(0,20,"High Scores", textStyle);
 		scoreLabel.x = this.playButton.width/2-scoreLabel.width/2;
         this.scoresButton.addChild(scoreLabel);
         // tästä kustomointi -valikkoon
-        this.customButton = this.game.add.button(425, 500, 'buttonSprite', this.customStart, this, 0, 1, 2);
+        this.customButton = this.game.add.button(x, 500, 'buttonSprite', this.customStart, this, 0, 1, 2);
         var customLabel = this.game.add.text(0,20,"Customize", textStyle);
 		customLabel.x = this.playButton.width/2-customLabel.width/2;
         this.customButton.addChild(customLabel);
@@ -89,6 +91,7 @@ mainMenu.prototype = {
             this.surroundings
         );
     }
+   
 
 };
 

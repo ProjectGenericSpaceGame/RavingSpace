@@ -161,6 +161,16 @@ function fire(bullets,gun,fireRate,deg,ship) {
     }
 
 }
+function enemyFire(user,gun,enemyBullets,fireRate,target){
+	if(user.key == 'commander'){
+		if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
+			user.nextFire = game.time.now + fireRate;
+			var bullet = enemyBullets.getFirstExists(false);
+			bullet.reset(gun.world.x, gun.world.y);
+			game.physics.arcade.moveToObject(bullet,target,200);
+		}
+	}
+}
 function hitDetector(bullet, enemy, enemyAmount,lap){
 	bullet.kill();
 	//console.log("got this far?");

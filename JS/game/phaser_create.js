@@ -58,13 +58,13 @@ gameLoad.prototype = {
 		});
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
-		this.ship.scale.setTo(0.3,0.3);
+		this.ship.scale.setTo(0.5,0.5);
 		this.gun = this.game.add.image(0,-90);
 		this.shipTrail = this.game.add.group();
-		var trail1 = this.game.add.emitter(0,90,1000);
-		var trail2 = this.game.add.emitter(0,90,1000);
-		trail1.width = 20;
-		trail2.width = 6;
+		var trail1 = this.game.add.emitter(0,60,1000);
+		var trail2 = this.game.add.emitter(0,60,1000);
+		trail1.width = 15;
+		trail2.width = 4;
 		trail1.makeParticles("trail6");
 		trail2.makeParticles("trail7");
 		trail2.lifespan = 100;
@@ -88,6 +88,16 @@ gameLoad.prototype = {
 		this.bullets.setAll('anchor.y', 0.5);
 		this.bullets.setAll('outOfBoundsKill', true);
 		this.bullets.setAll('checkWorldBounds', true);
+
+		//luodaan vihujen ammusryhmä
+		this.enemyBullets = this.game.add.group();
+		this.enemyBullets.enableBody = true;
+		this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
+		this.enemyBullets.createMultiple(500, 'bullet', 0, false);
+		this.enemyBullets.setAll('anchor.x', 0.5);
+		this.enemyBullets.setAll('anchor.y', 0.5);
+		this.enemyBullets.setAll('outOfBoundsKill', true);
+		this.enemyBullets.setAll('checkWorldBounds', true);
 		
 		//käsitellään hyökkäystieto
 		this.attackInfo = this.attackInfo.split("'");
@@ -97,7 +107,8 @@ gameLoad.prototype = {
 			enemyAmount[i] = (parseInt((this.attackInfo[i].substring(0,2)))+(parseInt(this.attackInfo[i].substring(2,4)))+(parseInt(this.attackInfo[i].substring(4,6))));
 		}
 		var spawnPool = [(enemyAmount[0]+1-1),(enemyAmount[1]+1-1),(enemyAmount[2]+1-1)];
-		
+
+        this.enemyFireRates = [500,500,1500];
 		//Luodaan viholliset
 		this.enemies = this.game.add.group();
 		var lap1 = this.game.add.group();
@@ -125,7 +136,10 @@ gameLoad.prototype = {
             tEnemy3.forEach(function(enemy){
                 enemy.health = 2.5;
                 enemy.scale.setTo(0.55,0.55);
-            });
+                enemy.nextFire = 0;
+				var enemyGun = this.game.add.image(0,-110);
+				enemy.addChild(enemyGun);
+            },this);
 			this.game.physics.p2.enable(tEnemy3);
 			this.enemies.getChildAt(i).add(tEnemy3);
 		};
@@ -159,7 +173,9 @@ gameLoad.prototype = {
 			 this.attackInfo,
 			 enemyAmount,
 			 spawnPool,
-             this.lap
+             this.lap,
+            this.enemyFireRates,
+            this.enemyBullets
 		);
 	}
 };

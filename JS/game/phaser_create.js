@@ -56,8 +56,18 @@ gameLoad.prototype = {
 		
 		//asteroids.anchor.setTo(0.5, 0.5); 
 		this.asteroids.forEach(function(item){
-		item.scale.setTo(0.5,0.5);
+		item.scale.setTo(0.5,0.5);    
 		});
+        
+        this.asteroid1 = this.asteroids.getChildAt(0);
+        this.asteroid1.health = 3;
+        
+        this.asteroid2 = this.asteroids.getChildAt(1);
+        this.asteroid2.health = 3;
+        
+        this.asteroid3 = this.asteroids.getChildAt(2);
+        this.asteroid3.health = 3;
+        
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
 		this.ship.scale.setTo(0.5,0.5);
@@ -165,22 +175,25 @@ gameLoad.prototype = {
         this.music = this.game.add.audio('soldier');
 
 		this.game.state.start("mainGame",false,false,
-			 this.asteroids,
-			 this.ship,
-			 this.gun,
-			 this.bullets,
-			 this.enemies,
-			 this.enemy1,
-			 this.enemy2,
-			 this.enemy3,
-			 this.cursors,
-			 this.bg,
-			 this.text,
-			 this.shipTrail,
-			 this.attackInfo,
-			 enemyAmount,
-			 spawnPool,
-             this.lap,
+            this.asteroids,
+            this.ship,
+            this.gun,
+            this.bullets,
+            this.enemies,
+            this.enemy1,
+            this.enemy2,
+            this.enemy3,
+            this.asteroid1,
+            this.asteroid2, 
+            this.asteroid3,
+            this.cursors,
+            this.bg,
+            this.text,
+            this.shipTrail,
+            this.attackInfo,
+            enemyAmount,
+            spawnPool,
+            this.lap,
             this.enemyFireRates,
             this.enemyBullets,
             this.music

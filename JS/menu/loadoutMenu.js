@@ -147,8 +147,8 @@ loadoutMenu.prototype = {
     
     selectAbility: function(button){
         this.preab = button;
-        this.x = 905;
-        this.y = 405;
+        this.x = 830;
+        this.y = 410;
         var i;
         // Mikäli toinen asevalikko on auki se suljetaan
         if(this.am == true){
@@ -157,16 +157,16 @@ loadoutMenu.prototype = {
         }
         // Mikäli tehostevalikko ei ole auki se avataan
         if (this.im == false){
-            this.sability = this.game.add.sprite(900, 400, 'availableTray');
+            this.sability = this.game.add.sprite(825, 405, 'availableTray');
             this.thingsGroup.add(this.sability);
             
             for (i = 0; i <= 3; i++){
                 // tarkistetaan saatavilla olevista tehosteista onko pelaaja avannut tehosteita.
                 if (this.availableAbilities[i] == 1){
                     // mikäli aseita on 3 vierekkäin niin 4. ase laitetaan toiselle riville. purkkakoodia.
-                    if(this.x > 905 + (92.5 * 2)){
+                    if(this.x > 830 + (92.5 * 2)){
                         this.y += 95;
-                        this.x = 905;
+                        this.x = 830;
                     }
                     if(this.preab.hasChild === true){
                         // jos on lapsi niin poistetaan se
@@ -215,6 +215,8 @@ loadoutMenu.prototype = {
         this.prewep.name = p.name;
         this.prewep.addChild(icon);
         this.prewep.hasChild = true;
+        this.thingsGroup.removeAll();
+        this.am = false;
      }, 
     
     abpressed: function(button){
@@ -232,6 +234,8 @@ loadoutMenu.prototype = {
         this.preab.name = p.name;
         this.preab.addChild(icon);
         this.preab.hasChild = true;
+        this.thingsGroup.removeAll();
+        this.im = false;
     },
     
     gameStart: function(){

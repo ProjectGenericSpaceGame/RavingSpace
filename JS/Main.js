@@ -187,6 +187,22 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
 		enemy.health -= 0.25;
 	}
 }
+
+
+function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
+    bullet.kill();
+    if((asteroid.health-0.25) <= 0 ){
+    asteroid.kill();
+    asteroidAmmount -= 1;    
+        if(asteroidAmmount == null){
+            console.log("Game Over");
+        }
+    
+    } else {
+        asteroid.health -= 0.25;
+    }
+}
+
 //Luodaan uusi vihollinen ja tarkistetaan onko kierros loppu
 function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
 	var randNumbers = randNumber();

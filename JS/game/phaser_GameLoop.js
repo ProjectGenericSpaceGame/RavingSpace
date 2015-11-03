@@ -11,7 +11,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music) {
         this.asteroids = asteroids;//
         this.ship = ship;//
         this.gun = gun;//
@@ -20,6 +20,9 @@ mainGame.prototype = {
         this.enemy1 = enemy1;//
         this.enemy2 = enemy2;//
         this.enemy3 = enemy3;//
+        this.asteroid1 = asteroid1;
+        this.asteroid2 = asteroid2;
+        this.asteroid3 = asteroid3;
         this.cursors = cursors;//
         this.bg = bg;//
         this.text = text;
@@ -32,6 +35,7 @@ mainGame.prototype = {
         this.enemyBullets = enemyBullets;
         this.music = music;
         //Loput muuttujat
+        this.asteroidAmmount = 3;
         this.fireRate = 450;
         this.direct = "";
         this.flipped = false;
@@ -290,10 +294,10 @@ mainGame.prototype = {
         if (this.frameSkip == 0) {
             var boundsBullet;
             var groups = [this.enemy1, this.enemy2, this.enemy3];
+            var rocks = [this.asteroid1, this.asteroid2, this.asteroid3];
             var bullets = this.bullets;
             var enemyAmount = this.enemyAmount;
             for (var iter = 0; iter < 3; iter++) {
-                //console.log(i);
                 groups[iter].forEachAlive(function (en) {
                     bullets.forEachAlive(function (b) {
                         boundsBullet = b.world;
@@ -306,11 +310,24 @@ mainGame.prototype = {
             }
             //nyt toistetaan pelaajalle
             this.enemyBullets.forEachAlive(function(b){
-                boundsBullet = b.world;
+               boundsBullet = b.world;
                 if( this.game.physics.p2.hitTest(boundsBullet, [this.ship]).length > 0 && this.ship.alive){
                     hitDetector(b, this.ship, null, null);
-                }
+                } 
             },this);
+            
+            // --------------testi---------------------
+             this.enemyBullets.forEachAlive(function(b){
+                 this.asteroids.forEachAlive(function (a) {
+               boundsBullet = b.world;
+                if( this.game.physics.p2.hitTest(boundsBullet, [a]).length > 0 && a.alive){
+                    asteroidHitDetector(b, a, this.asteroidAmmount);
+                } 
+                 },this);    
+            },this);
+            //------------- testi------------------
+           
+            
             this.frameSkip = 1;
         } else {
             this.frameSkip = 0;
@@ -326,8 +343,11 @@ mainGame.prototype = {
                 enemy.name = "fresh";
               
             } else if(enemy.name == "fresh"){
+                // uudelle viholliselle valitaan kohde
                 var targetAsteroid = this.asteroids.getRandom();
+                // suodatetaan nimestä pois kirjaimet
                 num = targetAsteroid.key.replace( /^\D+/g, '');
+                // nimetään vihollinen
                 if(num == 1){
                     enemy.name = 0.1;
                 }
@@ -340,28 +360,41 @@ mainGame.prototype = {
             }
             var dir;
            
+           // seuraavalla kierroksella tarkistetaan vihollisen sijainti ja nimi
             if(enemy.body.y > 100 && enemy.body.x < this.game.world.width-100
                 && enemy.body.y > 100 && enemy.body.y < this.game.world.height-100
                 && enemy.name == 0.1 || enemy.name == 1.1 || enemy.name == 2.1) {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
                     enemy.body.mass = rnd.realInRange(0.8, 0.92);
                     enemy.body.damping = rnd.realInRange(0.8, 0.92);
+                    // suunnataan vihollisen alus kohti kohde aseteroidia
                     var target = this.asteroids.getChildAt(enemy.name-0.1);
                     dir = acquireTarget(target, enemy);
                     enemy.body.rotation = dir;
                     enemy.body.thrust(60);
+                    // listätään alukselle massa ja hidastetaan sen vauhtia
                     this.game.time.events.add(1000,function() {
                         enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
                         enemy.body.mass = 0.7;
                         enemy.body.damping = 0.7;
                     },this);
-                enemy.name = enemy.name - 0.1;
-
-            }else if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 ){//tämä ajetaan normaalisti koko ajan
-                enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.name), enemy);
-                enemy.body.thrust(60);
-
-            }
-        }, this);
+                    //Muutetaan vihollisen nimi jotta se ei tule enään tähän silmukkaan
+                    enemy.name = enemy.name - 0.1;
+            
+            //Tämä ajetaan kohteen ja massan saaneellee viholliselle normaalisti
+            }else if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 ){
+                if (this.asteroids.getChildAt(enemy.name).alive == true ){
+                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.name), enemy);
+                    enemy.body.thrust(60);
+                } else {
+                    var targetAsteroid = this.asteroids.getRandom();
+                    num = targetAsteroid.key.replace( /^\D+/g, '');
+                    if(num == 1){ enemy.name = 0.1; }
+                    if(num == 2){ enemy.name = 1.1; }
+                    if(num == 3){ enemy.name = 2.1; }
+                }
+              
+            } 
+        }, this); // Asteroidin jahtaajan tekoäly loppuu
 
 		//Pomon tekoäly
 
@@ -465,5 +498,5 @@ mainGame.prototype = {
                 },this);
             }
         }
-    }
-}
+    } // trybuff
+} // prototype

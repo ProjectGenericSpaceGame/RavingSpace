@@ -400,10 +400,13 @@ mainGame.prototype = {
                 }
                 enemy.buffTimer--;
 
-                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2)){
+                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2 && this.ship.alive)){
                     enemy.body.thrust(0);
                     enemyFire(enemy,enemy.getChildAt(enemy.children.length-1),this.enemyBullets,this.enemyFireRates[2],this.ship);
 
+                } else if(!this.ship.alive){
+                    enemy.body.rotation = enemy.body.x/10;
+                    enemy.body.thrust(60);
                 } else {
                     enemy.body.thrust(60);
                 }
@@ -456,9 +459,9 @@ mainGame.prototype = {
                 en.health += 0.25;
                 alert("heal"+en.health);
             } else {
-                en.fireRate = this.enemyFireRates[2]-200;
+                en.fireRate = en.fireRate*0.6;
                 this.game.time.events.add(5000, function(){
-                    en.fireRate = this.enemyFireRates[2]+200;
+                    en.fireRate = this.enemyFireRates[2];
                 },this);
             }
         }

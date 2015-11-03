@@ -36,8 +36,14 @@ gameLoad.prototype = {
 		this.game.load.image('trail7', 'assets/particles/VS_peli_trail7.png');
 		//ladataan ammus
 		this.game.load.image('bullet', 'assets/sprites/bullet.png');
+		this.game.load.image('bullet2', 'assets/sprites/bullet2.png');
+		this.game.load.image('bullet3', 'assets/sprites/bullet3.png');
         //Musiikkia
 		this.game.load.audio('soldier', 'assets/sounds/extar.opus');
+		//explosion
+		this.game.load.image('boom', 'assets/particles/explosion3.png');
+		this.game.load.image('boom2', 'assets/particles/explosion2.png');
+
 	},
 	create: function(){
         waiter = this.game.time.create();
@@ -106,7 +112,7 @@ gameLoad.prototype = {
 		this.enemyBullets = this.game.add.group();
 		this.enemyBullets.enableBody = true;
 		this.enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-		this.enemyBullets.createMultiple(500, 'bullet', 0, false);
+		this.enemyBullets.createMultiple(500, 'bullet3', 0, false);
 		this.enemyBullets.setAll('anchor.x', 0.5);
 		this.enemyBullets.setAll('anchor.y', 0.5);
 		this.enemyBullets.setAll('outOfBoundsKill', true);
@@ -150,8 +156,11 @@ gameLoad.prototype = {
                 enemy.health = 2.5;
                 enemy.scale.setTo(0.55,0.55);
                 enemy.nextFire = 0;
-				var enemyGun = this.game.add.image(0,-110);
-				enemy.addChild(enemyGun);
+                enemy.barrel = 1;
+				var enemyGun1 = this.game.add.image(35,-50);
+				var enemyGun2 = this.game.add.image(-35,-50);
+				enemy.addChild(enemyGun1);
+				enemy.addChild(enemyGun2);
             },this);
 			this.game.physics.p2.enable(tEnemy3);
 			this.enemies.getChildAt(i).add(tEnemy3);

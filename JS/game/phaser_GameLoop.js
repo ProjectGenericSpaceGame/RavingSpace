@@ -435,7 +435,15 @@ mainGame.prototype = {
 
                 if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2 && this.ship.alive)){
                     enemy.body.thrust(0);
-                    enemyFire(enemy,enemy.getChildAt(enemy.children.length-1),this.enemyBullets,this.enemyFireRates[2],this.ship);
+                    var gun;
+                    if(enemy.barrel == 1){
+                        gun = enemy.getChildAt(enemy.children.length-1);
+                        enemy.barrel = 2 ;
+                    } else {
+                        gun = enemy.getChildAt(enemy.children.length-2);
+                        enemy.barrel = 1;
+                    }
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.ship);
 
                 } else if(!this.ship.alive){
                     enemy.body.rotation = enemy.body.x/10;
@@ -490,7 +498,7 @@ mainGame.prototype = {
         if(rnd.integerInRange(0,10) == 1){
             if(en.health < 1){
                 en.health += 0.25;
-                alert("heal"+en.health);
+                //alert("heal"+en.health);
             } else {
                 en.fireRate = en.fireRate*0.6;
                 this.game.time.events.add(5000, function(){

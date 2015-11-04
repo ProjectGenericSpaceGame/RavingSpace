@@ -8,10 +8,31 @@ var mainGame = function(game){
 	spawnNext = "undefined";
 	lastRot = 0;
     testBM = 0;
+    //sisällys
+    /*
+    init
+    create
+        sallitaan fysiikat
+        asetetaan törmäykset
+    update
+        Asteroidien pyöritys
+        Hiiren sijainnista lasketaan kulma
+        Aluksen pyörittäminen
+        Panosmäärän sijainti
+        Kontrollit
+        Ampuminen
+        Hyökkäyksen hallinta
+        Panosten osuminen
+        Asteroidin jahtaajan tekoäly
+        pomon tekoäly
+    checkRange
+    tryBuff
+    reload
+     */
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music,clipText) {
         this.asteroids = asteroids;//
         this.ship = ship;//
         this.gun = gun;//
@@ -34,6 +55,7 @@ mainGame.prototype = {
         this.enemyFireRates = enemyFireRates;
         this.enemyBullets = enemyBullets;
         this.music = music;
+		this.clipText = clipText;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -45,6 +67,7 @@ mainGame.prototype = {
         this.reloading = false;
         this.frameSkip = 0;
         this.timers = [0,60];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff
+		this.text3 = this.game.add.text(0,0,"");
 
         this.fixed = false;//dedug, to be removed
 
@@ -221,11 +244,14 @@ mainGame.prototype = {
                 }
             }
         }
-        //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-        text.text = String(this.clips[0] + "+" + this.reloading + "+" + this.ship.health);
+        text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
+        //text.text = String(this.clips[0] + "+" + this.reloading + "+" + this.ship.health);
         //text.text = String("");
 		//text2.text = String("");
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
+		this.clipText.text  = this.clips[0];
+		this.clipText.x = this.game.input.activePointer.worldX+40;
+		this.clipText.y = this.game.input.activePointer.worldY+5;
         if (execTime > 10) {
             //alert("performance issue: " + execTime);
         }
@@ -260,18 +286,16 @@ mainGame.prototype = {
         else if (this.cursors.right.isDown) {
             this.ship.body.applyForce([-Math.cos(this.ship.body.rotation) * 7, -Math.sin(this.ship.body.rotation) * 7], 0, 0);
         }
+		if(this.cursors.reload.isDown){
+			this.reload();
+		}
         //ampuminen
-        if (this.game.input.activePointer.isDown && this.clips[0] > 0) {
+        if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !this.reloading && this.ship.alive) {
             if (fire(this.bullets, this.gun, this.fireRate, corRot, this.ship)) {
                 this.clips[0]--;
             }
         } else if (!this.reloading && this.clips[0] == 0) {
-            this.game.time.events.add(3000, function () {
-                this.clips[0] = 35;
-                this.reloading = false
-            }, this);
-            //waiter.start();
-            this.reloading = true;
+            this.reload();
         }
 
         //Hyökkäyksen hallinta
@@ -298,7 +322,7 @@ mainGame.prototype = {
             var bullets = this.bullets;
             var enemyAmount = this.enemyAmount;
             for (var iter = 0; iter < 3; iter++) {
-                groups[iter].forEachAlive(function (en) {
+                this.enemies.getChildAt(this.lap-1).getChildAt(iter).forEachAlive(function (en) {
                     bullets.forEachAlive(function (b) {
                         boundsBullet = b.world;
                         var array = this.game.physics.p2.hitTest(boundsBullet, [en]);
@@ -399,12 +423,12 @@ mainGame.prototype = {
 		//Pomon tekoäly
 
             this.enemy3.forEachAlive(function (enemy) {
-                if (enemy.name == "fresh") {
+                
+                if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000) {
+                    enemy.name = "fresh";
+                }else if (enemy.name == "fresh") {
                     enemy.name = "free";
                     enemy.buffTimer = 60;
-                }
-                else if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000) {
-                    enemy.name = "fresh";
                 }
             var dir;
             if (enemy.name == "inPlay") {//tämä ajetaan normaalisti koko ajan
@@ -457,17 +481,18 @@ mainGame.prototype = {
             else if (enemy.body.y > 100 && enemy.body.x < this.game.world.width - 100
                 && enemy.body.y > 100 && enemy.body.y < this.game.world.height - 100
                 && enemy.name == "free") {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
-                enemy.body.mass = rnd.realInRange(0.8, 0.99);
+                enemy.body.mass = rnd.realInRange(0.85, 1.25);
                 enemy.body.damping = rnd.realInRange(0.8, 0.99);
-                dir = acquireTarget(this.ship, enemy);
-                enemy.body.rotation = dir;
-                enemy.body.thrust(60);
-                this.game.time.events.add(1000, function () {
-                    enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
-                    enemy.body.mass = 1.9;
-                    enemy.body.damping = 0.7;
-                }, this);
+                //dir = acquireTarget(this.ship, enemy);
+                //enemy.body.rotation = dir;
+                //enemy.body.thrust(60);
+               
+				if(enemy.body.force.destination[0] == 0){
                 enemy.name = "inPlay";
+				enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+				enemy.body.mass = 1.9;
+                enemy.body.damping = 0.7;
+				}
             }
             if(this.frameSkip == 0) {
                 enemy.rendeable = false;
@@ -506,5 +531,13 @@ mainGame.prototype = {
                 },this);
             }
         }
-    } // trybuff
+    }, // trybuff
+	reload:function(){
+		this.game.time.events.add(3000, function () {
+                this.clips[0] = 35;
+                this.reloading = false
+            }, this);
+            //waiter.start();
+            this.reloading = true;
+	}
 } // prototype

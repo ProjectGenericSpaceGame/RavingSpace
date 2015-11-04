@@ -10,4 +10,5 @@
 }
 * {
 	margin:0;
+	cursor: url('../assets/sprites/cursor.png'), default;
 }

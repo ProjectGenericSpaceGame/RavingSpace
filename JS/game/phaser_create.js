@@ -20,7 +20,7 @@ gameLoad.prototype = {
 		this.game.world.setBounds(0, 0, 1600, 1000);
 		//Ladataan tausta ja asteroidit
 		this.game.load.image('background', 'assets/sprites/VS_background_purple.png');
-		this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroid1.png');
+		this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroidi1_FIX.png');
 		this.game.load.image('asteroid2', 'assets/sprites/VS_peli_asteroid2.png');
 		this.game.load.image('asteroid3', 'assets/sprites/VS_peli_asteroid3.png');
 		//Ladataan alus
@@ -170,13 +170,14 @@ gameLoad.prototype = {
 		this.enemy2 = this.enemies.getChildAt(0).getChildAt(1);
 		this.enemy3 = this.enemies.getChildAt(0).getChildAt(2);
 		var X = this.game.world.centerX;
-                var Y = this.game.world.centerY;
-		text = this.game.add.text(X, Y, "blaa",{fill:"white"});
-		text2 = this.game.add.text(X-25, Y+25, "blaa",{fill:"white"});
+		var Y = this.game.world.centerY;
+		text = this.game.add.text(X, Y, "",{fill:"white"});
+		text2 = this.game.add.text(X-25, Y+25, "",{fill:"white"});
+		this.clipText = this.game.add.text(0, 0, "35",{fill:"white",font:"20px cyber"});//panosten määrä
 		
 		//asetetaan näppäimet
 		this.cursors = this.game.input.keyboard.addKeys( 
-			{ 'up': Phaser.Keyboard.W, 'down': Phaser.Keyboard.S, 'left': Phaser.Keyboard.A, 'right': Phaser.Keyboard.D } 
+			{ 'up': Phaser.Keyboard.W, 'down': Phaser.Keyboard.S, 'left': Phaser.Keyboard.A, 'right': Phaser.Keyboard.D,'reload':Phaser.Keyboard.R } 
 		);
         //kierrosmuuttuja kertoo mikä kierros menossa
         this.lap = 1;
@@ -205,7 +206,8 @@ gameLoad.prototype = {
             this.lap,
             this.enemyFireRates,
             this.enemyBullets,
-            this.music
+            this.music,
+			this.clipText
 		);
 	}
 };

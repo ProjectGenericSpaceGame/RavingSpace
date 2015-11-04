@@ -182,6 +182,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
                 enemy.reset(600,500,3);
             },this);
         }
+		//räjähdys kuolessa
         var boom = game.add.sprite(0,0,'boom');
         boom.x = enemy.body.x-boom.width*0.1/2;
         boom.y = enemy.body.y-boom.height*0.1/2;
@@ -192,14 +193,14 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
         //tween.to({height:boom.height*to,width:boom.width*to}, 300, "Linear", true, 0);
         tween.onComplete.add(function(){boom.destroy();enemy.kill();},this);
-        var boom2 = game.add.sprite(0,0,'boom2');
+        var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
         boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
         boom2.y = enemy.body.y-boom.height*0.1/2+rnd.integerInRange(-3,3);
         boom2.scale.setTo(0.1,0.1);
         var tween2 = game.add.tween(boom2);
         var to2 = rnd.realInRange(3,5);
         //tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height),width:boom.width*to,x:boom.x-(boom.width*to-boom.width)}, 300, "Linear", true, 0);
-        tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, 300, "Linear", true, 150);
+        tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, 400, "Linear", true, 150);
         //tween.to({height:boom.height*to,width:boom.width*to}, 300, "Linear", true, 0);
         tween2.onComplete.add(function(){boom2.destroy()},this);
     } else {

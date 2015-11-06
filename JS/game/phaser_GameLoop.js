@@ -49,8 +49,8 @@ mainGame.prototype = {
         this.text = text;
         this.shipTrail = shipTrail;//
         this.attackInfo = attackInfo;
-        this.enemyAmount = enemyAmount;
-        this.spawnPool = spawnPool;
+        this.enemyAmount = enemyAmount;//enemyAmount on elossa olevien vihollisten määrä
+        this.spawnPool = spawnPool; //spawnpool on syntyvien vihollisten määrä per aalto
         this.lap = lap;
         this.enemyFireRates = enemyFireRates;
         this.enemyBullets = enemyBullets;
@@ -90,7 +90,7 @@ mainGame.prototype = {
         this.ship.body.setCollisionGroup(this.playerCollisonGroup);
         this.ship.body.collides([this.enemiesCollisonGroup]);
         //this.ship.body.collideWorldBounds = true;
-        this.music.play();
+        //this.music.play();
     },
     update: function () {
         var self = this;
@@ -161,12 +161,12 @@ mainGame.prototype = {
         //console.log(this.ship.body.rotation);
         //rotation arvo yli ~7.8 tai alle ~-7.8
         if (this.ship.body.rotation > 2 * pi + (pi / 2) || this.ship.body.rotation < -1 * ((2 * pi) + (pi / 2))) {
-            this.ship.body.rotation = pi / 2;
+            this.ship.body.rotation = Math.round((pi / 2)*10)/10;
             //this.flipped = true;
             //console.log("nollattu"+(2*pi));
         }//mikäli raja-arvojen sisällä mutta negatiivinen
         else if (this.ship.body.rotation < pi / 2) {
-            this.ship.body.rotation = 2 * pi - (this.ship.body.rotation * -1);
+            this.ship.body.rotation = Math.round((2 * pi - (this.ship.body.rotation * -1))*10)/10;
             //this.flipped = true;
         }
 
@@ -178,11 +178,15 @@ mainGame.prototype = {
         var corRot = Math.round(this.ship.body.rotation * 10) / 10;//aluksen arvo
         if (corDeg == 7.9) {
             corDeg -= 0.1;
+            corDeg = Math.round(corDeg*10)/10;
         }
-        if ((corDeg >= 6 && degWas <= 3.0) || (corDeg <= 3 && degWas >= 6)) {
-            this.flipped = true;
+        if ((corDeg >= 6 && degWas <= 3.0) || (corDeg <= 3 && degWas >= 6)){
+            if(this.flipped == false) {
+                this.flipped = true;
+            } else {
+                this.flipped = false;
+            }
         }
-
         //tutkitaan hiiren liikkeen suuntaa
         if (((corDeg < degWas && this.direct == "right")
             || (corDeg > degWas && this.direct == "left"))
@@ -194,13 +198,14 @@ mainGame.prototype = {
             this.IntMouseTrack = corDeg;
         }
 
-        if (corDeg > degWas && !(degWas < 2 && corDeg > 7.5 )) {
+        if (corDeg > degWas && !(degWas < 2 && corDeg > 6 )) {
             this.direct = "right";
         }
-        else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 2)) {
+        else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 3)) {
             this.direct = "left";
         }
         //Tämä korjaa direct muuttujan jos nykyisellä suunnalla on lyhyempi matka kohteeseen kuin vaihtamalla suuntaa
+
         if (this.IntMouseTrack != -1 && corDeg > corRot && corDeg <= this.IntMouseTrack && this.flipped == false) {
             this.direct = "right";
             this.fixed = "normal fix";
@@ -225,7 +230,7 @@ mainGame.prototype = {
                 for (var i = 0; i <= 3; i++) {
                     if (corRot != corDeg) {
                         //console.log("runned"+i);
-                        this.ship.body.rotation = corRot + 0.1;
+                        this.ship.body.rotation = Math.round((corRot + 0.1)*10)/10;
                     }
                     else {
                         break;
@@ -236,7 +241,7 @@ mainGame.prototype = {
                 for (var i = 0; i <= 3; i++) {
                     if (corRot != corDeg) {
                         //console.log("runned"+i);
-                        this.ship.body.rotation = corRot - 0.1;
+                        this.ship.body.rotation = Math.round((corRot - 0.1)*10)/10;
                     }
                     else {
                         break;
@@ -248,6 +253,7 @@ mainGame.prototype = {
         //text.text = String(this.clips[0] + "+" + this.reloading + "+" + this.ship.health);
         //text.text = String("");
 		//text2.text = String("");
+		//text2.text = String(this.fixed);
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
 		this.clipText.text  = this.clips[0];
 		this.clipText.x = this.game.input.activePointer.worldX+40;
@@ -264,7 +270,7 @@ mainGame.prototype = {
             this.flipped = false;
         }
         //console.log(corRot+"...."+corDeg);
-        degWas = (corDeg + 1 - 1);
+        degWas = Math.round((corDeg + 1 - 1)*10)/10;
         lastRot = Math.round(this.ship.body.rotation * 10) / 10;
 
 

@@ -129,14 +129,19 @@ function fire(bullets,gun,fireRate,deg,ship) {
 
         var bullet = bullets.getFirstExists(false);
 
-        bullet.reset(gun.world.x, gun.world.y);
+        bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
 
         //game.physics.arcade.moveToPointer(bullet, 330);
         var pointX;
         var pointY;
         if(deg < 1.6+pi/2){//right bottom
             pointX = ship.x+50;
-            pointY = ship.y+(Math.tan(deg-pi/2)*50);
+            if(deg != 1.6) {
+                pointY = ship.y + (Math.tan(deg - pi / 2) * 50)+0.1;//+0.1 on virheen korjausta
+            } else {
+                pointY = ship.y+2.5;//tämä korjaa phaserin bugisuutta koska laskee luodin sijainnin jostain syystä siihen mihin sen pitäisi mennä
+                bullet.x = ship.x+25; //korjataan luodin sijaintia (JS matematiikka virhe tekee kepposiaan)
+            }
         } else if(deg < 1.6+pi){//left bottom
             pointX = ship.x-50;
             pointY = ship.y+50/(Math.tan(deg-pi));
@@ -150,7 +155,12 @@ function fire(bullets,gun,fireRate,deg,ship) {
 
         } else {//upper right
             pointX = ship.x+50;
-            pointY = ship.y-50/(Math.tan(deg-pi*2));
+            if(deg != 7.8) {
+                pointY = ship.y - 50 / (Math.tan(deg - pi * 2));
+            } else {
+                pointY = ship.y-2.5;//tämä korjaa phaserin bugisuutta koska laskee luodin sijainnin jostain syystä siihen mihin sen pitäisi mennä
+                bullet.x = ship.x+25; //korjataan luodin sijaintia (JS matematiikka virhe tekee kepposiaan)
+            }
         }
         game.physics.arcade.moveToXY(bullet, pointX,pointY,330);
         //ship.body.x = pointX;
@@ -174,8 +184,9 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
 function hitDetector(bullet, enemy, enemyAmount,lap){
     bullet.kill();
     //console.log("got this far?");
-    if((enemy.health-0.25) <= 0){
-        if(enemyAmount != null) {
+    if((enemy.health-0.25) <= 0 && enemy.health != 0.001){
+        enemy.health = 0.001;
+        if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
         } else {
             game.time.events.add(10000,function(){
@@ -189,9 +200,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         boom.scale.setTo(0.1,0.1);
         var tween = game.add.tween(boom);
         var to = rnd.realInRange(5,7);
-        //tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height),width:boom.width*to,x:boom.x-(boom.width*to-boom.width)}, 300, "Linear", true, 0);
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
-        //tween.to({height:boom.height*to,width:boom.width*to}, 300, "Linear", true, 0);
         tween.onComplete.add(function(){boom.destroy();enemy.kill();},this);
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
         boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
@@ -199,9 +208,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         boom2.scale.setTo(0.1,0.1);
         var tween2 = game.add.tween(boom2);
         var to2 = rnd.realInRange(3,5);
-        //tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height),width:boom.width*to,x:boom.x-(boom.width*to-boom.width)}, 300, "Linear", true, 0);
         tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, 400, "Linear", true, 150);
-        //tween.to({height:boom.height*to,width:boom.width*to}, 300, "Linear", true, 0);
         tween2.onComplete.add(function(){boom2.destroy()},this);
     } else {
         enemy.health -= 0.25;
@@ -244,7 +251,7 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
             }
         }
     }
-    if(enemyAmount[lap-1] == 0) //jos kaikki viholliset on tuhottu (peli käyttää destroyta)
+    if(enemyAmount[lap-1] == 0) //jos kaikki viholliset on tuhottu
     {
         spawnNext = true;
         return "next";

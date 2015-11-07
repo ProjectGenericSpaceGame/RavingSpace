@@ -19,7 +19,6 @@ mainMenu.prototype = {
         //do some murdering
         this.buttonGroup.removeAll();
         var textStyle = { font: '30px cyber'};
-      
         //otsikko
         this.surroundings.menuLabel.text = "Main Menu";
        

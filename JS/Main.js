@@ -186,13 +186,15 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
     //console.log("got this far?");
     if((enemy.health-0.25) <= 0 && enemy.health != 0.001){
         enemy.health = 0.001;
+       
         if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
         } else {
             game.time.events.add(10000,function(){
                 enemy.reset(600,500,3);
             },this);
-        }
+        } 
+      
 		//räjähdys kuolessa
         var boom = game.add.sprite(0,0,'boom');
         boom.x = enemy.body.x-boom.width*0.1/2;
@@ -201,7 +203,16 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         var tween = game.add.tween(boom);
         var to = rnd.realInRange(5,7);
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
-        tween.onComplete.add(function(){boom.destroy();enemy.kill();},this);
+        tween.onComplete.add(function(){
+            if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2){
+                if(enemy.ray !== null){
+                    enemy.ray.clear();
+                    enemy.ray = null;
+                    enemy.wait = 0;
+                }
+            }
+            boom.destroy();
+            enemy.kill();},this);
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
         boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
         boom2.y = enemy.body.y-boom.height*0.1/2+rnd.integerInRange(-3,3);

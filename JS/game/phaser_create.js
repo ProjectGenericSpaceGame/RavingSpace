@@ -45,7 +45,10 @@ gameLoad.prototype = {
 		this.game.load.image('boom2', 'assets/particles/explosion2.png');
         //reloadkursori
 		this.game.load.image('reloadTray', 'assets/sprites/reload3.png');
-
+        //HP elementit
+        this.game.load.image('healthbar', 'assets/GUI/healthbar.png');
+        this.game.load.image('health', 'assets/GUI/health.png');
+        this.game.load.image('respawnTimer', 'assets/GUI/respawn.png');
 	},
 	create: function(){
         waiter = this.game.time.create();
@@ -99,6 +102,7 @@ gameLoad.prototype = {
 		this.ship.addChild(this.shipTrail);
 		this.ship.addChild(this.gun);
         this.ship.health = 3;
+        this.ship.dying = false;
 		
 		// luodaan aluksen ammusryhmä
 		this.bullets = this.game.add.group();
@@ -197,6 +201,24 @@ gameLoad.prototype = {
         //asetetaan ääneet
         this.music = this.game.add.audio('soldier');
 
+        //pelaajan HP kenttä
+        this.HPbar = this.game.add.group();
+        var container = this.game.add.sprite(0,0,'healthbar');
+        var health = this.game.add.sprite(0,0,'health');
+        health.x = container.width/2-health.width/2;
+        health.y = container.height/2-health.height/2;
+        var respawn = this.game.add.sprite(0,0,'respawnTimer');
+        respawn.x = container.width/2-respawn.width/2;
+        respawn.y = container.height/2-respawn.height/2;
+        this.HPbar.addChild(respawn);
+        this.HPbar.addChild(health);
+        this.HPbar.addChild(container);
+        this.HPbar.fixedToCamera = true;
+        this.HPbar.cameraOffset.setTo(1100,100);
+        this.HPbar.scale.setTo(0.4,0.3);
+        this.HPbar.fullHealthLength = health.width;
+        respawn.width = 0;
+
 		this.game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,
@@ -220,7 +242,8 @@ gameLoad.prototype = {
             this.enemyFireRates,
             this.enemyBullets,
             this.music,
-			this.clipText
+			this.clipText,
+            this.HPbar
 		);
 	}
 };

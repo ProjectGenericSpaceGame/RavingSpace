@@ -181,7 +181,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
         }
     }
 }
-function hitDetector(bullet, enemy, enemyAmount,lap){
+function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     bullet.kill();
     //console.log("got this far?");
     if((enemy.health-0.25) <= 0 && enemy.health != 0.001){
@@ -190,9 +190,19 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
         } else {
+            enemy.dying = true;
+            HPbar.getChildAt(1).width = 0;
             game.time.events.add(10000,function(){
                 enemy.reset(game.world.width/2,game.world.height/2,3);
+                enemy.dying = false;
             },this);
+            var tweenHealth = game.add.tween(HPbar.getChildAt(1));
+            tweenHealth.frameBased = true;
+            tweenHealth.to({width:HPbar.fullHealthLength},1000,"Linear",true,9000);
+            var tweenRespawn = game.add.tween(HPbar.getChildAt(0));
+            tweenRespawn.frameBased = true;
+            tweenRespawn.to({width:HPbar.fullHealthLength},10000,"Linear",true);
+            tweenRespawn.onComplete.add(function(){HPbar.getChildAt(0).width = 0;},this);
         } 
       
 		//räjähdys kuolessa
@@ -206,7 +216,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         var to = rnd.realInRange(9,11);
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
         tween.onComplete.add(function(){
-            if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
+            if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== "" && enemy.key == 'enemies'){
                 if(enemy.ray !== null){
                     enemy.ray.clear();
                     enemy.ray = null;
@@ -230,6 +240,9 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         tween2.onComplete.add(function(){boom2.destroy();enemy.kill();},this);
     } else {
         enemy.health -= 0.25;
+        if(enemyAmount == null){
+            HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
+        }
     }
 }
 

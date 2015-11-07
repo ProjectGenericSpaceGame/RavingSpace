@@ -32,7 +32,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music,clipText) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music,clipText,HPbar) {
         this.asteroids = asteroids;//
         this.ship = ship;//
         this.gun = gun;//
@@ -56,6 +56,7 @@ mainGame.prototype = {
         this.enemyBullets = enemyBullets;
         this.music = music;
 		this.clipText = clipText;
+        this.HPbar = HPbar;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -100,7 +101,7 @@ mainGame.prototype = {
         //this.ship.body.collideWorldBounds = true;
         //pyörittää asteroideja
         var dir = 0;
-        this.asteroids.forEach(function (item) {
+        this.asteroids.forEachAlive(function (item) {
             if (dir == 0) {
                 item.body.rotateLeft(0.6);
                 dir = 1;
@@ -346,8 +347,8 @@ mainGame.prototype = {
             //nyt toistetaan pelaajalle
             this.enemyBullets.forEachAlive(function(b){
                boundsBullet = b.world;
-                if( this.game.physics.p2.hitTest(boundsBullet, [this.ship]).length > 0 && this.ship.alive){
-                    hitDetector(b, this.ship, null, null);
+                if( this.game.physics.p2.hitTest(boundsBullet, [this.ship]).length > 0 && !this.ship.dying){
+                    hitDetector(b, this.ship, null, null,this.HPbar);
                 } 
             },this);
             
@@ -440,14 +441,16 @@ mainGame.prototype = {
                         enemy.wait = 0;
                     }  
                 } else {
-                    enemy.ray.clear();
-                    enemy.ray = null;
-                    enemy.wait = 0;
-                    var targetAsteroid = this.asteroids.getRandom();
-                    num = targetAsteroid.key.replace( /^\D+/g, '');
-                    if(num == 1){ enemy.name = 0.1; }
-                    if(num == 2){ enemy.name = 1.1; }
-                    if(num == 3){ enemy.name = 2.1; }
+                     if(enemy.ray != null) {
+                         enemy.ray.clear();
+                         enemy.ray = null;
+                         enemy.wait = 0;
+                     }
+                     var targetAsteroid = this.asteroids.getRandom();
+                     num = targetAsteroid.key.replace( /^\D+/g, '');
+                     if(num == 1){ enemy.name = 0.1; }
+                     if(num == 2){ enemy.name = 1.1; }
+                     if(num == 3){ enemy.name = 2.1; }
                 } 
             }
            

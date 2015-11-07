@@ -374,7 +374,6 @@ mainGame.prototype = {
            
            var num;
            
-           
            if(enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000){
                 enemy.name = "fresh";
               
@@ -425,26 +424,25 @@ mainGame.prototype = {
                          enemy.body.thrust(60);
                      }
                     if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.ray == null && enemy.wait == 0){
-                        enemy.body.thrust(0);
                         var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
                         g.lineStyle(8, 0x5c040c, 1);
                         g.lineTo(target.body.x-enemy.body.x, target.body.y-enemy.body.y);
                         enemy.ray = g;
                     } else if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.wait < 5){
-                        enemy.body.thrust(0);
                         enemy.wait += 1;
                     } else if(enemy.wait == 5 && enemy.ray !== null){
-                        enemy.body.thrust(0);
                         enemy.ray.clear();
                         enemy.ray = null;      
                         enemy.wait = 0;
                     } else if (this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,2) && enemy.ray !== null ){
-                        enemy.body.thrust(0);
                         enemy.ray.clear();
-                        enemy.ray = null; 
-                    }
-                      
+                        enemy.ray = null;
+                        enemy.wait = 0;
+                    }  
                 } else {
+                    enemy.ray.clear();
+                    enemy.ray = null;
+                    enemy.wait = 0;
                     var targetAsteroid = this.asteroids.getRandom();
                     num = targetAsteroid.key.replace( /^\D+/g, '');
                     if(num == 1){ enemy.name = 0.1; }

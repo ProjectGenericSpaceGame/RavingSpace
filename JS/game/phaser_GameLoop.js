@@ -443,7 +443,7 @@ mainGame.prototype = {
                     enemy.body.thrust(0);
                     var gun;
                     gun = enemy.getChildAt(enemy.children.length-1);
-                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[6],this.ship);
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[1],this.ship);
 
                 } else if(!this.ship.alive){
                     enemy.body.rotation = enemy.body.x/10;
@@ -560,7 +560,7 @@ mainGame.prototype = {
     },
     checkRange: function(x,y,x2,y2,usage){
         var dist = this.game.math.distance(x,y,x2,y2);
-        if(dist < 250 && usage == 1){
+        if(dist < 350 && usage == 1){
             return true;
         } else if(dist < 400 && usage == 2){
             return true;

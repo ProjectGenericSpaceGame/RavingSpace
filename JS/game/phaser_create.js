@@ -53,7 +53,7 @@ gameLoad.prototype = {
 	create: function(){
         waiter = this.game.time.create();
 
-		this.attackInfo = "150000'302112'352713";
+		this.attackInfo = "101005'302112'352713";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);

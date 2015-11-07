@@ -224,7 +224,6 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
                 }
             }
             boom.destroy();
-            enemy.kill();
         },this);
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
         //boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);

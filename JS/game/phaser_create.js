@@ -146,12 +146,10 @@ gameLoad.prototype = {
 			tEnemy2.createMultiple(parseInt(this.attackInfo[i].substring(2,4)),"hunter");
             tEnemy2.forEach(function(enemy){
                 enemy.scale.setTo(0.4,0.4);
+                enemy.health = 0.75;
                 enemy.nextFire = 0;
-                enemy.barrel = 1;
-				var enemyGun1 = this.game.add.image(35,-50);
-				var enemyGun2 = this.game.add.image(-35,-50);
-				enemy.addChild(enemyGun1);
-				enemy.addChild(enemyGun2);
+                var enemyGun3 = this.game.add.image(0,-50);
+                enemy.addChild(enemyGun3);
             });
             this.game.physics.p2.enable(tEnemy2);
 			this.enemies.getChildAt(i).add(tEnemy2);

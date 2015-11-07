@@ -442,14 +442,8 @@ mainGame.prototype = {
                 if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,1 && this.ship.alive)){
                     enemy.body.thrust(0);
                     var gun;
-                    if(enemy.barrel == 1){
-                        gun = enemy.getChildAt(enemy.children.length-1);
-                        enemy.barrel = 2 ;
-                    } else {
-                        gun = enemy.getChildAt(enemy.children.length-2);
-                        enemy.barrel = 1;
-                    }
-                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.ship);
+                    gun = enemy.getChildAt(enemy.children.length-1);
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[6],this.ship);
 
                 } else if(!this.ship.alive){
                     enemy.body.rotation = enemy.body.x/10;

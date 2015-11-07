@@ -20,7 +20,7 @@ gameLoad.prototype = {
 		this.game.world.setBounds(0, 0, 1600, 1000);
 		//Ladataan tausta ja asteroidit
 		this.game.load.image('background', 'assets/sprites/VS_background_purple.png');
-		this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroidi1_FIX.png');
+		this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroid1.png');
 		this.game.load.image('asteroid2', 'assets/sprites/VS_peli_asteroid2.png');
 		this.game.load.image('asteroid3', 'assets/sprites/VS_peli_asteroid3.png');
 		//Ladataan alus
@@ -68,13 +68,13 @@ gameLoad.prototype = {
 		});
         
         this.asteroid1 = this.asteroids.getChildAt(0);
-        this.asteroid1.health = 3;
+        this.asteroid1.health = 5;
         
         this.asteroid2 = this.asteroids.getChildAt(1);
-        this.asteroid2.health = 3;
+        this.asteroid2.health = 5;
         
         this.asteroid3 = this.asteroids.getChildAt(2);
-        this.asteroid3.health = 3;
+        this.asteroid3.health = 5;
         
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
@@ -140,7 +140,11 @@ gameLoad.prototype = {
 		this.enemies.add(lap3);
 		for(var i=0,j=this.enemies.length; i<j; i++){
 			var tEnemy1 = this.game.add.group();
-			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"enemies", 0);
+			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"enemies");
+            tEnemy1.forEach(function(enemy){
+                enemy.ray = null;
+                enemy.wait = 0;
+            }); 
 			this.game.physics.p2.enable(tEnemy1);
 			this.enemies.getChildAt(i).add(tEnemy1);
 			

@@ -69,9 +69,7 @@ mainGame.prototype = {
         this.timers = [0,60];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff
 		this.text3 = this.game.add.text(0,0,"");
         this.reloadSprite = "";
-
         this.fixed = false;//dedug, to be removed
-
     },
     create: function () {
         //fysiikat voidaan sallia vain pyörivässä statessa
@@ -96,23 +94,22 @@ mainGame.prototype = {
     },
     update: function () {
         var self = this;
-
         var benchmark = performance.now();
         this.ship.body.mass = 0.7;
         this.ship.body.damping = 0.7;
         //this.ship.body.collideWorldBounds = true;
         //pyörittää asteroideja
-        var suunta = 0;
+        var dir = 0;
         this.asteroids.forEach(function (item) {
-            if (suunta == 0) {
+            if (dir == 0) {
                 item.body.rotateLeft(0.6);
-                suunta = 1;
-            } else if (suunta == 1) {
+                dir = 1;
+            } else if (dir == 1) {
                 item.body.rotateRight(0.7);
-                suunta = 2;
+                dir = 2;
             } else {
                 item.body.rotateLeft(0.8);
-                suunta = 0;
+                dir = 0;
             }
 
         });
@@ -377,6 +374,7 @@ mainGame.prototype = {
            
            var num;
            
+           
            if(enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000){
                 enemy.name = "fresh";
               
@@ -420,18 +418,42 @@ mainGame.prototype = {
             
             //Tämä ajetaan kohteen ja massan saaneellee viholliselle normaalisti
             }else if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 ){
-                if (this.asteroids.getChildAt(enemy.name).alive == true ){
-                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.name), enemy);
-                    enemy.body.thrust(60);
+                 if (this.asteroids.getChildAt(enemy.name).alive == true ){ 
+                     var target = this.asteroids.getChildAt(enemy.name);
+                     enemy.body.rotation = acquireTarget(target, enemy);
+                     if(!this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1)) {
+                         enemy.body.thrust(60);
+                     }
+                    if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.ray == null && enemy.wait == 0){
+                        enemy.body.thrust(0);
+                        var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
+                        g.lineStyle(8, 0x5c040c, 1);
+                        g.lineTo(target.body.x-enemy.body.x, target.body.y-enemy.body.y);
+                        enemy.ray = g;
+                    } else if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.wait < 5){
+                        enemy.body.thrust(0);
+                        enemy.wait += 1;
+                    } else if(enemy.wait == 5 && enemy.ray !== null){
+                        enemy.body.thrust(0);
+                        enemy.ray.clear();
+                        enemy.ray = null;      
+                        enemy.wait = 0;
+                    } else if (this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,2) && enemy.ray !== null ){
+                        enemy.body.thrust(0);
+                        enemy.ray.clear();
+                        enemy.ray = null; 
+                    }
+                      
                 } else {
                     var targetAsteroid = this.asteroids.getRandom();
                     num = targetAsteroid.key.replace( /^\D+/g, '');
                     if(num == 1){ enemy.name = 0.1; }
                     if(num == 2){ enemy.name = 1.1; }
                     if(num == 3){ enemy.name = 2.1; }
-                }
-              
-            } 
+                } 
+            }
+           
+          
         }, this); // Asteroidin jahtaajan tekoäly loppuu
         
         // Pelaajan jahtaajan tekoäly

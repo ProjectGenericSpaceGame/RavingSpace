@@ -68,8 +68,8 @@ mainGame.prototype = {
         this.frameSkip = 0;
         this.timers = [0,60];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff
 		this.text3 = this.game.add.text(0,0,"");
+        this.reloadSprite = "";
         this.fixed = false;//dedug, to be removed
-
     },
     create: function () {
         //fysiikat voidaan sallia vain pyörivässä statessa
@@ -90,6 +90,7 @@ mainGame.prototype = {
         this.ship.body.collides([this.enemiesCollisonGroup]);
         //this.ship.body.collideWorldBounds = true;
         //this.music.play();
+        $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");//asetetaan kursori, ei toimi jos tekee createssa
     },
     update: function () {
         var self = this;
@@ -254,8 +255,14 @@ mainGame.prototype = {
 		//text2.text = String(this.fixed);
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
 		this.clipText.text  = this.clips[0];
+        //liikutetaan hiiren viereen
 		this.clipText.x = this.game.input.activePointer.worldX+40;
 		this.clipText.y = this.game.input.activePointer.worldY+5;
+        //mikäli lataus tray pelissä, liikutetaan sitäkin
+        if(this.reloadSprite.exists) {
+            this.reloadSprite.body.y = this.game.input.activePointer.worldY + this.reloadSprite.height / 2;
+            this.reloadSprite.body.x = this.game.input.activePointer.worldX + this.reloadSprite.width / 2;
+        }
         if (execTime > 10) {
             //alert("performance issue: " + execTime);
         }
@@ -572,6 +579,7 @@ mainGame.prototype = {
             }
         }, this);
 
+
         var benchmark2 = performance.now();
         var wholeLoop = benchmark2 - testBM;
         testBM = performance.now();
@@ -605,13 +613,32 @@ mainGame.prototype = {
             }
         }
     }, // trybuff
-	reload:function(){
-		this.game.time.events.add(3000, function () {
-                this.clips[0] = 35;
-                this.reloading = false
-            }, this);
+	reload:function() {
+        if (this.reloadSprite.exists == false || this.reloadSprite == ""|| this.reloadSprite == null) {
+            this.reloadSprite = this.game.add.sprite(0, 0, "reloadTray");
+            //this.reloadSprite.enableBody = true;
+            //this.reloadSprite.physicsBodyType = Phaser.Physics.ARCADE;
+            this.reloadSprite.y = this.game.input.activePointer.worldY+this.reloadSprite.height/2;
+            this.reloadSprite.x = this.game.input.activePointer.worldX+this.reloadSprite.width/2;
+            this.game.physics.p2.enableBody(this.reloadSprite);
+            //this.reloadSprite.body.angularVelocity = 200;
+        }
+        var reloadTween = game.add.tween(this.reloadSprite.body);
+        reloadTween.frameBased = true;
+        reloadTween.to({rotation: 2*pi}, 3000, "Linear", true, 0, 1);
+		this.game.time.events.add(3000, function (){
+            this.clips[0] = 35;
+            this.reloading = false;
+            //reloadTween.stop();
+            this.reloadSprite.destroy();
+            $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
+        }, this);
             //waiter.start();
-            this.reloading = true;
+        this.reloading = true;
+
+
+        //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");
+        $("canvas").css("cursor","none");
 	}
     
 } // prototype

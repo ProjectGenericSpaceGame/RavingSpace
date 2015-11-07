@@ -206,7 +206,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap){
         var to = rnd.realInRange(9,11);
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
         tween.onComplete.add(function(){
-            if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 && enemyAmount != null){
+            if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 && enemy.name != ""){
                 if(enemy.ray !== null){
                     enemy.ray.clear();
                     enemy.ray = null;

@@ -44,7 +44,7 @@ gameLoad.prototype = {
 		this.game.load.image('boom', 'assets/particles/explosion3.png');
 		this.game.load.image('boom2', 'assets/particles/explosion2.png');
         //reloadkursori
-		this.game.load.image('reloadTray', 'assets/sprites/reload2.png');
+		this.game.load.image('reloadTray', 'assets/sprites/reload3.png');
 
 	},
 	create: function(){
@@ -165,6 +165,7 @@ gameLoad.prototype = {
                 enemy.scale.setTo(0.55,0.55);
                 enemy.nextFire = 0;
                 enemy.barrel = 1;
+                enemy.altTarget = rnd.integerInRange(0,2);
 				var enemyGun1 = this.game.add.image(35,-50);
 				var enemyGun2 = this.game.add.image(-35,-50);
 				enemy.addChild(enemyGun1);

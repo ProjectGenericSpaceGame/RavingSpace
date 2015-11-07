@@ -64,7 +64,7 @@ mainGame.prototype = {
         this.IntMouseTrack = -1;
         this.moving = "";
         this.clips = [35, 0, 0, 0];
-        this.reloading = false;
+        reloading = false;
         this.frameSkip = 0;
         this.timers = [0,60];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff
 		this.text3 = this.game.add.text(0,0,"");
@@ -252,7 +252,7 @@ mainGame.prototype = {
             }
         }
         text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-        //text.text = String(this.clips[0] + "+" + this.reloading + "+" + this.ship.health);
+        //text.text = String(this.clips[0] + "+" + reloading + "+" + this.ship.health);
         //text.text = String("");
 		//text2.text = String("");
 		//text2.text = String(this.fixed);
@@ -300,16 +300,16 @@ mainGame.prototype = {
         else if (this.cursors.right.isDown) {
             this.ship.body.applyForce([-Math.cos(this.ship.body.rotation) * 7, -Math.sin(this.ship.body.rotation) * 7], 0, 0);
         }
-		if(this.cursors.reload.isDown){
-			this.reload();
+		if(this.cursors.reload.isDown && !reloading){
+			this.reloadSprite = reload(this.reloadSprite,this.clips);
 		}
         //ampuminen
-        if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !this.reloading && this.ship.alive) {
+        if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !reloading && this.ship.alive) {
             if (fire(this.bullets, this.gun, this.fireRate, corRot, this.ship)) {
                 this.clips[0]--;
             }
-        } else if (!this.reloading && this.clips[0] == 0) {
-            this.reload();
+        } else if (!reloading && this.clips[0] == 0) {
+            this.reloadSprite = reload(this.reloadSprite,this.clips);
         }
 
         //Hyökkäyksen hallinta
@@ -520,8 +520,16 @@ mainGame.prototype = {
 
                 }
                 enemy.buffTimer--;
-
-                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2 && this.ship.alive)){
+                if(!this.asteroids.getChildAt(enemy.altTarget).alive){
+                    var newTarget = -1;
+                    while(newTarget == enemy.altTarget || newTarget == -1) {
+                        newTarget = rnd.integerInRange(0, 2);
+                    }
+                    enemy.altTarget = newTarget;
+                }
+                var altTargetX = this.asteroids.getChildAt(enemy.altTarget).x;
+                var altTargetY = this.asteroids.getChildAt(enemy.altTarget).y;
+                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2) && this.ship.alive){
                     enemy.body.thrust(0);
                     var gun;
                     if(enemy.barrel == 1){
@@ -533,10 +541,23 @@ mainGame.prototype = {
                     }
                     enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.ship);
 
-                } else if(!this.ship.alive){
-                    enemy.body.rotation = enemy.body.x/10;
+                } else if(!this.ship.alive && !this.checkRange(altTargetX,altTargetY,enemy.x,enemy.y,3)){
+                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.altTarget), enemy);
                     enemy.body.thrust(60);
-                } else {
+                } else if(!this.ship.alive && this.checkRange(altTargetX,altTargetY,enemy.x,enemy.y,3)){
+                    enemy.body.thrust(0);
+                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.altTarget), enemy);
+                    var gun;
+                    if(enemy.barrel == 1){
+                        gun = enemy.getChildAt(enemy.children.length-1);
+                        enemy.barrel = 2 ;
+                    } else {
+                        gun = enemy.getChildAt(enemy.children.length-2);
+                        enemy.barrel = 1;
+                    }
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.altTarget));
+                }
+                else {
                     enemy.body.thrust(60);
                 }
 
@@ -579,7 +600,10 @@ mainGame.prototype = {
             return true;
         } else if(dist < 400 && usage == 2){
             return true;
+        } else if(dist < 300 && usage == 3){
+            return true;
         }
+
         else {
             return false;
         }
@@ -596,32 +620,32 @@ mainGame.prototype = {
                 },this);
             }
         }
-    }, // trybuff
-	reload:function() {
-        if (this.reloadSprite.exists == false || this.reloadSprite == ""|| this.reloadSprite == null) {
-            this.reloadSprite = this.game.add.sprite(0, 0, "reloadTray");
-            //this.reloadSprite.enableBody = true;
-            //this.reloadSprite.physicsBodyType = Phaser.Physics.ARCADE;
-            this.reloadSprite.y = this.game.input.activePointer.worldY+this.reloadSprite.height/2;
-            this.reloadSprite.x = this.game.input.activePointer.worldX+this.reloadSprite.width/2;
-            this.game.physics.p2.enableBody(this.reloadSprite);
-            //this.reloadSprite.body.angularVelocity = 200;
+    } // trybuff
+	/*reload:function() {
+        if (reloadSprite.exists == false || reloadSprite == ""|| reloadSprite == null) {
+            reloadSprite = this.game.add.sprite(0, 0, "reloadTray");
+            //reloadSprite.enableBody = true;
+            //reloadSprite.physicsBodyType = Phaser.Physics.ARCADE;
+            reloadSprite.y = this.game.input.activePointer.worldY+reloadSprite.height/2;
+            reloadSprite.x = this.game.input.activePointer.worldX+reloadSprite.width/2;
+            this.game.physics.p2.enableBody(reloadSprite);
+            //reloadSprite.body.angularVelocity = 200;
         }
-        var reloadTween = game.add.tween(this.reloadSprite.body);
+        var reloadTween = game.add.tween(reloadSprite.body);
         reloadTween.frameBased = true;
         reloadTween.to({rotation: 2*pi}, 3000, "Linear", true, 0, 1);
 		this.game.time.events.add(3000, function (){
             this.clips[0] = 35;
-            this.reloading = false;
+            reloading = false;
             //reloadTween.stop();
-            this.reloadSprite.destroy();
+            reloadSprite.destroy();
             $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
         }, this);
             //waiter.start();
-        this.reloading = true;
+        reloading = true;
 
 
         //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");
         $("canvas").css("cursor","none");
-	}
+	}*/
 } // prototype

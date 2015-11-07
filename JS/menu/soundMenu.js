@@ -121,49 +121,29 @@ soundMenu.prototype = {
         console.log(this.mastervolume);
         if (this.masterneedle.x < 1) {
             this.mastervolume = 0.0;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 36) {
             this.mastervolume = 0.2;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 72) {
             this.mastervolume = 0.4;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 108) {
             this.mastervolume = 0.6;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 144) {
             this.mastervolume = 0.8;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 180) {
             this.mastervolume = 1.0;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 216) {
             this.mastervolume = 1.2;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 252) {
             this.mastervolume = 1.4;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 288) {
             this.mastervolume = 1.6;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x < 324) {
             this.mastervolume = 1.8;
-            this.musicVolume()
-            //this.fxVolume();
         } else if (this.masterneedle.x > 324) {
             this.mastervolume = 2.0;
-            this.musicVolume()
-            //this.fxVolume();
         }
+        this.musicVolume()
+        //this.fxVolume();
     }, // säädetään musiikkivolume musiikkisliderin neulan x:n mukaan
     musicVolume:function() {
         //console.log(this.musicneedle.x);

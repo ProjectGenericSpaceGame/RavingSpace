@@ -425,10 +425,60 @@ mainGame.prototype = {
               
             } 
         }, this); // Asteroidin jahtaajan tekoäly loppuu
+        
+        // Pelaajan jahtaajan tekoäly
+        this.enemy2.forEachAlive(function (enemy) {
+                
+                if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000) {
+                    enemy.name = "fresh";
+                }else if (enemy.name == "fresh") {
+                    enemy.name = "free";
+                }
+            var dir;
+            if (enemy.name == "inPlay") {//tämä ajetaan normaalisti koko ajan
+                dir = acquireTarget(this.ship, enemy);
+                enemy.body.rotation = dir;
+
+                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,1 && this.ship.alive)){
+                    enemy.body.thrust(0);
+                    var gun;
+                    if(enemy.barrel == 1){
+                        gun = enemy.getChildAt(enemy.children.length-1);
+                        enemy.barrel = 2 ;
+                    } else {
+                        gun = enemy.getChildAt(enemy.children.length-2);
+                        enemy.barrel = 1;
+                    }
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.ship);
+
+                } else if(!this.ship.alive){
+                    enemy.body.rotation = enemy.body.x/10;
+                    enemy.body.thrust(200);
+                } else {
+                    enemy.body.thrust(200);
+                }
+            }
+            
+            else if (enemy.body.y > 100 && enemy.body.x < this.game.world.width - 100
+                && enemy.body.y > 100 && enemy.body.y < this.game.world.height - 100
+                && enemy.name == "free") {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
+                enemy.body.mass = rnd.realInRange(0.85, 1.25);
+                enemy.body.damping = rnd.realInRange(0.8, 0.99);
+               
+				if(enemy.body.force.destination[0] == 0){
+                enemy.name = "inPlay";
+				enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+				enemy.body.mass = 0.7;
+                enemy.body.damping = 0.7;
+				}
+            }
+            if(this.frameSkip == 0) {
+                enemy.rendeable = false;
+            }
+        }, this);  // Pelaajan jahtaajan tekoäly loppuu 
 
 		//Pomon tekoäly
-
-            this.enemy3.forEachAlive(function (enemy) {
+        this.enemy3.forEachAlive(function (enemy) {
                 
                 if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000) {
                     enemy.name = "fresh";
@@ -518,7 +568,7 @@ mainGame.prototype = {
         var dist = this.game.math.distance(x,y,x2,y2);
         if(dist < 250 && usage == 1){
             return true;
-        } else if(dist < 300 && usage == 2){
+        } else if(dist < 400 && usage == 2){
             return true;
         }
         else {

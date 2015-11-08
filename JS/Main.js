@@ -253,7 +253,6 @@ function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
         if(asteroidAmmount == null){
             console.log("Game Over");
         }
-
     } else {
         asteroid.health -= 0.25;
     }

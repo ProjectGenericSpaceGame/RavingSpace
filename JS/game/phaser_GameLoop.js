@@ -441,7 +441,7 @@ mainGame.prototype = {
                         enemy.wait = 0;
                     }  
                 } else {
-                     if(enemy.ray != null) {
+                     if(enemy.ray !== null) {
                          enemy.ray.clear();
                          enemy.ray = null;
                          enemy.wait = 0;

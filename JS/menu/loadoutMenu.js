@@ -62,6 +62,7 @@ loadoutMenu.prototype = {
         this.noWeapons = this.game.add.text(0, 200, 'Select atleast one weapon!' ,styleR);
         this.noWeapons.x = (this.game.width/2)-(this.noWeapons.width/2);
         this.noWeapons.visible = false;
+        this.thingsGroup.add(this.noWeapons);
         
         // Go -painike. Sitä painamalla aloitetaan peli
         this.goButton = this.game.add.button(975, 680, 'buttonSprite', this.gameStart, this, 0, 1, 2);
@@ -249,7 +250,7 @@ loadoutMenu.prototype = {
     },
     
     gameStart: function(){
-        
+        // Tutkitaan onko pelaaja valinnut yhtään asetta.
         for (var i = 0; i <= 2; i++){
              if(this.selectedLoadout[i] !== undefined){
                 this.noWeapons.visible = false;

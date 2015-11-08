@@ -200,7 +200,6 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
             tweenHealth.frameBased = true;
             tweenHealth.to({width:HPbar.fullHealthLength},1000,"Linear",true,9000);
             var tweenRespawn = game.add.tween(HPbar.getChildAt(0));
-            tweenRespawn.frameBased = true;
             tweenRespawn.to({width:HPbar.fullHealthLength},10000,"Linear",true);
             tweenRespawn.onComplete.add(function(){HPbar.getChildAt(0).width = 0;},this);
         } 

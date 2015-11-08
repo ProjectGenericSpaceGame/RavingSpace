@@ -51,6 +51,7 @@ mainMenu.prototype = {
         this.buttonGroup.add(this.settingsButton);
         this.buttonGroup.add(this.scoresButton);
         this.buttonGroup.add(this.customButton);
+
     },
     
     loadoutStart: function(){

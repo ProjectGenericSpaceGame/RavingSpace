@@ -330,7 +330,6 @@ mainGame.prototype = {
         if (this.frameSkip == 0) {
             var boundsBullet;
             var groups = [this.enemy1, this.enemy2, this.enemy3];
-            var rocks = [this.asteroid1, this.asteroid2, this.asteroid3];
             var bullets = this.bullets;
             var enemyAmount = this.enemyAmount;
             for (var iter = 0; iter < 3; iter++) {
@@ -426,6 +425,8 @@ mainGame.prototype = {
                      }
                     if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.ray == null && enemy.wait == 0){
                         var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
+                        var gun;
+                        enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.name));
                         g.lineStyle(8, 0x5c040c, 1);
                         g.lineTo(target.body.x-enemy.body.x, target.body.y-enemy.body.y);
                         enemy.ray = g;
@@ -578,7 +579,7 @@ mainGame.prototype = {
                         gun = enemy.getChildAt(enemy.children.length-2);
                         enemy.barrel = 1;
                     }
-                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.altTarget));
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[1],this.asteroids.getChildAt(enemy.altTarget));
                 }
                 else {
                     enemy.body.thrust(60);

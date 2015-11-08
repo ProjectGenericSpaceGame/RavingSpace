@@ -180,6 +180,16 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     }
+    if(user.key == 'destroyer'){
+         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
+            user.nextFire = game.time.now + fireRate;
+            var bullet = enemyBullets.getFirstExists(false);
+            bullet.visible = false; 
+            bullet.reset(user.body.x, user.body.y);
+            game.physics.arcade.moveToObject(bullet,target,200);
+        }
+    }
+        
 }
 function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     bullet.kill();

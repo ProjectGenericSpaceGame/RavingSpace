@@ -424,11 +424,11 @@ mainGame.prototype = {
                          enemy.body.thrust(60);
                      }
                     if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.ray == null && enemy.wait == 0){
-                        var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
-						var gun;
+                        var gun = enemy.getChildAt(0);
+                        var g = this.game.add.graphics(enemy.getChildAt(0).world.x, enemy.getChildAt(0).world.y);
                         enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.name));
                         g.lineStyle(8, 0x5c040c, 1);
-                        g.lineTo(target.body.x-enemy.body.x, target.body.y-enemy.body.y);
+                        g.lineTo(target.body.x-(enemy.getChildAt(0).world.x+enemy.targetOff), target.body.y-(enemy.getChildAt(0).world.y+enemy.targetOff));
                         enemy.ray = g;
                     } else if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.wait < 5){
                         enemy.wait += 1;
@@ -580,7 +580,7 @@ mainGame.prototype = {
                         gun = enemy.getChildAt(enemy.children.length-2);
                         enemy.barrel = 1;
                     }
-                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[1],this.asteroids.getChildAt(enemy.altTarget));
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.altTarget));
                 }
                 else {
                     enemy.body.thrust(60);

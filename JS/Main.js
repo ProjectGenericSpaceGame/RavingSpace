@@ -177,26 +177,34 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             user.nextFire = game.time.now + fireRate;
             var bullet = enemyBullets.getFirstExists(false);
             bullet.reset(gun.world.x, gun.world.y);
+            bullet.alpha = 1;
             game.physics.arcade.moveToObject(bullet,target,200);
         }
-    }
-    if(user.key == 'destroyer'){
-         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
+    } else if(user.key == 'hunter'){
+        if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
             user.nextFire = game.time.now + fireRate;
             var bullet = enemyBullets.getFirstExists(false);
-            bullet.visible = false; 
+            bullet.reset(gun.world.x, gun.world.y);
+            bullet.alpha = 1;
+            game.physics.arcade.moveToObject(bullet,target,300);
+        }
+    } else if(user.key == 'destroyer'){
+        if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
+            user.nextFire = game.time.now + fireRate;
+            var bullet = enemyBullets.getFirstExists(false);
             bullet.reset(user.body.x, user.body.y);
+            bullet.alpha = 0;
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     }
-        
+
 }
 function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     bullet.kill();
     //console.log("got this far?");
     if((enemy.health-0.25) <= 0 && enemy.health != 0.001){
         enemy.health = 0.001;
-       
+
         if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
         } else {
@@ -210,11 +218,12 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
             tweenHealth.frameBased = true;
             tweenHealth.to({width:HPbar.fullHealthLength},1000,"Linear",true,9000);
             var tweenRespawn = game.add.tween(HPbar.getChildAt(0));
+            tweenRespawn.frameBased = true;
             tweenRespawn.to({width:HPbar.fullHealthLength},10000,"Linear",true);
             tweenRespawn.onComplete.add(function(){HPbar.getChildAt(0).width = 0;},this);
-        } 
-      
-		//räjähdys kuolessa
+        }
+
+        //räjähdys kuolessa
         var boom = game.add.sprite(0,0,'boom');
         //boom.x = enemy.body.x-boom.width*0.1/2;
         //boom.y = enemy.body.y-boom.height*0.1/2;
@@ -225,13 +234,6 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
         var to = rnd.realInRange(9,11);
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
         tween.onComplete.add(function(){
-            if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== "" && enemy.key == 'enemies'){
-                if(enemy.ray !== null){
-                    enemy.ray.clear();
-                    enemy.ray = null;
-                    enemy.wait = 0;
-                }
-            }
             boom.destroy();
         },this);
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
@@ -245,16 +247,42 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
         tween2.frameBased = true;
         var to2 = rnd.realInRange(7,5);
         tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, rnd.integerInRange(300,600), "Linear", true, 150);
-        tween2.onComplete.add(function(){boom2.destroy();enemy.kill();},this);
+        tween2.onComplete.add(function(){
+            boom2.destroy();
+            enemy.kill();
+            if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
+                if(enemy.ray !== null){
+                    enemy.ray.clear();
+                    enemy.ray = null;
+                    enemy.wait = 0;
+                }
+            }
+        },this);
     } else {
         enemy.health -= 0.25;
-        if(enemyAmount == null){
-            HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
+        if(enemyAmount == null || enemy.key  == 'commander'){
+            if(enemy.key != 'commander'){
+                HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
+            }
+            else if(enemy.key == 'commander'){
+                HPbar.renderable = true;
+                //alert(HPbar.getChildAt(1).width);
+                //HPbar.getChildAt(1).body.x = 10.6;
+                //HPbar.getChildAt(1).body.offset = 0;
+                //HPbar.getChildAt(1).x = HPbar.zeroPosition;
+                //HPbar.getChildAt(1).x = 10.6;
+                //HPbar.getChildAt(1).anchor.x = 0;
+                //HPbar.getChildAt(1).x -= 33.4;
+                //HPbar.getChildAt(1).body.width = HPbar.fullHealthLength*(enemy.health/2.5);
+                HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/2.5);
+                //HPbar.getChildAt(1).anchor.x = 1;
+                //alert(HPbar.zeroPosition);
+                //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
+                //alert(HPbar.x);
+            }
         }
     }
 }
-
-
 function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
     bullet.kill();
     if((asteroid.health-0.25) <= 0 ){
@@ -278,7 +306,15 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
             {
                 var enemy = enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false);
                 enemy.reset(randNumbers[2],randNumbers[3]);
-                if(enemy.key == "commander"){enemy.health = 2.5;}
+                if(enemy.key == "commander"){
+                    enemy.health = 2.5;
+                    enemy.getChildAt(0).getChildAt(1).anchor.x = 0;
+                    enemy.getChildAt(0).getChildAt(1).x = -(enemy.getChildAt(0).getChildAt(1).width/2);
+                    enemy.getChildAt(0).getChildAt(1).body.x = -(enemy.getChildAt(0).getChildAt(1).width/2);
+                    enemy.getChildAt(0).getChildAt(1).width = enemy.getChildAt(0).fullHealthLength;
+                    ;} else {
+                    enemy.health = enemy.maxHealth;
+                }
                 enemy.body.setCollisionGroup(enColGrp);
                 //enemy.body.collides([enColGrp,plrColGrp]);//törmäykset asetetaan kun vihu on päässyt pelialueelle
                 //enemy.body.collideWorldBounds = false; //salli tämä rivi kun tekoäly paikallaan, estää kolmioiden lentämisen pelialueelle suurella nopeudella
@@ -296,7 +332,6 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
     }
     spawnNext = true;
 }
-
 
 // Resisez the game based on the window size
 

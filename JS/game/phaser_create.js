@@ -39,7 +39,7 @@ gameLoad.prototype = {
 		this.game.load.image('bullet2', 'assets/sprites/bullet2.png');
 		this.game.load.image('bullet3', 'assets/sprites/bullet3.png');
         //Musiikkia
-		this.game.load.audio('soldier', 'assets/sounds/extar.opus');
+		//this.game.load.audio('soldier', 'assets/sounds/extar.opus');
 		//explosion
 		this.game.load.image('boom', 'assets/particles/explosion3.png');
 		this.game.load.image('boom2', 'assets/particles/explosion2.png');
@@ -150,7 +150,8 @@ gameLoad.prototype = {
 				enemy.nextFire = 0;
 				enemy.maxHealth = 1;
                 enemy.wait = 0;
-				var gun = this.game.add.image(0,-90);
+				enemy.targetOff = rnd.integerInRange(0,60);
+				var gun = this.game.add.image(0,-70);
 				enemy.addChild(gun);
             }); 
 			this.game.physics.p2.enable(tEnemy1);
@@ -213,7 +214,8 @@ gameLoad.prototype = {
         //kierrosmuuttuja kertoo mikä kierros menossa
         this.lap = 1;
         //asetetaan ääneet
-        this.music = this.game.add.audio('soldier');
+        //this.music = this.game.add.audio('soldier');
+		this.music = null;
 
         //pelaajan HP kenttä
 		var playerhealth = this.HPbar();
@@ -247,7 +249,7 @@ gameLoad.prototype = {
             this.enemyBullets,
             this.music,
 			this.clipText,
-            playerHealth
+            playerhealth
 		);
 	},
 	HPbar: function(){

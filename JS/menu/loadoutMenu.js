@@ -250,6 +250,7 @@ loadoutMenu.prototype = {
     },
     
     gameStart: function(){
+       // console.log(this.wepslot1.getChiltAt(0));
         // Tutkitaan onko pelaaja valinnut yhtään asetta.
         for (var i = 0; i <= 2; i++){
              if(this.selectedLoadout[i] !== undefined){

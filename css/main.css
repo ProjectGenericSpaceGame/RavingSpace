@@ -2,13 +2,28 @@
   font-family: 'cyber';
   src: url('../kelmscott_roman/Arkhip_font.ttf') format('truetype');
 }
+canvas{
+    margin: 0 auto;
+}
 
 .fontLoader {
     position: absolute;
 	visibility:hidden;
 	font-family:"cyber";
 }
+#loader {
+	position: fixed;
+    margin: 0 auto;
+	right: 0;
+	top: 100;
+	background: #FFF;
+	z-index: 9999;
+	background-image: url("../assets/loader/loading.gif");
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
 * {
 	margin:0;
-	/*cursor: url('../assets/sprites/cursor.png'), default;*//*tämä asetetaan koodista*/
+	/*cursor: url('../assets/sprites/cursor.png'), default;*// /* asetetaan koodista*/
 }

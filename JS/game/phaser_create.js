@@ -26,7 +26,7 @@ gameLoad.prototype = {
 		//Ladataan alus
 		this.game.load.image('ship', 'assets/sprites/VS_peli_ship.png');
 		//ladataan viholliset
-		this.game.load.spritesheet('enemies', 'assets/sprites/enemies.png',97,113);
+		this.game.load.spritesheet('destroyer', 'assets/sprites/enemies.png',97,113);
 		this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
 		this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
 		//this.game.load.spritesheet('enemy2', 'assets/sprites/enemies.png',97,195);
@@ -71,13 +71,13 @@ gameLoad.prototype = {
 		});
         
         this.asteroid1 = this.asteroids.getChildAt(0);
-        this.asteroid1.health = 5;
+        this.asteroid1.health = 25;
         
         this.asteroid2 = this.asteroids.getChildAt(1);
-        this.asteroid2.health = 5;
+        this.asteroid2.health = 25;
         
         this.asteroid3 = this.asteroids.getChildAt(2);
-        this.asteroid3.health = 5;
+        this.asteroid3.health = 25;
         
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
@@ -144,10 +144,14 @@ gameLoad.prototype = {
 		this.enemies.add(lap3);
 		for(var i=0,j=this.enemies.length; i<j; i++){
 			var tEnemy1 = this.game.add.group();
-			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"enemies");
+			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"destroyer");
             tEnemy1.forEach(function(enemy){
                 enemy.ray = null;
+				enemy.nextFire = 0;
+				enemy.maxHealth = 1;
                 enemy.wait = 0;
+				var gun = this.game.add.image(0,-90);
+				enemy.addChild(gun);
             }); 
 			this.game.physics.p2.enable(tEnemy1);
 			this.enemies.getChildAt(i).add(tEnemy1);
@@ -157,11 +161,10 @@ gameLoad.prototype = {
             tEnemy2.forEach(function(enemy){
                 enemy.scale.setTo(0.4,0.4);
                 enemy.nextFire = 0;
-                enemy.barrel = 1;
-				var enemyGun1 = this.game.add.image(35,-50);
-				var enemyGun2 = this.game.add.image(-35,-50);
+				enemy.health = 0.5;
+				enemy.maxHealth = 0.5;
+				var enemyGun1 = this.game.add.image(0,-70);
 				enemy.addChild(enemyGun1);
-				enemy.addChild(enemyGun2);
             });
             this.game.physics.p2.enable(tEnemy2);
 			this.enemies.getChildAt(i).add(tEnemy2);
@@ -174,9 +177,20 @@ gameLoad.prototype = {
                 enemy.nextFire = 0;
                 enemy.barrel = 1;
                 enemy.altTarget = rnd.integerInRange(0,2);
+				var healthbar = this.HPbar();
+				healthbar.scale.setTo(0.3,0.2);
+				//healthbar.renderable = false;
+				//healthbar.alpha = 0;
+				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
+				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
+				healthbar.zeroPosition = healthbar.width;
+				healthbar.y = -120;
+				healthbar.getChildAt(1).anchor.x = 0;
+				//enemy.healthbar = healthbar;
 				var enemyGun1 = this.game.add.image(35,-50);
 				var enemyGun2 = this.game.add.image(-35,-50);
-				enemy.addChild(enemyGun1);
+				enemy.addChild(healthbar);
+				enemy.addChild(enemyGun1);//pidä nämä aina viimeisenä
 				enemy.addChild(enemyGun2);
             },this);
 			this.game.physics.p2.enable(tEnemy3);
@@ -202,22 +216,12 @@ gameLoad.prototype = {
         this.music = this.game.add.audio('soldier');
 
         //pelaajan HP kenttä
-        this.HPbar = this.game.add.group();
-        var container = this.game.add.sprite(0,0,'healthbar');
-        var health = this.game.add.sprite(0,0,'health');
-        health.x = container.width/2-health.width/2;
-        health.y = container.height/2-health.height/2;
-        var respawn = this.game.add.sprite(0,0,'respawnTimer');
-        respawn.x = container.width/2-respawn.width/2;
-        respawn.y = container.height/2-respawn.height/2;
-        this.HPbar.addChild(respawn);
-        this.HPbar.addChild(health);
-        this.HPbar.addChild(container);
-        this.HPbar.fixedToCamera = true;
-        this.HPbar.cameraOffset.setTo(1100,100);
-        this.HPbar.scale.setTo(0.4,0.3);
-        this.HPbar.fullHealthLength = health.width;
-        respawn.width = 0;
+		var playerhealth = this.HPbar();
+        playerhealth.fixedToCamera = true;
+        playerhealth.cameraOffset.setTo(1100,100);
+        playerhealth.scale.setTo(0.4,0.3);
+        playerhealth.fullHealthLength = playerhealth.getChildAt(1).width;//health palkki
+        playerhealth.getChildAt(0).width = 0; //respawn palkki
 
 		this.game.state.start("mainGame",false,false,
             this.asteroids,
@@ -243,7 +247,22 @@ gameLoad.prototype = {
             this.enemyBullets,
             this.music,
 			this.clipText,
-            this.HPbar
+            playerHealth
 		);
-	}
+	},
+	HPbar: function(){
+		//pelaajan HP kenttä
+        var HPbar = this.game.add.group();
+        var container = this.game.add.sprite(0,0,'healthbar');
+        var health = this.game.add.sprite(0,0,'health');
+        health.x = container.width/2-health.width/2;
+        health.y = container.height/2-health.height/2;
+        var respawn = this.game.add.sprite(0,0,'respawnTimer');
+        respawn.x = container.width/2-respawn.width/2;
+        respawn.y = container.height/2-respawn.height/2;
+        HPbar.addChild(respawn);
+        HPbar.addChild(health);
+        HPbar.addChild(container);
+		return HPbar;
+	} 
 };

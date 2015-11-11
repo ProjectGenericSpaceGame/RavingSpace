@@ -330,7 +330,6 @@ mainGame.prototype = {
         if (this.frameSkip == 0) {
             var boundsBullet;
             var groups = [this.enemy1, this.enemy2, this.enemy3];
-       
             var bullets = this.bullets;
             var enemyAmount = this.enemyAmount;
             for (var iter = 0; iter < 3; iter++) {
@@ -581,7 +580,7 @@ mainGame.prototype = {
                         gun = enemy.getChildAt(enemy.children.length-2);
                         enemy.barrel = 1;
                     }
-                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.altTarget));
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[1],this.asteroids.getChildAt(enemy.altTarget));
                 }
                 else {
                     enemy.body.thrust(60);

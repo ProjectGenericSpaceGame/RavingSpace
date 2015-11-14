@@ -11,7 +11,7 @@ canvas{
 	visibility:hidden;
 	font-family:"cyber";
 }
-#loader {
+/* #loader {
 	position: fixed;
     margin: 0 auto;
 	right: 0;
@@ -21,7 +21,7 @@ canvas{
 	background-image: url("../assets/loader/loading.gif");
 	background-position: center;
 	background-repeat: no-repeat;
-}
+} */
 
 * {
 	margin:0;

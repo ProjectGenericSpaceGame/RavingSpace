@@ -1,4 +1,4 @@
-<?php
+Ôªø<?php
 include('cryptoClass.php');
 $DBhash;
 $return;
@@ -39,7 +39,7 @@ if(strlen($_POST['playerName']) > 0) {
     $failedAttempts = 0;
     $loginFollowID = 1;
 }
-if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksi‰
+if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksi√§
     $return = true;
     $toDB = $bcrypt->hash($newPassWord).$newRandom;
     $failedAttempts = 0;
@@ -48,7 +48,7 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $DBcon->query($select);
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
-} else if($bcrypt->verify($toCompare, $DBhash) != 1 && $failedAttempts < 4){// jos salis v‰‰rin ja yrityksi‰ viel‰ j‰ljell‰
+} else if($bcrypt->verify($toCompare, $DBhash) != 1 && $failedAttempts < 4){// jos salis v√§√§rin ja yrityksi√§ viel√§ j√§ljell√§
     $failedAttempts++;
     if($failedAttempts >= 4){
         $time = time();
@@ -61,7 +61,7 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
 
-} else if($failedAttempts >= 4  && (time()-$tryLock)<(10*60)){ // jos ei yrityksi‰ j‰ljell‰ ja lukossa
+} else if($failedAttempts >= 4  && (time()-$tryLock)<(10*60)){ // jos ei yrityksi√§ j√§ljell√§ ja lukossa
     $return = "lock";
     //query
 } else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60) && $bcrypt->verify($toCompare, $DBhash) == 1){//jos lukitus loppunut ja oikein
@@ -73,7 +73,7 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $DBcon->query($select);
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
-} else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60)){// jos v‰‰rin ja lukitus loppu
+} else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60)){// jos v√§√§rin ja lukitus loppu
     $return = "creds";
     $failedAttempts = 1;
     //query

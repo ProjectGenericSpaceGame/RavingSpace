@@ -1,10 +1,121 @@
-//Pelin funktio
-var game = new Phaser.Game(1280, 800, Phaser.CANVAS, '');
-var rnd = game.rnd;
+var game;
 const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
+var rnd; 
 
 
+// kirjautumisruutu / rekisteröitymisruutu
+$('.login').click(function(){
+    var other =  $('.signupDialog').css("display");
+    if(other == "block"){
+         $('.signupDialog').css("display","none");
+    }
+    $('.loginDialog').css("display","block");
+});
+
+$('.cancelLogin').click(function(){
+    $('.loginDialog').css("display","none");
+    $('.signupDialog').css("display","none");
+});
+
+$('.loginCheck').click(function(){
+    var pss =  $('.password-password').val();
+    var user = $('.username').val();
+    console.log(lel);
+    var getFromDB = $.ajax({
+        method:"POST",
+        async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+        url:"PHP/CryptoHandler/serveSalt.php",
+        data:{playerName:user}
+    });
+    getFromDB.done(function(returnValue){
+        var genSalt = getRandom();
+        var saltyhash = pss + returnValue;
+        var sh = hashPass(saltyhash);
+        var ssh = hashPass((pss+genSalt)) + genSalt; 
+        
+        var putToDB = $.ajax({
+            method:"POST",
+            async:false,
+            url:"PHP/CryptoHandler/loginHandler.php",
+            data:{data;{givenHash:sh,newHash:ssh,userName:user}}
+        });
+        putToDB.done(function(){
+            makeGame();
+        });
+        putToDB.fail(function(){
+            console.log("username or password is incorrect");
+        });
+        
+    });
+    getFromDB.fail(function(){
+        alert("database unreachable!")
+    });
+}); 
+
+// hankitaan uusi suola
+function getRandom(){
+    var possible = "b8EFGHdefMNTUXYZVghiOC#¤%KaIJP)=?@56opA£QRL\"&WtSjklmyncu/(\$\^\*\'vw34sxD79Bqrz012\!";
+       var length = 10;
+       var rnd = new Nonsense();
+       var toPick = [];
+       var randString = "";
+       for(var j = 0;j < length;j++){
+           toPick = [];
+           for(var i = 0;i < length;i++){
+               toPick.push(possible.charAt(rnd.integerInRange(0,possible.length-1)));
+           }
+           randString += rnd.pick(toPick);
+            
+       }
+   return randString;
+}
+
+function hashPass(pss){
+    var shaObj = new jsSHA("SHA-512", "TEXT");
+	shaObj.update(pss);
+	var hash = shaObj.getHash("HEX");
+    console.log(hash);
+    return hash;
+}
+
+$('.register').click(function(){
+    var first = $('.password-register').val();
+    console.log(first);
+    var second = $('.password-retype').val();
+    console.log(second);
+    if(first != second){
+        $('.password-retype').css("border","2px solid #a50716");
+    } else{
+        $('.signupDialog').css("display","none");
+    }
+});
+
+$('.signUp').click(function(){
+    var other =  $('.loginDialog').css("display");
+    if(other == "block"){
+         $('.loginDialog').css("display","none");
+    }
+    $('.signupDialog').css("display","block");
+});
+
+$('.info').hover(function(){
+    $('.infoDialog').css("display","block");
+});
+
+$('.info').mouseout(function(){
+    $('.infoDialog').css("display","none");
+});
+// kirjautumis/rekisteröitymisruutu loppuu
+
+
+
+//Pelin funktio
+function makeGame(){
+$('header').css("display","none");
+$('.dialog').css("display","none");     
+game = new Phaser.Game(1280, 800, Phaser.CANVAS, 'phaserGame');
+rnd = game.rnd;   
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
 //game.state.add("customMenu", customMenu);
@@ -19,7 +130,7 @@ game.state.add('mainGame', mainGame);
 game.state.add('loadoutMenu', loadoutMenu);
 
 game.state.start('menuLoad');
-
+}
 // game.state.start("gameLoad");
 /*
  //globaalit muuttujat

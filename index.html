@@ -5,12 +5,14 @@
         <meta charset="utf-8">
         <title>Raving Space | Space Game </title>
         <meta name="description" content="Template">
-		
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
 		<link rel="stylesheet" href="css/main.css" />
 		
 		<script src="JS/libs/phaser.min.js"></script>
 		<script src="JS/libs/jquery-1.11.2.min.js"></script>
-        
+        <script src="JS/libs/jssha/src/sha512.js"></script>
+        <script src="JS/libs/Nonsense.js"></script>
+                        
         <script src="JS/menu/menuLoad.js"></script>
         <script src="JS/menu/mainMenu.js"></script>
         <script src="JS/menu/loadoutMenu.js"></script>
@@ -27,12 +29,69 @@
         <script src="JS/menu/soundMenu.js"></script>
 
         <script src="JS/libs/textInputCreator.js"></script>
-
-		<script src="JS/Main.js"></script>
 		<!-- <script src="JS/timer.js"></script> -->
     </head>
     <body>
-	<div class="fontLoader">asd</div>	
+    <header>
+        <div class="login">
+            <p class="log">Login</p>
+        </div>
+        <div class="signUp">
+            <p class="log">Sign Up</p>
+        </div>
+    </header>
+    <main>
+        <div id="phaserGame"></div>
+        <div class="fontLoader"></div>
+        <div class="loginDialog">
+            <h class="dialogHeader">Login</h>
+            <div class="line"></div>
+                <p class="userLabel">Username</p>
+                <input class="username" type="text" size="35"/>
+                
+                <p class="passLabel">Password</p>
+                <input class="password-password" type="password" value="" autocomplete="off" size="35"/>
+                
+                <p class="forgot"><a href="forgotyourpass.html">Forgot your password or username?</a></p>
+                
+                <div class="loginCheck">
+                    <p class="log">Login</p>
+                </div>
+                <div class="cancelLogin">
+                    <p class="log">Cancel</p>
+                </div>
+            </div>
+        <div class="signupDialog">
+            <h class="dialogHeader">Register</h>
+            <div class="line"></div>
+            
+            <p class="userLabel">Username</p>
+            <input class="username" type="text" size="35"/>
+            
+            <p class="passLabel">Password</p>
+            <input class="password-password password-register" type="password" value="" autocomplete="off" size="35"/>
+            
+            <p class="passLabelRetype">Retype Password</p>
+            <input class="password-retype" type="password" value="" autocomplete="off" size="35"/>
+            
+            <p class="emailLabel">Email</p>
+            <input class="email" type="text" size="35"/>
+            
+            <img class="info" src="assets/menuelements/info.png" alt="info" height="30" width="auto"/>
+            <div class="loginCheck register">
+                <p class="log">Login</p>
+            </div>
+            <div class="cancelLogin">
+                <p class="log">Cancel</p>
+            </div>
+        </div>
+        <div class="infoDialog">
+            <p class="infoText">You can only reset your password if you add your email.</p>
+        </div>
+    </main>
+    <footer></footer>
     </body>
+    <script src="JS/Main.js"></script>
 </html>
     
+

@@ -1,3 +1,26 @@
+html{
+    font-family: Ubuntu;
+    margin:0;
+}
+
+body{
+    margin: 0;
+}
+
+header{
+    width: 1280px;
+    height: 75px;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #606060;
+}
+main{
+    width: 1280px;
+    height: 725px;
+    margin: 0 auto;
+    background-color: dimgrey;
+}
+
 @font-face {
   font-family: 'cyber';
   src: url('../kelmscott_roman/Arkhip_font.ttf') format('truetype');
@@ -11,6 +34,7 @@ canvas{
 	visibility:hidden;
 	font-family:"cyber";
 }
+
 #loader {
 	position: fixed;
     margin: 0 auto;
@@ -23,7 +47,166 @@ canvas{
 	background-repeat: no-repeat;
 }
 
-* {
-	margin:0;
-	/*cursor: url('../assets/sprites/cursor.png'), default;*// /* asetetaan koodista*/
+.login{
+    float: right;
+    margin: 17.5px 30px 15px 0;
+    width: 80px;
+    height: 40px;
+    border: 1px solid;
+    border-color: darkgray;
+    border-radius: 4px;
+    background-color: #cccccc;
 }
+
+.signUp{
+    float: right;
+    margin: 17.5px 30px;
+    width: 80px;
+    height: 40px;
+    border: 1px solid;
+    border-color: darkgray;
+    border-radius: 4px;
+    background-color: #cccccc;
+}
+
+.loginCheck{
+    float: right;
+    margin: 0 0 0 130px;
+    width: 80px;
+    height: 40px;
+    border: 1px solid;
+    border-color: darkgray;
+    border-radius: 4px;
+    background-color: #cccccc;
+    float: left;
+}
+
+.cancelLogin{
+    float: right;
+    margin: 0 130px 0 0;
+    width: 80px;
+    height: 40px;
+    border: 1px solid;
+    border-color: darkgray;
+    border-radius: 4px;
+    background-color: #cccccc;
+    float: right;
+}
+
+.log{
+    text-align: center;
+    margin-top: 9px;
+}
+
+.login:hover, .signUp:hover, .loginCheck:hover, .cancelLogin:hover{
+    background-color: #408080;
+    cursor: pointer;
+    border-color: #000000;
+}
+
+.loginDialog, .signupDialog{
+    background-color: #f0f0f0;
+    display: none;
+    width: 454px;
+    height: 280px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: #000000;
+    float: left;
+    margin: 50px 0 0 413px;
+}
+
+.signupDialog{
+    height: 345px;
+}
+
+.line{
+    height: 1px;
+    width: 414px;
+    background-color: black;
+    margin: 0 20px 20px 20px;
+    float:left;
+}
+
+.dialogHeader{
+    margin: 10px 200px;
+    float: left;
+    font-size: 20px;
+}
+
+.username{
+    margin: 10px 50px 20px 30px;
+    float: right;
+}
+
+.userLabel{
+    margin: 10px 0 0 40px;
+    width: 100px;
+    height: 20px;
+    float: left;
+}
+
+.passLabel{
+    margin: 30px 0 0 40px;
+    float: left;
+}
+
+.password-password{
+    margin: 10px 50px 0 30px;
+    float: right;
+}
+
+.password-retype{
+    margin: 30px 50px 0 20px;
+    float: right;
+}
+
+.passLabelRetype{
+    display: inline-block;
+    float: left;
+    margin: 30px 0 0 20px;
+}
+
+
+.forgot{
+    margin: 20px 0 30px 90px;
+    display: inline-block;
+    float: left;
+}
+
+.email{
+    margin: 30px 0px 30px 75px;
+    float: left;
+}
+
+.emailLabel{
+    float: left;
+    margin: 30px 0 0 55px;
+}
+
+.info{
+    margin: 25px 10px 0 0px;
+    float: right;
+}
+
+.infoText{
+   margin:0;
+}
+
+.infoDialog{
+    display: none;
+    width: 300px;
+    border: 1px solid;
+    border-color: #000000;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    float: right;
+    margin: 260px 80px 0 0;
+    padding: 10px;
+}
+
+
+
+
+
+

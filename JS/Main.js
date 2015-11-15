@@ -19,7 +19,6 @@ game.state.add('mainGame', mainGame);
 game.state.add('loadoutMenu', loadoutMenu);
 
 game.state.start('menuLoad');
-
 // game.state.start("gameLoad");
 /*
  //globaalit muuttujat
@@ -60,6 +59,9 @@ game.state.start('menuLoad');
  //Nämä ovat esimerkiksi tietokannasta tulevia arvoja ennen kuin itse tietokantaa on tehty
  var attackInfo = "231509'302112'352713"; //jaetaan kahden sarjoihin ja kuuden sarjoihin, 23, 15, 09|30,21,12|35,27,13
  */
+document.addEventListener( "contextmenu", function(e) {
+    e.preventDefault();
+});
 function randNumber(lap){
     var randNumbers =[]; // [0] vihollinen , [1] vihollisen spawninopeus
     var x = 0;
@@ -114,8 +116,10 @@ function randNumber(lap){
             spawnCoordY = rnd.integerInRange(100,game.world.height-100);
             break;
     }
-    randNumbers[2] = spawnCoordX;
-    randNumbers[3] = spawnCoordY;
+    randNumbers[2] = parseInt(spawnCoordX+1-1);
+    randNumbers[3] = parseInt(spawnCoordY+1-1);
+    spawnCoordX = null;
+    spawnCoordY = null;
     //console.log(randNumbers[0], randNumbers[1]);
     return randNumbers;
 }
@@ -127,12 +131,12 @@ function fire(bullets,gun,fireRate,deg,ship) {
     {
         nextFire = game.time.now + fireRate;
 
-        var bullet = bullets.getFirstExists(false);
+        var bullet = bullets.getFirstDead();
 
         bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
 
-        //game.physics.arcade.moveToPointer(bullet, 330);
-        var pointX;
+        game.physics.arcade.moveToPointer(bullet, 330);
+        /*var pointX;
         var pointY;
         if(deg < 1.6+pi/2){//right bottom
             pointX = ship.x+50;
@@ -162,7 +166,7 @@ function fire(bullets,gun,fireRate,deg,ship) {
                 bullet.x = ship.x+25; //korjataan luodin sijaintia (JS matematiikka virhe tekee kepposiaan)
             }
         }
-        game.physics.arcade.moveToXY(bullet, pointX,pointY,330);
+        game.physics.arcade.moveToXY(bullet, pointX,pointY,330);*/
         //ship.body.x = pointX;
         //ship.body.y = pointY;
         return true;
@@ -172,10 +176,10 @@ function fire(bullets,gun,fireRate,deg,ship) {
 
 }
 function enemyFire(user,gun,enemyBullets,fireRate,target){
+    var bullet = enemyBullets.getFirstDead();
     if(user.key == 'commander'){
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
             user.nextFire = game.time.now + fireRate;
-            var bullet = enemyBullets.getFirstExists(false);
             bullet.reset(gun.world.x, gun.world.y);
             bullet.alpha = 1;
             game.physics.arcade.moveToObject(bullet,target,200);
@@ -183,7 +187,6 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
     } else if(user.key == 'hunter'){
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
             user.nextFire = game.time.now + fireRate;
-            var bullet = enemyBullets.getFirstExists(false);
             bullet.reset(gun.world.x, gun.world.y);
             bullet.alpha = 1;
             game.physics.arcade.moveToObject(bullet,target,300);
@@ -191,7 +194,6 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
     } else if(user.key == 'destroyer'){
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
             user.nextFire = game.time.now + fireRate;
-            var bullet = enemyBullets.getFirstExists(false);
             bullet.reset(user.body.x, user.body.y);
             bullet.alpha = 0;
             game.physics.arcade.moveToObject(bullet,target,200);
@@ -252,13 +254,13 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
             enemy.kill();
             if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
                 if(enemy.ray !== null){
-                    enemy.ray.clear();
+                    //enemy.ray.clear();
                     enemy.ray = null;
                     enemy.wait = 0;
                 }
             }
         },this);
-    } else {
+    } else if(enemy.health > 0.25){
         enemy.health -= 0.25;
         if(enemyAmount == null || enemy.key  == 'commander'){
             if(enemy.key != 'commander'){
@@ -297,14 +299,14 @@ function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
 }
 
 //Luodaan uusi vihollinen ja tarkistetaan onko kierros loppu
-function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
+function spawnEnemy(spawnPool,enemyAmount,enemies,lap,enColGrp){
     var randNumbers = randNumber();
     var repeat = true;
     if(spawnPool[lap-1] > 0){//jos poolissa on vielä aluksia
         while(repeat){
             if (enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false) != null)
             {
-                var enemy = enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstExists(false);
+                var enemy = enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstDead();
                 enemy.reset(randNumbers[2],randNumbers[3]);
                 if(enemy.key == "commander"){
                     enemy.health = 2.5;
@@ -312,7 +314,8 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
                     enemy.getChildAt(0).getChildAt(1).x = -(enemy.getChildAt(0).getChildAt(1).width/2);
                     enemy.getChildAt(0).getChildAt(1).body.x = -(enemy.getChildAt(0).getChildAt(1).width/2);
                     enemy.getChildAt(0).getChildAt(1).width = enemy.getChildAt(0).fullHealthLength;
-                    ;} else {
+                    }
+                else {
                     enemy.health = enemy.maxHealth;
                 }
                 enemy.body.setCollisionGroup(enColGrp);
@@ -328,9 +331,14 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,ship,plrColGrp,enColGrp){
     if(enemyAmount[lap-1] == 0) //jos kaikki viholliset on tuhottu
     {
         spawnNext = true;
+        randNumbers = null;
+        repeat = null;
         return "next";
     }
     spawnNext = true;
+    randNumbers = null;
+    repeat = null;
+    return null;
 }
 
 // Resisez the game based on the window size
@@ -390,35 +398,65 @@ function acquireTarget(target,enemy){
         ////console.log("lol");
     }
     degr = pi*(2+1/2)-degr;
-    return degr;
-
+    Ycoord = null;
+    Xcoord = null;
+    return parseFloat(degr+1-1);
 }
-function reload(reloadSprite,clips){
-    if (reloadSprite.exists == false || reloadSprite == ""|| reloadSprite == null) {
-        reloadSprite = game.add.sprite(0, 0, "reloadTray");
-        //reloadSprite.enableBody = true;
-        //reloadSprite.physicsBodyType = Phaser.Physics.ARCADE;
+function reload(reloadSprite,clips,HUD){
+    if (reloadSprite.alive == false) {
+        reloadSprite.reset();
+        reloadSprite.body.rotation = 0;
+        reloadSprite.rotation = 0;
         reloadSprite.y = game.input.activePointer.worldY+reloadSprite.height/2;
         reloadSprite.x = game.input.activePointer.worldX+reloadSprite.width/2;
-        game.physics.p2.enableBody(reloadSprite);
-        //reloadSprite.body.angularVelocity = 200;
     }
     var reloadTween = game.add.tween(reloadSprite.body);
     reloadTween.frameBased = true;
     reloadTween.to({rotation: 2*pi}, 3000, "Linear", true, 0, 1);
+    reloadTween.frameBased = true;
+    var tray  = HUD.webTray.getChildAt(1).getChildAt((HUD.webTray.trayPosition)*2-1);
+    tray.alpha = 1;
+    var trayTween = game.add.tween(tray);
+    trayTween.to({y:(tray.y+tray.height)},3000,"Linear",true,0);
+    trayTween.onComplete.add(function(){
+        tray.y = 22;
+        tray.alpha = 0;
+    });
     game.time.events.add(3000, function (){
         clips[0] = 35;
         reloading = false;
         //reloadTween.stop();
-        reloadSprite.destroy();
+        reloadSprite.kill();
         $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
     }, this);
     //waiter.start();
     reloading = true;
     $("canvas").css("cursor","none");
-    return reloadSprite;
+    //return reloadSprite;
 
     //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");
 
+}
+function checkRange(x,y,x2,y2,usage,off){
+    if(!off > 0){off = 0}
+    var dist = this.game.math.distance(x,y,x2,y2);//x2  &y2 = target
+    if(dist-off < 100 && usage == 1){
+        dist = null;
+        usage = null;
+        return true;
+    } else if(dist < 300 && usage == 2){
+        dist = null;
+        usage = null;
+        return true;
+    } else if(dist < 400 && usage == 3){
+        dist = null;
+        usage = null;
+        return true;
+    }
+    else {
+        dist = null;
+        usage = null;
+        return false;
+    }
 }
 

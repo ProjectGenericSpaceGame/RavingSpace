@@ -256,7 +256,9 @@ loadoutMenu.prototype = {
              if(this.selectedLoadout[i] !== undefined){
                 this.noWeapons.visible = false;
                 // kutsutaan gameLoad -tilaa
-                this.game.state.start('gameLoad');
+                this.game.state.start('gameLoad',true,true,
+                    this.selectedLoadout
+                );
              }
         }
         this.noWeapons.visible = true;

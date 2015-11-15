@@ -49,11 +49,36 @@ gameLoad.prototype = {
         this.game.load.image('healthbar', 'assets/GUI/healthbar.png');
         this.game.load.image('health', 'assets/GUI/health.png');
         this.game.load.image('respawnTimer', 'assets/GUI/respawn.png');
+		//ladataan bannerit ja weapon-/ability trayt
+        this.game.load.spritesheet('banner', 'assets/GUI/banners.png',1280,179);
+        this.game.load.image('wepTray', 'assets/GUI/wepTray.png');
+        this.game.load.image('abTray', 'assets/GUI/abTray.png');
+        this.game.load.image('trayChoser', 'assets/GUI/trayChosen.png');
+        //lataamisen näyttämistray
+        this.game.load.image('trayReloading', 'assets/GUI/trayReloading.png');
+		//asteroidin tappajien laser
+		this.game.load.image('laser1', 'assets/particles/laser1.png');
+		this.game.load.image('laser2', 'assets/particles/laser2.png');
+		this.game.load.image('laser3', 'assets/particles/laser3.png');
+		// aseet
+		this.game.load.image('weapon0', 'assets/placeholders/weapon0.png');
+		this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
+		this.game.load.image('weapon2', 'assets/placeholders/weapon2.png');
+		this.game.load.image('weapon3', 'assets/placeholders/weapon3.png');
+		// tehosteet
+		this.game.load.image('ability0', 'assets/placeholders/ability0.png');
+		this.game.load.image('ability1', 'assets/placeholders/ability1.png');
+		this.game.load.image('ability2', 'assets/placeholders/ability2.png');
+		this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+
 	},
+    init:function(loadout){
+        this.loadout = loadout;
+    },
 	create: function(){
         waiter = this.game.time.create();
 
-		this.attackInfo = "101005'302112'352713";
+		this.attackInfo = "050805'302112'352713";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -108,7 +133,7 @@ gameLoad.prototype = {
 		this.bullets = this.game.add.group();
 		this.bullets.enableBody = true;
 		this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-		this.bullets.createMultiple(50, 'bullet', 0, false);
+		this.bullets.createMultiple(50, 'bullet', 0);
 		this.bullets.setAll('anchor.x', 0.5);
 		this.bullets.setAll('anchor.y', 0.5);
 		this.bullets.setAll('outOfBoundsKill', true);
@@ -151,8 +176,17 @@ gameLoad.prototype = {
 				enemy.maxHealth = 1;
                 enemy.wait = 0;
 				enemy.targetOff = rnd.integerInRange(0,60);
+                enemy.name = ".";
 				var gun = this.game.add.image(0,-70);
 				enemy.addChild(gun);
+				var laser = this.game.add.emitter(0,-125,10);
+                laser.makeParticles('laser1');
+                laser.lifespan = 100;
+                laser.setXSpeed(-30, 30);
+                laser.setYSpeed(-200, -180);
+                laser.setRotation(0);
+                laser.scale.setTo(0.2,0.5);
+                enemy.addChild(laser);
             }); 
 			this.game.physics.p2.enable(tEnemy1);
 			this.enemies.getChildAt(i).add(tEnemy1);
@@ -196,7 +230,7 @@ gameLoad.prototype = {
             },this);
 			this.game.physics.p2.enable(tEnemy3);
 			this.enemies.getChildAt(i).add(tEnemy3);
-		};
+		}
 		//alustetaan kerran
 		this.enemy1 = this.enemies.getChildAt(0).getChildAt(0);
 		this.enemy2 = this.enemies.getChildAt(0).getChildAt(1);
@@ -220,10 +254,73 @@ gameLoad.prototype = {
         //pelaajan HP kenttä
 		var playerhealth = this.HPbar();
         playerhealth.fixedToCamera = true;
-        playerhealth.cameraOffset.setTo(1100,100);
+        playerhealth.cameraOffset.setTo(1100,180);
         playerhealth.scale.setTo(0.4,0.3);
         playerhealth.fullHealthLength = playerhealth.getChildAt(1).width;//health palkki
         playerhealth.getChildAt(0).width = 0; //respawn palkki
+
+        var wepTray = this.game.add.image(0,0,'wepTray');
+        wepTray.fixedToCamera = true;
+        wepTray.cameraOffset.setTo(1115,20);//100 korkea
+        var choserWeps = this.game.add.image(-108,0,'trayChoser');
+        wepTray.addChild(choserWeps);
+        wepTray.trayPosition = 1;
+        var icons = this.game.add.group();
+        for(var i = 0; i < 3;i++){
+            if(this.loadout[i] != null){
+                var gun = this.game.add.sprite(0,22,this.loadout[i]);
+                if(icons.length == 0){
+                    gun.x = 12.5;
+                } else {
+                    gun.x = 54*i+12.5;
+                }
+                gun.scale.setTo(0.4,0.4);
+                icons.addChild(gun);
+                var reloadTray = this.game.add.sprite(0,22,'trayReloading');
+                if(icons.length == 1){
+                    reloadTray.x = 12.5;
+                } else {
+                    reloadTray.x = 54*i+12.5;
+                }
+                reloadTray.alpha = 0;
+                icons.addChild(reloadTray);
+            }
+        }
+        wepTray.addChild(icons);
+        var mask = this.game.add.graphics(0,0);
+        mask.beginFill(0xFFFFFF,1);
+        mask.drawRect(0,22,wepTray.width,36);
+        icons.addChild(mask);
+        icons.mask = mask;
+
+        var abTray = this.game.add.image(0,0,'abTray');
+        abTray.fixedToCamera = true;
+        abTray.cameraOffset.setTo(1115,100);
+        var choserAbs = this.game.add.image(-108,0,'trayChoser');
+        abTray.addChild(choserAbs);
+        abTray.trayPosition = 1;
+        for(var i = 3; i < 5;i++){
+            if(this.loadout[i] != null){
+                var abil = this.game.add.sprite(0,22,this.loadout[i]);
+                if(abTray.children.length == 1){
+                    abil.x = 13;
+                } else {
+                    abil.x = 54*(i-3)+13;
+                }
+                abil.scale.setTo(0.4,0.4);
+                abTray.addChild(abil);
+            }
+        }
+
+        var banner = this.game.add.image(0,0,'banner',2);
+        banner.fixedToCamera = true;
+        banner.cameraOffset.setTo(0,this.game.camera.height/2-banner.height/2);
+
+        var HUD = {
+            banner:banner,
+            webTray:wepTray,
+            abTray:abTray
+        };
 
 		this.game.state.start("mainGame",false,false,
             this.asteroids,
@@ -249,7 +346,8 @@ gameLoad.prototype = {
             this.enemyBullets,
             this.music,
 			this.clipText,
-            playerhealth
+            playerhealth,
+            HUD
 		);
 	},
 	HPbar: function(){

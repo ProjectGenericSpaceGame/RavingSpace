@@ -43,8 +43,8 @@ menuLoad.prototype = {
         this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
 
-        this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.mp3');
-        this.game.load.audio('dystopia', 'assets/sounds/dystopia.mp3');
+        //this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.mp3');
+        //this.game.load.audio('dystopia', 'assets/sounds/dystopia.mp3');
           
         },
   

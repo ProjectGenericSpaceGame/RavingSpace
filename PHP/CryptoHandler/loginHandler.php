@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include('cryptoClass.php');
 $DBhash;
 $return;
@@ -6,7 +6,8 @@ $failedAttempts;
 $loginFollowID;
 $tryLock;
 $bcrypt = new Bcrypt(15);
-if(strlen($_POST['playerName']) > 0) {
+$_POST['userName'] = 'testi1';
+if(strlen($_POST['userName']) > 0) {
     $userName = $_POST['userName'];
     $givenHash = $_POST['givenHash'];
     $newPassWord = $_POST['newPass'];
@@ -28,6 +29,7 @@ if(strlen($_POST['playerName']) > 0) {
     $failedAttempts = $row['failedTries'];
     $loginFollowID = $row['loginFollowID'];
     $tryLock = $row['fail1'];
+    //echo "dis";
 } else {//demo
     $userName = "testi1";
     $givenHash = "5756c06c3eebc950605b15cee74e882e7c0218f6!!!!!!!!!!";
@@ -39,15 +41,19 @@ if(strlen($_POST['playerName']) > 0) {
     $failedAttempts = 0;
     $loginFollowID = 1;
 }
+//echo "daa?";
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
     $return = true;
     $toDB = $bcrypt->hash($newPassWord).$newRandom;
     $failedAttempts = 0;
     //query
     $select = "update playerData set passHash = '$toDB' where playerID = '$userName'";
+    //echo "daa?";
     $DBcon->query($select);
+    //echo "daa?";
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
+    //echo "daa?";
 } else if($bcrypt->verify($toCompare, $DBhash) != 1 && $failedAttempts < 4){// jos salis väärin ja yrityksiä vielä jäljellä
     $failedAttempts++;
     if($failedAttempts >= 4){

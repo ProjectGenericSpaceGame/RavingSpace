@@ -42,7 +42,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music,clipText,HPbar,HUD) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.gun = gun;//
@@ -62,7 +62,6 @@ mainGame.prototype = {
         this.enemyAmount = enemyAmount;//enemyAmount on elossa olevien vihollisten määrä
         this.spawnPool = spawnPool; //spawnpool on syntyvien vihollisten määrä per aalto
         this.lap = lap;
-        this.enemyFireRates = enemyFireRates;
         this.enemyBullets = enemyBullets;
         this.music = music;
 		this.clipText = clipText;
@@ -449,9 +448,9 @@ mainGame.prototype = {
                         }
                         if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 1,enemy.targetOff) && enemy.ray == null && enemy.wait == 0) {
                             //var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
-                            enemy.getChildAt(1).emitParticle();
+                            enemy.getChildAt(2).emitParticle();
                             var gun = null;
-                            enemyFire(enemy, gun, this.enemyBullets, this.enemyFireRates[2], this.asteroids.getChildAt(enemy.name));
+                            enemyFire(enemy, gun, this.enemyBullets, enemy.fireRate, this.asteroids.getChildAt(enemy.name));
                             //g.lineStyle(8, 0x5c040c, 1);
                             //g.lineTo(target.body.x - enemy.body.x, target.body.y - enemy.body.y);
                             enemy.ray = "g";
@@ -514,7 +513,7 @@ mainGame.prototype = {
                          gun = enemy.getChildAt(enemy.children.length-2);
                          enemy.barrel = 1;
                          }*/
-                        enemyFire(enemy, enemy.getChildAt(enemy.children.length - 1), this.enemyBullets, this.enemyFireRates[1], this.ship);
+                        enemyFire(enemy, enemy.getChildAt(enemy.children.length - 1), this.enemyBullets, enemy.fireRate, this.ship);
 
                     } else if (!this.ship.alive) {
                         enemy.body.rotation = enemy.body.x / 10;
@@ -562,14 +561,14 @@ mainGame.prototype = {
                     var inRange = false;
                     if (enemy.buffTimer <= 0) {
                         var buff = function(en){
-                            if (checkRange(en.x, en.y, enemy.x, enemy.y, 1)) {
+                            if (checkRange(en.x, en.y, enemy.x, enemy.y, 4)) {
                                 inRange = true;
                                 this.tryBuff(en);
                             }
                         };
                         while (!inRange) {
-                            this.enemy1.forEach(buff, this);
-                            this.enemy2.forEach(buff, this);
+                            this.enemy1.forEachAlive(buff, this);
+                            this.enemy2.forEachAlive(buff, this);
                             inRange = true;
                         }
                         enemy.buffTimer = 60;
@@ -595,7 +594,7 @@ mainGame.prototype = {
                             gun2 = enemy.getChildAt(enemy.children.length - 2);
                             enemy.barrel = 1;
                         }
-                        enemyFire(enemy, gun2, this.enemyBullets, this.enemyFireRates[2], this.ship);
+                        enemyFire(enemy, gun2, this.enemyBullets, enemy.fireRate, this.ship);
                         gun2 = null;
 
                     } else if (!this.ship.alive && !checkRange(altTargetX, altTargetY, enemy.x, enemy.y, 3)) {
@@ -612,7 +611,7 @@ mainGame.prototype = {
                             gun = enemy.getChildAt(enemy.children.length - 2);
                             enemy.barrel = 1;
                         }
-                        enemyFire(enemy, gun, this.enemyBullets, this.enemyFireRates[2], this.asteroids.getChildAt(enemy.altTarget));
+                        enemyFire(enemy, gun, this.enemyBullets, enemy.fireRate, this.asteroids.getChildAt(enemy.altTarget));
                         gun = null;
                     }
                     else {
@@ -680,14 +679,33 @@ mainGame.prototype = {
         }
     },
     tryBuff: function(en){
-        if(rnd.integerInRange(0,10) == 1){
+		var chance = rnd.integerInRange(0,6);
+        if(chance == 1){
             if(en.health < en.maxHealth){
                 en.health += 0.25;
+				var healed  = this.HUD.buffTrays1.getFirstDead();
+				healed.revive();
+				healed.x = en.x;
+				healed.y = en.y;
+				var tween = this.game.add.tween(healed);
+				tween.to({y:healed.y-100},3000,"Linear",true);
+				tween.onComplete.add(function(){
+					healed.kill();
+				});
                 //alert("heal"+en.health);
-            } else {
-                en.fireRate = en.fireRate*0.6;
+            } else if(en.fireRate == en.parent.fireRate){
+                en.fireRate = en.fireRate/2;
+				var boosted  = this.HUD.buffTrays2.getFirstDead();
+				boosted.revive();
+				boosted.x = en.x;
+				boosted.y = en.y;
+				var tween = this.game.add.tween(boosted);
+				tween.to({y:boosted.y-100},3000,"Linear",true);
+				tween.onComplete.add(function(){
+					boosted.kill();
+				});
                 this.game.time.events.add(5000, function(){
-                    en.fireRate = this.enemyFireRates[2];
+                    en.fireRate = en.parent.fireRate;
                 },this);
             }
         }

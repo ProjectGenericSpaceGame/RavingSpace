@@ -21,7 +21,7 @@ $('.cancelLogin').click(function(){
 $('.loginCheck').click(function(){
     var pss =  $('.password-password').val();
     var user = $('.username').val();
-    console.log(lel);
+    //console.log(lel);
     var getFromDB = $.ajax({
         method:"POST",
         async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
@@ -42,9 +42,11 @@ $('.loginCheck').click(function(){
         });
         putToDB.done(function(){
             makeGame();
+			$('.loginDialog').css("display","none");
+			$('.signupDialog').css("display","none");
         });
         putToDB.fail(function(){
-            console.log("username or password is incorrect");
+            console.log("username or password is incorrect or database unreachable");
         });
         
     });
@@ -374,12 +376,19 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
         },this);
     } else if(enemy.health > 0.25){
         enemy.health -= 0.25;
-        if(enemyAmount == null || enemy.key  == 'commander'){
-            if(enemy.key != 'commander'){
+            if(enemy.key == 'ship'){
                 HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
             }
-            else if(enemy.key == 'commander'){
+			else{
                 HPbar.renderable = true;
+				HPbar.alpha = 1;
+				HPbar.lastHit = Date.now();
+				game.time.events.add(2000, function(){
+					if(Date.now()-HPbar.lastHit>1500){
+						HPbar.renderable = false;
+						HPbar.alpha = 0;
+					}
+				});
                 //alert(HPbar.getChildAt(1).width);
                 //HPbar.getChildAt(1).body.x = 10.6;
                 //HPbar.getChildAt(1).body.offset = 0;
@@ -388,14 +397,13 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
                 //HPbar.getChildAt(1).anchor.x = 0;
                 //HPbar.getChildAt(1).x -= 33.4;
                 //HPbar.getChildAt(1).body.width = HPbar.fullHealthLength*(enemy.health/2.5);
-                HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/2.5);
+                HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/enemy.maxHealth);
                 //HPbar.getChildAt(1).anchor.x = 1;
                 //alert(HPbar.zeroPosition);
                 //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
                 //alert(HPbar.x);
             }
         }
-    }
 }
 function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
     bullet.kill();
@@ -420,16 +428,16 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,enColGrp){
             {
                 var enemy = enemies.getChildAt(lap-1).getChildAt((randNumbers[0]-1)).getFirstDead();
                 enemy.reset(randNumbers[2],randNumbers[3]);
-                if(enemy.key == "commander"){
-                    enemy.health = 2.5;
+					
+					enemy.health = enemy.maxHealth;
                     enemy.getChildAt(0).getChildAt(1).anchor.x = 0;
-                    enemy.getChildAt(0).getChildAt(1).x = -(enemy.getChildAt(0).getChildAt(1).width/2);
-                    enemy.getChildAt(0).getChildAt(1).body.x = -(enemy.getChildAt(0).getChildAt(1).width/2);
                     enemy.getChildAt(0).getChildAt(1).width = enemy.getChildAt(0).fullHealthLength;
-                    }
-                else {
-                    enemy.health = enemy.maxHealth;
-                }
+					enemy.getChildAt(0).getChildAt(1).x = -(enemy.getChildAt(0).getChildAt(1).width/2);//mitä helvettiä
+                    enemy.getChildAt(0).getChildAt(1).body.x = -(enemy.getChildAt(0).getChildAt(1).width/2);
+					enemy.getChildAt(0).getChildAt(1).y = 0;//mitä helvettiä
+                    enemy.getChildAt(0).getChildAt(1).body.y = 0;
+                    
+
                 enemy.body.setCollisionGroup(enColGrp);
                 //enemy.body.collides([enColGrp,plrColGrp]);//törmäykset asetetaan kun vihu on päässyt pelialueelle
                 //enemy.body.collideWorldBounds = false; //salli tämä rivi kun tekoäly paikallaan, estää kolmioiden lentämisen pelialueelle suurella nopeudella
@@ -556,7 +564,12 @@ function checkRange(x,y,x2,y2,usage,off){
         dist = null;
         usage = null;
         return true;
-    } else if(dist < 300 && usage == 2){
+    } else if(dist < 200 && usage == 4){
+        dist = null;
+        usage = null;
+        return true;
+    } 
+	else if(dist < 300 && usage == 2){
         dist = null;
         usage = null;
         return true;

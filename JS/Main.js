@@ -298,9 +298,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             bullet.alpha = 1;
             game.physics.arcade.moveToObject(bullet,target,200);
         }
-<<<<<<< HEAD
     }
-<<<<<<< HEAD
     else if(user.key == 'hunter') {
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
             user.nextFire = game.time.now + fireRate;
@@ -308,33 +306,14 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             bullet.reset(gun.world.x, gun.world.y);
             game.physics.arcade.moveToObject(bullet,target,200);
         }
-    }
-=======
-    if(user.key == 'destroyer'){
-         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
-=======
-    } else if(user.key == 'hunter'){
-        if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
-            user.nextFire = game.time.now + fireRate;
-            bullet.reset(gun.world.x, gun.world.y);
-            bullet.alpha = 1;
-            game.physics.arcade.moveToObject(bullet,target,300);
-        }
     } else if(user.key == 'destroyer'){
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
->>>>>>> origin/master
             user.nextFire = game.time.now + fireRate;
             bullet.reset(user.body.x, user.body.y);
             bullet.alpha = 0;
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     }
-<<<<<<< HEAD
-        
->>>>>>> origin/master
-=======
-
->>>>>>> origin/master
 }
 function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     bullet.kill();

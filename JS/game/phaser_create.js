@@ -185,7 +185,7 @@ gameLoad.prototype = {
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
 				healthbar.alpha = 0;
-				healthbar.lastHit;
+				healthbar.lastHit = 0;
 				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
 				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
 				healthbar.zeroPosition = healthbar.width;
@@ -211,13 +211,7 @@ gameLoad.prototype = {
 			tEnemy2.createMultiple(parseInt(this.attackInfo[i].substring(2,4)),"hunter");
             tEnemy2.forEach(function(enemy){
                 enemy.scale.setTo(0.4,0.4);
-                enemy.health = 0.75;
                 enemy.nextFire = 0;
-<<<<<<< HEAD
-                var enemyGun3 = this.game.add.image(0,-50);
-                enemy.addChild(enemyGun3);
-            });
-=======
 				enemy.health = 0.5;
 				enemy.maxHealth = 0.5;
 				enemy.fireRate  = enemyFireRates[1];
@@ -225,7 +219,7 @@ gameLoad.prototype = {
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
 				healthbar.alpha = 0;
-				healthbar.lastHit;
+				healthbar.lastHit = 0;
 				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
 				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
 				healthbar.zeroPosition = healthbar.width;
@@ -236,7 +230,6 @@ gameLoad.prototype = {
 				enemy.addChild(enemyGun1);
             },this);
 			tEnemy2.fireRate = enemyFireRates[1];
->>>>>>> origin/master
             this.game.physics.p2.enable(tEnemy2);
 			this.enemies.getChildAt(i).add(tEnemy2);
 			
@@ -254,7 +247,7 @@ gameLoad.prototype = {
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
 				healthbar.alpha = 0;
-				healthbar.lastHit;
+				healthbar.lastHit = 0;
 				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
 				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
 				healthbar.zeroPosition = healthbar.width;

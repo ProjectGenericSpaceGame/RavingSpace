@@ -504,28 +504,8 @@ mainGame.prototype = {
                     enemy.body.rotation = dir;
                     dir = null;
 
-<<<<<<< HEAD
-                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,1 && this.ship.alive)){
-                    enemy.body.thrust(0);
-                    var gun;
-                    gun = enemy.getChildAt(enemy.children.length-1);
-                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[1],this.ship);
-
-                } else if(!this.ship.alive){
-                    enemy.body.rotation = enemy.body.x/10;
-                    enemy.body.thrust(200);
-                } else {
-                    enemy.body.thrust(200);
-=======
                     if (checkRange(this.ship.x, this.ship.y, enemy.x, enemy.y, 2) && this.ship.alive) {
                         enemy.body.thrust(0);
-                        /*if(enemy.barrel == 1){
-                         gun = enemy.getChildAt(enemy.children.length-1);
-                         enemy.barrel = 2 ;
-                         } else {
-                         gun = enemy.getChildAt(enemy.children.length-2);
-                         enemy.barrel = 1;
-                         }*/
                         enemyFire(enemy, enemy.getChildAt(enemy.children.length - 1), this.enemyBullets, enemy.fireRate, this.ship);
 
                     } else if (!this.ship.alive) {
@@ -534,7 +514,6 @@ mainGame.prototype = {
                     } else {
                         enemy.body.thrust(250);
                     }
->>>>>>> origin/master
                 }
 
                 else if (enemy.body.y > 100 && enemy.body.x < this.game.world.width - 100
@@ -688,27 +667,8 @@ mainGame.prototype = {
         testBM = performance.now();
         execTime = benchmark2 - benchmark;
         if (execTime > 0.5) {
-<<<<<<< HEAD
-            console.log(execTime);
-            console.log(wholeLoop);
-        }
-    },
-    checkRange: function(x,y,x2,y2,usage){
-        var dist = this.game.math.distance(x,y,x2,y2);
-        if(dist < 350 && usage == 1){
-            return true;
-        } else if(dist < 400 && usage == 2){
-            return true;
-        } else if(dist < 300 && usage == 3){
-            return true;
-        }
-
-        else {
-            return false;
-=======
             //console.log(execTime);
             //console.log(wholeLoop);
->>>>>>> origin/master
         }
     },
     tryBuff: function(en){

@@ -30,6 +30,12 @@ menuLoad.prototype = {
             this.game.load.image('ability2', 'assets/placeholders/ability2.png');
             this.game.load.image('ability3', 'assets/placeholders/ability3.png');
             
+            // kaupan kuvakkeet
+            this.game.load.image('bullet', 'assets/sprites/bullet.png');
+            this.game.load.image('laser', 'assets/particles/laser2.png');
+            this.game.load.image('shotgun', 'assets/sprites/bullet2.png');
+            this.game.load.image('mines', 'assets/particles/explosion3.png');
+            
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
 			 this.game.load.image('minus', 'assets/menuelements/minus.png');

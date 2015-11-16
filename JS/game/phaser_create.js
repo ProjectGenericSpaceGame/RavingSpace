@@ -20,13 +20,13 @@ gameLoad.prototype = {
 		this.game.world.setBounds(0, 0, 1600, 1000);
 		//Ladataan tausta ja asteroidit
 		this.game.load.image('background', 'assets/sprites/VS_background_purple.png');
-		this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroidi1_FIX.png');
+		this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroid1.png');
 		this.game.load.image('asteroid2', 'assets/sprites/VS_peli_asteroid2.png');
 		this.game.load.image('asteroid3', 'assets/sprites/VS_peli_asteroid3.png');
 		//Ladataan alus
 		this.game.load.image('ship', 'assets/sprites/VS_peli_ship.png');
 		//ladataan viholliset
-		this.game.load.spritesheet('enemies', 'assets/sprites/enemies.png',97,113);
+		this.game.load.spritesheet('destroyer', 'assets/sprites/enemies.png',97,113);
 		this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
 		this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
 		//this.game.load.spritesheet('enemy2', 'assets/sprites/enemies.png',97,195);
@@ -43,12 +43,17 @@ gameLoad.prototype = {
 		//explosion
 		this.game.load.image('boom', 'assets/particles/explosion3.png');
 		this.game.load.image('boom2', 'assets/particles/explosion2.png');
-
+        //reloadkursori
+		this.game.load.image('reloadTray', 'assets/sprites/reload3.png');
+        //HP elementit
+        this.game.load.image('healthbar', 'assets/GUI/healthbar.png');
+        this.game.load.image('health', 'assets/GUI/health.png');
+        this.game.load.image('respawnTimer', 'assets/GUI/respawn.png');
 	},
 	create: function(){
         waiter = this.game.time.create();
 
-		this.attackInfo = "031509'302112'352713";
+		this.attackInfo = "101005'302112'352713";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -66,13 +71,13 @@ gameLoad.prototype = {
 		});
         
         this.asteroid1 = this.asteroids.getChildAt(0);
-        this.asteroid1.health = 3;
+        this.asteroid1.health = 5;
         
         this.asteroid2 = this.asteroids.getChildAt(1);
-        this.asteroid2.health = 3;
+        this.asteroid2.health = 5;
         
         this.asteroid3 = this.asteroids.getChildAt(2);
-        this.asteroid3.health = 3;
+        this.asteroid3.health = 5;
         
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
@@ -97,6 +102,7 @@ gameLoad.prototype = {
 		this.ship.addChild(this.shipTrail);
 		this.ship.addChild(this.gun);
         this.ship.health = 3;
+        this.ship.dying = false;
 		
 		// luodaan aluksen ammusryhmä
 		this.bullets = this.game.add.group();
@@ -138,7 +144,12 @@ gameLoad.prototype = {
 		this.enemies.add(lap3);
 		for(var i=0,j=this.enemies.length; i<j; i++){
 			var tEnemy1 = this.game.add.group();
-			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"enemies", 0);
+			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"destroyer");
+            tEnemy1.forEach(function(enemy){
+                enemy.ray = null;
+                enemy.nextFire = 0;
+                enemy.wait = 0;
+            }); 
 			this.game.physics.p2.enable(tEnemy1);
 			this.enemies.getChildAt(i).add(tEnemy1);
 			
@@ -161,6 +172,7 @@ gameLoad.prototype = {
                 enemy.scale.setTo(0.55,0.55);
                 enemy.nextFire = 0;
                 enemy.barrel = 1;
+                enemy.altTarget = rnd.integerInRange(0,2);
 				var enemyGun1 = this.game.add.image(35,-50);
 				var enemyGun2 = this.game.add.image(-35,-50);
 				enemy.addChild(enemyGun1);
@@ -188,6 +200,24 @@ gameLoad.prototype = {
         //asetetaan ääneet
         this.music = this.game.add.audio('soldier');
 
+        //pelaajan HP kenttä
+        this.HPbar = this.game.add.group();
+        var container = this.game.add.sprite(0,0,'healthbar');
+        var health = this.game.add.sprite(0,0,'health');
+        health.x = container.width/2-health.width/2;
+        health.y = container.height/2-health.height/2;
+        var respawn = this.game.add.sprite(0,0,'respawnTimer');
+        respawn.x = container.width/2-respawn.width/2;
+        respawn.y = container.height/2-respawn.height/2;
+        this.HPbar.addChild(respawn);
+        this.HPbar.addChild(health);
+        this.HPbar.addChild(container);
+        this.HPbar.fixedToCamera = true;
+        this.HPbar.cameraOffset.setTo(1100,100);
+        this.HPbar.scale.setTo(0.4,0.3);
+        this.HPbar.fullHealthLength = health.width;
+        respawn.width = 0;
+
 		this.game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,
@@ -211,7 +241,8 @@ gameLoad.prototype = {
             this.enemyFireRates,
             this.enemyBullets,
             this.music,
-			this.clipText
+			this.clipText,
+            this.HPbar
 		);
 	}
 };

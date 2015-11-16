@@ -19,7 +19,6 @@ mainMenu.prototype = {
         //do some murdering
         this.buttonGroup.removeAll();
         var textStyle = { font: '30px cyber'};
-      
         //otsikko
         this.surroundings.menuLabel.text = "Main Menu";
        
@@ -52,6 +51,7 @@ mainMenu.prototype = {
         this.buttonGroup.add(this.settingsButton);
         this.buttonGroup.add(this.scoresButton);
         this.buttonGroup.add(this.customButton);
+
     },
     
     loadoutStart: function(){

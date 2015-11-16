@@ -35,8 +35,8 @@ loadoutMenu.prototype = {
         for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
             this.availableAbilities[i-10] = this.playerData.shipData[i];
         }
-        this.WSA = [];
-        this.ASA = [];
+        this.WSA = []; // weapons still available
+        this.ASA = []; // abilities still available
         // näihin taulukoihin tallennetaan tieto siitä onko ase valittu. 0 = ei valittu, 1 = on valittu 
         for(var g = 0;g < SET_GUNS;g++) {
             this.WSA.push(0);
@@ -53,9 +53,17 @@ loadoutMenu.prototype = {
         
         // Sivun otsake
         this.surroundings.menuLabel.text = 'Loadout';
+        this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
         var styleB = { font:'25px cyber', fill:'black'};
         var styleW = { font:'25px cyber', fill:'white'};
+        var styleR = { font:'25px cyber', fill:'red'};
 
+                
+        this.noWeapons = this.game.add.text(0, 200, 'Select atleast one weapon!' ,styleR);
+        this.noWeapons.x = (this.game.width/2)-(this.noWeapons.width/2);
+        this.noWeapons.visible = false;
+        this.thingsGroup.add(this.noWeapons);
+        
         // Go -painike. Sitä painamalla aloitetaan peli
         this.goButton = this.game.add.button(975, 680, 'buttonSprite', this.gameStart, this, 0, 1, 2);
         this.goButton.scale.setTo(0.3, 0.9);
@@ -217,6 +225,9 @@ loadoutMenu.prototype = {
         this.prewep.hasChild = true;
         this.thingsGroup.removeAll();
         this.am = false;
+        if(this.noWeapons.visible == true){
+            this.noWeapons.visible = false;
+        }
      }, 
     
     abpressed: function(button){
@@ -239,9 +250,15 @@ loadoutMenu.prototype = {
     },
     
     gameStart: function(){
-        // kutsutaan gameLoad -tilaa
-        this.game.state.start('gameLoad');
-        
+        // Tutkitaan onko pelaaja valinnut yhtään asetta.
+        for (var i = 0; i <= 2; i++){
+             if(this.selectedLoadout[i] !== undefined){
+                this.noWeapons.visible = false;
+                // kutsutaan gameLoad -tilaa
+                this.game.state.start('gameLoad');
+             }
+        }
+        this.noWeapons.visible = true;
     },
  
     back:function(){

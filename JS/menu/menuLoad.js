@@ -39,9 +39,9 @@ menuLoad.prototype = {
 			 
 			 this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
 			 this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
+
         this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
-
           
         },
   

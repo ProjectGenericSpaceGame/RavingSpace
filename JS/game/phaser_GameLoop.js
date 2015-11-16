@@ -32,7 +32,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music,clipText) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyFireRates,enemyBullets,music,clipText,HPbar) {
         this.asteroids = asteroids;//
         this.ship = ship;//
         this.gun = gun;//
@@ -56,6 +56,7 @@ mainGame.prototype = {
         this.enemyBullets = enemyBullets;
         this.music = music;
 		this.clipText = clipText;
+        this.HPbar = HPbar;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -64,13 +65,12 @@ mainGame.prototype = {
         this.IntMouseTrack = -1;
         this.moving = "";
         this.clips = [35, 0, 0, 0];
-        this.reloading = false;
+        reloading = false;
         this.frameSkip = 0;
         this.timers = [0,60];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff
 		this.text3 = this.game.add.text(0,0,"");
-
+        this.reloadSprite = "";
         this.fixed = false;//dedug, to be removed
-
     },
     create: function () {
         //fysiikat voidaan sallia vain pyörivässä statessa
@@ -91,26 +91,26 @@ mainGame.prototype = {
         this.ship.body.collides([this.enemiesCollisonGroup]);
         //this.ship.body.collideWorldBounds = true;
         //this.music.play();
+        $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");//asetetaan kursori, ei toimi jos tekee createssa
     },
     update: function () {
         var self = this;
-
         var benchmark = performance.now();
         this.ship.body.mass = 0.7;
         this.ship.body.damping = 0.7;
         //this.ship.body.collideWorldBounds = true;
         //pyörittää asteroideja
-        var suunta = 0;
-        this.asteroids.forEach(function (item) {
-            if (suunta == 0) {
+        var dir = 0;
+        this.asteroids.forEachAlive(function (item) {
+            if (dir == 0) {
                 item.body.rotateLeft(0.6);
-                suunta = 1;
-            } else if (suunta == 1) {
+                dir = 1;
+            } else if (dir == 1) {
                 item.body.rotateRight(0.7);
-                suunta = 2;
+                dir = 2;
             } else {
                 item.body.rotateLeft(0.8);
-                suunta = 0;
+                dir = 0;
             }
 
         });
@@ -250,14 +250,20 @@ mainGame.prototype = {
             }
         }
         text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-        //text.text = String(this.clips[0] + "+" + this.reloading + "+" + this.ship.health);
+        //text.text = String(this.clips[0] + "+" + reloading + "+" + this.ship.health);
         //text.text = String("");
 		//text2.text = String("");
 		//text2.text = String(this.fixed);
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
 		this.clipText.text  = this.clips[0];
+        //liikutetaan hiiren viereen
 		this.clipText.x = this.game.input.activePointer.worldX+40;
 		this.clipText.y = this.game.input.activePointer.worldY+5;
+        //mikäli lataus tray pelissä, liikutetaan sitäkin
+        if(this.reloadSprite.exists) {
+            this.reloadSprite.body.y = this.game.input.activePointer.worldY + this.reloadSprite.height / 2;
+            this.reloadSprite.body.x = this.game.input.activePointer.worldX + this.reloadSprite.width / 2;
+        }
         if (execTime > 10) {
             //alert("performance issue: " + execTime);
         }
@@ -292,16 +298,16 @@ mainGame.prototype = {
         else if (this.cursors.right.isDown) {
             this.ship.body.applyForce([-Math.cos(this.ship.body.rotation) * 7, -Math.sin(this.ship.body.rotation) * 7], 0, 0);
         }
-		if(this.cursors.reload.isDown){
-			this.reload();
+		if(this.cursors.reload.isDown && !reloading){
+			this.reloadSprite = reload(this.reloadSprite,this.clips);
 		}
         //ampuminen
-        if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !this.reloading && this.ship.alive) {
+        if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !reloading && this.ship.alive) {
             if (fire(this.bullets, this.gun, this.fireRate, corRot, this.ship)) {
                 this.clips[0]--;
             }
-        } else if (!this.reloading && this.clips[0] == 0) {
-            this.reload();
+        } else if (!reloading && this.clips[0] == 0) {
+            this.reloadSprite = reload(this.reloadSprite,this.clips);
         }
 
         //Hyökkäyksen hallinta
@@ -324,7 +330,6 @@ mainGame.prototype = {
         if (this.frameSkip == 0) {
             var boundsBullet;
             var groups = [this.enemy1, this.enemy2, this.enemy3];
-            var rocks = [this.asteroid1, this.asteroid2, this.asteroid3];
             var bullets = this.bullets;
             var enemyAmount = this.enemyAmount;
             for (var iter = 0; iter < 3; iter++) {
@@ -341,8 +346,8 @@ mainGame.prototype = {
             //nyt toistetaan pelaajalle
             this.enemyBullets.forEachAlive(function(b){
                boundsBullet = b.world;
-                if( this.game.physics.p2.hitTest(boundsBullet, [this.ship]).length > 0 && this.ship.alive){
-                    hitDetector(b, this.ship, null, null);
+                if( this.game.physics.p2.hitTest(boundsBullet, [this.ship]).length > 0 && !this.ship.dying){
+                    hitDetector(b, this.ship, null, null,this.HPbar);
                 } 
             },this);
             
@@ -412,18 +417,45 @@ mainGame.prototype = {
             
             //Tämä ajetaan kohteen ja massan saaneellee viholliselle normaalisti
             }else if(enemy.name == 0 || enemy.name == 1 || enemy.name == 2 ){
-                if (this.asteroids.getChildAt(enemy.name).alive == true ){
-                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.name), enemy);
-                    enemy.body.thrust(60);
+                 if (this.asteroids.getChildAt(enemy.name).alive == true ){ 
+                     var target = this.asteroids.getChildAt(enemy.name);
+                     enemy.body.rotation = acquireTarget(target, enemy);
+                     if(!this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1)) {
+                         enemy.body.thrust(60);
+                     }
+                    if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.ray == null && enemy.wait == 0){
+                        var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
+                        var gun;
+                        enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.asteroids.getChildAt(enemy.name));
+                        g.lineStyle(8, 0x5c040c, 1);
+                        g.lineTo(target.body.x-enemy.body.x, target.body.y-enemy.body.y);
+                        enemy.ray = g;
+                    } else if(this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,1) && enemy.wait < 5){
+                        enemy.wait += 1;
+                    } else if(enemy.wait == 5 && enemy.ray !== null){
+                        enemy.ray.clear();
+                        enemy.ray = null;      
+                        enemy.wait = 0;
+                    } else if (this.checkRange(enemy.body.x,enemy.body.y,target.x,target.y,2) && enemy.ray !== null ){
+                        enemy.ray.clear();
+                        enemy.ray = null;
+                        enemy.wait = 0;
+                    }  
                 } else {
-                    var targetAsteroid = this.asteroids.getRandom();
-                    num = targetAsteroid.key.replace( /^\D+/g, '');
-                    if(num == 1){ enemy.name = 0.1; }
-                    if(num == 2){ enemy.name = 1.1; }
-                    if(num == 3){ enemy.name = 2.1; }
-                }
-              
-            } 
+                     if(enemy.ray !== null) {
+                         enemy.ray.clear();
+                         enemy.ray = null;
+                         enemy.wait = 0;
+                     }
+                     var targetAsteroid = this.asteroids.getRandom();
+                     num = targetAsteroid.key.replace( /^\D+/g, '');
+                     if(num == 1){ enemy.name = 0.1; }
+                     if(num == 2){ enemy.name = 1.1; }
+                     if(num == 3){ enemy.name = 2.1; }
+                } 
+            }
+           
+          
         }, this); // Asteroidin jahtaajan tekoäly loppuu
         
         // Pelaajan jahtaajan tekoäly
@@ -506,8 +538,16 @@ mainGame.prototype = {
 
                 }
                 enemy.buffTimer--;
-
-                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2 && this.ship.alive)){
+                if(!this.asteroids.getChildAt(enemy.altTarget).alive){
+                    var newTarget = -1;
+                    while(newTarget == enemy.altTarget || newTarget == -1) {
+                        newTarget = rnd.integerInRange(0, 2);
+                    }
+                    enemy.altTarget = newTarget;
+                }
+                var altTargetX = this.asteroids.getChildAt(enemy.altTarget).x;
+                var altTargetY = this.asteroids.getChildAt(enemy.altTarget).y;
+                if(this.checkRange(this.ship.x,this.ship.y,enemy.x,enemy.y,2) && this.ship.alive){
                     enemy.body.thrust(0);
                     var gun;
                     if(enemy.barrel == 1){
@@ -519,10 +559,23 @@ mainGame.prototype = {
                     }
                     enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[2],this.ship);
 
-                } else if(!this.ship.alive){
-                    enemy.body.rotation = enemy.body.x/10;
+                } else if(!this.ship.alive && !this.checkRange(altTargetX,altTargetY,enemy.x,enemy.y,3)){
+                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.altTarget), enemy);
                     enemy.body.thrust(60);
-                } else {
+                } else if(!this.ship.alive && this.checkRange(altTargetX,altTargetY,enemy.x,enemy.y,3)){
+                    enemy.body.thrust(0);
+                    enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.altTarget), enemy);
+                    var gun;
+                    if(enemy.barrel == 1){
+                        gun = enemy.getChildAt(enemy.children.length-1);
+                        enemy.barrel = 2 ;
+                    } else {
+                        gun = enemy.getChildAt(enemy.children.length-2);
+                        enemy.barrel = 1;
+                    }
+                    enemyFire(enemy,gun,this.enemyBullets,this.enemyFireRates[1],this.asteroids.getChildAt(enemy.altTarget));
+                }
+                else {
                     enemy.body.thrust(60);
                 }
 
@@ -549,6 +602,7 @@ mainGame.prototype = {
             }
         }, this);
 
+
         var benchmark2 = performance.now();
         var wholeLoop = benchmark2 - testBM;
         testBM = performance.now();
@@ -564,7 +618,10 @@ mainGame.prototype = {
             return true;
         } else if(dist < 400 && usage == 2){
             return true;
+        } else if(dist < 300 && usage == 3){
+            return true;
         }
+
         else {
             return false;
         }
@@ -581,13 +638,32 @@ mainGame.prototype = {
                 },this);
             }
         }
-    }, // trybuff
-	reload:function(){
-		this.game.time.events.add(3000, function () {
-                this.clips[0] = 35;
-                this.reloading = false
-            }, this);
+    } // trybuff
+	/*reload:function() {
+        if (reloadSprite.exists == false || reloadSprite == ""|| reloadSprite == null) {
+            reloadSprite = this.game.add.sprite(0, 0, "reloadTray");
+            //reloadSprite.enableBody = true;
+            //reloadSprite.physicsBodyType = Phaser.Physics.ARCADE;
+            reloadSprite.y = this.game.input.activePointer.worldY+reloadSprite.height/2;
+            reloadSprite.x = this.game.input.activePointer.worldX+reloadSprite.width/2;
+            this.game.physics.p2.enableBody(reloadSprite);
+            //reloadSprite.body.angularVelocity = 200;
+        }
+        var reloadTween = game.add.tween(reloadSprite.body);
+        reloadTween.frameBased = true;
+        reloadTween.to({rotation: 2*pi}, 3000, "Linear", true, 0, 1);
+		this.game.time.events.add(3000, function (){
+            this.clips[0] = 35;
+            reloading = false;
+            //reloadTween.stop();
+            reloadSprite.destroy();
+            $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
+        }, this);
             //waiter.start();
-            this.reloading = true;
-	}
+        reloading = true;
+
+
+        //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");
+        $("canvas").css("cursor","none");
+	}*/
 } // prototype

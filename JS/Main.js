@@ -180,6 +180,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     }
+<<<<<<< HEAD
     else if(user.key == 'hunter') {
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
             user.nextFire = game.time.now + fireRate;
@@ -188,38 +189,79 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     }
+=======
+    if(user.key == 'destroyer'){
+         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
+            user.nextFire = game.time.now + fireRate;
+            var bullet = enemyBullets.getFirstExists(false);
+            bullet.visible = false; 
+            bullet.reset(user.body.x, user.body.y);
+            game.physics.arcade.moveToObject(bullet,target,200);
+        }
+    }
+        
+>>>>>>> origin/master
 }
-function hitDetector(bullet, enemy, enemyAmount,lap){
+function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     bullet.kill();
     //console.log("got this far?");
     if((enemy.health-0.25) <= 0 && enemy.health != 0.001){
         enemy.health = 0.001;
+       
         if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
         } else {
+            enemy.dying = true;
+            HPbar.getChildAt(1).width = 0;
             game.time.events.add(10000,function(){
-                enemy.reset(600,500,3);
+                enemy.reset(game.world.width/2,game.world.height/2,3);
+                enemy.dying = false;
             },this);
-        }
+            var tweenHealth = game.add.tween(HPbar.getChildAt(1));
+            tweenHealth.frameBased = true;
+            tweenHealth.to({width:HPbar.fullHealthLength},1000,"Linear",true,9000);
+            var tweenRespawn = game.add.tween(HPbar.getChildAt(0));
+            tweenRespawn.to({width:HPbar.fullHealthLength},10000,"Linear",true);
+            tweenRespawn.onComplete.add(function(){HPbar.getChildAt(0).width = 0;},this);
+        } 
+      
 		//räjähdys kuolessa
         var boom = game.add.sprite(0,0,'boom');
-        boom.x = enemy.body.x-boom.width*0.1/2;
-        boom.y = enemy.body.y-boom.height*0.1/2;
+        //boom.x = enemy.body.x-boom.width*0.1/2;
+        //boom.y = enemy.body.y-boom.height*0.1/2;
         boom.scale.setTo(0.1,0.1);
+        enemy.addChild(boom);
         var tween = game.add.tween(boom);
-        var to = rnd.realInRange(5,7);
+        tween.frameBased = true;
+        var to = rnd.realInRange(9,11);
         tween.to({height:boom.height*to,y:boom.y-(boom.height*to-boom.height)/2,width:boom.width*to,x:boom.x-(boom.width*to-boom.width)/2}, 300, "Linear", true, 0,1);
-        tween.onComplete.add(function(){boom.destroy();enemy.kill();},this);
+        tween.onComplete.add(function(){
+            if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== "" && enemy.key == 'enemies'){
+                if(enemy.ray !== null){
+                    enemy.ray.clear();
+                    enemy.ray = null;
+                    enemy.wait = 0;
+                }
+            }
+            boom.destroy();
+        },this);
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
-        boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
-        boom2.y = enemy.body.y-boom.height*0.1/2+rnd.integerInRange(-3,3);
+        //boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
+        boom2.x = rnd.integerInRange(-3,3);
+        //boom2.y = enemy.body.y-boom.height*0.1/2+rnd.integerInRange(-3,3);
+        boom2.y = rnd.integerInRange(-3,3);
         boom2.scale.setTo(0.1,0.1);
+        enemy.addChild(boom2);
         var tween2 = game.add.tween(boom2);
-        var to2 = rnd.realInRange(3,5);
-        tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, 400, "Linear", true, 150);
-        tween2.onComplete.add(function(){boom2.destroy()},this);
+        tween2.frameBased = true;
+        var to2 = rnd.realInRange(7,5);
+        tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, rnd.integerInRange(300,600), "Linear", true, 150);
+        tween2.onComplete.add(function(){boom2.destroy();enemy.kill();},this);
     } else {
         enemy.health -= 0.25;
+        if(enemyAmount == null){
+            HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
+        }
     }
 }
 
@@ -232,7 +274,6 @@ function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
         if(asteroidAmmount == null){
             console.log("Game Over");
         }
-
     } else {
         asteroid.health -= 0.25;
     }
@@ -326,6 +367,34 @@ function acquireTarget(target,enemy){
     }
     degr = pi*(2+1/2)-degr;
     return degr;
+
+}
+function reload(reloadSprite,clips){
+    if (reloadSprite.exists == false || reloadSprite == ""|| reloadSprite == null) {
+        reloadSprite = game.add.sprite(0, 0, "reloadTray");
+        //reloadSprite.enableBody = true;
+        //reloadSprite.physicsBodyType = Phaser.Physics.ARCADE;
+        reloadSprite.y = game.input.activePointer.worldY+reloadSprite.height/2;
+        reloadSprite.x = game.input.activePointer.worldX+reloadSprite.width/2;
+        game.physics.p2.enableBody(reloadSprite);
+        //reloadSprite.body.angularVelocity = 200;
+    }
+    var reloadTween = game.add.tween(reloadSprite.body);
+    reloadTween.frameBased = true;
+    reloadTween.to({rotation: 2*pi}, 3000, "Linear", true, 0, 1);
+    game.time.events.add(3000, function (){
+        clips[0] = 35;
+        reloading = false;
+        //reloadTween.stop();
+        reloadSprite.destroy();
+        $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
+    }, this);
+    //waiter.start();
+    reloading = true;
+    $("canvas").css("cursor","none");
+    return reloadSprite;
+
+    //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");
 
 }
 

@@ -1,6 +1,7 @@
 html{
     font-family: Ubuntu;
     margin:0;
+    background-color: dimgrey;
 }
 
 body{
@@ -8,7 +9,8 @@ body{
 }
 
 header{
-    width: 1280px;
+    /*width: 1280px; */
+    width: 100wv;
     height: 75px;
     margin: 0 auto;
     background-color: #f2f2f2;
@@ -46,6 +48,13 @@ canvas{
 	background-position: center;
 	background-repeat: no-repeat;
 }
+.cont{
+    width: 1280px;
+    height: 75px;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #606060;
+}
 
 .login{
     float: right;
@@ -69,7 +78,7 @@ canvas{
     background-color: #cccccc;
 }
 
-.loginCheck{
+.loginCheck, .register{
     float: right;
     margin: 0 0 0 130px;
     width: 80px;
@@ -98,7 +107,7 @@ canvas{
     margin-top: 9px;
 }
 
-.login:hover, .signUp:hover, .loginCheck:hover, .cancelLogin:hover{
+.login:hover, .signUp:hover, .loginCheck:hover, .cancelLogin:hover, .register:hover{
     background-color: #408080;
     cursor: pointer;
     border-color: #000000;
@@ -117,7 +126,7 @@ canvas{
 }
 
 .signupDialog{
-    height: 345px;
+    height: 355px;
 }
 
 .line{
@@ -133,27 +142,35 @@ canvas{
     float: left;
     font-size: 20px;
 }
+.input{
+    height: 25px;
+    border: 0px;
+    border-radius: 4px;
+    -moz-box-shadow: 0 0 2px #888888;
+    -webkit-box-shadow: 0 0 2px #888888;
+    box-shadow: 0 0 2px #888888;
+}
 
 .username{
-    margin: 10px 50px 20px 30px;
+    margin: 10px 50px 20px 20px;
     float: right;
 }
 
 .userLabel{
-    margin: 10px 0 0 40px;
+    margin: 14px 0 0 45px;
     width: 100px;
     height: 20px;
     float: left;
 }
 
 .passLabel{
-    margin: 30px 0 0 40px;
+    margin: 37px 0 0 45px;
     float: left;
 }
 
-.password-password{
+.password{
     margin: 10px 50px 0 30px;
-    float: right;
+    float: right; 
 }
 
 .password-retype{
@@ -164,28 +181,28 @@ canvas{
 .passLabelRetype{
     display: inline-block;
     float: left;
-    margin: 30px 0 0 20px;
+    margin: 37px 0 0 20px;
 }
 
 
 .forgot{
-    margin: 20px 0 30px 90px;
+    margin: 20px 0 20px 100px;
     display: inline-block;
     float: left;
 }
 
 .email{
-    margin: 30px 0px 30px 75px;
+    margin: 30px 0px 22px 75px;
     float: left;
 }
 
 .emailLabel{
     float: left;
-    margin: 30px 0 0 55px;
+    margin: 37px 0 0 60px;
 }
 
 .info{
-    margin: 25px 10px 0 0px;
+    margin: 29px 10px 0 0px;
     float: right;
 }
 

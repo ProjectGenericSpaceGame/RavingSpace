@@ -9,7 +9,7 @@ menuLoad.prototype = {
 
             // ladataan valikon elementit
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
-            this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
+            //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');    
             this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
@@ -58,11 +58,11 @@ menuLoad.prototype = {
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
            
             this.menuheader = this.game.add.sprite(0,0, "menuHeader");
-            var decos = this.game.add.sprite(0,0, "menuHeaderDeco");
-            decos.y = this.menuheader.height-decos.height;
+            //var decos = this.game.add.sprite(0,0, "menuHeaderDeco");
+            //decos.y = this.menuheader.height-decos.height;
             var logotext = this.game.add.text(550, 20, "Raving Space");
             this.menuheader.addChild(logotext);
-            this.menuheader.addChild(decos);
+            //this.menuheader.addChild(decos);
 
             
             this.menubbg = this.game.add.sprite(150, 100,  "menuButtonBG");

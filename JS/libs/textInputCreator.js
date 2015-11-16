@@ -1,3 +1,8 @@
+/*
+Author: Ronnie Nygren
+License: MIT
+ */
+
 var createInput = function createInput(game,style,width,height){
     this.game = game;
     if(width > 0){
@@ -24,7 +29,7 @@ var createInput = function createInput(game,style,width,height){
     this.inputField.height = this.height;
     this.text = this.game.add.text(0.03*this.width,0.17*this.height,"",this.style);
     this.field = this.game.add.group();
-    this.field.addChild(this.inputField);
+    this.field.addChild(this.inputFiaeld);
     this.field.addChild(this.text);
     $("body").append('<input type="text" id="userInput" name="userInput"/>');
     $("#userInput").css({position:"absolute",left:"-1000px"});

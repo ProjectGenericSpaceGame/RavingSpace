@@ -2,7 +2,7 @@
 	//alustetaan tiedot
 	$servername = "mysql.labranet.jamk.fi";
 	$user = "H3492";
-	$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan myöhemmin hakemaan toisesta tiedostosta
+	$pass = "";//vaihdetaan myöhemmin hakemaan toisesta tiedostosta
 	$returnObject = "";
 	//avataan yhteys
 	$DBcon = new mysqli($servername,$user,$pass, "H3492_3");

@@ -42,6 +42,9 @@ menuLoad.prototype = {
 
         this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
+
+        //this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.mp3');
+        //this.game.load.audio('dystopia', 'assets/sounds/dystopia.mp3');
           
         },
   
@@ -199,6 +202,8 @@ menuLoad.prototype = {
                 }
                 ]}; //demo
             //this.playerWaves = JSON.parse(this.playerWaves);
+
+
             //tässä kasataan jutut
             var surroundings = {
                 menubg:this.menubg,
@@ -206,7 +211,8 @@ menuLoad.prototype = {
                 menubbg:this.menubbg,
                 menuLabel:this.menuLabel,
                 headUnder:this.headUnder,
-                backButton:this.backButton
+                backButton:this.backButton,
+                musics:["dustsucker","dystopia"]
             };//demo
             
            // lisätään pelaajan pisteet sekä rahat yläpalkkiin

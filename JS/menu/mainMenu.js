@@ -52,6 +52,8 @@ mainMenu.prototype = {
         this.buttonGroup.add(this.scoresButton);
         this.buttonGroup.add(this.customButton);
 
+        //var music = this.game.add.audio(this.surroundings.musics[0]);
+        //music.play();
     },
     
     loadoutStart: function(){

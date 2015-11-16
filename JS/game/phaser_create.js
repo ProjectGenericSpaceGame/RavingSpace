@@ -39,7 +39,7 @@ gameLoad.prototype = {
 		this.game.load.image('bullet2', 'assets/sprites/bullet2.png');
 		this.game.load.image('bullet3', 'assets/sprites/bullet3.png');
         //Musiikkia
-		this.game.load.audio('soldier', 'assets/sounds/extar.opus');
+		//this.game.load.audio('soldier', 'assets/sounds/extar.opus');
 		//explosion
 		this.game.load.image('boom', 'assets/particles/explosion3.png');
 		this.game.load.image('boom2', 'assets/particles/explosion2.png');
@@ -49,11 +49,39 @@ gameLoad.prototype = {
         this.game.load.image('healthbar', 'assets/GUI/healthbar.png');
         this.game.load.image('health', 'assets/GUI/health.png');
         this.game.load.image('respawnTimer', 'assets/GUI/respawn.png');
+		//ladataan bannerit ja weapon-/ability trayt
+        this.game.load.spritesheet('banner', 'assets/GUI/banners.png',1280,179);
+        this.game.load.image('wepTray', 'assets/GUI/wepTray.png');
+        this.game.load.image('abTray', 'assets/GUI/abTray.png');
+        this.game.load.image('trayChoser', 'assets/GUI/trayChosen.png');
+        //lataamisen näyttämistray
+        this.game.load.image('trayReloading', 'assets/GUI/trayReloading.png');
+		//buffausikonit
+		this.game.load.image('healed','assets/GUI/healed.png');
+		this.game.load.image('boosted','assets/GUI/boosted.png');
+		//asteroidin tappajien laser
+		this.game.load.image('laser1', 'assets/particles/laser1.png');
+		this.game.load.image('laser2', 'assets/particles/laser2.png');
+		this.game.load.image('laser3', 'assets/particles/laser3.png');
+		// aseet
+		this.game.load.image('weapon0', 'assets/placeholders/weapon0.png');
+		this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
+		this.game.load.image('weapon2', 'assets/placeholders/weapon2.png');
+		this.game.load.image('weapon3', 'assets/placeholders/weapon3.png');
+		// tehosteet
+		this.game.load.image('ability0', 'assets/placeholders/ability0.png');
+		this.game.load.image('ability1', 'assets/placeholders/ability1.png');
+		this.game.load.image('ability2', 'assets/placeholders/ability2.png');
+		this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+
 	},
+    init:function(loadout){
+        this.loadout = loadout;
+    },
 	create: function(){
         waiter = this.game.time.create();
 
-		this.attackInfo = "101005'302112'352713";
+		this.attackInfo = "001006'302112'352713";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -71,13 +99,13 @@ gameLoad.prototype = {
 		});
         
         this.asteroid1 = this.asteroids.getChildAt(0);
-        this.asteroid1.health = 5;
+        this.asteroid1.health = 25;
         
         this.asteroid2 = this.asteroids.getChildAt(1);
-        this.asteroid2.health = 5;
+        this.asteroid2.health = 25;
         
         this.asteroid3 = this.asteroids.getChildAt(2);
-        this.asteroid3.health = 5;
+        this.asteroid3.health = 25;
         
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
@@ -108,7 +136,7 @@ gameLoad.prototype = {
 		this.bullets = this.game.add.group();
 		this.bullets.enableBody = true;
 		this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-		this.bullets.createMultiple(50, 'bullet', 0, false);
+		this.bullets.createMultiple(50, 'bullet', 0);
 		this.bullets.setAll('anchor.x', 0.5);
 		this.bullets.setAll('anchor.y', 0.5);
 		this.bullets.setAll('outOfBoundsKill', true);
@@ -133,7 +161,7 @@ gameLoad.prototype = {
 		}
 		var spawnPool = [(enemyAmount[0]+1-1),(enemyAmount[1]+1-1),(enemyAmount[2]+1-1)];
 
-        this.enemyFireRates = [500,500,1500];
+        var enemyFireRates = [500,600,1500];
 		//Luodaan viholliset
 		this.enemies = this.game.add.group();
 		var lap1 = this.game.add.group();
@@ -147,9 +175,35 @@ gameLoad.prototype = {
 			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"destroyer");
             tEnemy1.forEach(function(enemy){
                 enemy.ray = null;
-                enemy.nextFire = 0;
+				enemy.nextFire = 0;
+				enemy.maxHealth = 1;
                 enemy.wait = 0;
-            }); 
+				enemy.targetOff = rnd.integerInRange(0,60);
+                enemy.name = ".";
+				enemy.fireRate  = enemyFireRates[0];
+				var healthbar = this.HPbar();
+				healthbar.scale.setTo(0.25,0.1);
+				healthbar.renderable = false;
+				healthbar.alpha = 0;
+				healthbar.lastHit;
+				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
+				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
+				healthbar.zeroPosition = healthbar.width;
+				healthbar.y = -120;
+				healthbar.getChildAt(1).anchor.x = 0;
+				enemy.addChild(healthbar);
+				var gun = this.game.add.image(0,-70);
+				enemy.addChild(gun);
+				var laser = this.game.add.emitter(0,-125,10);
+                laser.makeParticles('laser1');
+                laser.lifespan = 100;
+                laser.setXSpeed(-30, 30);
+                laser.setYSpeed(-200, -180);
+                laser.setRotation(0);
+                laser.scale.setTo(0.2,0.5);
+                enemy.addChild(laser);
+            },this);
+			tEnemy1.fireRate = enemyFireRates[0];
 			this.game.physics.p2.enable(tEnemy1);
 			this.enemies.getChildAt(i).add(tEnemy1);
 			
@@ -159,9 +213,30 @@ gameLoad.prototype = {
                 enemy.scale.setTo(0.4,0.4);
                 enemy.health = 0.75;
                 enemy.nextFire = 0;
+<<<<<<< HEAD
                 var enemyGun3 = this.game.add.image(0,-50);
                 enemy.addChild(enemyGun3);
             });
+=======
+				enemy.health = 0.5;
+				enemy.maxHealth = 0.5;
+				enemy.fireRate  = enemyFireRates[1];
+				var healthbar = this.HPbar();
+				healthbar.scale.setTo(0.25,0.1);
+				healthbar.renderable = false;
+				healthbar.alpha = 0;
+				healthbar.lastHit;
+				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
+				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
+				healthbar.zeroPosition = healthbar.width;
+				healthbar.y = -120;
+				healthbar.getChildAt(1).anchor.x = 0;
+				var enemyGun1 = this.game.add.image(0,-70);
+				enemy.addChild(healthbar);
+				enemy.addChild(enemyGun1);
+            },this);
+			tEnemy2.fireRate = enemyFireRates[1];
+>>>>>>> origin/master
             this.game.physics.p2.enable(tEnemy2);
 			this.enemies.getChildAt(i).add(tEnemy2);
 			
@@ -169,18 +244,33 @@ gameLoad.prototype = {
 			tEnemy3.createMultiple(parseInt(this.attackInfo[i].substring(4,6)),"commander");
             tEnemy3.forEach(function(enemy){
                 enemy.health = 2.5;
+                enemy.maxHealth = 2.5;
                 enemy.scale.setTo(0.55,0.55);
                 enemy.nextFire = 0;
                 enemy.barrel = 1;
                 enemy.altTarget = rnd.integerInRange(0,2);
+				enemy.fireRate  = enemyFireRates[2];
+				var healthbar = this.HPbar();
+				healthbar.scale.setTo(0.25,0.1);
+				healthbar.renderable = false;
+				healthbar.alpha = 0;
+				healthbar.lastHit;
+				healthbar.getChildAt(0).width = 0; //respawn, tätä ei käytetä vihulla
+				healthbar.fullHealthLength = healthbar.getChildAt(1).width;//hp palkki
+				healthbar.zeroPosition = healthbar.width;
+				healthbar.y = -120;
+				healthbar.getChildAt(1).anchor.x = 0;
+				//enemy.healthbar = healthbar;
 				var enemyGun1 = this.game.add.image(35,-50);
 				var enemyGun2 = this.game.add.image(-35,-50);
-				enemy.addChild(enemyGun1);
+				enemy.addChild(healthbar);
+				enemy.addChild(enemyGun1);//pidä nämä aina viimeisenä
 				enemy.addChild(enemyGun2);
             },this);
+			tEnemy3.fireRate = enemyFireRates[2];
 			this.game.physics.p2.enable(tEnemy3);
 			this.enemies.getChildAt(i).add(tEnemy3);
-		};
+		}
 		//alustetaan kerran
 		this.enemy1 = this.enemies.getChildAt(0).getChildAt(0);
 		this.enemy2 = this.enemies.getChildAt(0).getChildAt(1);
@@ -198,27 +288,96 @@ gameLoad.prototype = {
         //kierrosmuuttuja kertoo mikä kierros menossa
         this.lap = 1;
         //asetetaan ääneet
-        this.music = this.game.add.audio('soldier');
+        //this.music = this.game.add.audio('soldier');
+		this.music = null;
 
         //pelaajan HP kenttä
-        this.HPbar = this.game.add.group();
-        var container = this.game.add.sprite(0,0,'healthbar');
-        var health = this.game.add.sprite(0,0,'health');
-        health.x = container.width/2-health.width/2;
-        health.y = container.height/2-health.height/2;
-        var respawn = this.game.add.sprite(0,0,'respawnTimer');
-        respawn.x = container.width/2-respawn.width/2;
-        respawn.y = container.height/2-respawn.height/2;
-        this.HPbar.addChild(respawn);
-        this.HPbar.addChild(health);
-        this.HPbar.addChild(container);
-        this.HPbar.fixedToCamera = true;
-        this.HPbar.cameraOffset.setTo(1100,100);
-        this.HPbar.scale.setTo(0.4,0.3);
-        this.HPbar.fullHealthLength = health.width;
-        respawn.width = 0;
+		var playerhealth = this.HPbar();
+        playerhealth.fixedToCamera = true;
+        playerhealth.cameraOffset.setTo(1100,180);
+        playerhealth.scale.setTo(0.4,0.3);
+        playerhealth.fullHealthLength = playerhealth.getChildAt(1).width;//health palkki
+        playerhealth.getChildAt(0).width = 0; //respawn palkki
 
-		this.game.state.start("mainGame",false,false,
+        var wepTray = this.game.add.image(0,0,'wepTray');
+        wepTray.fixedToCamera = true;
+        wepTray.cameraOffset.setTo(1115,20);//100 korkea
+        var choserWeps = this.game.add.image(-108,0,'trayChoser');
+        wepTray.addChild(choserWeps);
+        wepTray.trayPosition = 1;
+        var icons = this.game.add.group();
+        for(var i = 0; i < 3;i++){
+            if(this.loadout[i] != null){
+                var gun = this.game.add.sprite(0,22,this.loadout[i]);
+                if(icons.length == 0){
+                    gun.x = 12.5;
+                } else {
+                    gun.x = 54*i+12.5;
+                }
+                gun.scale.setTo(0.4,0.4);
+                icons.addChild(gun);
+                var reloadTray = this.game.add.sprite(0,22,'trayReloading');
+                if(icons.length == 1){
+                    reloadTray.x = 12.5;
+                } else {
+                    reloadTray.x = 54*i+12.5;
+                }
+                reloadTray.alpha = 0;
+                icons.addChild(reloadTray);
+            }
+        }
+        wepTray.addChild(icons);
+        var mask = this.game.add.graphics(0,0);
+        mask.beginFill(0xFFFFFF,1);
+        mask.drawRect(0,22,wepTray.width,36);
+        icons.addChild(mask);
+        icons.mask = mask;
+
+        var abTray = this.game.add.image(0,0,'abTray');
+        abTray.fixedToCamera = true;
+        abTray.cameraOffset.setTo(1115,100);
+        var choserAbs = this.game.add.image(-108,0,'trayChoser');
+        abTray.addChild(choserAbs);
+        abTray.trayPosition = 1;
+        for(var i = 3; i < 5;i++){
+            if(this.loadout[i] != null){
+                var abil = this.game.add.sprite(0,22,this.loadout[i]);
+                if(abTray.children.length == 1){
+                    abil.x = 13;
+                } else {
+                    abil.x = 54*(i-3)+13;
+                }
+                abil.scale.setTo(0.4,0.4);
+                abTray.addChild(abil);
+            }
+        }
+
+        var banner = this.game.add.image(0,0,'banner',2);
+        banner.fixedToCamera = true;
+        banner.cameraOffset.setTo(0,this.game.camera.height/2-banner.height/2);
+		
+		var buffTrays1 = this.game.add.group();
+		buffTrays1.createMultiple(10,'healed');
+		buffTrays1.forEach(function(tray){
+			tray.kill();
+			tray.scale.setTo(0.7,0.7);
+		});
+		var buffTrays2 = this.game.add.group();
+		buffTrays2.createMultiple(10,'boosted');
+		buffTrays2.forEach(function(tray){
+			tray.kill();
+			tray.scale.setTo(0.7,0.7);
+		});
+		
+        var HUD = {
+            banner:banner,
+            webTray:wepTray,
+            abTray:abTray,
+			buffTrays1:buffTrays1,
+			buffTrays2:buffTrays2
+        };
+
+		game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,
             this.gun,
@@ -238,11 +397,26 @@ gameLoad.prototype = {
             enemyAmount,
             spawnPool,
             this.lap,
-            this.enemyFireRates,
             this.enemyBullets,
             this.music,
 			this.clipText,
-            this.HPbar
+            playerhealth,
+            HUD
 		);
-	}
+	},
+	HPbar: function(){
+		//pelaajan HP kenttä
+        var HPbar = this.game.add.group();
+        var container = this.game.add.sprite(0,0,'healthbar');
+        var health = this.game.add.sprite(0,0,'health');
+        health.x = container.width/2-health.width/2;
+        health.y = container.height/2-health.height/2;
+        var respawn = this.game.add.sprite(0,0,'respawnTimer');
+        respawn.x = container.width/2-respawn.width/2;
+        respawn.y = container.height/2-respawn.height/2;
+        HPbar.addChild(respawn);
+        HPbar.addChild(health);
+        HPbar.addChild(container);
+		return HPbar;
+	} 
 };

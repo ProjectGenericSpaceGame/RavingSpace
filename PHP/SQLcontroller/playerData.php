@@ -2,7 +2,7 @@
 	//alustetaan tiedot
 	$servername = "mysql.labranet.jamk.fi";
 	$user = "H3492";
-	$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan myöhemmin hakemaan toisesta tiedostosta
+	$pass = "";//vaihdetaan myöhemmin hakemaan toisesta tiedostosta
 	$returnObject = "";
 	if(strlen($_POST['playerName']) > 0){
 		$playerName = $_POST['playerName'];

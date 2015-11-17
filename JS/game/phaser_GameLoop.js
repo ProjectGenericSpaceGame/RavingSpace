@@ -42,10 +42,10 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul) {
         this.asteroids = asteroids;
         this.ship = ship;//
-        this.gun = gun;//
+        this.guns = gun;//
         this.bullets = bullets;//
         this.enemies = enemies;//
         this.enemy1 = enemy1;//
@@ -67,6 +67,7 @@ mainGame.prototype = {
 		this.clipText = clipText;
         this.HPbar = HPbar;
         this.HUD = HUD;
+        this.laserBul = laserBul;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -74,7 +75,8 @@ mainGame.prototype = {
         this.flipped = false;
         this.IntMouseTrack = -1;
         //this.moving = "";
-        this.clips = [35, 0, 0, 0];
+        this.clips = [35, 1, 5, 1];
+        this.clipSizes = [35, 1, 5, 1];
         reloading = false;
         this.frameSkip = 0;
         this.timers = [0,60,300,0,1,0];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff,aaltojen delay,scrolldelay,panosten hallinta bullet collision limitter
@@ -308,15 +310,15 @@ mainGame.prototype = {
             this.ship.body.applyForce([-Math.cos(this.ship.body.rotation) * 7, -Math.sin(this.ship.body.rotation) * 7], 0, 0);
         }
 		if(this.cursors.reload.isDown && !reloading){
-			reload(this.reloadSprite,this.clips,this.HUD);
+			reload(this.reloadSprite,this.clips,this.HUD,this.HUD.webTray.trayPosition-1,this.clipSizes);
 		}
         //ampuminen
         if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !reloading && this.ship.alive) {
-            if (fire(this.bullets, this.gun, this.fireRate, corRot, this.ship)) {
-                this.clips[0]--;
+            if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition-1), this.guns.getChildAt(this.HUD.webTray.trayPosition-1).fireRate, corRot, this.ship)) {
+                this.clips[this.HUD.webTray.trayPosition-1]--;
             }
         } else if (!reloading && this.clips[0] == 0) {
-            reload(this.reloadSprite,this.clips,this.HUD);
+            reload(this.reloadSprite,this.clips,this.HUD,this.HUD.webTray.trayPosition-1,this.clipSizes);
         }
 
         //Hyökkäyksen hallinta

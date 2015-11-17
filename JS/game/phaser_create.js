@@ -110,7 +110,33 @@ gameLoad.prototype = {
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
 		this.ship.scale.setTo(0.5,0.5);
+        var guns = this.game.add.group();
 		this.gun = this.game.add.image(0,-90);
+        this.gun.name = "basic";
+        this.gun.fireRate = 450;
+		//this.laser = this.game.add.emitter(0,-90,2);
+		this.laser = this.game.add.image(0,-70);
+		this.laser.name = "laser";
+        this.laser.fireRate = 1500;
+		this.shotgun = this.game.add.image(0,-90);
+		this.shotgun.name = "shotgun";
+		this.shotgun.fireRate = 1500;
+		this.mines = this.game.add.image(0,40);
+		this.mines.name = "mines";
+		this.mines.fireRate = 20000;
+        for(var o = 0; o < 3;o++){
+            if(this.loadout[o] != null){//TÄSSÄ VIRHE
+                if(this.loadout[o] == "weapon0") {
+                    guns.add(this.gun);
+                } else if(this.loadout[o] == "weapon1"){
+                    guns.add(this.laser);
+                } else if(this.loadout[o] == "weapon2"){
+                    guns.add(this.shotgun);
+                } else if(this.loadout[o] == "weapon3"){
+                    guns.add(this.mines);
+                }
+            }
+        }
 		this.shipTrail = this.game.add.group();
 		var trail1 = this.game.add.emitter(0,60,1000);
 		var trail2 = this.game.add.emitter(0,60,1000);
@@ -128,7 +154,7 @@ gameLoad.prototype = {
 			em.setRotation(0);
 		});
 		this.ship.addChild(this.shipTrail);
-		this.ship.addChild(this.gun);
+		this.ship.addChild(guns);
         this.ship.health = 3;
         this.ship.dying = false;
 		
@@ -141,6 +167,18 @@ gameLoad.prototype = {
 		this.bullets.setAll('anchor.y', 0.5);
 		this.bullets.setAll('outOfBoundsKill', true);
 		this.bullets.setAll('checkWorldBounds', true);
+
+		this.laserBul = this.game.add.group();
+		this.laserBul.enableBody = true;
+		this.laserBul.physicsBodyType = Phaser.Physics.ARCADE;
+		this.laserBul.createMultiple(5, 'laser1', 0);
+		//this.laserBul.forEach(function(b){
+			//b.scale.setTo(1,1);
+		//});
+		this.laserBul.setAll('anchor.x', 0.5);
+		this.laserBul.setAll('anchor.y', 0.5);
+		this.laserBul.setAll('outOfBoundsKill', true);
+		this.laserBul.setAll('checkWorldBounds', true);
 
 		//luodaan vihujen ammusryhmä
 		this.enemyBullets = this.game.add.group();
@@ -373,7 +411,7 @@ gameLoad.prototype = {
 		game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,
-            this.gun,
+            guns,
             this.bullets,
             this.enemies,
             this.enemy1,
@@ -394,7 +432,8 @@ gameLoad.prototype = {
             this.music,
 			this.clipText,
             playerhealth,
-            HUD
+            HUD,
+			this.laserBul
 		);
 	},
 	HPbar: function(){

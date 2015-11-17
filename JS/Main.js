@@ -283,10 +283,31 @@ function fire(bullets,gun,fireRate,deg,ship) {
         nextFire = game.time.now + fireRate;
 
         var bullet = bullets.getFirstDead();
-
         bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+        if(gun.name == "laser"){
+            bullet.name = "laser";
+            bullet.rotation = 0;
+            bullet.rotation = ship.body.rotation;
+            game.physics.arcade.moveToPointer(bullet, 1500);
+            function repeat(){
+                var bullet = bullets.getFirstDead();
+                bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+                bullet.name = "laser";
+                bullet.rotation = 0;
+                bullet.rotation = ship.body.rotation;
+                game.physics.arcade.moveToPointer(bullet, 1500);
+            }
+            game.time.events.add(50,repeat,this);
+            game.time.events.add(100,repeat,this);
+        } else {
+            bullet.name = "basic";
+            game.physics.arcade.moveToPointer(bullet, 330);
+        }
 
-        game.physics.arcade.moveToPointer(bullet, 330);
+
+
+
+
         /*var pointX;
         var pointY;
         if(deg < 1.6+pi/2){//right bottom
@@ -353,9 +374,16 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
     }
 }
 function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
-    bullet.kill();
+    var dmg;
+    if(bullet.name == "laser"){
+        dmg = 0.5;
+    } else {
+        dmg  = 0.25;
+        bullet.kill();
+    }
+
     //console.log("got this far?");
-    if((enemy.health-0.25) <= 0 && enemy.health != 0.001){
+    if((enemy.health-dmg) <= 0 && enemy.health != 0.001){
         enemy.health = 0.001;
 
         if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
@@ -411,8 +439,8 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
                 }
             }
         },this);
-    } else if(enemy.health > 0.25){
-        enemy.health -= 0.25;
+    } else if(enemy.health > dmg){
+        enemy.health -= dmg;
             if(enemy.key == 'ship'){
                 HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
             }
@@ -559,7 +587,7 @@ function acquireTarget(target,enemy){
     Xcoord = null;
     return parseFloat(degr+1-1);
 }
-function reload(reloadSprite,clips,HUD){
+function reload(reloadSprite,clips,HUD,pos,sizes){
     if (reloadSprite.alive == false) {
         reloadSprite.reset();
         reloadSprite.body.rotation = 0;
@@ -580,7 +608,7 @@ function reload(reloadSprite,clips,HUD){
         tray.alpha = 0;
     });
     game.time.events.add(3000, function (){
-        clips[0] = 35;
+        clips[pos] = sizes[pos];
         reloading = false;
         //reloadTween.stop();
         reloadSprite.kill();

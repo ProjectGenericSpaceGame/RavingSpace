@@ -8,6 +8,12 @@ body{
     margin: 0;
 }
 
+*{
+    -webkit-margin-after: 0;
+    -webkit-margin-before: 0;
+    margin:0;
+}
+
 header{
     /*width: 1280px; */
     width: 100wv;
@@ -143,6 +149,7 @@ canvas{
     font-size: 20px;
 }
 .input{
+    width: 235px;
     height: 25px;
     border: 0px;
     border-radius: 4px;
@@ -192,7 +199,7 @@ canvas{
 }
 
 .email{
-    margin: 30px 0px 22px 75px;
+    margin: 30px 0px 22px 68px;
     float: left;
 }
 

@@ -42,7 +42,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.guns = gun;//
@@ -68,6 +68,10 @@ mainGame.prototype = {
         this.HPbar = HPbar;
         this.HUD = HUD;
         this.laserBul = laserBul;
+        this.clips = clips;
+        reloading = reloadingAr;
+        this.minesBul = minesBul;
+        this.minesExpl = minesExpl;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -75,9 +79,9 @@ mainGame.prototype = {
         this.flipped = false;
         this.IntMouseTrack = -1;
         //this.moving = "";
-        this.clips = [35, 1, 5, 1];
-        this.clipSizes = [35, 1, 5, 1];
-        reloading = false;
+
+        this.clipSizes = [35, 30, 5, 1];
+        //reloading = false;
         this.frameSkip = 0;
         this.timers = [0,60,300,0,1,0];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff,aaltojen delay,scrolldelay,panosten hallinta bullet collision limitter
 		//this.text3 = this.game.add.text(0,0,"");
@@ -87,21 +91,33 @@ mainGame.prototype = {
     create: function () {
         var self = this;
         //fysiikat voidaan sallia vain pyörivässä statessa
+		//this.game.physics.p2.setImpactEvents(true);
         this.game.physics.p2.enable(this.ship);
         this.game.camera.follow(this.ship);
         this.game.physics.p2.defaultRestitution = 0.8;
         this.game.physics.p2.enable(this.asteroids);
-        this.game.physics.p2.setImpactEvents(true);
         this.asteroids.forEach(function (item) {
             item.body.clearCollision();
         });
         //this.game.physics.p2.setBounds(0,0,this.game.world.width,this.game.world.height,true,true,true,true,true);
         this.playerCollisonGroup = this.game.physics.p2.createCollisionGroup();
         this.enemiesCollisonGroup = this.game.physics.p2.createCollisionGroup();
+        this.boomCollisonGroup = this.game.physics.p2.createCollisionGroup();
+
         //this.game.physics.p2.setBounds(0,0,1600,1000,true,true,true,true,true);
         this.game.physics.p2.updateBoundsCollisionGroup();
         this.ship.body.setCollisionGroup(this.playerCollisonGroup);
         this.ship.body.collides([this.enemiesCollisonGroup]);
+        this.minesExpl.forEach(function(i){
+            i.body.setCollisionGroup(this.boomCollisonGroup);
+            i.body.collides([this.enemiesCollisonGroup]);
+        },this);
+
+		/*if(this.guns.laserLocation != null){
+			this.guns.getChildAt(this.guns.laserLocation).body.setCollisionGroup(this.laserColGroup);
+			this.guns.getChildAt(this.guns.laserLocation).body.collides([this.enemiesCollisonGroup]);
+			//this.guns.getChildAt(this.guns.laserLocation).body.onBeginContact.add(this.laserHit,this);
+		}*/
         //this.ship.body.collideWorldBounds = true;
         //this.music.play();
         this.game.input.mouse.mouseWheelCallback = function(){self.changeHUDSlot()};
@@ -204,7 +220,8 @@ mainGame.prototype = {
                 this.flipped = false;
             }
         }
-        this.ship.body.rotation = Math.round((corDeg - 0.1)*10)/10;
+        //this.ship.body.rotation = Math.round((corDeg - 0.1)*10)/10;
+        this.ship.body.rotation = ((2 * pi - deg) + (pi / 2));
         /*
         //tutkitaan hiiren liikkeen suuntaa
         if (((corDeg < degWas && this.direct == "right")
@@ -261,12 +278,12 @@ mainGame.prototype = {
             }
         }*/
         //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-        //text.text = String(this.clips[0] + "+" + reloading + "+" + this.ship.health);
+        //text.text = String(this.clips[0] + "+" + reloading[this.HUD.webTray.trayPosition-1] + "+" + this.ship.health);
         //text.text = String("");
 		//text2.text = String("");
 		//text2.text = String(this.fixed);
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
-        this.clipText.text  = this.clips[0];
+        this.clipText.text  = this.clips[this.HUD.webTray.trayPosition-1];
         //liikutetaan hiiren viereen
 		this.clipText.x = parseFloat(this.game.input.activePointer.worldX+40);
 		this.clipText.y = parseFloat(this.game.input.activePointer.worldY+5);
@@ -309,17 +326,41 @@ mainGame.prototype = {
         else if (this.cursors.right.isDown) {
             this.ship.body.applyForce([-Math.cos(this.ship.body.rotation) * 7, -Math.sin(this.ship.body.rotation) * 7], 0, 0);
         }
-		if(this.cursors.reload.isDown && !reloading){
-			reload(this.reloadSprite,this.clips,this.HUD,this.HUD.webTray.trayPosition-1,this.clipSizes);
+		if(this.cursors.reload.isDown && !reloading[this.HUD.webTray.trayPosition-1]){
+			reload(this.reloadSprite,this.clips,this.HUD.webTray.trayPosition-1, this.HUD,this.guns.getChildAt(this.HUD.webTray.trayPosition-1));
 		}
         //ampuminen
-        if (this.game.input.activePointer.isDown && this.clips[0] > 0 && !reloading && this.ship.alive) {
+		var laserFire = function(){
+			if (fire(self.laserBul, self.guns.getChildAt(self.HUD.webTray.trayPosition-1), self.guns.getChildAt(self.HUD.webTray.trayPosition-1).fireRate, corRot, self.ship)) {
+                self.clips[self.HUD.webTray.trayPosition-1]--;
+			}
+			if (fire(self.laserBul, self.guns.getChildAt(self.HUD.webTray.trayPosition-1), self.guns.getChildAt(self.HUD.webTray.trayPosition-1).fireRate, corRot, self.ship)) {
+                self.clips[self.HUD.webTray.trayPosition-1]--;
+			}
+			if(self.clips[self.HUD.webTray.trayPosition-1] > 0){
+			self.game.time.events.add(5,function(){
+				laserFire();
+			},self);
+			} /*else {
+				reload(self.reloadSprite,self.clips,self.HUD,self.HUD.webTray.trayPosition-1,self.clipSizes);
+			}*/
+		}
+        if (this.game.input.activePointer.isDown && this.clips[this.HUD.webTray.trayPosition-1] > 0 && !reloading[this.HUD.webTray.trayPosition-1] && this.ship.alive) {
+			if(this.guns.getChildAt(this.HUD.webTray.trayPosition-1).name == "basic"){
             if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition-1), this.guns.getChildAt(this.HUD.webTray.trayPosition-1).fireRate, corRot, this.ship)) {
                 this.clips[this.HUD.webTray.trayPosition-1]--;
             }
-        } else if (!reloading && this.clips[0] == 0) {
-            reload(this.reloadSprite,this.clips,this.HUD,this.HUD.webTray.trayPosition-1,this.clipSizes);
+			} else if(this.guns.getChildAt(this.HUD.webTray.trayPosition-1).name == "laser"){
+				laserFire();
+			} else if(this.guns.getChildAt(this.HUD.webTray.trayPosition-1).name == "mines"){
+                if (fire(this.minesBul, this.guns.getChildAt(this.HUD.webTray.trayPosition-1), this.guns.getChildAt(this.HUD.webTray.trayPosition-1).fireRate, corRot, this.ship)) {
+                    this.clips[this.HUD.webTray.trayPosition-1]--;
+                }
+            }
+        } else if (!reloading[this.HUD.webTray.trayPosition-1] && this.clips[this.HUD.webTray.trayPosition-1] <= 0) {
+            reload(this.reloadSprite,this.clips,this.HUD.webTray.trayPosition-1,this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition-1));
         }
+		
 
         //Hyökkäyksen hallinta
         //alert(enemy1.countLiving);
@@ -378,6 +419,16 @@ mainGame.prototype = {
                 self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);
                 if (self.bulletArray.length != 0 && self.timers[4] == 1) {
                     hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0));
+                    if(b.name == "mine"){
+                        var boom = self.minesExpl.getFirstDead();
+                        boom.reset(b.x,b.y);
+                        var tween = self.game.add.tween(boom.scale);
+                        tween.to({x:1.5,y:1.5},500,"Linear",true);
+                        tween.onComplete.add(function(){
+                            boom.kill();
+                            boom.scale.setTo(0.1,0.1);
+                        });
+                    }
                 } else if(self.bulletArray.length != 0 && self.timers[4] == 2){//jos pelaajaan osumista tutkitaan
                     hitDetector(b, enm, null, self.lap, self.HPbar);
                 }
@@ -386,6 +437,8 @@ mainGame.prototype = {
                 enm = en;
                 if(self.timers[4] == 1){
                     self.bullets.forEachAlive(eachBulletAliveFn);
+                    self.laserBul.forEachAlive(eachBulletAliveFn);
+                    self.minesBul.forEachAlive(eachBulletAliveFn);
                 } else {
                     self.enemyBullets.forEachAlive(eachBulletAliveFn);
                 }
@@ -394,9 +447,11 @@ mainGame.prototype = {
                 var num;
                 if(this.timers[5] >= 5) {
                     eachEnemyAliveFn(enemy);
-                }
+                } 
                 if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000 || enemy.name == "r") {
                     enemy.name = "fresh";
+                    enemy.body.mass = 1;
+                    enemy.body.damping = 0.5;
 
                 } else if (enemy.name == "fresh") {
                     // uudelle viholliselle valitaan kohde
@@ -431,7 +486,8 @@ mainGame.prototype = {
                     enemy.body.thrust(60);
                     // listätään alukselle massa ja hidastetaan sen vauhtia
                     this.game.time.events.add(1000, function () {
-                        enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+                        enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup,this.boomCollisonGroup]);
+                        enemy.body.onBeginContact.add(this.boomCollision, this);
                         enemy.body.mass = 0.7;
                         enemy.body.damping = 0.7;
                     }, this);
@@ -497,6 +553,8 @@ mainGame.prototype = {
                 }
                 if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000 || enemy.name == "") {
                     enemy.name = "fresh";
+                    enemy.body.mass = 1;
+                    enemy.body.damping = 0.5;
                 } else if (enemy.name == "fresh") {
                     enemy.name = "free";
                 }
@@ -528,7 +586,8 @@ mainGame.prototype = {
 
                     if (enemy.body.force.destination[0] == 0) {
                         enemy.name = "inPlay";
-                        enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+                        enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup,this.boomCollisonGroup]);
+                        enemy.body.onBeginContact.add(this.boomCollision, this);
                         enemy.body.mass = 0.7;
                         enemy.body.damping = 0.7;
                     }
@@ -543,6 +602,8 @@ mainGame.prototype = {
                 }
                 if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000 || enemy.name == "") {
                     enemy.name = "fresh";
+                    enemy.body.mass = 1;
+                    enemy.body.damping = 0.5;
                 } else if (enemy.name == "fresh") {
                     enemy.name = "free";
                     enemy.buffTimer = 60;
@@ -628,7 +689,9 @@ mainGame.prototype = {
 
                     if (enemy.body.force.destination[0] == 0) {
                         enemy.name = "inPlay";
-                        enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup]);
+                        
+						enemy.body.collides([this.enemiesCollisonGroup, this.playerCollisonGroup,this.boomCollisonGroup]);
+                        enemy.body.onBeginContact.add(this.boomCollision, this);
                         enemy.body.mass = 1.9;
                         enemy.body.damping = 0.7;
                     }
@@ -737,6 +800,15 @@ mainGame.prototype = {
                 this.game.time.events.add(75, function () {
                     this.timers[4] = 0
                 }, this);
+            }
+        }
+    },
+    boomCollision : function(a,b,shapeCaller,shapeCollided,c){
+        if(a != null) {
+            if (shapeCollided.body.parent.sprite.key == "boom") {
+                shapeCaller.body.mass = 9999;
+                shapeCaller.body.damping = 0.999;
+                hitDetector(shapeCollided.body.parent.sprite, shapeCaller.body.parent.sprite, this.enemyAmount, this.lap, shapeCaller.body.parent.sprite.getChildAt(0));
             }
         }
     }

@@ -38,6 +38,7 @@ gameLoad.prototype = {
 		this.game.load.image('bullet', 'assets/sprites/bullet.png');
 		this.game.load.image('bullet2', 'assets/sprites/bullet2.png');
 		this.game.load.image('bullet3', 'assets/sprites/bullet3.png');
+		this.game.load.image('mine', 'assets/sprites/mine.png');
         //Musiikkia
 		//this.game.load.audio('soldier', 'assets/sounds/extar.opus');
 		//explosion
@@ -69,7 +70,7 @@ gameLoad.prototype = {
 		this.game.load.image('weapon2', 'assets/placeholders/weapon2.png');
 		this.game.load.image('weapon3', 'assets/placeholders/weapon3.png');
 		// tehosteet
-		this.game.load.image('ability0', 'assets/placeholders/ability0.png');
+		this.game.load.image('ability0', 'assets/GUI/superSpeed.png');
 		this.game.load.image('ability1', 'assets/placeholders/ability1.png');
 		this.game.load.image('ability2', 'assets/placeholders/ability2.png');
 		this.game.load.image('ability3', 'assets/placeholders/ability3.png');
@@ -80,6 +81,7 @@ gameLoad.prototype = {
     },
 	create: function(){
         waiter = this.game.time.create();
+		this.clipSizes = [35, 30, 5, 1];
 
 		this.attackInfo = "001006'302112'352713";
         //this.game.scale.scaleMode = 0;
@@ -113,27 +115,51 @@ gameLoad.prototype = {
         var guns = this.game.add.group();
 		this.gun = this.game.add.image(0,-90);
         this.gun.name = "basic";
+        this.gun.reload = 3000;
         this.gun.fireRate = 450;
+        this.gun.clip = 35;
 		//this.laser = this.game.add.emitter(0,-90,2);
 		this.laser = this.game.add.image(0,-70);
 		this.laser.name = "laser";
-        this.laser.fireRate = 1500;
+		//this.laser.scale.setTo(0.5,30);
+		//this.laser.anchor.x = 1;
+		/*this.laser.anchor.y = 1;
+		this.laser.renderable = false;*/
+        this.laser.fireRate = 0.1;
+        this.laser.reload = 6000;
+        this.laser.clip = 30;
 		this.shotgun = this.game.add.image(0,-90);
 		this.shotgun.name = "shotgun";
 		this.shotgun.fireRate = 1500;
+        this.shotgun.reload = 3000;
+        this.shotgun.clip = 5;
 		this.mines = this.game.add.image(0,40);
 		this.mines.name = "mines";
-		this.mines.fireRate = 20000;
+		this.mines.fireRate = 0;
+        this.mines.reload = 2000;
+        this.mines.clip = 1;
+		guns.laserLocation = null;
+        this.clips = [];
+        this.reloading = [];
         for(var o = 0; o < 3;o++){
             if(this.loadout[o] != null){//TÄSSÄ VIRHE
                 if(this.loadout[o] == "weapon0") {
                     guns.add(this.gun);
+                    this.clips.push(this.clipSizes[0]);
+                    this.reloading.push(false);
                 } else if(this.loadout[o] == "weapon1"){
                     guns.add(this.laser);
+					guns.laserLocation = guns.length-1;
+                    this.clips.push(this.clipSizes[1]);
+                    this.reloading.push(false);
                 } else if(this.loadout[o] == "weapon2"){
                     guns.add(this.shotgun);
+                    this.clips.push(this.clipSizes[2]);
+                    this.reloading.push(false);
                 } else if(this.loadout[o] == "weapon3"){
                     guns.add(this.mines);
+                    this.clips.push(this.clipSizes[3]);
+                    this.reloading.push(false);
                 }
             }
         }
@@ -171,14 +197,31 @@ gameLoad.prototype = {
 		this.laserBul = this.game.add.group();
 		this.laserBul.enableBody = true;
 		this.laserBul.physicsBodyType = Phaser.Physics.ARCADE;
-		this.laserBul.createMultiple(5, 'laser1', 0);
-		//this.laserBul.forEach(function(b){
-			//b.scale.setTo(1,1);
-		//});
+		this.laserBul.createMultiple(30, 'laser1', 0);
+		this.laserBul.forEach(function(b){
+			b.scale.setTo(0.3,0.6);
+		});
 		this.laserBul.setAll('anchor.x', 0.5);
 		this.laserBul.setAll('anchor.y', 0.5);
 		this.laserBul.setAll('outOfBoundsKill', true);
 		this.laserBul.setAll('checkWorldBounds', true);
+
+        this.minesBul = this.game.add.group();
+        this.minesBul.enableBody = true;
+        this.minesBul.physicsBodyType = Phaser.Physics.ARCADE;
+        this.minesBul.createMultiple(20, 'mine', 0);
+        this.minesBul.setAll('anchor.x', 0.5);
+        this.minesBul.setAll('anchor.y', 0.5);
+        this.minesBul.setAll('outOfBoundsKill', true);
+        this.minesBul.setAll('checkWorldBounds', true);
+        this.minesExpl = this.game.add.group();
+        this.minesExpl.createMultiple(5, 'boom', 0);
+        this.game.physics.p2.enable(this.minesExpl);
+        this.minesExpl.forEach(function(i){
+            i.scale.setTo(0.1,0.1);
+            i.body.kinematic = true;
+        },this);
+
 
 		//luodaan vihujen ammusryhmä
 		this.enemyBullets = this.game.add.group();
@@ -433,7 +476,11 @@ gameLoad.prototype = {
 			this.clipText,
             playerhealth,
             HUD,
-			this.laserBul
+			this.laserBul,
+            this.clips,
+            this.reloading,
+            this.minesBul,
+            this.minesExpl
 		);
 	},
 	HPbar: function(){

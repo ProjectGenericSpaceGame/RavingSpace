@@ -16,7 +16,7 @@ if(strlen($_POST['userName']) > 0) {
 
     $servername = "mysql.labranet.jamk.fi";
     $user = "H3492";
-    $pass = "";
+    $pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";
     $DBcon = new mysqli($servername, $user, $pass, "H3492_3");
 
     $select = "select passHash, playerData.loginFollowID, loginAttempts.failedTries, loginAttempts.fail1 from playerData

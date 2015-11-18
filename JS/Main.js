@@ -46,12 +46,15 @@ $(document).ready(function(){
                     makeGame();
                     $('.loginDialog').css("display","none");
                     $('.signupDialog').css("display","none");
-                } if (returnValue == "credsFirst") {
+                } else if (returnValue == "credsFirst") {
                     console.log('salis on väärin tai käyttäjä nimi on väärin');
-                } if(returnValue == "lock"){
+					makeGame();
+                } else if(returnValue == "lock"){
                     console.log("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
-                } if(returnValue == "creds") {
+					makeGame();
+                } else if(returnValue == "creds") {
                     console.log("jotain");
+					makeGame();
                 } else{ // demoamiseen
                     makeGame();
                      $('.loginDialog').css("display","none");
@@ -149,7 +152,11 @@ $(document).ready(function(){
 
 //Pelin funktio
 function makeGame(){
+    $('.loginDialog').css("display","none");
+    $('.signupDialog').css("display","none");
     $('.cont').css("display","none");
+	$('.loginDialog').css("display","none");
+    $('.signupDialog').css("display","none");
     $('main').css("position","relative");
     $('main').css("top","-76px");
 //$('header').css("display","none");
@@ -276,7 +283,7 @@ function randNumber(lap){
 }
 
 //Ampumisfunktio
-function fire(bullets,gun,fireRate,deg,ship) {
+function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
 
     if (game.time.now > nextFire && bullets.countDead() > 0)
     {
@@ -285,21 +292,22 @@ function fire(bullets,gun,fireRate,deg,ship) {
         var bullet = bullets.getFirstDead();
         bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
         if(gun.name == "laser"){
-            bullet.name = "laser";
-            bullet.rotation = 0;
-            bullet.rotation = ship.body.rotation;
-            game.physics.arcade.moveToPointer(bullet, 1500);
-            function repeat(){
-                var bullet = bullets.getFirstDead();
-                bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-                bullet.name = "laser";
-                bullet.rotation = 0;
-                bullet.rotation = ship.body.rotation;
-                game.physics.arcade.moveToPointer(bullet, 1500);
-            }
-            game.time.events.add(50,repeat,this);
-            game.time.events.add(100,repeat,this);
-        } else {
+			//gun.revive();
+			//bullet.scale.setTo(1,4);
+			bullet.rotation = ship.rotation;
+			bullet.name = "laser";
+            game.physics.arcade.moveToPointer(bullet, 2000);
+			/*game.time.events.add(250,function(){
+				gun.kill();
+				gun.renderable = false;
+			},this);*/
+        } else if(gun.name == 'mines'){
+            bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet.name = "mine";
+        }
+        else {
+			bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+			bullet.scale.setTo(1,1);
             bullet.name = "basic";
             game.physics.arcade.moveToPointer(bullet, 330);
         }
@@ -376,7 +384,11 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
 function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     var dmg;
     if(bullet.name == "laser"){
-        dmg = 0.5;
+        dmg = 0.1;
+    } else if(bullet.name == "mine") {
+        bullet.kill();
+    } else if(bullet.key == "boom") {
+        dmg = 2.5;
     } else {
         dmg  = 0.25;
         bullet.kill();
@@ -587,7 +599,7 @@ function acquireTarget(target,enemy){
     Xcoord = null;
     return parseFloat(degr+1-1);
 }
-function reload(reloadSprite,clips,HUD,pos,sizes){
+function reload(reloadSprite,clips,pos,HUD,gun){
     if (reloadSprite.alive == false) {
         reloadSprite.reset();
         reloadSprite.body.rotation = 0;
@@ -597,25 +609,26 @@ function reload(reloadSprite,clips,HUD,pos,sizes){
     }
     var reloadTween = game.add.tween(reloadSprite.body);
     reloadTween.frameBased = true;
-    reloadTween.to({rotation: 2*pi}, 3000, "Linear", true, 0, 1);
+    reloadTween.to({rotation: 2*pi}, gun.reload, "Linear", true, 0, 1);
     reloadTween.frameBased = true;
     var tray  = HUD.webTray.getChildAt(1).getChildAt((HUD.webTray.trayPosition)*2-1);
     tray.alpha = 1;
     var trayTween = game.add.tween(tray);
-    trayTween.to({y:(tray.y+tray.height)},3000,"Linear",true,0);
+    trayTween.frameBased = true;
+    trayTween.to({y:(tray.y+tray.height)},gun.reload,"Linear",true,0);
     trayTween.onComplete.add(function(){
         tray.y = 22;
         tray.alpha = 0;
     });
-    game.time.events.add(3000, function (){
-        clips[pos] = sizes[pos];
-        reloading = false;
+    game.time.events.add(gun.reload, function (){
+        clips[pos] = gun.clip;
+        reloading[pos] = false;
         //reloadTween.stop();
         reloadSprite.kill();
         $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
     }, this);
     //waiter.start();
-    reloading = true;
+    reloading[pos] = true;
     $("canvas").css("cursor","none");
     //return reloadSprite;
 

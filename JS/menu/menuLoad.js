@@ -29,6 +29,7 @@ menuLoad.prototype = {
             this.game.load.image('ability1', 'assets/placeholders/ability1.png');
             this.game.load.image('ability2', 'assets/placeholders/ability2.png');
             this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+            this.game.load.image('abSpeed', 'assets/GUI/superSpeed.png');
             
             // kaupan kuvakkeet
             this.game.load.image('bullet', 'assets/sprites/bullet.png');

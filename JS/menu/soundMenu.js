@@ -74,8 +74,6 @@ soundMenu.prototype = {
         this.fxneedle.events.onDragUpdate.add(this.fxVolume,this);
         this.fxGroup.add(this.fxslider);
         this.fxGroup.add(this.fxneedle);
-
-
         
         // alustetaan äänten on/off painike
         this.onoffButton = this.game.add.button(590, 560, 'menuHeader', this.onOff, this);

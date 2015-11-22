@@ -238,9 +238,9 @@ gameLoad.prototype = {
 		
 		//vihujen dropit
 		var dropBoom = this.game.add.group();
-		dropBoom.createMultiple(20,'dropBoom',0);
 		dropBoom.enableBody = true;
 		dropBoom.physicsBodyType = Phaser.Physics.ARCADE;
+        dropBoom.createMultiple(20,'dropBoom',0);
 		dropBoom.setAll("anchor.x",0.5);
 		dropBoom.setAll("anchor.y",0.5);
 		dropBoom.setAll("name","drop");

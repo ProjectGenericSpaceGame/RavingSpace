@@ -28,9 +28,11 @@ $(document).ready(function(){
         var location = window.location.href;
         if(user.length != 0 && pss.length != 0){
             $('#loader').css("display","block");
+            $('.loginDialog').css("display", "none");
+            $('.signupDialog').css("display", "none");
             var getFromDB = $.ajax({
                 method:"POST",
-                async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                //async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/CryptoHandler/serveSalt.php",
                 data:{playerName:user,location:location}
             });
@@ -42,7 +44,7 @@ $(document).ready(function(){
         
                 var putToDB = $.ajax({
                     method:"POST",
-                    async:false,
+                    //async:false,
                     url:"PHP/CryptoHandler/loginHandler.php",
                     data:{givenHash:sh,newPass:ssh,userName:user,location:location}
                 });
@@ -55,14 +57,17 @@ $(document).ready(function(){
                     } else if (returnValue == "credsFirst") {
                         alert('salis on väärin tai käyttäjä nimi on väärin');
                         $('#loader').css("display","none");
+                        $('.loginDialog').css("display", "block");
                         //makeGame();
                     } else if (returnValue == "lock") {
                         alert("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
                         $('#loader').css("display","none");
+                        $('.loginDialog').css("display", "block");
                         //makeGame();
                     } else if (returnValue == "creds") {
                         alert("salis on väärin tai käyttäjä nimi on väärin");
                         $('#loader').css("display","none");
+                        $('.loginDialog').css("display", "block");
                         //makeGame();
                     } else { // demoamiseen
                         //makeGame();
@@ -410,12 +415,12 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
     }
 
     //console.log("got this far?");
-    if((enemy.health-dmg) <= 0 && enemy.health != 0.001){
+    if(((enemy.health-dmg) <= 0 && enemy.health != 0.001) && enemy.name != "drop"){
         enemy.health = 0.001;
 
-        if(enemyAmount != null && enemy.name != "drop") {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
+        if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
-        } else {
+        } else if(enemyAmount == null){
             enemy.dying = true;
             HPbar.getChildAt(1).width = 0;
             game.time.events.add(10000,function(){
@@ -458,8 +463,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         tween2.onComplete.add(function(){
             boom2.destroy();
             enemy.kill();
-			//var random = rnd.integerInRange(1,13);
-			var random = 5;
+			var random = rnd.integerInRange(1,13);
 			if((random == 10 || random == 5) && enemy.key != "ship"){
 				if(random == 5){
 					dropBoom.getFirstDead().reset(enemy.x,enemy.y);
@@ -504,7 +508,10 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
                 //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
                 //alert(HPbar.x);
             }
-        }
+        } else if(enemy.name == "drop"){
+        enemy.health = 0.001;
+        enemy.kill();
+    }
 }
 function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
     bullet.kill();

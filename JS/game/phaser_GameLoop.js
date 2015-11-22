@@ -346,7 +346,7 @@ mainGame.prototype = {
 			} /*else {
 				reload(self.reloadSprite,self.clips,self.HUD,self.HUD.webTray.trayPosition-1,self.clipSizes);
 			}*/
-		}
+		};
         if (this.game.input.activePointer.isDown && this.clips[this.HUD.webTray.trayPosition-1] > 0 && !reloading[this.HUD.webTray.trayPosition-1] && this.ship.alive) {
 			if(this.guns.getChildAt(this.HUD.webTray.trayPosition-1).name == "basic"){
             if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition-1), this.guns.getChildAt(this.HUD.webTray.trayPosition-1).fireRate, corRot, this.ship)) {
@@ -824,9 +824,9 @@ mainGame.prototype = {
     dropBoomStarter: function(drop,bullet){
         hitDetector(bullet,drop,1,this.lap,null);
         if(drop.health == 0.001){
-            var boom = self.minesExpl.getFirstDead();
-            boom.reset(b.x,b.y);
-            var tween = self.game.add.tween(boom.scale);
+            var boom = this.minesExpl.getFirstDead();
+            boom.reset(drop.x,drop.y);
+            var tween = this.game.add.tween(boom.scale);
             tween.to({x:1.5,y:1.5},500,"Linear",true);
             tween.onComplete.add(function(){
                 boom.kill();

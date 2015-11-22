@@ -25,25 +25,26 @@ $(document).ready(function(){
     $('.loginCheck').click(function(){
         var pss =  $('.password').val();
         var user = $('.username').val();
+        var location = window.location.href;
         if(user.length != 0 && pss.length != 0){
             $('#loader').css("display","block");
             var getFromDB = $.ajax({
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/CryptoHandler/serveSalt.php",
-                data:{playerName:user}
+                data:{playerName:user,location:location}
             });
             getFromDB.done(function(returnValue){
                 var genSalt = getRandom();
                 var saltyhash = pss + returnValue;
-                var sh = hashPass(saltyhash);
-                var ssh = hashPass((pss+genSalt)) + genSalt; 
+                var sh = hashPass(saltyhash)+genSalt;
+                var ssh = hashPass((pss+genSalt));
         
                 var putToDB = $.ajax({
                     method:"POST",
                     async:false,
                     url:"PHP/CryptoHandler/loginHandler.php",
-                    data:{data:{givenHash:sh,newHash:ssh,userName:user}}
+                    data:{givenHash:sh,newPass:ssh,userName:user,location:location}
                 });
                 putToDB.done(function(returnValue) {
                     if (returnValue == true) {
@@ -52,16 +53,19 @@ $(document).ready(function(){
                         console.log("onnistui");
                         makeGame();
                     } else if (returnValue == "credsFirst") {
-                        console.log('salis on väärin tai käyttäjä nimi on väärin');
-                        makeGame();
+                        alert('salis on väärin tai käyttäjä nimi on väärin');
+                        $('#loader').css("display","none");
+                        //makeGame();
                     } else if (returnValue == "lock") {
-                        console.log("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
-                        makeGame();
+                        alert("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
+                        $('#loader').css("display","none");
+                        //makeGame();
                     } else if (returnValue == "creds") {
-                        console.log("jotain");
-                        makeGame();
+                        alert("salis on väärin tai käyttäjä nimi on väärin");
+                        $('#loader').css("display","none");
+                        //makeGame();
                     } else { // demoamiseen
-                        makeGame();
+                        //makeGame();
                         $('.loginDialog').css("display", "none");
                         $('.signupDialog').css("display", "none");
                     }

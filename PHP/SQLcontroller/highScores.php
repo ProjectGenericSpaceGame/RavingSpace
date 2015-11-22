@@ -2,7 +2,7 @@
 	//alustetaan tiedot
 	$returnObject = "";
 	//avataan yhteys
-	if(strlen($_POST['playerName']) > 0) {
+	if($_POST['location'] != "http://localhost:509/RavingSpace/") {
 		$servername = "mysql.labranet.jamk.fi";
 		$user = "H3492";
 		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta

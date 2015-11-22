@@ -2,7 +2,7 @@
 $userName;
 $return;
 
-if(strlen($_POST['playerName']) > 0){
+if($_POST['location'] != "http://localhost:509/RavingSpace/"){
     $playerName = $_POST['playerName'];
     $servername = "mysql.labranet.jamk.fi";
     $user = "H3492";

@@ -6,9 +6,9 @@ $failedAttempts;
 $loginFollowID;
 $tryLock;
 $bcrypt = new Bcrypt(15);
-$_POST['userName'] = 'testi1';
+//$_POST['userName'] = 'testi1';
 
-if(strlen($_POST['playerName']) > 0){
+if($_POST['location'] != "http://localhost:509/RavingSpace/"){
     $userName = $_POST['userName'];
     $givenHash = $_POST['givenHash'];
     $newPassWord = $_POST['newPass'];
@@ -21,9 +21,9 @@ if(strlen($_POST['playerName']) > 0){
     }
 } else {
     $servername = "localhost";
-    $userName = "testi1";
-    $givenHash = "5756c06c3eebc950605b15cee74e882e7c0218f6!!!!!!!!!!";
-    $newPassWord = "634123f1a7d73d7c4b9d21971ce9acf9db706ae5";
+    $userName = $_POST['userName'];
+    $givenHash = $_POST['givenHash'];
+    $newPassWord = $_POST['newPass'];
     $user = "root";
     $pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
     $DBcon = new mysqli($servername,$user,$pass, "H3492_3");

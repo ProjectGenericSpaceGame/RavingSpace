@@ -4,8 +4,11 @@ const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
 var rnd; 
 
-$(document).ready(function(){
-// kirjautumisruutu / rekisteröitymisruutu
+
+$(document).ready(function(){ 
+    // Poistetaan latausruutu
+     $('#loader').css("display","none");
+    // kirjautumisruutu / rekisteröitymisruutu
     $('.login').click(function(){
         var other =  $('.signupDialog').css("display");
         if(other == "block"){
@@ -22,53 +25,58 @@ $(document).ready(function(){
     $('.loginCheck').click(function(){
         var pss =  $('.password').val();
         var user = $('.username').val();
-        //console.log(lel);
-        var getFromDB = $.ajax({
-            method:"POST",
-            async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
-            url:"PHP/CryptoHandler/serveSalt.php",
-            data:{playerName:user}
-        });
-        getFromDB.done(function(returnValue){
-            var genSalt = getRandom();
-            var saltyhash = pss + returnValue;
-            var sh = hashPass(saltyhash);
-            var ssh = hashPass((pss+genSalt)) + genSalt; 
-        
-            var putToDB = $.ajax({
+        if(user.length != 0 && pss.length != 0){
+            $('#loader').css("display","block");
+            var getFromDB = $.ajax({
                 method:"POST",
-                async:false,
-                url:"PHP/CryptoHandler/loginHandler.php",
-                data:{data:{givenHash:sh,newHash:ssh,userName:user}}
+                async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                url:"PHP/CryptoHandler/serveSalt.php",
+                data:{playerName:user}
             });
-            putToDB.done(function(returnValue){
-                if(returnValue == true){
-                    makeGame();
-                    $('.loginDialog').css("display","none");
-                    $('.signupDialog').css("display","none");
-                } else if (returnValue == "credsFirst") {
-                    console.log('salis on väärin tai käyttäjä nimi on väärin');
-					makeGame();
-                } else if(returnValue == "lock"){
-                    console.log("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
-					makeGame();
-                } else if(returnValue == "creds") {
-                    console.log("jotain");
-					makeGame();
-                } else{ // demoamiseen
-                    makeGame();
-                     $('.loginDialog').css("display","none");
-                    $('.signupDialog').css("display","none");
-                }
-            });
-            putToDB.fail(function(){
-                console.log("username or password is incorrect or database unreachable");
-            });
+            getFromDB.done(function(returnValue){
+                var genSalt = getRandom();
+                var saltyhash = pss + returnValue;
+                var sh = hashPass(saltyhash);
+                var ssh = hashPass((pss+genSalt)) + genSalt; 
         
-        });
-        getFromDB.fail(function(){
-            alert("database unreachable!")
-        });
+                var putToDB = $.ajax({
+                    method:"POST",
+                    async:false,
+                    url:"PHP/CryptoHandler/loginHandler.php",
+                    data:{data:{givenHash:sh,newHash:ssh,userName:user}}
+                });
+                putToDB.done(function(returnValue){
+                    if(returnValue == true){
+                        makeGame();
+                        $('.loginDialog').css("display","none");
+                        $('.signupDialog').css("display","none");
+                    } else if (returnValue == "credsFirst") {
+                        console.log('salis on väärin tai käyttäjä nimi on väärin');
+					   makeGame();
+                    } else if(returnValue == "lock"){
+                        console.log("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
+					   makeGame();
+                    } else if(returnValue == "creds") {
+                        console.log("jotain");
+					   makeGame();
+                    } else{ // demoamiseen
+                        makeGame();
+                        $('.loginDialog').css("display","none");
+                        $('.signupDialog').css("display","none");
+                    }
+                });
+                putToDB.fail(function(){
+                    $('#loader').css("display","none");
+                    console.log("username or password is incorrect or database unreachable");
+                });
+            });
+            getFromDB.fail(function(){
+                $('#loader').css("display","none");
+                console.log("database unreachable!");
+            });
+        } else {
+            alert('please provide username and password');
+        }
     }); 
 
     // hankitaan uusi suola
@@ -101,10 +109,10 @@ $(document).ready(function(){
         var check = checkRegisterInfo();
         if(check == false){
             $('.password-retype').css("border","2px solid #a50716");
-            $('.password-retype').css("margin","26px 48px 0px 20px");
+            $('.password-retype').css("margin","26px 48px 0 0");
         } else{
             $('.password-retype').css("border","2px solid #07a547");
-            $('.password-retype').css("margin","26px 48px 0px 20px");
+            $('.password-retype').css("margin","26px 48px 0 0");
         }
     });
     // login -painike rekisteröitymisruudussa
@@ -152,14 +160,15 @@ $(document).ready(function(){
 
 //Pelin funktio
 function makeGame(){
+    
     $('.loginDialog').css("display","none");
     $('.signupDialog').css("display","none");
     $('.cont').css("display","none");
 	$('.loginDialog').css("display","none");
     $('.signupDialog').css("display","none");
     $('main').css("position","relative");
-    $('main').css("top","-76px");
-//$('header').css("display","none");
+    $('main').css("top","-75px");
+    
 game = new Phaser.Game(1280, 800, Phaser.CANVAS, 'phaserGame');
 rnd = game.rnd;   
 game.state.add('mainMenu', mainMenu);
@@ -174,8 +183,8 @@ game.state.add('waveMenu', waveMenu);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
 game.state.add('loadoutMenu', loadoutMenu);
-
 game.state.start('menuLoad');
+   
 }
 // game.state.start("gameLoad");
 /*

@@ -11,7 +11,7 @@ mainMenu.prototype = {
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
-        
+        $('#loader').css("display","none");
     },
     
     create: function(){

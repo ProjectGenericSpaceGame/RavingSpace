@@ -27,11 +27,13 @@
     <script src="JS/menu/shopMenu.js"></script>
     <script src="JS/menu/waveMenu.js"></script>
     <script src="JS/menu/soundMenu.js"></script>
-    ​
+    
     <script src="JS/libs/textInputCreator.js"></script>
     <!-- <script src="JS/timer.js"></script> -->
 </head>
 <body>
+<!-- Lautausruutu ---->    
+<div id="loader"></div>
 <header>
     <div class="cont">
         <div class="login">
@@ -63,32 +65,34 @@
             <p class="log">Cancel</p>
         </div>
     </div>
+    <!-- rekisteröitymisruutu --->
     <div class="signupDialog">
         <h class="dialogHeader">Register</h>
         <div class="line"></div>
 
-        <p class="userLabel">Username</p>
+        <p class="userLabel">Username *</p>
         <input class="username username-register input" type="text"/>
 
-        <p class="passLabel">Password</p>
+        <p class="passLabel">Password *</p>
         <input class="password password-register input" type="password" value="" autocomplete="off" />
 
-        <p class="passLabelRetype">Retype Password</p>
+        <p class="passLabelRetype">Retype Password *</p>
         <input class="password-retype input" type="password" value="" autocomplete="off"/>
 
         <p class="emailLabel">Email</p>
         <input class="email input" type="text"/>
 
-        <img class="info" src="assets/menuelements/info.png" alt="info" height="30" width="auto"/>
         <div class="register">
             <p class="log">Login</p>
         </div>
+        <img class="info" src="assets/menuelements/info.png" alt="info" height="30" width="auto"/>
         <div class="cancelLogin">
             <p class="log">Cancel</p>
         </div>
+        
     </div>
     <div class="infoDialog">
-        <p class="infoText">You can only reset your password if you add your email.</p>
+        <p class="infoText">You can only reset your password if you add your email. </br> Fields marked with * are mandatory</p>
     </div>
 </main>
 <footer></footer>

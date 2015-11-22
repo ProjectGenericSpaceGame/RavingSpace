@@ -1,26 +1,37 @@
+
 html{
     font-family: Ubuntu;
     margin:0;
+    padding: 0;
+    height: 100%;
     background-color: dimgrey;
 }
 
 body{
     margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
-*{
-    -webkit-margin-after: 0;
-    -webkit-margin-before: 0;
-    margin:0;
+#loader {
+	position: fixed;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+	background-color: dimgrey;
+	z-index: 9999;
+	background-image: url("../assets/loader/loading.gif");
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 header{
     /*width: 1280px; */
-    width: 100wv;
+    width: 100%;
     height: 75px;
     margin: 0 auto;
     background-color: #f2f2f2;
-    border-bottom: 1px solid #606060;
+   /* border-bottom: 1px solid #606060; */
 }
 main{
     width: 1280px;
@@ -43,23 +54,12 @@ canvas{
 	font-family:"cyber";
 }
 
-#loader {
-	position: fixed;
-    margin: 0 auto;
-	right: 0;
-	top: 100;
-	background: #FFF;
-	z-index: 9999;
-	background-image: url("../assets/loader/loading.gif");
-	background-position: center;
-	background-repeat: no-repeat;
-}
 .cont{
     width: 1280px;
     height: 75px;
-    margin: 0 auto;
+    margin: 0px auto;
     background-color: #f2f2f2;
-    border-bottom: 1px solid #606060;
+   /* border-bottom: 1px solid #606060; */
 }
 
 .login{
@@ -97,15 +97,14 @@ canvas{
 }
 
 .cancelLogin{
-    float: right;
-    margin: 0 130px 0 0;
+    float: left;
+    margin: 0 0 0 30px;
     width: 80px;
     height: 40px;
     border: 1px solid;
     border-color: darkgray;
     border-radius: 4px;
     background-color: #cccccc;
-    float: right;
 }
 
 .log{
@@ -176,19 +175,19 @@ canvas{
 }
 
 .password{
-    margin: 10px 50px 0 30px;
+    margin: 10px 50px 0 0;
     float: right; 
 }
 
 .password-retype{
-    margin: 30px 50px 0 20px;
+    margin: 30px 50px 0 0;
     float: right;
 }
 
 .passLabelRetype{
     display: inline-block;
     float: left;
-    margin: 37px 0 0 20px;
+    margin: 35px 0 0 20px;
 }
 
 
@@ -205,11 +204,11 @@ canvas{
 
 .emailLabel{
     float: left;
-    margin: 37px 0 0 60px;
+    margin: 35px 0 0 60px;
 }
 
 .info{
-    margin: 29px 10px 0 0px;
+    margin: 5px 25px 0px 0px;
     float: right;
 }
 
@@ -225,7 +224,7 @@ canvas{
     border-radius: 4px;
     background-color: #f0f0f0;
     float: right;
-    margin: 260px 80px 0 0;
+    margin: 310px 80px 0 0;
     padding: 10px;
 }
 

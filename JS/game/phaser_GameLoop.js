@@ -42,7 +42,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.guns = gun;//
@@ -72,6 +72,8 @@ mainGame.prototype = {
         reloading = reloadingAr;
         this.minesBul = minesBul;
         this.minesExpl = minesExpl;
+		this.dropBoom = dropBoom;
+		this.dropApi = dropApi;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -416,9 +418,9 @@ mainGame.prototype = {
             var enm;
             var eachBulletAliveFn = function(b) {
                 boundsBullet = b.world;
-                self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);
+                self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);//droppi kaatuu tähän, bullet ja drop molemmat arcade
                 if (self.bulletArray.length != 0 && self.timers[4] == 1) {
-                    hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0));
+                    hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0),self.dropBoom,self.dropApi);
                     if(b.name == "mine"){
                         var boom = self.minesExpl.getFirstDead();
                         boom.reset(b.x,b.y);
@@ -441,6 +443,7 @@ mainGame.prototype = {
                     self.minesBul.forEachAlive(eachBulletAliveFn);
                 } else {
                     self.enemyBullets.forEachAlive(eachBulletAliveFn);
+					self.dropApi.forEachAlive(eachBulletAliveFn);
                 }
             };
             destroyerAI = function(enemy){
@@ -711,6 +714,12 @@ mainGame.prototype = {
 
             //Pomon tekoäly
             this.enemy3.forEachAlive(commanderAI,this);
+			
+			//tiputettujen räjähteiden osumat
+            if(this.dropBoom.countLiving() > 0) {
+                this.game.physics.arcade.overlap(this.dropBoom, this.laserBul, this.dropBoomStarter, null, this);
+                this.game.physics.arcade.overlap(this.dropBoom, this.bullets, this.dropBoomStarter, null, this);
+            }
             this.frameSkip = 0;
         }
         self.timers[4]++;
@@ -808,8 +817,21 @@ mainGame.prototype = {
             if (shapeCollided.body.parent.sprite.key == "boom") {
                 shapeCaller.body.mass = 9999;
                 shapeCaller.body.damping = 0.999;
-                hitDetector(shapeCollided.body.parent.sprite, shapeCaller.body.parent.sprite, this.enemyAmount, this.lap, shapeCaller.body.parent.sprite.getChildAt(0));
+                hitDetector(shapeCollided.body.parent.sprite, shapeCaller.body.parent.sprite, this.enemyAmount, this.lap, shapeCaller.body.parent.sprite.getChildAt(0),this.dropBoom,this.dropApi);
             }
+        }
+    },
+    dropBoomStarter: function(drop,bullet){
+        hitDetector(bullet,drop,1,this.lap,null);
+        if(drop.health == 0.001){
+            var boom = self.minesExpl.getFirstDead();
+            boom.reset(b.x,b.y);
+            var tween = self.game.add.tween(boom.scale);
+            tween.to({x:1.5,y:1.5},500,"Linear",true);
+            tween.onComplete.add(function(){
+                boom.kill();
+                boom.scale.setTo(0.1,0.1);
+            });
         }
     }
 } // prototype

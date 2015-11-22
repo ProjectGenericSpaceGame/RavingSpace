@@ -1,19 +1,24 @@
 <?php
 	//alustetaan tiedot
-	$servername = "mysql.labranet.jamk.fi";
-	$user = "H3492";
-	$pass = "";//vaihdetaan myöhemmin hakemaan toisesta tiedostosta
 	$returnObject = "";
 	if(strlen($_POST['playerName']) > 0){
 		$playerName = $_POST['playerName'];
-		$playerName = $_POST['playerName'];
+		$servername = "mysql.labranet.jamk.fi";
+		$user = "H3492";
+		$pass = "";//vaihdetaan myï¿½hemmin hakemaan toisesta tiedostosta
+		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
+		if ($DBcon->connect_error) {
+			die("Connection failed: " . $DBcon->connect_error);
+		}
 	} else {
 		$playerName = "testi1";
-	}
-	//avataan yhteys
-	$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-	if ($DBcon->connect_error) {
-		die("Connection failed: " . $DBcon->connect_error);
+		$servername = "localhost";
+		$user = "root";
+		$pass = "";//vaihdetaan myï¿½hemmin hakemaan toisesta tiedostosta
+		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
+		if ($DBcon->connect_error) {
+			die("Connection failed: " . $DBcon->connect_error);
+		}
 	}
 	//query
 	$select =

@@ -43,9 +43,10 @@ $(document).ready(function(){
             });
             putToDB.done(function(returnValue){
                 if(returnValue == true){
-                    makeGame();
                     $('.loginDialog').css("display","none");
                     $('.signupDialog').css("display","none");
+                    console.log("onnistui");
+                    makeGame();
                 } else if (returnValue == "credsFirst") {
                     console.log('salis on väärin tai käyttäjä nimi on väärin');
 					makeGame();
@@ -93,6 +94,7 @@ $(document).ready(function(){
         shaObj.update(pss);
         var hash = shaObj.getHash("HEX");
         console.log(hash);
+        console.log("dis");
         return hash;
     }
     
@@ -381,7 +383,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
         }
     }
 }
-function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
+function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
     var dmg;
     if(bullet.name == "laser"){
         dmg = 0.1;
@@ -398,7 +400,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
     if((enemy.health-dmg) <= 0 && enemy.health != 0.001){
         enemy.health = 0.001;
 
-        if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
+        if(enemyAmount != null && enemy.name != "drop") {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
         } else {
             enemy.dying = true;
@@ -443,6 +445,15 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
         tween2.onComplete.add(function(){
             boom2.destroy();
             enemy.kill();
+			//var random = rnd.integerInRange(1,13);
+			var random = 5;
+			if((random == 10 || random == 5) && enemy.key != "ship"){
+				if(random == 5){
+					dropBoom.getFirstDead().reset(enemy.x,enemy.y);
+				} else if(random == 10){
+					dropAbi.getFirstDead().reset(enemy.x,enemy.y);
+				}
+			}
             if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
                 if(enemy.ray !== null){
                     //enemy.ray.clear();
@@ -456,7 +467,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar){
             if(enemy.key == 'ship'){
                 HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
             }
-			else{
+			else if(enemy.name != "drop"){
                 HPbar.renderable = true;
 				HPbar.alpha = 1;
 				HPbar.lastHit = Date.now();

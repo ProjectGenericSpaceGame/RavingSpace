@@ -74,6 +74,9 @@ gameLoad.prototype = {
 		this.game.load.image('ability1', 'assets/placeholders/ability1.png');
 		this.game.load.image('ability2', 'assets/placeholders/ability2.png');
 		this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+		//dropit
+		this.game.load.image('dropBoom', 'assets/placeholders/weapon0.png');
+		this.game.load.image('dropApi', 'assets/placeholders/ability3.png');
 
 	},
     init:function(loadout){
@@ -232,6 +235,24 @@ gameLoad.prototype = {
 		this.enemyBullets.setAll('anchor.y', 0.5);
 		this.enemyBullets.setAll('outOfBoundsKill', true);
 		this.enemyBullets.setAll('checkWorldBounds', true);
+		
+		//vihujen dropit
+		var dropBoom = this.game.add.group();
+		dropBoom.createMultiple(20,'dropBoom',0);
+		dropBoom.enableBody = true;
+		dropBoom.physicsBodyType = Phaser.Physics.ARCADE;
+		dropBoom.setAll("anchor.x",0.5);
+		dropBoom.setAll("anchor.y",0.5);
+		dropBoom.setAll("name","drop");
+
+		var dropApi= this.game.add.group();
+		dropApi.createMultiple(20,'dropApi',0);
+		dropApi.enableBody = true;
+		dropApi.physicsBodyType = Phaser.Physics.ARCADE;
+		dropApi.setAll("anchor.x",0.5);
+		dropApi.setAll("anchor.y",0.5);
+		dropApi.setAll("name","drop");
+		
 		
 		//käsitellään hyökkäystieto
 		this.attackInfo = this.attackInfo.split("'");
@@ -480,7 +501,9 @@ gameLoad.prototype = {
             this.clips,
             this.reloading,
             this.minesBul,
-            this.minesExpl
+            this.minesExpl,
+			dropBoom,
+			dropApi
 		);
 	},
 	HPbar: function(){

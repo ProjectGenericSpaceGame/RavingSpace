@@ -7,17 +7,33 @@ $loginFollowID;
 $tryLock;
 $bcrypt = new Bcrypt(15);
 $_POST['userName'] = 'testi1';
-if(strlen($_POST['userName']) > 0) {
+
+if(strlen($_POST['playerName']) > 0){
     $userName = $_POST['userName'];
     $givenHash = $_POST['givenHash'];
     $newPassWord = $_POST['newPass'];
-    $newRandom = substr($givenHash, -10);
-    $toCompare = substr($givenHash, 0, -10);
-
     $servername = "mysql.labranet.jamk.fi";
     $user = "H3492";
     $pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";
-    $DBcon = new mysqli($servername, $user, $pass, "H3492_3");
+    $DBcon = new mysqli($servername,$user,$pass, "H3492_3");
+    if ($DBcon->connect_error) {
+        die("Connection failed: " . $DBcon->connect_error);
+    }
+} else {
+    $servername = "localhost";
+    $userName = "testi1";
+    $givenHash = "5756c06c3eebc950605b15cee74e882e7c0218f6!!!!!!!!!!";
+    $newPassWord = "634123f1a7d73d7c4b9d21971ce9acf9db706ae5";
+    $user = "root";
+    $pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
+    $DBcon = new mysqli($servername,$user,$pass, "H3492_3");
+    if ($DBcon->connect_error) {
+        die("Connection failed: " . $DBcon->connect_error);
+    }
+}
+
+    $newRandom = substr($givenHash, -10);
+    $toCompare = substr($givenHash, 0, -10);
 
     $select = "select passHash, playerData.loginFollowID, loginAttempts.failedTries, loginAttempts.fail1 from playerData
     inner join loginAttempts on loginAttempts.loginFollowID = playerData.loginFollowID
@@ -30,17 +46,6 @@ if(strlen($_POST['userName']) > 0) {
     $loginFollowID = $row['loginFollowID'];
     $tryLock = $row['fail1'];
     //echo "dis";
-} else {//demo
-    $userName = "testi1";
-    $givenHash = "5756c06c3eebc950605b15cee74e882e7c0218f6!!!!!!!!!!";
-    $newPassWord = "634123f1a7d73d7c4b9d21971ce9acf9db706ae5";
-    $newRandom = substr($givenHash,-10);
-    $toCompare = substr($givenHash,0,-10);
-    $DBhash = substr("$2a$15\$a7Qv.kC81iRsFyjCXQ5yluaCgw5cFyJfaf9FaGuqhy/xsZuBWWeR6##########",0,-10);
-    $tryLock = 1227264499;
-    $failedAttempts = 0;
-    $loginFollowID = 1;
-}
 //echo "daa?";
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
     $return = true;

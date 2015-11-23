@@ -2,7 +2,7 @@
 	//alustetaan tiedot
 	$returnObject = "";
 	//avataan yhteys
-	if($_POST['location'] != "http://localhost:509/RavingSpace/") {
+if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/") {
 		$servername = "mysql.labranet.jamk.fi";
 		$user = "H3492";
 		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta

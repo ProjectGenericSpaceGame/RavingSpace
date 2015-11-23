@@ -285,6 +285,7 @@ mainGame.prototype = {
 		//text2.text = String("");
 		//text2.text = String(this.fixed);
 		text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
+        this.HUD.points.text = points;
         this.clipText.text  = this.clips[this.HUD.webTray.trayPosition-1];
         //liikutetaan hiiren viereen
 		this.clipText.x = parseFloat(this.game.input.activePointer.worldX+40);
@@ -779,7 +780,7 @@ mainGame.prototype = {
     }, // trybuff
     changeHUDSlot: function(){
         if(!this.game.input.activePointer.isDown) {
-            if (this.game.input.mouse.wheelDelta == 1 && this.HUD.webTray.trayPosition < 3 && this.timers[3] == 0) {
+            if (this.game.input.mouse.wheelDelta == 1 && this.HUD.webTray.trayPosition < this.guns.length && this.timers[3] == 0) {
                 this.HUD.webTray.getChildAt(0).x += 54;
                 this.HUD.webTray.trayPosition++;
                 this.timers[4]++;
@@ -794,7 +795,7 @@ mainGame.prototype = {
                     this.timers[4] = 0
                 }, this);
             }
-        } else {
+        } else if(this.game.input.activePointer.rightButton.isDown){
             if (this.game.input.mouse.wheelDelta == 1 && this.HUD.abTray.trayPosition < 3 && this.timers[3] == 0) {
                 this.HUD.abTray.getChildAt(0).x += 54;
                 this.HUD.abTray.trayPosition++;

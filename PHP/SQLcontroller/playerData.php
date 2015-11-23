@@ -1,7 +1,7 @@
 <?php
 	//alustetaan tiedot
 	$returnObject = "";
-	if($_POST['location'] != "http://localhost:509/RavingSpace/"){
+if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
 		$playerName = $_POST['playerName'];
 		$servername = "mysql.labranet.jamk.fi";
 		$user = "H3492";

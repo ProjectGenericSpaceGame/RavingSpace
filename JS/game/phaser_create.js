@@ -283,6 +283,7 @@ gameLoad.prototype = {
 				enemy.targetOff = rnd.integerInRange(0,60);
                 enemy.name = ".";
 				enemy.fireRate  = enemyFireRates[0];
+				enemy.worth = 100;
 				var healthbar = this.HPbar();
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
@@ -317,6 +318,7 @@ gameLoad.prototype = {
 				enemy.health = 0.5;
 				enemy.maxHealth = 0.5;
 				enemy.fireRate  = enemyFireRates[1];
+				enemy.worth = 125;
 				var healthbar = this.HPbar();
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
@@ -345,6 +347,7 @@ gameLoad.prototype = {
                 enemy.barrel = 1;
                 enemy.altTarget = rnd.integerInRange(0,2);
 				enemy.fireRate  = enemyFireRates[2];
+				enemy.worth = 350;
 				var healthbar = this.HPbar();
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
@@ -463,15 +466,18 @@ gameLoad.prototype = {
 			tray.kill();
 			tray.scale.setTo(0.7,0.7);
 		});
-		
+		var pointsText = this.game.add.text(20,20,"Points: ",{fill:"white",font:"20px cyber"});
+        pointsText.fixedToCamera = true;
+
         var HUD = {
             banner:banner,
             webTray:wepTray,
             abTray:abTray,
 			buffTrays1:buffTrays1,
-			buffTrays2:buffTrays2
+			buffTrays2:buffTrays2,
+            points:pointsText
         };
-
+		points = 0;
 		game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,

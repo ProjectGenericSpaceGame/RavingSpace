@@ -8,7 +8,7 @@ $tryLock;
 $bcrypt = new Bcrypt(15);
 //$_POST['userName'] = 'testi1';
 
-if($_POST['location'] != "http://localhost:509/RavingSpace/"){
+if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
     $userName = $_POST['userName'];
     $givenHash = $_POST['givenHash'];
     $newPassWord = $_POST['newPass'];

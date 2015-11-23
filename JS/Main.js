@@ -3,7 +3,7 @@ var game;
 const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
 var rnd; 
-
+var points;
 
 $(document).ready(function(){ 
     // Poistetaan latausruutu
@@ -44,7 +44,7 @@ $(document).ready(function(){
         
                 var putToDB = $.ajax({
                     method:"POST",
-                    //async:false,
+                    //sync:false,
                     url:"PHP/CryptoHandler/loginHandler.php",
                     data:{givenHash:sh,newPass:ssh,userName:user,location:location}
                 });
@@ -420,7 +420,9 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
 
         if(enemyAmount != null) {//enemyAmount on null jos kutsuja oli playerHit funktio (eli pelaajaan osuttiin)
             enemyAmount[lap - 1]--;
+            points += enemy.worth;
         } else if(enemyAmount == null){
+            points = points*0.9;
             enemy.dying = true;
             HPbar.getChildAt(1).width = 0;
             game.time.events.add(10000,function(){

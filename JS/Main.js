@@ -1,11 +1,12 @@
 
+
 var game;
 const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
 var rnd; 
 var points;
 
-$(document).ready(function(){ 
+$(document).ready(function(){
     // Poistetaan latausruutu
      $('#loader').css("display","none");
     // kirjautumisruutu / rekisteröitymisruutu
@@ -317,58 +318,49 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
 			bullet.rotation = ship.rotation;
 			bullet.name = "laser";
             game.physics.arcade.moveToPointer(bullet, 2000);
-			/*game.time.events.add(250,function(){
-				gun.kill();
-				gun.renderable = false;
-			},this);*/
+            
         } else if(gun.name == 'mines'){
             bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet.name = "mine";
-        }
-        else {
+            
+        } else if (gun.name == 'shotgun'){
+            var x = game.input.mousePointer.x;
+            var y = game.input.mousePointer.y;    
+                bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+                bullet.scale.setTo(1,1);
+                bullet.name = "shotgun";
+                game.physics.arcade.moveToXY(bullet, x, y, 330);
+            
+            var bullet2 = bullets.getFirstDead();
+                bullet2.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+                bullet2.scale.setTo(1,1);
+                bullet2.name = "shotgun";
+                game.physics.arcade.moveToXY(bullet2, x-100, y-100, 330);
+              
+            var bullet3 = bullets.getFirstDead();
+               bullet3.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+                bullet3.scale.setTo(1,1);
+                bullet3.name = "shotgun";
+                game.physics.arcade.moveToXY(bullet3, x-200, y-200, 330);
+             
+            var bullet4 = bullets.getFirstDead();
+              bullet4.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+                bullet4.scale.setTo(1,1);
+                bullet4.name = "shotgun";
+                game.physics.arcade.moveToXY(bullet4, x+100, y+100, 330);
+                
+            var bullet5 = bullets.getFirstDead();
+                bullet5.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+                bullet5.scale.setTo(1,1);
+                bullet5.name = "shotgun";
+                game.physics.arcade.moveToXY(bullet5, x+200, y+200, 330);
+                
+        } else {
 			bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
 			bullet.scale.setTo(1,1);
             bullet.name = "basic";
             game.physics.arcade.moveToPointer(bullet, 330);
         }
-
-
-
-
-
-        /*var pointX;
-        var pointY;
-        if(deg < 1.6+pi/2){//right bottom
-            pointX = ship.x+50;
-            if(deg != 1.6) {
-                pointY = ship.y + (Math.tan(deg - pi / 2) * 50)+0.1;//+0.1 on virheen korjausta
-            } else {
-                pointY = ship.y+2.5;//tämä korjaa phaserin bugisuutta koska laskee luodin sijainnin jostain syystä siihen mihin sen pitäisi mennä
-                bullet.x = ship.x+25; //korjataan luodin sijaintia (JS matematiikka virhe tekee kepposiaan)
-            }
-        } else if(deg < 1.6+pi){//left bottom
-            pointX = ship.x-50;
-            pointY = ship.y+50/(Math.tan(deg-pi));
-        } else if(deg < 1.6+3*pi/2){//upper left
-            pointX = ship.x-50;
-            if(deg != 6.3) {
-                pointY = ship.y - (Math.tan(deg - 3 * pi / 2) * 50);
-            } else {
-                pointY = ship.y - (Math.tan(1.57) * 50);//Tästä tulisi normaalisti taniin 1.5755 joka antaa negatiivisia arvoja (1.5755 on asteina 90.1)
-            }
-
-        } else {//upper right
-            pointX = ship.x+50;
-            if(deg != 7.8) {
-                pointY = ship.y - 50 / (Math.tan(deg - pi * 2));
-            } else {
-                pointY = ship.y-2.5;//tämä korjaa phaserin bugisuutta koska laskee luodin sijainnin jostain syystä siihen mihin sen pitäisi mennä
-                bullet.x = ship.x+25; //korjataan luodin sijaintia (JS matematiikka virhe tekee kepposiaan)
-            }
-        }
-        game.physics.arcade.moveToXY(bullet, pointX,pointY,330);*/
-        //ship.body.x = pointX;
-        //ship.body.y = pointY;
         return true;
     } else {
         return false;
@@ -409,6 +401,8 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         bullet.kill();
     } else if(bullet.key == "boom") {
         dmg = 2.5;
+      } else if(bullet.name == "shotgun") {
+        dmg = 0.5;    
     } else {
         dmg  = 0.25;
         bullet.kill();
@@ -521,7 +515,8 @@ function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
         asteroid.kill();
         asteroidAmmount -= 1;
         if(asteroidAmmount == null){
-            console.log("Game Over");
+            alert("Game Over");
+            this.game.stop();
         }
     } else {
         asteroid.health -= 0.25;

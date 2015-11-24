@@ -4,6 +4,9 @@ const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
 var rnd; 
 var points;
+var enemiesKilled;
+var deaths;
+var totalTime;
 
 $(document).ready(function(){ 
     // Poistetaan latausruutu
@@ -193,7 +196,9 @@ game.state.add('shopMenu', shopMenu);
 game.state.add('waveMenu', waveMenu);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
+game.state.add('endGame', endGame);
 game.state.add('loadoutMenu', loadoutMenu);
+
 game.state.start('menuLoad');
    
 }
@@ -390,6 +395,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             user.nextFire = game.time.now + fireRate;
             var bullet = enemyBullets.getFirstExists(false);
             bullet.reset(gun.world.x, gun.world.y);
+            bullet.alpha = 1;
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     } else if(user.key == 'destroyer'){

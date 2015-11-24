@@ -77,6 +77,8 @@ gameLoad.prototype = {
 		//dropit
 		this.game.load.image('dropBoom', 'assets/placeholders/weapon0.png');
 		this.game.load.image('dropApi', 'assets/placeholders/ability3.png');
+        //tausta lopetusnäytölle
+        this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
 
 	},
     init:function(loadout){
@@ -86,7 +88,7 @@ gameLoad.prototype = {
         waiter = this.game.time.create();
 		this.clipSizes = [35, 30, 5, 1];
 
-		this.attackInfo = "001006'302112'352713";
+		this.attackInfo = "000001'000002'010000";
         //this.game.scale.scaleMode = 0;
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -478,6 +480,11 @@ gameLoad.prototype = {
             points:pointsText
         };
 		points = 0;
+		enemiesKilled = 0;
+        deaths = 0;
+        var date = new Date();
+        totalTime = date.getTime();
+        date = null;
 		game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,

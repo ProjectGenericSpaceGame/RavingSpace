@@ -371,7 +371,7 @@ mainGame.prototype = {
             var randNumbers = randNumber(this.lap);
             this.game.time.events.add((randNumbers[1] * 1000), function () {
                 var next = spawnEnemy(this.spawnPool, this.enemyAmount, this.enemies, this.lap, this.enemiesCollisonGroup);
-                if (next === "next") {
+                if (next === "next" && this.lap != 3) {
                     this.lap++;
                     this.enemy1 = this.enemies.getChildAt(this.lap - 1).getChildAt(0);//tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
                     this.enemy2 = this.enemies.getChildAt(this.lap - 1).getChildAt(1);
@@ -380,6 +380,8 @@ mainGame.prototype = {
                     this.HUD.banner.frame = this.HUD.banner.frame-1;
                     this.HUD.banner.revive();
                     this.game.add.tween(this.HUD.banner).to({alpha:1},400,"Linear",true,1000);
+                } else if(this.lap >= 3 && this.asteroids.countLiving() > 0 && next === "next"){
+                    this.game.state.start('endGame',false,false,this.HUD,this.ship);
                 }
             }, this);
             if(this.timers[2]-1 <= 0){

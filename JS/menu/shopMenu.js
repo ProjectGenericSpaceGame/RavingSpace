@@ -56,20 +56,11 @@ shopMenu.prototype = {
         for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
             this.availableAbilities[i-10] = this.playerData.shipData[i];
         }
-        this.WSA = []; // weapons still available
-        this.ASA = []; // abilities still available
         
-        // näihin taulukoihin tallennetaan tieto siitä onko ase valittu. 0 = ei valittu, 1 = on valittu 
-        for(var g = 0;g < SET_GUNS;g++) {
-            this.WSA.push(0);
-        }
-        for(var h = 0;h < SET_ABILITIES;h++) {
-            this.ASA.push(0);
-        }
         console.log("available wep: "+this.availableWeapons);
         console.log("available ab: "+this.availableAbilities);
-        console.log("WSA: "+this.WSA);
-        console.log("ASA: "+this.ASA);
+        
+        
 
         // Aseet
         this.weaponsLabel = this.game.add.text(220, 260, 'Weapons', styleA);
@@ -248,7 +239,24 @@ shopMenu.prototype = {
         this.buttonGroup.add(this.abilityTray);
         this.buttonGroup.add(this.weaponTray);
         this.buttonGroup.add(this.backButton);
-        this.buttonGroup.add(this.purchaseButton);        
+        this.buttonGroup.add(this.purchaseButton); 
+        
+        for (i = 0; i <= 3; i++){
+            // tarkistetaan onko pelaaja ostanut aseen
+            if (this.availableWeapons[i] == 1){
+                console.log("Aseita ostettu: "+i);
+                this.weaponsGroup.getChildAt(i).getChildAt(3).alpha = 0.5;
+                
+            } 
+        }
+        
+        for (j = 0; j <= 3; j++){
+            // tarkistetaan onko pelaaja ostanut abilityn
+            if (this.availableAbilities[j] == 1){
+                console.log("Kykyja ostettu: "+j);
+                this.abilitiesGroup.getChildAt(j).getChildAt(3).alpha = 0.5;
+            }
+        }
 
         },
         // kun ase valittu, selvitetään sen index arvo ja sijoitetaan se windex muuttujaan
@@ -268,22 +276,51 @@ shopMenu.prototype = {
             console.log(this.aindex);
         },
         
+        // osto-painikkeen toiminto
         purchase: function() {
              var i = this.windex;
              var j = this.aindex;
-             console.log("Weapon "+i+" bought.");
-             console.log("Ability "+j+" bought.");
-             if (i = 0){
+             if (this.weaponsGroup.getChildAt(i).getChildAt(3).alpha == 0.5) {
+                this.windex = null;
+                console.log(this.windex);
+             }
+               else if (i == 0){
                  console.log("You already own that weapon.");
-             } else if (i = 1) {
-                 this.playerData.playerData.money - 200;
+             } else if (i == 1) {
+                 console.log("Weapon "+i+" bought.");
+                 this.playerData.playerData.money -= 200;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 this.playerData.shipData[i] = 1;              
+             } else if (i == 2) {
+                 console.log("Weapon "+i+" bought.");
+                 this.playerData.playerData.money -= 600;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
                  this.playerData.shipData[i] = 1;
-             } else if (i = 2) {
-                 this.playerData.playerData.money - 600;
+             } else if (i == 3){
+                 console.log("Weapon "+i+" bought.");
+                 this.playerData.playerData.money -= 1000;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
                  this.playerData.shipData[i] = 1;
-             } else if (i = 3){
-                 this.playerData.playerData.money - 1000;
-                 this.playerData.shipData[i] = 1;
+             } else if (j == 0) {
+                this.playerData.playerData.money -= 250;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 console.log("Ability "+j+" bought.");
+                 this.playerData.shipData[i+10] = 1;
+             } else if (j == 1) {
+                this.playerData.playerData.money -= 450;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 console.log("Ability "+j+" bought.");
+                 this.playerData.shipData[i+10] = 1;
+             } else if (j == 2) {
+                this.playerData.playerData.money -= 700;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 console.log("Ability "+j+" bought.");
+                 this.playerData.shipData[i+10] = 1;
+             } else if (j == 3) {
+                this.playerData.playerData.money -= 900;
+                 this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 console.log("Ability "+j+" bought.");
+                 this.playerData.shipData[i+10] = 1;
              }
         },
 

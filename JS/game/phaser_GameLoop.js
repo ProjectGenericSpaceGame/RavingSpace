@@ -80,7 +80,7 @@ mainGame.prototype = {
         this.direct = "";
         this.flipped = false;
         this.IntMouseTrack = -1;
-        //this.moving = "";
+        this.kick = 60;
 
         this.clipSizes = [35, 30, 5, 1];
         //reloading = false;
@@ -191,7 +191,6 @@ mainGame.prototype = {
                 deg = (Math.atan((Xcoord / Ycoord) * (0 - 1))) + ((3 * pi) / 2);
                 break;
             default:
-            //console.log("lol");
         }
         //console.log(this.ship.body.rotation);
         //rotation arvo yli ~7.8 tai alle ~-7.8
@@ -222,7 +221,6 @@ mainGame.prototype = {
                 this.flipped = false;
             }
         }
-        //this.ship.body.rotation = Math.round((corDeg - 0.1)*10)/10;
         this.ship.body.rotation = ((2 * pi - deg) + (pi / 2));
         /*
         //tutkitaan hiiren liikkeen suuntaa
@@ -359,7 +357,14 @@ mainGame.prototype = {
                 if (fire(this.minesBul, this.guns.getChildAt(this.HUD.webTray.trayPosition-1), this.guns.getChildAt(this.HUD.webTray.trayPosition-1).fireRate, corRot, this.ship)) {
                     this.clips[this.HUD.webTray.trayPosition-1]--;
                 }
+            // ari lisäsi 24.11.2015    
+            } else if(this.guns.getChildAt(this.HUD.webTray.trayPosition-1).name == "shotgun"){
+                if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition-1), this.guns.getChildAt(this.HUD.webTray.trayPosition-1).fireRate, corRot, this.ship)) {
+                    this.clips[this.HUD.webTray.trayPosition-1]--;
+                }   
             }
+                
+            
         } else if (!reloading[this.HUD.webTray.trayPosition-1] && this.clips[this.HUD.webTray.trayPosition-1] <= 0) {
             reload(this.reloadSprite,this.clips,this.HUD.webTray.trayPosition-1,this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition-1));
         }
@@ -373,7 +378,8 @@ mainGame.prototype = {
                 var next = spawnEnemy(this.spawnPool, this.enemyAmount, this.enemies, this.lap, this.enemiesCollisonGroup);
                 if (next === "next" && this.lap != 3) {
                     this.lap++;
-                    this.enemy1 = this.enemies.getChildAt(this.lap - 1).getChildAt(0);//tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
+                    this.enemy1 = this.enemies.getChildAt(this.lap - 1).getChildAt(0);
+                    //tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
                     this.enemy2 = this.enemies.getChildAt(this.lap - 1).getChildAt(1);
                     this.enemy3 = this.enemies.getChildAt(this.lap - 1).getChildAt(2);
                     this.timers[2] = 460;
@@ -399,18 +405,6 @@ mainGame.prototype = {
         var destroyerAI;
         var boundsBullet;
         if (this.frameSkip == 0) {
-           /*
-            // --------------testi---------------------
-             this.enemyBullets.forEachAlive(function(b){
-                 this.asteroids.forEachAlive(function (a) {
-               boundsBullet = b.world;
-                if( this.game.physics.p2.hitTest(boundsBullet, [a]).length > 0 && a.alive){
-                    asteroidHitDetector(b, a, this.asteroidAmmount);
-                } 
-                 },this);    
-            },this);
-            //------------- testi------------------
-            */
             eachEnemyAliveFn = function(){};
             commanderAI = function(){};
             hunterAI = function(){};
@@ -449,6 +443,7 @@ mainGame.prototype = {
 					self.dropApi.forEachAlive(eachBulletAliveFn);
                 }
             };
+            // asteroidien tuhoajien AI
             destroyerAI = function(enemy){
                 var num;
                 if(this.timers[5] >= 5) {
@@ -475,12 +470,11 @@ mainGame.prototype = {
                         enemy.name = 2.1;
                     }
                 }
-                //var dir;
-
                 // seuraavalla kierroksella tarkistetaan vihollisen sijainti ja nimi
                 if (enemy.body.y > 100 && enemy.body.x < this.game.world.width - 100
                     && enemy.body.y > 100 && enemy.body.y < this.game.world.height - 100
-                    && enemy.name == 0.1 || enemy.name == 1.1 || enemy.name == 2.1) {//tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
+                    && enemy.name == 0.1 || enemy.name == 1.1 || enemy.name == 2.1) {
+                    //tämä ajetaan kun vihollinen päässyt tarpeeksi kauas maailman rajasta
                     enemy.body.mass = rnd.realInRange(0.8, 0.92);
                     enemy.body.damping = rnd.realInRange(0.8, 0.92);
                     // suunnataan vihollisen alus kohti kohde aseteroidia
@@ -511,27 +505,21 @@ mainGame.prototype = {
                             enemy.body.thrust(100);
                         }
                         if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 1,enemy.targetOff) && enemy.ray == null && enemy.wait == 0) {
-                            //var g = this.game.add.graphics(enemy.body.x, enemy.body.y);
                             enemy.getChildAt(2).emitParticle();
                             var gun = null;
                             enemyFire(enemy, gun, this.enemyBullets, enemy.fireRate, this.asteroids.getChildAt(enemy.name));
-                            //g.lineStyle(8, 0x5c040c, 1);
-                            //g.lineTo(target.body.x - enemy.body.x, target.body.y - enemy.body.y);
                             enemy.ray = "g";
                         } else if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 1,enemy.targetOff) && enemy.wait < 2) {
                             enemy.wait += 1;
                         } else if (enemy.wait >= 2 && enemy.ray !== null) {
-                            //enemy.ray.clear();
                             enemy.ray = null;
                             enemy.wait = 0;
                         } else if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 2,enemy.targetOff) && enemy.ray !== null) {
-                            //enemy.ray.clear();
                             enemy.ray = null;
                             enemy.wait = 0;
                         }
                     } else {
                         if (enemy.ray !== null) {
-                            //enemy.ray.clear();
                             enemy.ray = null;
                             enemy.wait = 0;
                         }
@@ -549,8 +537,6 @@ mainGame.prototype = {
                         target = null;
                     }
                 }
-
-
             };
             hunterAI = function(enemy) {
 

@@ -1,12 +1,13 @@
 // Tämä tiedosto lataa valikon elementit.
 var menuLoad = function(game){
+     
 };
 
 menuLoad.prototype = {
         
     preload: function(){
         
-
+        
             // ladataan valikon elementit
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
             //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');

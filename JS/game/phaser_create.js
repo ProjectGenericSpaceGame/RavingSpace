@@ -87,20 +87,18 @@ gameLoad.prototype = {
 	create: function(){
         waiter = this.game.time.create();
 		this.clipSizes = [35, 30, 5, 1];
-
-		this.attackInfo = "000001'000002'010000";
-        //this.game.scale.scaleMode = 0;
+		this.attackInfo = "051006'302112'352713";
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
 		this.bg = this.game.add.sprite(0, 0, 'background');
 		this.bg.scale.setTo(1,1.1);
+        // asteroidit
 		this.asteroids = this.game.add.group();
 		this.asteroids.create(300, 156, 'asteroid1');
 		this.asteroids.create(400, 800, 'asteroid2');
 		this.asteroids.create(1360, 650, 'asteroid3');
-		
-		//asteroids.anchor.setTo(0.5, 0.5); 
+		 
 		this.asteroids.forEach(function(item){
 		item.scale.setTo(0.5,0.5);    
 		});
@@ -113,32 +111,31 @@ gameLoad.prototype = {
         
         this.asteroid3 = this.asteroids.getChildAt(2);
         this.asteroid3.health = 25;
-        
 		//luodaan alus ja moottorivana
 		this.ship = this.game.add.sprite(650, 400, 'ship');
 		this.ship.scale.setTo(0.5,0.5);
+        // luodaan ryhmä aseille
         var guns = this.game.add.group();
-		this.gun = this.game.add.image(0,-90);
+		// perusaseen tiedot
+        this.gun = this.game.add.image(0,-90);
         this.gun.name = "basic";
         this.gun.reload = 3000;
         this.gun.fireRate = 450;
         this.gun.clip = 35;
-		//this.laser = this.game.add.emitter(0,-90,2);
-		this.laser = this.game.add.image(0,-70);
+		// laserin tiedot
+        this.laser = this.game.add.image(0,-70);
 		this.laser.name = "laser";
-		//this.laser.scale.setTo(0.5,30);
-		//this.laser.anchor.x = 1;
-		/*this.laser.anchor.y = 1;
-		this.laser.renderable = false;*/
         this.laser.fireRate = 0.1;
         this.laser.reload = 6000;
         this.laser.clip = 30;
-		this.shotgun = this.game.add.image(0,-90);
+		// haulikon tiedot
+        this.shotgun = this.game.add.image(0,-90);
 		this.shotgun.name = "shotgun";
 		this.shotgun.fireRate = 1500;
         this.shotgun.reload = 3000;
         this.shotgun.clip = 5;
-		this.mines = this.game.add.image(0,40);
+		// miinojen tiedot
+        this.mines = this.game.add.image(0,40);
 		this.mines.name = "mines";
 		this.mines.fireRate = 0;
         this.mines.reload = 2000;
@@ -226,7 +223,6 @@ gameLoad.prototype = {
             i.scale.setTo(0.1,0.1);
             i.body.kinematic = true;
         },this);
-
 
 		//luodaan vihujen ammusryhmä
 		this.enemyBullets = this.game.add.group();

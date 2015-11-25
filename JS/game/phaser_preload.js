@@ -9,7 +9,7 @@ function preload(){
 	//Ladataan alus
 	game.load.image('ship', 'assets/sprites/VS_peli_ship.png');
 	//ladataan viholliset
-	game.load.spritesheet('enemies', 'assets/sprites/enemies.png',97,113);
+	//game.load.spritesheet('enemies', 'assets/sprites/enemies.png',97,113);
 	//game.load.spritesheet('enemy2', 'assets/sprites/enemies.png',97,195);
 	//game.load.spritesheet('enemy3', 'assets/sprites/enemies.png',195,290);
 	//Ladataan trail-partikkelit

@@ -26,7 +26,7 @@ gameLoad.prototype = {
 		//Ladataan alus
 		this.game.load.image('ship', 'assets/sprites/VS_peli_ship.png');
 		//ladataan viholliset
-		this.game.load.spritesheet('destroyer', 'assets/sprites/enemies.png',97,113);
+		this.game.load.spritesheet('destroyer', 'assets/sprites/fighter.png');
 		this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
 		this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
 		//this.game.load.spritesheet('enemy2', 'assets/sprites/enemies.png',97,195);
@@ -274,6 +274,7 @@ gameLoad.prototype = {
 			var tEnemy1 = this.game.add.group();
 			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"destroyer");
             tEnemy1.forEach(function(enemy){
+                enemy.scale.setTo(0.15,0.15);
                 enemy.ray = null;
 				enemy.nextFire = 0;
 				enemy.maxHealth = 1;

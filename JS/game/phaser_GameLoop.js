@@ -42,7 +42,7 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi) {
+    init: function (asteroids, ship, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.guns = gun;//
@@ -74,6 +74,7 @@ mainGame.prototype = {
         this.minesExpl = minesExpl;
 		this.dropBoom = dropBoom;
 		this.dropApi = dropApi;
+		this.playerData = playerData;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -391,7 +392,7 @@ mainGame.prototype = {
                 }
             }, this);
             if(this.timers[2]-1 <= 0){
-                this.game.add.tween(this.HUD.banner).to({alpha:0},200,"Linear",true).onComplete.add(function(){this.HUD.banner.kill()},this);
+                this.game.add.tween(this.HUD.banner).to({alpha:0},200,"Linear",true,5000).onComplete.add(function(){this.HUD.banner.kill()},this);
             }
             //waiter.start();
             spawnNext = false;

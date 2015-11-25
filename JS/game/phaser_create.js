@@ -81,13 +81,15 @@ gameLoad.prototype = {
         this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
 
 	},
-    init:function(loadout){
+    init:function(loadout,playerData){
         this.loadout = loadout;
+		this.playerData = playerData;
     },
 	create: function(){
         waiter = this.game.time.create();
 		this.clipSizes = [35, 30, 5, 1];
-		this.attackInfo = "051006'302112'352713";
+		//this.attackInfo = "051006'302112'352713";
+		this.attackInfo = "010000'000002'000001";
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
@@ -513,7 +515,8 @@ gameLoad.prototype = {
             this.minesBul,
             this.minesExpl,
 			dropBoom,
-			dropApi
+			dropApi,
+			this.playerData
 		);
 	},
 	HPbar: function(){

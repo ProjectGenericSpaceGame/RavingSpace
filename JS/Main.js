@@ -9,170 +9,6 @@ var enemiesKilled;
 var deaths;
 var totalTime;
 
-$(document).ready(function(){
-    // Poistetaan latausruutu
-     $('#loader').css("display","none");
-    // kirjautumisruutu / rekisteröitymisruutu
-    $('.login').click(function(){
-        var other =  $('.signupDialog').css("display");
-        if(other == "block"){
-            $('.signupDialog').css("display","none");
-        }
-        $('.loginDialog').css("display","block");
-    });
-
-    $('.cancelLogin').click(function(){
-        $('.loginDialog').css("display","none");
-        $('.signupDialog').css("display","none");
-    });
-
-    $('.loginCheck').click(function(){
-        var pss =  $('.password').val();
-        var user = $('.username').val();
-        var location = window.location.href;
-        if(user.length != 0 && pss.length != 0){
-            $('#loader').css("display","block");
-            $('.loginDialog').css("display", "none");
-            $('.signupDialog').css("display", "none");
-            var getFromDB = $.ajax({
-                method:"POST",
-                //async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
-                url:"PHP/CryptoHandler/serveSalt.php",
-                data:{playerName:user,location:location}
-            });
-            getFromDB.done(function(returnValue){
-                var genSalt = getRandom();
-                var saltyhash = pss + returnValue;
-                var sh = hashPass(saltyhash)+genSalt;
-                var ssh = hashPass((pss+genSalt));
-        
-                var putToDB = $.ajax({
-                    method:"POST",
-                    //sync:false,
-                    url:"PHP/CryptoHandler/loginHandler.php",
-                    data:{givenHash:sh,newPass:ssh,userName:user,location:location}
-                });
-                putToDB.done(function(returnValue) {
-                    if (returnValue == true) {
-                        $('.loginDialog').css("display", "none");
-                        $('.signupDialog').css("display", "none");
-                        console.log("onnistui");
-                        makeGame();
-                    } else if (returnValue == "credsFirst") {
-                        alert('salis on väärin tai käyttäjä nimi on väärin');
-                        $('#loader').css("display","none");
-                        $('.loginDialog').css("display", "block");
-                        //makeGame();
-                    } else if (returnValue == "lock") {
-                        alert("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
-                        $('#loader').css("display","none");
-                        $('.loginDialog').css("display", "block");
-                        //makeGame();
-                    } else if (returnValue == "creds") {
-                        alert("salis on väärin tai käyttäjä nimi on väärin");
-                        $('#loader').css("display","none");
-                        $('.loginDialog').css("display", "block");
-                        //makeGame();
-                    } else { // demoamiseen
-                        //makeGame();
-                        $('.loginDialog').css("display", "none");
-                        $('.signupDialog').css("display", "none");
-                    }
-                });
-                putToDB.fail(function(){
-                    $('#loader').css("display","none");
-                    console.log("username or password is incorrect or database unreachable");
-                });
-            });
-            getFromDB.fail(function(){
-                $('#loader').css("display","none");
-                console.log("database unreachable!");
-            });
-        } else {
-            alert('please provide username and password');
-        }
-    }); 
-
-    // hankitaan uusi suola
-    function getRandom(){
-        var possible = "b8EFGHdefMNTUXYZVghiOC#¤%KaIJP)=?@56opA£QRL\"&WtSjklmyncu/(\$\^\*\'vw34sxD79Bqrz012\!";
-        var length = 10;
-        var rnd = new Nonsense();
-        var toPick = [];
-        var randString = "";
-        for(var j = 0;j < length;j++){
-            toPick = [];
-            for(var i = 0;i < length;i++){
-                toPick.push(possible.charAt(rnd.integerInRange(0,possible.length-1)));
-            }
-            randString += rnd.pick(toPick);
-        }
-    return randString;
-    }
-
-    function hashPass(pss){
-        var shaObj = new jsSHA("SHA-512", "TEXT");
-        shaObj.update(pss);
-        var hash = shaObj.getHash("HEX");
-        console.log(hash);
-        console.log("dis");
-        return hash;
-    }
-    
-    $('.password-retype').on('input', function() {
-        // tarkistetaan, että salasanat täsmäävät
-        var check = checkRegisterInfo();
-        if(check == false){
-            $('.password-retype').css("border","2px solid #a50716");
-            $('.password-retype').css("margin","26px 48px 0 0");
-        } else{
-            $('.password-retype').css("border","2px solid #07a547");
-            $('.password-retype').css("margin","26px 48px 0 0");
-        }
-    });
-    // login -painike rekisteröitymisruudussa
-    $('.register').click(function(){
-        var givenUserName = $('.username-register').val();
-        console.log(givenUserName);
-        var check = checkRegisterInfo();
-        // tarkistetaan, että salanat ovat samat ja käyttäjänimeksi on syötetty jotain
-        if(check == true && givenUserName.length != 0){
-            console.log('tadaa');
-            $('.signupDialog').css("display","none");
-            makeGame();
-        } else {
-            console.log('noTadaa');
-        }
-    });
-    // salasana kenttien tarkistus
-    function checkRegisterInfo(){
-        var first = $('.password-register').val();
-        var second = $('.password-retype').val();
-        if(first != second){
-            return false;
-        } else{
-            return true;
-        }
-    }
-    
-    $('.signUp').click(function(){
-        var other =  $('.loginDialog').css("display");
-        if(other == "block"){
-            $('.loginDialog').css("display","none");
-        }
-        $('.signupDialog').css("display","block");
-    });
-
-    $('.info').hover(function(){
-        $('.infoDialog').css("display","block");
-    });
-
-    $('.info').mouseout(function(){
-        $('.infoDialog').css("display","none");
-    });
-    // kirjautumis/rekisteröitymisruutu loppuu
-});
-
 //Pelin funktio
 function makeGame(){
     
@@ -318,51 +154,54 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
         var bullet = bullets.getFirstDead();
         bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
         if(gun.name == "laser"){
-			//gun.revive();
-			//bullet.scale.setTo(1,4);
-			bullet.rotation = ship.rotation;
-			bullet.name = "laser";
+            //gun.revive();
+            //bullet.scale.setTo(1,4);
+            bullet.rotation = ship.rotation;
+            bullet.name = "laser";
             game.physics.arcade.moveToPointer(bullet, 2000);
-            
+
         } else if(gun.name == 'mines'){
             bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet.name = "mine";
-            
+
         } else if (gun.name == 'shotgun'){
-            var x = game.input.mousePointer.x;
-            var y = game.input.mousePointer.y;    
-                bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-                bullet.scale.setTo(1,1);
-                bullet.name = "shotgun";
-                game.physics.arcade.moveToXY(bullet, x, y, 330);
-            
+            var x = game.input.worldX;
+            var y = game.input.worldY;
+            var distance = game.math.distance(x,y,gun.world.x,gun.world.y);
+            var offsetX = (x+distance-x)*0.3;
+            var offsetY = (y+distance-y)*0.3;
+            bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet.scale.setTo(1,1);
+            bullet.name = "shotgun";
+            game.physics.arcade.moveToXY(bullet, x, y, 330);
+
             var bullet2 = bullets.getFirstDead();
-                bullet2.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-                bullet2.scale.setTo(1,1);
-                bullet2.name = "shotgun";
-                game.physics.arcade.moveToXY(bullet2, x-100, y-100, 330);
-              
+            bullet2.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet2.scale.setTo(1,1);
+            bullet2.name = "shotgun";
+            game.physics.arcade.moveToXY(bullet2, x-(0.25*distance)-offsetX, y-(0.25*distance)-offsetY, 330);
+
             var bullet3 = bullets.getFirstDead();
-               bullet3.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-                bullet3.scale.setTo(1,1);
-                bullet3.name = "shotgun";
-                game.physics.arcade.moveToXY(bullet3, x-200, y-200, 330);
-             
+            bullet3.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet3.scale.setTo(1,1);
+            bullet3.name = "shotgun";
+            game.physics.arcade.moveToXY(bullet3, x-(0.5*distance)-offsetX, y-(0.25*distance)-offsetY, 330);
+
             var bullet4 = bullets.getFirstDead();
-              bullet4.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-                bullet4.scale.setTo(1,1);
-                bullet4.name = "shotgun";
-                game.physics.arcade.moveToXY(bullet4, x+100, y+100, 330);
-                
+            bullet4.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet4.scale.setTo(1,1);
+            bullet4.name = "shotgun";
+            game.physics.arcade.moveToXY(bullet4, x+(0.25*distance)+offsetX, y+(0.25*distance)+offsetY, 330);
+
             var bullet5 = bullets.getFirstDead();
-                bullet5.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-                bullet5.scale.setTo(1,1);
-                bullet5.name = "shotgun";
-                game.physics.arcade.moveToXY(bullet5, x+200, y+200, 330);
-                
+            bullet5.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet5.scale.setTo(1,1);
+            bullet5.name = "shotgun";
+            game.physics.arcade.moveToXY(bullet5, x+(0.5*distance)+offsetX, y+(0.5*distance)+offsetY, 330);
+
         } else {
-			bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
-			bullet.scale.setTo(1,1);
+            bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
+            bullet.scale.setTo(1,1);
             bullet.name = "basic";
             game.physics.arcade.moveToPointer(bullet, 330);
         }
@@ -407,8 +246,9 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         bullet.kill();
     } else if(bullet.key == "boom") {
         dmg = 2.5;
-      } else if(bullet.name == "shotgun") {
-        dmg = 0.5;    
+    } else if(bullet.name == "shotgun") {
+        dmg = 0.35;
+        bullet.kill();
     } else {
         dmg  = 0.25;
         bullet.kill();
@@ -465,14 +305,14 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         tween2.onComplete.add(function(){
             boom2.destroy();
             enemy.kill();
-			var random = rnd.integerInRange(1,13);
-			if((random == 10 || random == 5) && enemy.key != "ship"){
-				if(random == 5){
-					dropBoom.getFirstDead().reset(enemy.x,enemy.y);
-				} else if(random == 10){
-					dropAbi.getFirstDead().reset(enemy.x,enemy.y);
-				}
-			}
+            var random = rnd.integerInRange(1,13);
+            if((random == 10 || random == 5) && enemy.key != "ship"){
+                if(random == 5){
+                    dropBoom.getFirstDead().reset(enemy.x,enemy.y);
+                } else if(random == 10){
+                    dropAbi.getFirstDead().reset(enemy.x,enemy.y);
+                }
+            }
             if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
                 if(enemy.ray !== null){
                     //enemy.ray.clear();
@@ -483,34 +323,34 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         },this);
     } else if(enemy.health > dmg){
         enemy.health -= dmg;
-            if(enemy.key == 'ship'){
-                HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
-            }
-			else if(enemy.name != "drop"){
-                HPbar.renderable = true;
-				HPbar.alpha = 1;
-				HPbar.lastHit = Date.now();
-				game.time.events.add(2000, function(){
-					if(Date.now()-HPbar.lastHit>1500){
-						HPbar.renderable = false;
-						HPbar.alpha = 0;
-					}
-				});
-                //alert(HPbar.getChildAt(1).width);
-                //HPbar.getChildAt(1).body.x = 10.6;
-                //HPbar.getChildAt(1).body.offset = 0;
-                //HPbar.getChildAt(1).x = HPbar.zeroPosition;
-                //HPbar.getChildAt(1).x = 10.6;
-                //HPbar.getChildAt(1).anchor.x = 0;
-                //HPbar.getChildAt(1).x -= 33.4;
-                //HPbar.getChildAt(1).body.width = HPbar.fullHealthLength*(enemy.health/2.5);
-                HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/enemy.maxHealth);
-                //HPbar.getChildAt(1).anchor.x = 1;
-                //alert(HPbar.zeroPosition);
-                //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
-                //alert(HPbar.x);
-            }
-        } else if(enemy.name == "drop"){
+        if(enemy.key == 'ship'){
+            HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/3);
+        }
+        else if(enemy.name != "drop"){
+            HPbar.renderable = true;
+            HPbar.alpha = 1;
+            HPbar.lastHit = Date.now();
+            game.time.events.add(2000, function(){
+                if(Date.now()-HPbar.lastHit>1500){
+                    HPbar.renderable = false;
+                    HPbar.alpha = 0;
+                }
+            });
+            //alert(HPbar.getChildAt(1).width);
+            //HPbar.getChildAt(1).body.x = 10.6;
+            //HPbar.getChildAt(1).body.offset = 0;
+            //HPbar.getChildAt(1).x = HPbar.zeroPosition;
+            //HPbar.getChildAt(1).x = 10.6;
+            //HPbar.getChildAt(1).anchor.x = 0;
+            //HPbar.getChildAt(1).x -= 33.4;
+            //HPbar.getChildAt(1).body.width = HPbar.fullHealthLength*(enemy.health/2.5);
+            HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/enemy.maxHealth);
+            //HPbar.getChildAt(1).anchor.x = 1;
+            //alert(HPbar.zeroPosition);
+            //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
+            //alert(HPbar.x);
+        }
+    } else if(enemy.name == "drop"){
         enemy.health = 0.001;
         enemy.kill();
     }

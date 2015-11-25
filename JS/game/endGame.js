@@ -5,9 +5,10 @@ var endGame = function(game){
 
 };
 endGame.prototype = {
-    init:function(HUD,ship){
+    init:function(HUD,ship,playerData){
         this.HUD = HUD;
         this.ship = ship;
+		this.playerData = playerData;
     },
     create:function(){
         var style = {fill:"white",font:"30px cyber"};
@@ -61,6 +62,33 @@ endGame.prototype = {
 
     },
     backToMenu:function(){
+        //tässä katsotaan meneekö uusi piste taulukon alkuun (on pienenpi kuin muut)
+        //jos ei ole pienin, poistetaan taulukon pienin (0 index)
+        var scoreToUpdate;
+        var tempArray = this.playerData.playerScores.slice();
+        tempArray.push(points);
+        tempArray.sort(function(a, b){return a-b});
+        if(tempArray[0] == points){
+            scoreToUpdate = -1;
+        } else {
+            tempArray.splice(0,1);
+            this.playerData.playerScores = tempArray.slice();
+            scoreToUpdate = tempArray.slice();
+        }
+        tempArray = null;
+		var updateData = $.ajax({
+                method:"POST",
+                //async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                url:"PHP/SQLcontroller/updateData.php",
+                data:{
+					playername:this.playerData.playerData.playerName,
+					location:window.location.href,
+                    attackLoot:2,
+                    attackID:2,
+                    scoreID:this.playerData.playerData.scoreID,
+                    scoreToUpdate:scoreToUpdate
+				}
+            });
         this.game.state.start('menuLoad');
     }
 };

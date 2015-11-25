@@ -1,10 +1,13 @@
 <?php
+session_start();
 include('cryptoClass.php');
 $DBhash;
 $return;
 $failedAttempts;
 $loginFollowID;
 $tryLock;
+$_SESSION['log'] = 1;
+
 $bcrypt = new Bcrypt(15);
 //$_POST['userName'] = 'testi1';
 
@@ -48,6 +51,7 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
     //echo "dis";
 //echo "daa?";
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
+    $_SESSION['log'] = 1;
     $return = true;
     $toDB = $bcrypt->hash($newPassWord).$newRandom;
     $failedAttempts = 0;
@@ -60,6 +64,7 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $DBcon->query($select);
     //echo "daa?";
 } else if($bcrypt->verify($toCompare, $DBhash) != 1 && $failedAttempts < 4){// jos salis väärin ja yrityksiä vielä jäljellä
+    $_SESSION['log'] = 0;
     $failedAttempts++;
     if($failedAttempts >= 4){
         $time = time();
@@ -72,10 +77,12 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
 
-} else if($failedAttempts >= 4  && (time()-$tryLock)<(10*60)){ // jos ei yrityksiä jäljellä ja lukossa
+} else if($failedAttempts >= 4  && (time()-$tryLock)<(10*60)){// jos ei yrityksiä jäljellä ja lukossa
+    $_SESSION['log'] = 0;
     $return = "lock";
     //query
 } else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60) && $bcrypt->verify($toCompare, $DBhash) == 1){//jos lukitus loppunut ja oikein
+    $_SESSION['log'] = 0;
     $return = true;
     $toDB = $bcrypt->hash($newPassWord).$newRandom;
     $failedAttempts = 0;
@@ -85,6 +92,7 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
 } else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60)){// jos väärin ja lukitus loppu
+    $_SESSION['log'] = 0;
     $return = "creds";
     $failedAttempts = 1;
     //query

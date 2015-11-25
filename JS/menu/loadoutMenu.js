@@ -257,7 +257,8 @@ loadoutMenu.prototype = {
                 this.noWeapons.visible = false;
                 // kutsutaan gameLoad -tilaa
                 this.game.state.start('gameLoad',true,true,
-                    this.selectedLoadout
+                    this.selectedLoadout,
+					this.playerData
                 );
              }
         }

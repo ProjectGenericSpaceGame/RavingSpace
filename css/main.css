@@ -227,6 +227,10 @@ canvas{
     margin: 310px 80px 0 0;
     padding: 10px;
 }
+.hidden{
+    position: absolute;
+    display: none;
+}
 
 
 

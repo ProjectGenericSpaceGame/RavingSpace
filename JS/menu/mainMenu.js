@@ -15,6 +15,9 @@ mainMenu.prototype = {
     },
     
     create: function(){
+        var textStyleFix = { font: "20px cyber"};
+        this.surroundings.menuheader.getChildAt(2).setStyle(textStyleFix);//kiitos chrome
+        this.surroundings.menuheader.getChildAt(3).setStyle(textStyleFix);
         var self = this;
         //do some murdering
         this.buttonGroup.removeAll();

@@ -74,6 +74,8 @@ gameLoad.prototype = {
 		this.game.load.image('ability1', 'assets/placeholders/ability1.png');
 		this.game.load.image('ability2', 'assets/placeholders/ability2.png');
 		this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+		//abilityjen visuaaliy
+		this.game.load.image('shield', 'assets/particles/shield.png');
 		//dropit
 		this.game.load.image('dropBoom', 'assets/placeholders/weapon0.png');
 		this.game.load.image('dropApi', 'assets/placeholders/ability3.png');
@@ -114,10 +116,12 @@ gameLoad.prototype = {
         this.asteroid3 = this.asteroids.getChildAt(2);
         this.asteroid3.health = 25;
 		//luodaan alus ja moottorivana
+        this.shipAccessories  = this.game.add.group();
 		this.ship = this.game.add.sprite(650, 400, 'ship');
 		this.ship.scale.setTo(0.5,0.5);
-        // luodaan ryhmä aseille
+        // luodaan ryhmä aseille js abiltyille
         var guns = this.game.add.group();
+        var abilities = this.game.add.group();
 		// perusaseen tiedot
         this.gun = this.game.add.image(0,-90);
         this.gun.name = "basic";
@@ -143,10 +147,31 @@ gameLoad.prototype = {
         this.mines.reload = 2000;
         this.mines.clip = 1;
 		guns.laserLocation = null;
+        //supernopeus
+        this.superSpeed = this.game.add.image(0,0);
+        this.superSpeed.name = "superSpeed";//kyvyillä ei ole omaa ammusryhmää joten niille luodaan sprite suoraan isäksi
+        this.superSpeed.reload = 5000;
+        this.superSpeed.clip = 0.7; //clips on abilityillä lähtöarvo johon palataan, nimetty näin että voidaan hyödyntää samaa reload funktiota sekä aseille että abilityille
+        //EMP
+        this.EMP = this.game.add.sprite(0,0,"EMP");
+        this.EMP.name = "EMP";
+        this.EMP.kill();
+        //Kilpi
+        this.shield = this.game.add.sprite(0,0,"shield");
+        this.game.physics.enable(this.shield, Phaser.Physics.ARCADE);
+        this.shield.anchor.x = 0.5;
+        this.shield.anchor.y = 0.5;
+        this.shield.reloa = 10000;
+        this.shield.name = "shield";
+        this.shield.kill();
+
         this.clips = [];
         this.reloading = [];
-        for(var o = 0; o < 3;o++){
-            if(this.loadout[o] != null){//TÄSSÄ VIRHE
+        this.abilityReloading = [];
+		//kasataan pelaajan loadout joka tulee peliin
+        for(var o = 0; o < 5;o++){ //tässä on viisi koska pelaajalle mahtuu mukaan yhteensä kolme asetta ja kaksi abilitya = 5
+            if(this.loadout[o] != null){
+                //aseet
                 if(this.loadout[o] == "weapon0") {
                     guns.add(this.gun);
                     this.clips.push(this.clipSizes[0]);
@@ -164,9 +189,18 @@ gameLoad.prototype = {
                     guns.add(this.mines);
                     this.clips.push(this.clipSizes[3]);
                     this.reloading.push(false);
+                } //tästä alkaa abilityt
+                else if(this.loadout[o] == "ability0"){
+                    abilities.add(this.superSpeed);
+                    this.abilityReloading.push(false);
+                }
+                else if(this.loadout[o] == "ability2"){
+                    abilities.add(this.shield);
+                    this.abilityReloading.push(false);
                 }
             }
         }
+        //aluksen moottoritrail
 		this.shipTrail = this.game.add.group();
 		var trail1 = this.game.add.emitter(0,60,1000);
 		var trail2 = this.game.add.emitter(0,60,1000);
@@ -183,12 +217,15 @@ gameLoad.prototype = {
 			em.setYSpeed(200, 180);
 			em.setRotation(0);
 		});
+
 		this.ship.addChild(this.shipTrail);
 		this.ship.addChild(guns);
+        this.shipAccessories.add(abilities);
         this.ship.health = 3;
         this.ship.dying = false;
+        this.ship.shield = false;
 		
-		// luodaan aluksen ammusryhmä
+		// luodaan aluksen ammusryhmät
 		this.bullets = this.game.add.group();
 		this.bullets.enableBody = true;
 		this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -225,6 +262,8 @@ gameLoad.prototype = {
             i.scale.setTo(0.1,0.1);
             i.body.kinematic = true;
         },this);
+
+        //luodaan pelaajan abilityjen ryhmä
 
 		//luodaan vihujen ammusryhmä
 		this.enemyBullets = this.game.add.group();
@@ -276,7 +315,7 @@ gameLoad.prototype = {
 			var tEnemy1 = this.game.add.group();
 			tEnemy1.createMultiple(parseInt(this.attackInfo[i].substring(0,2)),"destroyer");
             tEnemy1.forEach(function(enemy){
-                enemy.scale.setTo(0.15,0.15);
+                enemy.scale.setTo(0.45,0.45);
                 enemy.ray = null;
 				enemy.nextFire = 0;
 				enemy.maxHealth = 1;
@@ -298,9 +337,9 @@ gameLoad.prototype = {
 				enemy.addChild(healthbar);
 				var gun = this.game.add.image(0,-70);
 				enemy.addChild(gun);
-				var laser = this.game.add.emitter(0,-125,10);
+				var laser = this.game.add.emitter(-8,-125,10);
                 laser.makeParticles('laser1');
-                laser.lifespan = 100;
+                laser.lifespan = 200;
                 laser.setXSpeed(-30, 30);
                 laser.setYSpeed(-200, -180);
                 laser.setRotation(0);
@@ -398,6 +437,7 @@ gameLoad.prototype = {
         playerhealth.fullHealthLength = playerhealth.getChildAt(1).width;//health palkki
         playerhealth.getChildAt(0).width = 0; //respawn palkki
 
+        //kasataan HUD
         var wepTray = this.game.add.image(0,0,'wepTray');
         wepTray.fixedToCamera = true;
         wepTray.cameraOffset.setTo(1115,20);//100 korkea
@@ -438,19 +478,35 @@ gameLoad.prototype = {
         var choserAbs = this.game.add.image(-108,0,'trayChoser');
         abTray.addChild(choserAbs);
         abTray.trayPosition = 1;
+        var abIcons = this.game.add.group();
         for(var i = 3; i < 5;i++){
             if(this.loadout[i] != null){
                 var abil = this.game.add.sprite(0,22,this.loadout[i]);
-                if(abTray.children.length == 1){
-                    abil.x = 13;
+                if(abIcons.length == 0){
+                    abil.x = 12.5;
                 } else {
-                    abil.x = 54*(i-3)+13;
+                    abil.x = 54*(i-3)+12.5;
                 }
                 abil.scale.setTo(0.4,0.4);
-                abTray.addChild(abil);
+                abIcons.addChild(abil);
+                var reloadTrayAb = this.game.add.sprite(0,22,'trayReloading');
+                if(abIcons.length == 1){
+                    reloadTrayAb.x = 12.5;
+                } else {
+                    reloadTray.x = 54*i+12.5;
+                }
+                reloadTrayAb.alpha = 0;
+                abIcons.addChild(reloadTrayAb);
             }
         }
+        abTray.addChild(abIcons);
+        var mask2 = this.game.add.graphics(0,0);
+        mask2.beginFill(0xFFFFFF,1);
+        mask2.drawRect(0,22,abTray.width,36);
+        abIcons.addChild(mask2);
+        abIcons.mask = mask2;
 
+        //Alustetaan muut osat kuten vihujen buff kuvakkeet ja kierrosten välissä olevat bannerit
         var banner = this.game.add.image(0,0,'banner',2);
         banner.fixedToCamera = true;
         banner.cameraOffset.setTo(0,this.game.camera.height/2-banner.height/2);
@@ -487,6 +543,7 @@ gameLoad.prototype = {
 		game.state.start("mainGame",false,false,
             this.asteroids,
             this.ship,
+            this.shipAccessories,
             guns,
             this.bullets,
             this.enemies,
@@ -516,7 +573,8 @@ gameLoad.prototype = {
             this.minesExpl,
 			dropBoom,
 			dropApi,
-			this.playerData
+			this.playerData,
+            this.abilityReloading
 		);
 	},
 	HPbar: function(){

@@ -22,9 +22,13 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
 	}
 	//query
 	$select =
-	"Select waveData, attackLoot, attackState from attackWaves 
+	"Select waveData, attackLoot, attackState, loginAttempts.fail2 from attackWaves
 	inner join playersAttacks
 	on playersAttacks.attackID = attackWaves.attackID
+	inner join playerData
+	on playerData.playerID = playersAttacks.playerID
+	inner join loginAttempts
+	on loginAttempts.loginFollowID = playerData.loginFollowID
 	WHERE playersAttacks.playerID = '$playerName'";
 
 	$query = $DBcon->query($select);//tulokset ovat $query muuttujassa
@@ -47,7 +51,10 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
             $iter++;
 		}
 	$returnObject .= ']}';
-
+	if($row['fail2'] == "out"){
+		$returnObject = true;
+	} else {
+	}
 	//suljetaan yhteys
 	$query->close();
 	$DBcon->close();

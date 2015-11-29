@@ -280,10 +280,13 @@ shopMenu.prototype = {
         purchase: function() {
              var i = this.windex;
              var j = this.aindex;
-             if (this.weaponsGroup.getChildAt(i).getChildAt(3).alpha == 0.5) {
-                this.windex = null;
-                console.log(this.windex);
-             }
+            if(j == null) {
+                if (this.weaponsGroup.getChildAt(i).getChildAt(3).alpha == 0.5)
+                {
+                    this.windex = null;
+                    console.log(this.windex);
+                }
+            }
                else if (i == 0){
                  console.log("You already own that weapon.");
              } else if (i == 1) {
@@ -322,6 +325,8 @@ shopMenu.prototype = {
                  console.log("Ability "+j+" bought.");
                  this.playerData.shipData[i+10] = 1;
              }
+            i = null;
+            j = null;
         },
 
         back: function(){

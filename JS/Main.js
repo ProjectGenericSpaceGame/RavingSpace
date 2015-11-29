@@ -82,6 +82,33 @@ game.state.start('menuLoad');
 document.addEventListener( "contextmenu", function(e) {
     e.preventDefault();
 });
+$(document).ready(function() {
+    var time = new Date();
+    var time2 = time.getTime();
+    var delay = time+1;
+        function logOff() {
+            while(delay-time2 < 100){
+                delay = time.getTime();
+            }
+            $.ajax({
+                method: "POST",
+                async: false,
+                url: "PHP/SQLcontroller/updateData.php",
+                data: {
+                    playerData: sessionStorage.getItem("playerID"),
+                    loginFollowID: sessionStorage.getItem("loginFollowID"),
+                    location: window.location.href,
+                    usage: 5
+                }
+            });
+            return null;
+        }
+
+        document.getElementsByTagName("BODY")[0].onbeforeunload = logOff;
+
+
+
+});
 function randNumber(lap){
     var randNumbers =[]; // [0] vihollinen , [1] vihollisen spawninopeus
     var x = 0;
@@ -473,37 +500,54 @@ function acquireTarget(target,enemy){
     Xcoord = null;
     return parseFloat(degr+1-1);
 }
-function reload(reloadSprite,clips,pos,HUD,gun){
-    if (reloadSprite.alive == false) {
-        reloadSprite.reset();
-        reloadSprite.body.rotation = 0;
-        reloadSprite.rotation = 0;
-        reloadSprite.y = game.input.activePointer.worldY+reloadSprite.height/2;
-        reloadSprite.x = game.input.activePointer.worldX+reloadSprite.width/2;
+function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading){
+    if(usage == 1) {
+        //vaihdetaan kursori
+        if (reloadSprite.alive == false) {
+            reloadSprite.reset();
+            reloadSprite.body.rotation = 0;
+            reloadSprite.rotation = 0;
+            reloadSprite.y = game.input.activePointer.worldY + reloadSprite.height / 2;
+            reloadSprite.x = game.input.activePointer.worldX + reloadSprite.width / 2;
+        }
+        var reloadTween = game.add.tween(reloadSprite.body);
+        reloadTween.frameBased = true;
+        reloadTween.to({rotation: 2 * pi}, gun.reload, "Linear", true, 0, 1);
+        //lisätään latausanimaatio HUDiin
+        var tray = HUD.webTray.getChildAt(1).getChildAt((HUD.webTray.trayPosition) * 2 - 1);
+        tray.alpha = 1;
+        var trayTween = game.add.tween(tray);
+        trayTween.frameBased = true;
+        trayTween.to({y: (tray.y + tray.height)}, gun.reload, "Linear", true, 0);
+        trayTween.onComplete.add(function () {
+            tray.y = 22;
+            tray.alpha = 0;
+        });
+        game.time.events.add(gun.reload, function () {
+            clips[pos] = gun.clip;
+            reloading[pos] = false;
+            //reloadTween.stop();
+            reloadSprite.kill();
+            $("canvas").css("cursor", "url('assets/sprites/cursor.png'),none");
+        }, this);
+        //waiter.start();
+        reloading[pos] = true;
+        $("canvas").css("cursor", "none");
+    } else if(usage == 2){
+        var trayAb = HUD.abTray.getChildAt(1).getChildAt((HUD.abTray.trayPosition) * 2 - 1);
+        trayAb.alpha = 1;
+        var trayTweenAb = game.add.tween(trayAb);
+        trayTweenAb.frameBased = true;
+        trayTweenAb.to({y: (trayAb.y + trayAb.height)}, gun.reload, "Linear", true, 0);
+        trayTweenAb.onComplete.add(function () {
+            trayAb.y = 22;
+            trayAb.alpha = 0;
+            //clips[pos] = gun.clip;
+            reloading[pos] = false;
+            //reloadTween.stop();
+        });
+        reloading[pos] = true;
     }
-    var reloadTween = game.add.tween(reloadSprite.body);
-    reloadTween.frameBased = true;
-    reloadTween.to({rotation: 2*pi}, gun.reload, "Linear", true, 0, 1);
-    reloadTween.frameBased = true;
-    var tray  = HUD.webTray.getChildAt(1).getChildAt((HUD.webTray.trayPosition)*2-1);
-    tray.alpha = 1;
-    var trayTween = game.add.tween(tray);
-    trayTween.frameBased = true;
-    trayTween.to({y:(tray.y+tray.height)},gun.reload,"Linear",true,0);
-    trayTween.onComplete.add(function(){
-        tray.y = 22;
-        tray.alpha = 0;
-    });
-    game.time.events.add(gun.reload, function (){
-        clips[pos] = gun.clip;
-        reloading[pos] = false;
-        //reloadTween.stop();
-        reloadSprite.kill();
-        $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");
-    }, this);
-    //waiter.start();
-    reloading[pos] = true;
-    $("canvas").css("cursor","none");
     //return reloadSprite;
 
     //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");

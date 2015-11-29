@@ -51,7 +51,7 @@
 </header>
 <main>
     <div id="phaserGame"></div>
-    <div class="fontLoader"></div>
+    <div class="fontLoader">asd</div>
 </main>
 <footer></footer>
 </body>

@@ -44,7 +44,7 @@
 		$select = 'update playerData set points = $points, where playerID = $playerName';//päivitetään pelaajan pisteet
 		$DBcon->query($select);
 		if($scoreToUpdate != -1){
-			$select = 'update highScores set
+			$select = "update highScores set
 											score1 = $scoreToUpdate[9],
 											score2 = $scoreToUpdate[8],
 											score3 = $scoreToUpdate[7],
@@ -55,11 +55,17 @@
 											score8 = $scoreToUpdate[2],
 											score9 = $scoreToUpdate[1],
 											score10 = $scoreToUpdate[0]
-						where scoreID = $scoreID';
+						where scoreID = $scoreID";
 						$DBcon->query($select);
 		}
 		
 	}
+	function logOff($returnObject,$DBcon){
+		$loginFollowID = intval($_POST['loginFollowID']);
+		$select = "update loginAttempts set fail2 = 'out' where loginFollowID = $loginFollowID";
+		$DBcon->query($select);
+	}
+
 	if($usage == 1){
 		updateAccountInfo();
 	} 
@@ -72,8 +78,11 @@
 	else if($usage == 4){
 		finishedGame();
 	}
+	else if($usage == 5){
+		logOff($returnObject,$DBcon);
+	}
 	//suljetaan yhteys
-	$query->close();
+	//$query->close();
 	$DBcon->close();
-	echo $returnObject;
+	//echo $returnObject;
 ?>

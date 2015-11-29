@@ -62,6 +62,8 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     //echo "daa?";
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     $DBcon->query($select);
+    $select = "update loginAttempts set fail2 = 'in' where loginFollowID = $loginFollowID";
+    $DBcon->query($select);
     //echo "daa?";
 } else if($bcrypt->verify($toCompare, $DBhash) != 1 && $failedAttempts < 4){// jos salis väärin ja yrityksiä vielä jäljellä
     $_SESSION['log'] = 0;

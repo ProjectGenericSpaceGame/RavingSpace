@@ -85,7 +85,7 @@ menuLoad.prototype = {
             this.logoutBtn = this.game.add.button(1160, 20, "menuHeader", this.logout, this, 1, 0, 2);
             this.logoutBtn.scale.setTo(0.08, 0.5);
             this.logoutBtn.tint = 0xf0f0f0;
-            var logText = this.game.add.text(0,22.5,"Logout",{font:"18px cyber"});
+            var logText = this.game.add.text(0,22.5,"Logout",{ font: "20px Calibri", fill:"red"});
             logText.x = (this.logoutBtn.width/2)*(1/0.08)-(logText.width*(1/0.08)/2);
             this.logoutBtn.addChild(logText);
             this.menuheader.addChild(this.logoutBtn);
@@ -93,15 +93,19 @@ menuLoad.prototype = {
 
             //tänne tulee ajaxia ja kissoja
             var demoname = "testi1";
-            /*// ------>TESTATTU JA TOIMII<------
+            // ------>TESTATTU JA TOIMII<------
             var getFromDB = $.ajax({
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerData.php",
-                data:{playerName:demoname}
+                data:{playerName:demoname,location:window.location.href}
             });
             getFromDB.done(function(returnValue){
-                self.playerData = JSON.parse(returnValue);
+                if(returnValue == true){
+                    self.logout();
+                } else {
+                    self.playerData = JSON.parse(returnValue);
+                }
             });
             getFromDB.fail(function(){alert("database unreachable!")});
             //
@@ -109,18 +113,23 @@ menuLoad.prototype = {
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerWaves.php",
-                data:{playerName:demoname}
+                data:{playerName:demoname,location:window.location.href}
             });
             getFromDB.done(function(returnValue){
-                self.playerWaves = JSON.parse(returnValue);
+                if(returnValue == true){
+                    self.logout();
+                } else {
+                    self.playerWaves = JSON.parse(returnValue);
+                }
             });
             getFromDB.fail(function(){alert("database unreachable!")});
             //
 
              getFromDB = $.ajax({
-             method:"POST",
-             async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
-             url:"PHP/SQLcontroller/highScores.php"
+                 method:"POST",
+                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                 url:"PHP/SQLcontroller/highScores.php",
+                 data:{location:window.location.href}
              });
              getFromDB.done(function(returnValue){
              //self.globalScores = returnValue;});
@@ -132,8 +141,12 @@ menuLoad.prototype = {
                 scoreSort.push(this.globalScores.highScores[i]);
             }
             scoreSort.sort(this.compare);
-            this.globalScores = scoreSort;*/
-            this.playerData = {
+            this.globalScores = scoreSort;
+
+
+            sessionStorage.setItem("playerID",this.playerData.playerData.playerName);
+            sessionStorage.setItem("loginFollowID",this.playerData.loginFollowID);
+            /*this.playerData = {
                 "playerData":{
                     "playerName":"testi1",
                     "email":"test1@testmail.io",
@@ -145,8 +158,11 @@ menuLoad.prototype = {
                     25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
                 ],
 				"scoreID":1,
-				"shipID":1
+				"shipID":1,
+                "loginFollowID":1
             };//demo
+            sessionStorage.setItem("playerID",this.playerData.playerData.playerName);
+            sessionStorage.setItem("loginFollowID",this.playerData.loginFollowID);
             this.globalScores = {"highScores":[["testi1",25000],["testi1",21566],["testi1",20145],["testi1",19563],["testi1",18054],["testi1",12056],["testi1",11753],["testi1",10654],["testi1",9236],["testi1",4067],["testi2",100],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi4",0],["testi4",22798],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi7",30000],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0]]};//demo
             var scoreSort = [];
             for(var i = 0;i < this.globalScores.highScores.length;i++) {
@@ -211,6 +227,7 @@ menuLoad.prototype = {
                     "profit":400
                 }
                 ]}; //demo
+                */
             //this.playerWaves = JSON.parse(this.playerWaves);
 
 
@@ -258,6 +275,12 @@ menuLoad.prototype = {
             // funktio uloskirjaukselle
                 console.log("Logged out");
                 this.game.destroy();
+                var logof = $.ajax({
+                    method:"POST",
+                    //sync:false,
+                    url:"PHP/SQLcontroller/updateData.php",
+                    data:{playerData:sessionStorage.getItem("playerID"),loginFollowID:sessionStorage.getItem("loginFollowID"),location:window.location.href,usage:5}
+                });
                 window.location.pathname = "/RavingSpace";
         }
 

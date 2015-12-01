@@ -6,8 +6,7 @@ $return;
 $failedAttempts;
 $loginFollowID;
 $tryLock;
-$_SESSION['log'] = 1;
-
+//$_SESSION['log'] = 1;
 $bcrypt = new Bcrypt(15);
 //$_POST['userName'] = 'testi1';
 

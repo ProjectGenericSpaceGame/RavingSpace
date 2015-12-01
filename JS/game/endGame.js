@@ -5,10 +5,12 @@ var endGame = function(game){
 
 };
 endGame.prototype = {
-    init:function(HUD,ship,playerData){
+    init:function(HUD,ship,playerData,attackLoot,attackID){
         this.HUD = HUD;
         this.ship = ship;
 		this.playerData = playerData;
+        this.attackLoot = attackLoot;
+        this.attackID = attackID;
     },
     create:function(){
         var style = {fill:"white",font:"30px cyber"};
@@ -64,6 +66,7 @@ endGame.prototype = {
     backToMenu:function(){
         //tässä katsotaan meneekö uusi piste taulukon alkuun (on pienenpi kuin muut)
         //jos ei ole pienin, poistetaan taulukon pienin (0 index)
+        var self = this;
         var scoreToUpdate;
         var tempArray = this.playerData.playerScores.slice();
         tempArray.push(points);
@@ -71,7 +74,7 @@ endGame.prototype = {
         if(tempArray[0] == points){
             scoreToUpdate = -1;
         } else {
-            tempArray.splice(0,1);
+            tempArray.splice(0,1);//poistetaan huonoin pistemäärässä (taulukossa 11 arvoa tällä hetkellä)
             this.playerData.playerScores = tempArray.slice();
             scoreToUpdate = tempArray.slice();
         }
@@ -83,12 +86,18 @@ endGame.prototype = {
                 data:{
 					playername:this.playerData.playerData.playerName,
 					location:window.location.href,
-                    attackLoot:2,
-                    attackID:2,
-                    scoreID:this.playerData.playerData.scoreID,
-                    scoreToUpdate:scoreToUpdate
+                    attackLoot:this.attackLoot,
+                    attackID:this.attackID,
+                    scoreID:this.playerData.scoreID,
+                    scoreToUpdate:scoreToUpdate,
+                    points:this.playerData.playerData.points+points,
+                    usage:4
 				}
             });
+        updateData.done(function(returnData){
+            alert("Your data successfully was successfully updated:"+returnData);
+            self.playerData.playerData.points += points;
+        });
         this.game.state.start('menuLoad');
     }
 };

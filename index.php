@@ -1,5 +1,6 @@
 <?php
 	session_start();
+    //$_SESSION['log'] = 3;
     if($_SESSION['log'] != 1) {
         $_SESSION['log'] = 0;
     } else if($_SESSION['log'] == 1){
@@ -89,6 +90,6 @@
 </main>
 <footer></footer>
 </body>
-<script>if($("#redirect").length > 0){$("#redirect").remove();window.location.pathname = "/RavingSpace/game.php";}</script>
+<script>if($("#redirect").length > 0){$("#redirect").remove();if(window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){window.location.pathname = "~H3492/RavingSpace/game.php"} else {window.location.pathname = "RavingSpace/game.php"}}</script>
 <script src="JS/login/handleLogin.js"></script>
 </html>

@@ -2,10 +2,10 @@
 	//alustetaan tiedot
 	$returnObject = "";
 	//avataan yhteys
-if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/") {
+if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php") {
 		$servername = "mysql.labranet.jamk.fi";
 		$user = "H3492";
-		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
+		$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
 		$DBcon = new mysqli($servername, $user, $pass, "H3492_3");
 		if ($DBcon->connect_error) {
 			die("Connection failed: " . $DBcon->connect_error);

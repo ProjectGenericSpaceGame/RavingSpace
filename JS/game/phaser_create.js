@@ -88,8 +88,28 @@ gameLoad.prototype = {
 		this.playerData = playerData;
     },
 	create: function(){
-        waiter = this.game.time.create();
+		var self = this;
+		waiter = this.game.time.create();
 		this.clipSizes = [35, 30, 5, 1];
+		var getWave = $.ajax({
+			method:"POST",
+			async:false,
+			url:"PHP/SQLcontroller/getWave.php",
+			data: {
+				playername: self.playerData.playerData.playerName,
+				loginFollow: self.playerData.loginFollowID,
+				location: window.location.href
+			}
+		});
+		getWave.done(function(returnData){
+			JSONform = JSON.parse(returnData);
+			self.attackInfo = JSONform.attackInfo;
+			self.attackID = JSONform.attackID;
+		});
+		getWave.fail(function(){
+			alert("can't start game because can't reach database to fetch a attack wave");
+			self.game.state.start('menuLoad');
+		});
 		//this.attackInfo = "051006'302112'352713";
 		this.attackInfo = "010000'000002'000001";
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
@@ -161,7 +181,7 @@ gameLoad.prototype = {
         this.game.physics.enable(this.shield, Phaser.Physics.ARCADE);
         this.shield.anchor.x = 0.5;
         this.shield.anchor.y = 0.5;
-        this.shield.reloa = 10000;
+        this.shield.reload = 10000;
         this.shield.name = "shield";
         this.shield.kill();
 
@@ -541,40 +561,41 @@ gameLoad.prototype = {
         totalTime = date.getTime();
         date = null;
 		game.state.start("mainGame",false,false,
-            this.asteroids,
-            this.ship,
-            this.shipAccessories,
-            guns,
-            this.bullets,
-            this.enemies,
-            this.enemy1,
-            this.enemy2,
-            this.enemy3,
-            this.asteroid1,
-            this.asteroid2, 
-            this.asteroid3,
-            this.cursors,
-            this.bg,
-            this.text,
-            this.shipTrail,
-            this.attackInfo,
-            enemyAmount,
-            spawnPool,
-            this.lap,
-            this.enemyBullets,
-            this.music,
+			this.asteroids,
+			this.ship,
+			this.shipAccessories,
+			guns,
+			this.bullets,
+			this.enemies,
+			this.enemy1,
+			this.enemy2,
+			this.enemy3,
+			this.asteroid1,
+			this.asteroid2,
+			this.asteroid3,
+			this.cursors,
+			this.bg,
+			this.text,
+			this.shipTrail,
+			this.attackInfo,
+			this.attackID,
+			enemyAmount,
+			spawnPool,
+			this.lap,
+			this.enemyBullets,
+			this.music,
 			this.clipText,
-            playerhealth,
-            HUD,
+			playerhealth,
+			HUD,
 			this.laserBul,
-            this.clips,
-            this.reloading,
-            this.minesBul,
-            this.minesExpl,
+			this.clips,
+			this.reloading,
+			this.minesBul,
+			this.minesExpl,
 			dropBoom,
 			dropApi,
 			this.playerData,
-            this.abilityReloading
+			this.abilityReloading
 		);
 	},
 	HPbar: function(){

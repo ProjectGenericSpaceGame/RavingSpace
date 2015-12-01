@@ -281,7 +281,11 @@ menuLoad.prototype = {
                     url:"PHP/SQLcontroller/updateData.php",
                     data:{playerData:sessionStorage.getItem("playerID"),loginFollowID:sessionStorage.getItem("loginFollowID"),location:window.location.href,usage:5}
                 });
-                window.location.pathname = "/RavingSpace";
+                if(window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php") {
+                    window.location.pathname = "~H3492/RavingSpace";
+                } else {
+                    window.location.pathname = "RavingSpace";
+                }
         }
 
 };

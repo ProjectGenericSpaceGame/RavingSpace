@@ -382,17 +382,22 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         enemy.kill();
     }
 }
-function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
+function asteroidHitDetector(bullet, asteroid, asteroidAmmount,attackLoot){
     bullet.kill();
     if((asteroid.health-0.25) <= 0 ){
+        attackLoot += 350;
+        if(attackLoot < -1){}
         asteroid.kill();
         asteroidAmmount -= 1;
-        if(asteroidAmmount == null){
+        if(asteroidAmmount == 0){
             alert("Game Over");
-            this.game.stop();
+            return true;
         }
     } else {
+        attackLoot += 10;
+        if(attackLoot < -1){}
         asteroid.health -= 0.25;
+        return false;
     }
 }
 
@@ -467,8 +472,23 @@ function resizeGame() {
     game.scale.scaleMode = 0;
 }	// By Roni 2015
 function formatWave(data){
+    //muodostetaan objekti
     var formatted = {"waveStruct":"","waveStatus":"Unused","profit":0};
-    var struct = ""+data[0][0]+""+data[0][1]+""+""+data[0][2]+"'"+data[1][0]+""+data[1][1]+""+""+data[1][2]+"'"+data[2][0]+""+data[2][1]+""+""+data[2][2]+"";
+    var struct = "";
+    //kasataan
+    for(var i = 0;i<3;i++){
+        for(var j = 0;j<3;j++){
+            var amount = ""+data[i][j];
+            if(amount.length < 2){ //tarkistetaan ettei hyökkäystiedosta tule liian lyhyt
+                amount = "0"+amount;
+            }
+            struct += amount;
+        }
+        if(i != 2) {
+            struct += "'";
+        }
+    }
+    //struct = ""+data[0][0]+""+data[0][1]+""+""+data[0][2]+"'"+data[1][0]+""+data[1][1]+""+""+data[1][2]+"'"+data[2][0]+""+data[2][1]+""+""+data[2][2]+"";
     formatted.waveStruct = struct;
     return formatted;
 }

@@ -42,7 +42,8 @@ var mainGame = function(game){
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
-    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading) {
+    //tämän funktion parametreistä ei tarvitse tietää muuta kuin että ne kaikki ovat createssa luodut muuttujat
+    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.shipAccessories = shipAccessories;
@@ -60,12 +61,13 @@ mainGame.prototype = {
         this.text = text;
         this.shipTrail = shipTrail;//
         this.attackInfo = attackInfo;
+        this.attackID = attackID;
         this.enemyAmount = enemyAmount;//enemyAmount on elossa olevien vihollisten määrä
         this.spawnPool = spawnPool; //spawnpool on syntyvien vihollisten määrä per aalto
         this.lap = lap;
         this.enemyBullets = enemyBullets;
         this.music = music;
-		this.clipText = clipText;
+        this.clipText = clipText;
         this.HPbar = HPbar;
         this.HUD = HUD;
         this.laserBul = laserBul;
@@ -73,9 +75,9 @@ mainGame.prototype = {
         this.reloading = reloadingAr;
         this.minesBul = minesBul;
         this.minesExpl = minesExpl;
-		this.dropBoom = dropBoom;
-		this.dropApi = dropApi;
-		this.playerData = playerData;
+        this.dropBoom = dropBoom;
+        this.dropApi = dropApi;
+        this.playerData = playerData;
         this.abilityReloading = abilityReloading;
         //Loput muuttujat
         this.asteroidAmmount = 3;
@@ -84,6 +86,7 @@ mainGame.prototype = {
         this.flipped = false;
         this.IntMouseTrack = -1;
         this.kick = 60;
+        this.attackLoot = 0;
 
         this.clipSizes = [35, 30, 5, 1];
         //reloading = false;
@@ -412,12 +415,12 @@ mainGame.prototype = {
                     this.HUD.banner.frame = this.HUD.banner.frame-1;
                     this.HUD.banner.revive();
                     this.game.add.tween(this.HUD.banner).to({alpha:1},400,"Linear",true,1000);
-                } else if(this.lap >= 3 && this.asteroids.countLiving() > 0 && next === "next"){
-                    this.game.state.start('endGame',false,false,this.HUD,this.ship,this.playerData);
+                } else if(this.lap >= 3 && this.asteroids.countLiving() > 0 && next == "next"){
+                    this.game.state.start('endGame',false,false,this.HUD,this.ship,this.playerData,this.attackLoot,this.attackID);
                 }
             }, this);
-            if(this.timers[2]-1 <= 0){
-                this.game.add.tween(this.HUD.banner).to({alpha:0},200,"Linear",true,5000).onComplete.add(function(){this.HUD.banner.kill()},this);
+            if(this.timers[2] <= 0 && this.HUD.banner.alive){
+                this.game.add.tween(this.HUD.banner).to({alpha:0},200,"Linear",true).onComplete.add(function(){this.HUD.banner.kill()},this);
             }
             //waiter.start();
             spawnNext = false;
@@ -426,12 +429,15 @@ mainGame.prototype = {
         }
         //panokset
         var eachEnemyAliveFn;
+        var eachBulletAliveFn;
+        var destroyerBullets = [];
         var commanderAI;
         var hunterAI;
         var destroyerAI;
         var boundsBullet;
         if (this.frameSkip == 0) {
             eachEnemyAliveFn = function(){};
+            eachBulletAliveFn = function(){};
             commanderAI = function(){};
             hunterAI = function(){};
             destroyerAI = function(){};
@@ -439,7 +445,7 @@ mainGame.prototype = {
         } else {
             this.frameSkip = 2;
             var enm;
-            var eachBulletAliveFn = function(b) {
+            eachBulletAliveFn = function(b) {
                 boundsBullet = b.world;
                 self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);//droppi kaatuu tähän, bullet ja drop molemmat arcade
                 if (self.bulletArray.length != 0 && self.timers[4] == 1) {
@@ -454,8 +460,18 @@ mainGame.prototype = {
                             boom.scale.setTo(0.1,0.1);
                         });
                     }
+                    if(b.alpha == 0){
+                        destroyerBullets.push(b);
+                    }
                 } else if(self.bulletArray.length != 0 && self.timers[4] == 2){//jos pelaajaan osumista tutkitaan
                     hitDetector(b, enm, null, self.lap, self.HPbar);
+                    if(self.ship.health == 0.001){
+                        self.attackLoot += 300;
+                    }
+                } else if(self.bulletArray.length != 0 && self.timers[4] == 3) {
+                    if (asteroidHitDetector(b, enm, self.asteroidAmmount, self.attackLoot)) {//asteroidHitDetector palauttaa true jos ei ole enää asteroideja
+                        self.game.state.start('endGame', false, false, self.HUD, self.ship, self.playerData, self.attackLoot, self.attackID);
+                    }
                 }
             };
             eachEnemyAliveFn = function(en) {
@@ -464,9 +480,13 @@ mainGame.prototype = {
                     self.bullets.forEachAlive(eachBulletAliveFn);
                     self.laserBul.forEachAlive(eachBulletAliveFn);
                     self.minesBul.forEachAlive(eachBulletAliveFn);
-                } else {
+                } else if(self.timers[4] == 2){
                     self.enemyBullets.forEachAlive(eachBulletAliveFn);
 					self.dropApi.forEachAlive(eachBulletAliveFn);
+                } else {
+                    for(var u = 0;u < destroyerBullets.length;u++){
+                        eachBulletAliveFn(destroyerBullets[u]);
+                    }
                 }
             };
             // asteroidien tuhoajien AI
@@ -744,6 +764,8 @@ mainGame.prototype = {
         } else if(!this.ship.dying && this.ship.shield){
             this.game.physics.arcade.overlap(this.shipAccessories.getChildAt(0).getChildAt(0), this.enemyBullets, this.shieldHit, null, this);
         }
+        self.timers[4]++;
+        this.asteroids.forEachAlive(eachEnemyAliveFn);
         eachBulletAliveFn = null;
         eachEnemyAliveFn = null;
         self.timers[4] = 1;

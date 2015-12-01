@@ -2,11 +2,13 @@
 	//alustetaan tiedot
 	$returnObject = "";
 	$usage = $_POST['usage'];
-	if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
+    $playerName = "";
+
+	if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
 		$playerName = $_POST['playerName'];
 		$servername = "mysql.labranet.jamk.fi";
 		$user = "H3492";
-		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
+		$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
 		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
 		if ($DBcon->connect_error) {
 			die("Connection failed: " . $DBcon->connect_error);
@@ -26,22 +28,43 @@
 	function updateAccountInfo(){
 	
 	}
-	function newWave(){
-		
+	function newWave($playerName,$DBcon){
+        $loginFollowID = $_POST['loginFollowID'];
+        $waveData = $_POST['wave'];
+        $points = $_POST['points'];
+        $select = "select fail2 from loginAttempts where loginFollowID = $loginFollowID";
+        $query = $DBcon->query($select);//tulokset ovat $query muuttujassa
+        $row = $query->fetch_array(MYSQLI_BOTH);
+        if($row['fail2'] == "in") {
+            $select = "insert into attackWaves (waveData,attackLoot,attackState)
+                      values (".$waveData.",0,'Unused')";
+            $DBcon->query($select);
+            $select = "insert into playersAttacks (attackID,playerID) select MAX(attackID), '".$playerName."' from attackWaves";
+            $DBcon->query($select);
+            $select = "update playerData set points = $points where playerID = '$playerName'";//päivitetään pelaajan pisteet
+            echo $select;
+            echo $waveData;
+            $DBcon->query($select);
+        }
 	}
 	function shoppingEvent(){
 		
 	}
-	function finishedGame(){
+	function finishedGame($playerName,$DBcon){
 		$attackID = $_POST['attackID'];
 		$attackLoot = $_POST['attackLoot'];
-		$points = $_POST['points'];
+		$points = (integer)$_POST['points'];
 		$scoreID = $_POST['scoreID'];
 		$scoreToUpdate = $_POST['scoreToUpdate'];
-		
-		$select = 'update attackWaves set attackState = "Destroyed", attackLoot = $attackLoot where attackID = $attackID';//päivitetään käytetyn aallon tiedot
+		//$DBcon = "";
+
+        echo "".$attackID." ".$attackLoot." ".$points." ".$scoreID." ".$scoreToUpdate."+ ";
+
+		$select = "update attackWaves set attackState = 'Destroyed', attackLoot = $attackLoot where attackID = $attackID";//päivitetään käytetyn aallon tiedot
+        echo $select;
 		$DBcon->query($select);
-		$select = 'update playerData set points = $points, where playerID = $playerName';//päivitetään pelaajan pisteet
+		$select = "update playerData set points = $points where playerID = '$playerName'";//päivitetään pelaajan pisteet
+        echo $select;
 		$DBcon->query($select);
 		if($scoreToUpdate != -1){
 			$select = "update highScores set
@@ -70,13 +93,13 @@
 		updateAccountInfo();
 	} 
 	else if($usage == 2){
-		newWave();
+		newWave($playerName,$DBcon);
 	} 
 	else if($usage == 3){
 		shoppingEvent();
 	} 
 	else if($usage == 4){
-		finishedGame();
+		finishedGame($playerName,$DBcon);
 	}
 	else if($usage == 5){
 		logOff($returnObject,$DBcon);

@@ -320,22 +320,31 @@ waveMenu.prototype = {
                         points.setStyle(newstyle);
                         self.tweenActive = false;
                     },this);
-                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0 && self.playerData.playerData.points > parseInt(self.waveTotalCost.text.substring(12))){
+                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0 && self.playerData.playerData.points >= parseInt(self.waveTotalCost.text.substring(12))){
                     self.playerData.playerData.points -= parseInt(self.waveTotalCost.text.substring(12));
                     var newWave = formatWave(self.waveCreateData);
                     self.playerWaves.playerWaves.push(newWave);
+                    var waveDataForDB = newWave.waveStruct.split("'");
+                    waveDataForDB = ""+waveDataForDB[0]+waveDataForDB[1]+waveDataForDB[2];//hyökkäystieto jaeteltu ' merkillä kierrosten välille
                     //Tätä php filua ei vielä ole
-                    /*var createWave = $.ajax({
+                    var createWave = $.ajax({
                         method:"POST",
-                        url:"PHP/SQLcontroller/update.php",
-                        data:{data:newWave,updateSection:1}
+                        url:"PHP/SQLcontroller/updateData.php",
+                        data:{
+                            wave:waveDataForDB,
+                            usage:2,
+                            location:window.location.href,
+                            loginFollowID: self.playerData.loginFollowID,
+                            playerName:self.playerData.playerData.playerName,
+                            points:self.playerData.playerData.points
+                        }
                     });
                     createWave.done(function(returnValue){
-
+                        alert("New wave created sucessfully");
                     });
-                    createWave.fail(function(){
-
-                    });*/
+                    createWave.fail(function(returndata){
+                        alert("Couldn't create new wave, database unreachable");
+                    });
                     self.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
                     points.text = self.playerData.playerData.points;
 					self.surroundings.menuheader.getChildAt(3).text = "Points: "+self.playerData.playerData.points;

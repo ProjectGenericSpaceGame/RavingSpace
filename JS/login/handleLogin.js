@@ -1,6 +1,4 @@
-/**
- * Created by RAndom MC on 26/11/2015.
- */
+
 var hashPass;
 var getRandom;
 var checkRegisterInfo;
@@ -33,7 +31,6 @@ $(document).ready(function(){
             $('.signupDialog').css("display", "none");
             var getFromDB = $.ajax({
                 method:"POST",
-                //async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/CryptoHandler/serveSalt.php",
                 data:{playerName:user,location:location}
             });
@@ -55,29 +52,25 @@ $(document).ready(function(){
                         $('.signupDialog').css("display", "none");
                         window.location.reload(false);
                     } else if (returnValue == "credsFirst") {
-                        alert('salis on väärin tai käyttäjä nimi on väärin');
+                        alert('Username or password is wrong');
                         $('#loader').css("display","none");
                         $('.loginDialog').css("display", "block");
-                        //makeGame();
                     } else if (returnValue == "lock") {
-                        alert("olet yrittänyt kirjautumista liian monta kertaa! yritä 200vuoden päästä uudestaan");
+                        alert("You have tried login too many times");
                         $('#loader').css("display","none");
                         $('.loginDialog').css("display", "block");
-                        //makeGame();
                     } else if (returnValue == "creds") {
-                        alert("salis on väärin tai käyttäjä nimi on väärin");
+                        alert("Username or password is wrong");
                         $('#loader').css("display","none");
                         $('.loginDialog').css("display", "block");
-                        //makeGame();
-                    } else { // demoamiseen
-                        //makeGame();
+                    } else { 
                         $('.loginDialog').css("display", "none");
                         $('.signupDialog').css("display", "none");
                     }
                 });
                 putToDB.fail(function(){
                     $('#loader').css("display","none");
-                    console.log("username or password is incorrect or database unreachable");
+                    alert("username or password is incorrect or database unreachable");
                 });
             });
             getFromDB.fail(function(){
@@ -105,13 +98,11 @@ $(document).ready(function(){
         }
         return randString;
     }
-
+    // tiivistetään salasana
     hashPass = function(pss){
         var shaObj = new jsSHA("SHA-512", "TEXT");
         shaObj.update(pss);
         var hash = shaObj.getHash("HEX");
-        console.log(hash);
-        console.log("dis");
         return hash;
     }
 
@@ -128,29 +119,48 @@ $(document).ready(function(){
     });
     // login -painike rekisteröitymisruudussa
     $('.register').click(function(){
+        $('#loader').css("display","block");
         var givenUserName = $('.username-register').val();
-        console.log(givenUserName);
+        var email = $('.email').val();
         var check = checkRegisterInfo();
         // tarkistetaan, että salanat ovat samat ja käyttäjänimeksi on syötetty jotain
         if(check == true && givenUserName.length != 0){
-            console.log('tadaa');
-            $('.signupDialog').css("display","none");
-            makeGame();
+            var pass =  $('.password-register').val();
+            var genSalt = getRandom();
+            var saltyhash = pass + genSalt;
+            var sh = hashPass(saltyhash)+genSalt;
+            var checkUser = $.ajax({
+                    method:"POST",
+                    //sync:false,
+                    url:"PHP/CryptoHandler/loginHandler.php",
+                    data:{newPass:sh, userName:user,location:location, userEmail:email}
+            });
+            checkUser.done(function(returnValue){
+                $('.signupDialog').css("display", "none");
+                $('.loginDialog').css("display", "block");
+                alert("registeration completed. Please Log in");
+                    
+            });
+            checkUser.fail(function(){
+                alert("database failure");               
+            });
         } else {
-            console.log('noTadaa');
+            $('#loader').css("display","none");
+            alert("please input valid user info");
         }
     });
-    // salasana kenttien tarkistus
+    // kenttien tarkistus
     checkRegisterInfo = function(){
         var first = $('.password-register').val();
         var second = $('.password-retype').val();
+        
         if(first != second){
             return false;
         } else{
             return true;
         }
     }
-
+    
     $('.signUp').click(function(){
         var other =  $('.loginDialog').css("display");
         if(other == "block"){

@@ -238,7 +238,7 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
     }
 
 }
-function enemyFire(user,gun,enemyBullets,fireRate,target){
+function enemyFire(user,gun,enemyBullets,fireRate,target,destroyerBullets){
     var bullet = enemyBullets.getFirstDead();
     if(user.key == 'commander'){
         if(game.time.now > user.nextFire && enemyBullets.countDead() > 0){
@@ -261,6 +261,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target){
             user.nextFire = game.time.now + fireRate;
             bullet.reset(user.body.x, user.body.y);
             bullet.alpha = 0;
+            destroyerBullets.push(bullet);
             game.physics.arcade.moveToObject(bullet,target,200);
         }
     }

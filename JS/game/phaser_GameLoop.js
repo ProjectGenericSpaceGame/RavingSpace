@@ -87,6 +87,7 @@ mainGame.prototype = {
         this.IntMouseTrack = -1;
         this.kick = 60;
         this.attackLoot = 0;
+        this.HUDchangeEvent = false; //mahdollistaa tehoste HUDin käytön hiiren rullalla ilman että tehoste laukeaa
 
         this.clipSizes = [35, 30, 5, 1];
         //reloading = false;
@@ -292,8 +293,8 @@ mainGame.prototype = {
         this.HUD.points.text = points;
         this.clipText.text  = this.clips[this.HUD.webTray.trayPosition-1];
         if(this.ship.shield){
-            this.shipAccessories.getChildAt(0).getChildAt(0).x = this.ship.x;
-            this.shipAccessories.getChildAt(0).getChildAt(0).y = this.ship.y;
+            this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).x = this.ship.x;
+            this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).y = this.ship.y;
         }
         //liikutetaan hiiren viereen
 		this.clipText.x = parseFloat(this.game.input.activePointer.worldX+40);
@@ -340,6 +341,9 @@ mainGame.prototype = {
 		if(this.cursors.reload.isDown && !this.reloading[this.HUD.webTray.trayPosition-1]){
 			reload(this.reloadSprite,this.clips,this.HUD.webTray.trayPosition-1, this.HUD,this.guns.getChildAt(this.HUD.webTray.trayPosition-1),1,this.reloading);
 		}
+        if(this.cursors.abil1.isDown||this.cursors.abil2.isDown||this.cursors.wep1.isDown||this.cursors.wep2.isDown||this.cursors.wep3.isDown){
+            this.changeHUDSlot(true,this.game.input.keyboard.lastKey.event.key);
+        }
         //ampuminen
 		var laserFire = function(){
 			if (fire(self.laserBul, self.guns.getChildAt(self.HUD.webTray.trayPosition-1), self.guns.getChildAt(self.HUD.webTray.trayPosition-1).fireRate, corRot, self.ship)) {
@@ -378,7 +382,8 @@ mainGame.prototype = {
         } else if (!this.reloading[this.HUD.webTray.trayPosition-1] && this.clips[this.HUD.webTray.trayPosition-1] <= 0) {
             reload(this.reloadSprite,this.clips,this.HUD.webTray.trayPosition-1,this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition-1),1,this.reloading);
         }
-        if(this.game.input.activePointer.rightButton.isDown && !this.abilityReloading[this.HUD.abTray.trayPosition-1]){
+        
+        if(this.game.input.activePointer.rightButton.justReleased(40) && !this.abilityReloading[this.HUD.abTray.trayPosition-1] && !this.HUDchangeEvent){
             var mass = this.ship.body.mass+1-1;
             if(this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition-1).name == "superSpeed"){
                 this.game.time.events.add(1000,function(){
@@ -391,12 +396,15 @@ mainGame.prototype = {
             } else if(this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition-1).name == "shield"){
                 this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition-1).revive();
                 this.game.time.events.add(5000,function(){
-                    this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition-1).kill();
+                    this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).kill();
                     this.ship.shield = false;
                     reload(null,null,this.HUD.abTray.trayPosition-1,this.HUD,this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition-1),2,this.abilityReloading);
                 },this);
                 this.ship.shield = true;
             }
+        }
+        else if(this.HUDchangeEvent && !this.game.input.activePointer.rightButton.isDown && !this.game.input.activePointer.rightButton.justReleased(40)) {
+            this.HUDchangeEvent = false;
         }
 
         //Hyökkäyksen hallinta
@@ -459,9 +467,6 @@ mainGame.prototype = {
                             boom.kill();
                             boom.scale.setTo(0.1,0.1);
                         });
-                    }
-                    if(b.alpha == 0){
-                        destroyerBullets.push(b);
                     }
                 } else if(self.bulletArray.length != 0 && self.timers[4] == 2){//jos pelaajaan osumista tutkitaan
                     hitDetector(b, enm, null, self.lap, self.HPbar);
@@ -553,7 +558,7 @@ mainGame.prototype = {
                         if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 1,enemy.targetOff) && enemy.ray == null && enemy.wait == 0) {
                             enemy.getChildAt(2).emitParticle();
                             var gun = null;
-                            enemyFire(enemy, gun, this.enemyBullets, enemy.fireRate, this.asteroids.getChildAt(enemy.name));
+                            enemyFire(enemy, gun, this.enemyBullets, enemy.fireRate, this.asteroids.getChildAt(enemy.name),destroyerBullets);
                             enemy.ray = "g";
                         } else if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 1,enemy.targetOff) && enemy.wait < 2) {
                             enemy.wait += 1;
@@ -762,7 +767,7 @@ mainGame.prototype = {
         if(!this.ship.dying && !this.ship.shield) {
             eachEnemyAliveFn(this.ship);
         } else if(!this.ship.dying && this.ship.shield){
-            this.game.physics.arcade.overlap(this.shipAccessories.getChildAt(0).getChildAt(0), this.enemyBullets, this.shieldHit, null, this);
+            this.game.physics.arcade.overlap(this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos), this.enemyBullets, this.shieldHit, null, this);
         }
         self.timers[4]++;
         this.asteroids.forEachAlive(eachEnemyAliveFn);
@@ -816,38 +821,60 @@ mainGame.prototype = {
             }
         }
     }, // trybuff
-    changeHUDSlot: function(){
-        if(!this.game.input.activePointer.isDown) {
-            if (this.game.input.mouse.wheelDelta == 1 && this.HUD.webTray.trayPosition < this.guns.length && this.timers[3] == 0) {
-                this.HUD.webTray.getChildAt(0).x += 54;
-                this.HUD.webTray.trayPosition++;
-                this.timers[4]++;
-                this.game.time.events.add(75, function () {
-                    this.timers[4] = 0
+    changeHUDSlot: function(wasKeyboard,key){
+        if(wasKeyboard){
+            var to;
+            if(key == "1"||key == "2"|| key == "3"){ //jos vaihdetaan asetta
+                to = parseInt(key)-this.HUD.webTray.trayPosition;
+                this.HUD.webTray.trayPosition = parseInt(key);
+                this.HUD.webTray.getChildAt(0).x += 54*to;
+                this.timers[3]++;
+                this.game.time.events.add(175, function () {
+                    this.timers[3] = 0
                 }, this);
-            } else if (this.game.input.mouse.wheelDelta == -1 && this.HUD.webTray.trayPosition > 1 && this.timers[3] == 0) {
-                this.HUD.webTray.getChildAt(0).x -= 54;
-                this.HUD.webTray.trayPosition--;
-                this.timers[4]++;
-                this.game.time.events.add(75, function () {
-                    this.timers[4] = 0
+            } else {
+                to = this.cursors.abilChangeHotkeys[key]-this.HUD.abTray.trayPosition;
+                this.HUD.abTray.trayPosition = this.cursors.abilChangeHotkeys[key];
+                this.HUD.abTray.getChildAt(0).x += 54*to;
+                this.timers[3]++;
+                this.game.time.events.add(175, function () {
+                    this.timers[3] = 0
                 }, this);
             }
-        } else if(this.game.input.activePointer.rightButton.isDown){
-            if (this.game.input.mouse.wheelDelta == 1 && this.HUD.abTray.trayPosition < 3 && this.timers[3] == 0) {
-                this.HUD.abTray.getChildAt(0).x += 54;
-                this.HUD.abTray.trayPosition++;
-                this.timers[4]++;
-                this.game.time.events.add(75, function () {
-                    this.timers[4] = 0
-                }, this);
-            } else if (this.game.input.mouse.wheelDelta == -1 && this.HUD.abTray.trayPosition > 1 && this.timers[3] == 0) {
-                this.HUD.abTray.getChildAt(0).x -= 54;
-                this.HUD.abTray.trayPosition--;
-                this.timers[4]++;
-                this.game.time.events.add(75, function () {
-                    this.timers[4] = 0
-                }, this);
+        } else {//tällöin oletetaan että kutsu tuli hiiren rullan kuuntelijasta
+            if (!this.game.input.activePointer.isDown) {
+                if (this.game.input.mouse.wheelDelta == 1 && this.HUD.webTray.trayPosition < this.guns.length && this.timers[3] == 0) {
+                    this.HUD.webTray.getChildAt(0).x += 54;
+                    this.HUD.webTray.trayPosition++;
+                    this.timers[3]++;
+                    this.game.time.events.add(175, function () {
+                        this.timers[3] = 0
+                    }, this);
+                } else if (this.game.input.mouse.wheelDelta == -1 && this.HUD.webTray.trayPosition > 1 && this.timers[3] == 0) {
+                    this.HUD.webTray.getChildAt(0).x -= 54;
+                    this.HUD.webTray.trayPosition--;
+                    this.timers[3]++;
+                    this.game.time.events.add(175, function () {
+                        this.timers[3] = 0
+                    }, this);
+                }
+            } else if (this.game.input.activePointer.rightButton.isDown) {
+                this.HUDchangeEvent = true;
+                if (this.game.input.mouse.wheelDelta == 1 && this.HUD.abTray.trayPosition < 3 && this.timers[3] == 0) {
+                    this.HUD.abTray.getChildAt(0).x += 54;
+                    this.HUD.abTray.trayPosition++;
+                    this.timers[3]++;
+                    this.game.time.events.add(175, function () {
+                        this.timers[3] = 0
+                    }, this);
+                } else if (this.game.input.mouse.wheelDelta == -1 && this.HUD.abTray.trayPosition > 1 && this.timers[3] == 0) {
+                    this.HUD.abTray.getChildAt(0).x -= 54;
+                    this.HUD.abTray.trayPosition--;
+                    this.timers[3]++;
+                    this.game.time.events.add(175, function () {
+                        this.timers[3] = 0
+                    }, this);
+                }
             }
         }
     },

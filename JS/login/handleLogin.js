@@ -6,6 +6,7 @@ var getRandom;
 var checkRegisterInfo;
 
 $(document).ready(function(){
+
     // Poistetaan latausruutu
     $('#loader').css("display","none");
     // kirjautumisruutu / rekisteröitymisruutu

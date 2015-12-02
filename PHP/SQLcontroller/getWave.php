@@ -32,7 +32,7 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/gam
         //haluamme vain yhden aallon vaikka query palauttaa kaikki, tutkimme siis rivien määrää ja valitsemme sattuman varaisesti yhden (tulossetti on array)
         $query = $DBcon->query($select);//tulokset ovat $query muuttujassa
         $len = $query->num_rows;
-        $rand = rand(0,$len);
+        $rand = rand(1,$len);
         //rakennetaan returnObject muuttuja
         //aallon tiedot
         for($i = 0;$i<$rand;$i++){

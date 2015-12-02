@@ -2,3 +2,5 @@
 *.iml
 .idea/deployment.xml
 *.xml
+*.psd
+*.npmignore

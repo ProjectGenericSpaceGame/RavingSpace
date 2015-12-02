@@ -111,7 +111,7 @@ gameLoad.prototype = {
 			self.game.state.start('menuLoad');
 		});
 		//this.attackInfo = "051006'302112'352713";
-		this.attackInfo = "010000'000002'000001";
+		this.attackInfo = "100000'000002'000001";
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
@@ -217,6 +217,7 @@ gameLoad.prototype = {
                 else if(this.loadout[o] == "ability2"){
                     abilities.add(this.shield);
                     this.abilityReloading.push(false);
+					this.shipAccessories.shieldPos = abilities.length-1;
                 }
             }
         }
@@ -441,8 +442,24 @@ gameLoad.prototype = {
 		
 		//asetetaan näppäimet
 		this.cursors = this.game.input.keyboard.addKeys( 
-			{ 'up': Phaser.Keyboard.W, 'down': Phaser.Keyboard.S, 'left': Phaser.Keyboard.A, 'right': Phaser.Keyboard.D,'reload':Phaser.Keyboard.R } 
+			{
+                'up': Phaser.Keyboard.W,
+                'down': Phaser.Keyboard.S,
+                'left': Phaser.Keyboard.A,
+                'right': Phaser.Keyboard.D,
+                'reload':Phaser.Keyboard.R,
+                'abil1':Phaser.Keyboard.Z,
+                'abil2':Phaser.Keyboard.X,
+                'abil3':Phaser.Keyboard.C,
+                'wep1':Phaser.Keyboard.ONE,
+                'wep2':Phaser.Keyboard.TWO,
+                'wep3':Phaser.Keyboard.THREE
+            }
 		);
+        this.cursors.abilChangeHotkeys = {//tällä päästään vaihtamaan HUDin paikka helposti ilman pitkiä if-lauseita, ks gameLoop changeHUDposition
+            'z':1,
+            'x':2
+        };
         //kierrosmuuttuja kertoo mikä kierros menossa
         this.lap = 1;
         //asetetaan ääneet

@@ -63,7 +63,7 @@
 		$select = "update attackWaves set attackState = 'Destroyed', attackLoot = $attackLoot where attackID = $attackID";//päivitetään käytetyn aallon tiedot
         echo $select;
 		$DBcon->query($select);
-		$select = "update playerData set points = $points where playerID = '$playerName'";//päivitetään pelaajan pisteet
+		$select = "update playerData set points = $points where playerID = '".$playerName."'";//päivitetään pelaajan pisteet
         echo $select;
 		$DBcon->query($select);
 		if($scoreToUpdate != -1){

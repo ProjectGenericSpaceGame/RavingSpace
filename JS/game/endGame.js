@@ -84,7 +84,7 @@ endGame.prototype = {
                 //async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/updateData.php",
                 data:{
-					playername:this.playerData.playerData.playerName,
+					playerName:this.playerData.playerData.playerName,
 					location:window.location.href,
                     attackLoot:this.attackLoot,
                     attackID:this.attackID,

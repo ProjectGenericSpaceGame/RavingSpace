@@ -14,7 +14,7 @@
 			die("Connection failed: " . $DBcon->connect_error);
 		}
 	} else {
-		$playerName = "testi1";
+		$playerName = $_POST['playerName'];
 		$servername = "localhost";
 		$user = "root";
 		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta

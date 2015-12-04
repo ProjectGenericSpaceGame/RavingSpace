@@ -92,13 +92,13 @@ menuLoad.prototype = {
             this.logoutBtn.getChildAt(0).scale.setTo((1/0.08), 1.5);
 
             //tänne tulee ajaxia ja kissoja
-            var demoname = "testi1";
+            var name = sessionStorage.getItem('playerID');
             // ------>TESTATTU JA TOIMII<------
             var getFromDB = $.ajax({
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerData.php",
-                data:{playerName:demoname,location:window.location.href}
+                data:{playerName:name,location:window.location.href}
             });
             getFromDB.done(function(returnValue){
                 if(returnValue == true){
@@ -113,7 +113,7 @@ menuLoad.prototype = {
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerWaves.php",
-                data:{playerName:demoname,location:window.location.href}
+                data:{playerName:name,location:window.location.href}
             });
             getFromDB.done(function(returnValue){
                 if(returnValue == true){
@@ -144,7 +144,7 @@ menuLoad.prototype = {
             this.globalScores = scoreSort;
 
 
-            sessionStorage.setItem("playerID",this.playerData.playerData.playerName);
+            //sessionStorage.setItem("playerID",this.playerData.playerData.playerName);asetettu handleLoginissa
             sessionStorage.setItem("loginFollowID",this.playerData.loginFollowID);
             /*this.playerData = {
                 "playerData":{
@@ -243,10 +243,11 @@ menuLoad.prototype = {
             };//demo
             
            // lisätään pelaajan pisteet sekä rahat yläpalkkiin
-            var  playerDisplayPoints = this.game.add.text(10, 15, "Points: "+this.playerData.playerData.points, textStyle);
-            var  playerDisplayMoney = this.game.add.text(10, 40, "Money: "+this.playerData.playerData.money, textStyle);
+            var playerDisplayPoints = this.game.add.text(10, 15, "Points: "+this.playerData.playerData.points, textStyle);
+            var playerDisplayMoney = this.game.add.text(10, 40, "Money: "+this.playerData.playerData.money, textStyle);
             // lisätään pelaajan nimi yläpälkkiin
-            var  playerDisplayName = this.game.add.text(1100, 30, this.playerData.playerData.playerName, nameStyle);
+            var playerDisplayName = this.game.add.text(0, 30, this.playerData.playerData.playerName, nameStyle);
+            playerDisplayName.x = (this.menuheader.width/2+450)-playerDisplayName.width/2;
            
             
              this.menuheader.addChild(playerDisplayMoney);

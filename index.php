@@ -19,7 +19,7 @@
 
     <script src="JS/libs/jquery-1.11.2.min.js"></script>
     <script src="JS/libs/jssha/src/sha512.js"></script>
-    <script src="JS/libs/Nonsense.js"></script>
+    <script src="JS/libs/chance.js"></script>
 
     <!-- <script src="JS/timer.js"></script> -->
 </head>
@@ -90,6 +90,13 @@
 </main>
 <footer></footer>
 </body>
-<script>if($("#redirect").length > 0){$("#redirect").remove();if(window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){window.location.pathname = "~H3492/RavingSpace/game.php"} else {window.location.pathname = "RavingSpace/game.php"}}</script>
+<script>
+    if($("#redirect").length > 0){
+        $("#redirect").remove();
+        if(window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/" || window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/index.php")
+        {window.location.pathname = "~H3492/RavingSpace/game.php"}
+        else {window.location.pathname = "RavingSpace/game.php"}
+    }
+</script>
 <script src="JS/login/handleLogin.js"></script>
 </html>

@@ -50,6 +50,7 @@ $(document).ready(function(){
                     if (returnValue == true) {
                         $('.loginDialog').css("display", "none");
                         $('.signupDialog').css("display", "none");
+                        sessionStorage.setItem("playerID",user);
                         window.location.reload(false);
                     } else if (returnValue == "credsFirst") {
                         alert('Username or password is wrong');
@@ -86,13 +87,13 @@ $(document).ready(function(){
     getRandom = function(){
         var possible = "b8EFGHdefMNTUXYZVghiOC#¤%KaIJP)=?@56opA£QRL\"&WtSjklmyncu/(\$\^\*\'vw34sxD79Bqrz012\!";
         var length = 10;
-        var rnd = new Nonsense();
+        var rnd = new Chance();
         var toPick = [];
         var randString = "";
         for(var j = 0;j < length;j++){
             toPick = [];
             for(var i = 0;i < length;i++){
-                toPick.push(possible.charAt(rnd.integerInRange(0,possible.length-1)));
+                toPick.push(possible.charAt(rnd.integer({min:0,max:possible.length-1})));
             }
             randString += rnd.pick(toPick);
         }
@@ -132,13 +133,19 @@ $(document).ready(function(){
             var checkUser = $.ajax({
                     method:"POST",
                     //sync:false,
-                    url:"PHP/CryptoHandler/loginHandler.php",
-                    data:{newPass:sh, userName:user,location:location, userEmail:email}
+                    url:"PHP/CryptoHandler/newUser.php",
+                    data:{newPass:sh, playerName:givenUserName,location:window.location.href, email:email}
             });
             checkUser.done(function(returnValue){
-                $('.signupDialog').css("display", "none");
-                $('.loginDialog').css("display", "block");
-                alert("registeration completed. Please Log in");
+                if(returnValue == "success") {
+                    $('#loader').css("display","none");
+                    $('.signupDialog').css("display", "none");
+                    $('.loginDialog').css("display", "block");
+                    alert("registeration completed. Please Log in");
+                } else if(returnValue == "taken"){
+                    alert("This username was already taken!");
+                    $('#loader').css("display","none");
+                }
                     
             });
             checkUser.fail(function(){

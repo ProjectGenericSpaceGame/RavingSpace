@@ -43,7 +43,7 @@ var mainGame = function(game){
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
     //tämän funktion parametreistä ei tarvitse tietää muuta kuin että ne kaikki ovat createssa luodut muuttujat
-    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading) {
+    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading,pauseMenu) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.shipAccessories = shipAccessories;
@@ -79,6 +79,7 @@ mainGame.prototype = {
         this.dropApi = dropApi;
         this.playerData = playerData;
         this.abilityReloading = abilityReloading;
+        this.pauseMenu = pauseMenu;
         //Loput muuttujat
         this.asteroidAmmount = 3;
         this.fireRate = 450;
@@ -343,6 +344,16 @@ mainGame.prototype = {
 		}
         if(this.cursors.abil1.isDown||this.cursors.abil2.isDown||this.cursors.wep1.isDown||this.cursors.wep2.isDown||this.cursors.wep3.isDown){
             this.changeHUDSlot(true,this.game.input.keyboard.lastKey.event.key);
+        }
+        if(this.cursors.pause.isDown){
+            if(this.game.paused){
+                this.game.paused = false;
+                this.pauseMenu.kill();
+            } else {
+                this.game.paused = true;
+                this.pauseMenu.revive();
+            }
+
         }
         //ampuminen
 		var laserFire = function(){

@@ -8,6 +8,11 @@ var points;
 var enemiesKilled;
 var deaths;
 var totalTime;
+var volumes = {
+    master:0.5,
+    music:0.5,
+    sounds:0.5
+};
 
 //Pelin funktio
 function makeGame(){

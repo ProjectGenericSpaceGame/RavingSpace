@@ -36,6 +36,9 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/ind
 
     $newRandom = substr($givenHash, -10);
     $toCompare = substr($givenHash, 0, -10);
+    //echo $toCompare;
+    //echo "µµ";
+    //echo strlen($newRandom);
 
     $select = "select passHash, playerData.loginFollowID, loginAttempts.failedTries, loginAttempts.fail1 from playerData
     inner join loginAttempts on loginAttempts.loginFollowID = playerData.loginFollowID
@@ -47,12 +50,14 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/ind
     $failedAttempts = $row['failedTries'];
     $loginFollowID = $row['loginFollowID'];
     $tryLock = $row['fail1'];
-    //echo "dis";
-//echo "daa?";
+    echo strlen($DBhash);
+    echo "µµ";
+    echo $toCompare."+".$DBhash;
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
     $_SESSION['log'] = 1;
     $return = true;
-    $toDB = $bcrypt->hash($newPassWord).$newRandom;
+    $toDB = $bcrypt->hash($newPassWord);
+    $toDB .= $newRandom;
     $failedAttempts = 0;
     //query
     $select = "update playerData set passHash = '$toDB' where playerID = '$userName'";

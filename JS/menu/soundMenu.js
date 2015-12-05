@@ -19,7 +19,7 @@ soundMenu.prototype = {
         
         this.sound = this.game.add.audio('testi');
         this.sound.play();
-        this.mastervolume = 1.0;
+        //this.mastervolume = 1.0;
         
         var styleA = { font:'25px cyber', fill:'white'};
         var styleB = { font:'20px cyber', fill:'black'};

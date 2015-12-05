@@ -453,7 +453,8 @@ gameLoad.prototype = {
                 'abil3':Phaser.Keyboard.C,
                 'wep1':Phaser.Keyboard.ONE,
                 'wep2':Phaser.Keyboard.TWO,
-                'wep3':Phaser.Keyboard.THREE
+                'wep3':Phaser.Keyboard.THREE,
+                'pause':Phaser.Keyboard.ESC
             }
 		);
         this.cursors.abilChangeHotkeys = {//tällä päästään vaihtamaan HUDin paikka helposti ilman pitkiä if-lauseita, ks gameLoop changeHUDposition
@@ -563,6 +564,9 @@ gameLoad.prototype = {
 		var pointsText = this.game.add.text(20,20,"Points: ",{fill:"white",font:"20px cyber"});
         pointsText.fixedToCamera = true;
 
+
+
+		//kasataan HUD
         var HUD = {
             banner:banner,
             webTray:wepTray,
@@ -571,6 +575,100 @@ gameLoad.prototype = {
 			buffTrays2:buffTrays2,
             points:pointsText
         };
+
+		//pause valikko, tässä olisi voinut hyödyntää soundMenua mutta tämän yrittäminen johti jostain syystä tilin hajoamiseen
+		var styleA = { font:'25px cyber', fill:'white'};
+		var styleB = { font:'20px cyber', fill:'black'};
+        this.pauseMenu = this.game.add.group();
+		// mastervolumen säädin
+		this.mastervolLabel = this.game.add.text(330, 300, 'Master volume', styleA);
+		this.masterGroup = this.game.add.group();
+		this.masterGroup.x = 630;
+		this.masterGroup.y = 300;
+		this.masterslider = this.game.add.sprite(0, 0, 'slider');
+		this.masterslider.scale.setTo(1,2);
+		this.masterneedle = this.game.add.sprite(170, 1, 'needle');
+		this.masterneedle.inputEnabled = true;
+		this.masterneedle.input.enableDrag();
+		this.masterneedle.input.boundsSprite = this.masterslider;
+		this.masterneedle.input.allowVerticalDrag = false;
+		this.masterneedle.events.onDragUpdate.add(this.masterVolume,this);
+		this.masterGroup.add(this.masterslider);
+		this.masterGroup.add(this.masterneedle);
+
+		// musiikkivolumen säädin
+		this.musicvolLabel = this.game.add.text(330, 370, 'Music volume', styleA);
+		this.musicGroup = this.game.add.group();
+		this.musicGroup.x = 630;
+		this.musicGroup.y = 370;
+		this.musicslider = this.game.add.sprite(0, 0, 'slider');
+		this.musicslider.scale.setTo(1,2);
+		this.musicneedle = this.game.add.sprite(170, 1, 'needle');
+		this.musicneedle.inputEnabled = true;
+		this.musicneedle.input.enableDrag();
+		this.musicneedle.input.boundsSprite = this.musicslider;
+		this.musicneedle.input.allowVerticalDrag = false;
+		this.musicneedle.events.onDragUpdate.add(this.musicVolume,this);
+		this.musicGroup.add(this.musicslider);
+		this.musicGroup.add(this.musicneedle);
+
+		// efektivolumen säädin
+		this.effectsvolLabel = this.game.add.text(330, 440, 'Effects volume', styleA);
+		this.fxGroup = this.game.add.group();
+		this.fxGroup.x = 630;
+		this.fxGroup.y = 440;
+		this.fxslider = this.game.add.sprite(0, 0, 'slider');
+		this.fxslider.scale.setTo(1,2);
+		this.fxneedle = this.game.add.sprite(170, 1, 'needle');
+		this.fxneedle.inputEnabled = true;
+		this.fxneedle.input.enableDrag();
+		this.fxneedle.input.boundsSprite = this.fxslider;
+		this.fxneedle.input.allowVerticalDrag = false;
+		this.fxneedle.events.onDragUpdate.add(this.fxVolume,this);
+		this.fxGroup.add(this.fxslider);
+		this.fxGroup.add(this.fxneedle);
+
+		// alustetaan äänten on/off painike
+		this.onoffButton = this.game.add.button(590, 560, 'menuHeader', this.onOff, this);
+		this.onoffButton.scale.setTo(0.08, 0.5);
+		var onoffText = this.game.add.text(210,20,"On/Off",styleB);
+		this.onoffButton.addChild(onoffText);
+		this.onoffButton.getChildAt(0).scale.setTo(10, 1.5);
+
+		// alustetaan äänien resetointi painike
+		this.resetButton = this.game.add.button(660, 620, 'menuHeader', this.reset, this);
+		this.resetButton.scale.setTo(0.08, 0.5);
+		var resetText = this.game.add.text(400,20,"Reset",styleB);
+		this.resetButton.addChild(resetText);
+		this.resetButton.getChildAt(0).scale.setTo(10, 1.5);
+
+		// alustetaan äänien tallennus painike
+		this.saveButton = this.game.add.button(530, 620, 'menuHeader', this.save, this);
+		this.saveButton.scale.setTo(0.08, 0.5);
+		var saveText = this.game.add.text(400,20,"Save",styleB);
+		this.saveButton.addChild(saveText);
+		this.saveButton.getChildAt(0).scale.setTo(10, 1.5);
+
+		//alustetaan takaisin nappula
+		this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
+		this.backButton.scale.setTo(0.08, 0.5);
+		var backText = this.game.add.text(400,20,"Return to main menu",styleB);
+		this.backButton.addChild(backText);
+		this.backButton.getChildAt(0).scale.setTo(10, 1.5);
+
+
+		this.pauseMenu.add(this.mastervolLabel);
+		this.pauseMenu.add(this.masterGroup);
+		this.pauseMenu.add(this.musicvolLabel);
+		this.pauseMenu.add(this.musicGroup);
+		this.pauseMenu.add(this.effectsvolLabel);
+		this.pauseMenu.add(this.fxGroup);
+		this.pauseMenu.add(this.onoffButton);
+		this.pauseMenu.add(this.saveButton);
+		this.pauseMenu.add(this.backButton);
+		this.pauseMenu.add(this.resetButton);
+        this.pauseMenu.kill();
+
 		points = 0;
 		enemiesKilled = 0;
         deaths = 0;
@@ -612,7 +710,8 @@ gameLoad.prototype = {
 			dropBoom,
 			dropApi,
 			this.playerData,
-			this.abilityReloading
+			this.abilityReloading,
+            this.pauseMenu
 		);
 	},
 	HPbar: function(){
@@ -629,5 +728,42 @@ gameLoad.prototype = {
         HPbar.addChild(health);
         HPbar.addChild(container);
 		return HPbar;
-	} 
+	},
+    masterVolume:function() {
+        //console.log(this.masterneedle.x);
+        console.log(this.mastervolume);
+        this.mastervolume = this.masterneedle.x*(1/this.masterneedle.width);
+        this.musicVolume();
+        this.fxVolume();
+    }, // säädetään musiikkivolume musiikkisliderin neulan x:n mukaan
+    musicVolume:function() {
+        //console.log(this.musicneedle.x);
+        console.log(this.sound.volume);
+        this.sound.volume = this.musicneedle.x*(1/this.musicneedle.width);
+    }, // säädetään efektivolume efektisliderin neulan x:n mukaan
+    fxVolume:function() {
+        //console.log(this.fxneedle.x);
+        console.log(this.sound.volume);
+        this.sound.volume = this.fxneedle.x*(1/this.fxneedle.width);
+    },
+    // asettaa sliderit takaisin keskelle ja ajaa volume funktiot
+    reset:function(){
+        this.masterneedle.x = this.masterslider.width/2;
+        this.masterVolume();
+        this.musicneedle.x = this.masterslider.width/2;
+        this.musicVolume();
+        this.fxneedle.x = this.fxslider.width/2;
+        this.fxVolume();
+    },
+    // vaihda mute on/off
+    onOff:function(){
+        this.game.sound.mute = !this.game.sound.mute;
+    },
+    // back-painike takaisin päävalikkoon
+    back:function(){
+        this.masterGroup.removeAll();
+        this.musicGroup.removeAll();
+        this.fxGroup.removeAll();
+        this.game.state.start('menuLoad');
+    }
 };

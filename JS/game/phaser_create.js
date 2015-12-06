@@ -98,6 +98,7 @@ gameLoad.prototype = {
     },
 	create: function(){
         this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.start,this);
+        this.game.input.keyboard.addKey(Phaser.Keyboard.BACKSPACE).onDown.add(this.back, this);
 		var self = this;
         var loadertrail1 = this.game.add.emitter(645,480,1000);
         var loadertrail2 = this.game.add.emitter(645,480,1000);
@@ -122,11 +123,14 @@ gameLoad.prototype = {
             tracks: [],
             index: 0
         };
+      
         this.musics.tracks.push(this.game.add.audio('highOctane'));
         this.game.sound.setDecodedCallback(this.musics.tracks,audioReady, this);
         function audioReady(){
                 this.musicLoadStatus = true;
                 this.enterText = this.game.add.text(1000,700,"Press ENTER to start",{fill:"white",font:"20px cyber"});
+                this.backToMenuText = this.game.add.text(50, 700, "Press BACKSPACE to get back to the menu", {fill:"white",font:"20px cyber"});
+
         }
         //luodaan alus ja moottorivana
         this.shipAccessories  = this.game.add.group();
@@ -736,6 +740,7 @@ gameLoad.prototype = {
             this.loader.destroy();
             this.loaderTrail.destroy();
             this.enterText.destroy();
+            this.backToMenuText.destroy();
             game.state.start("mainGame", false, false,
                 this.asteroids,
                 this.ship,

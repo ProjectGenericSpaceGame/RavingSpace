@@ -1,4 +1,4 @@
-﻿
+
 var hashPass;
 var getRandom;
 var checkRegisterInfo;
@@ -20,7 +20,7 @@ $(document).ready(function(){
         $('.loginDialog').css("display","none");
         $('.signupDialog').css("display","none");
     });
-
+    
     $('.loginCheck').click(function(){
         var pss =  $('.password').val();
         var user = $('.username').val();
@@ -183,5 +183,17 @@ $(document).ready(function(){
     $('.info').mouseout(function(){
         $('.infoDialog').css("display","none");
     });
-    // kirjautumis/rekisteröitymisruutu loppuu
+ 
+    // Tutkitaan onko caps lock pohjassa
+   $('.password').keypress(function(e) {
+        var s = String.fromCharCode( e.which );
+        // tarkistetaan, että sift ei ole pohjassa ja sift pohjassa s on pieni s. 
+        if ( s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey ) {
+             $('.capsLockWarning').css("display","block");
+        } else{
+            $('.capsLockWarning').css("display","none");
+        } 
+            
+    });
+       // kirjautumis/rekisteröitymisruutu loppuu
 });

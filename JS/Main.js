@@ -198,6 +198,7 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
             bullet.name = "mine";
 
         } else if (gun.name == 'shotgun'){
+            
             var x = game.input.worldX;
             var y = game.input.worldY;
             var distance = game.math.distance(x,y,gun.world.x,gun.world.y);

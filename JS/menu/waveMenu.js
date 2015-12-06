@@ -17,7 +17,6 @@ waveMenu.prototype = {
         //do some murdering here
        this.buttonGroup.removeAll();
      
-
     },
     create:function(){
         var self = this;
@@ -86,7 +85,6 @@ waveMenu.prototype = {
         this.centerWindow.y = 200;
         },
         
-
     waveCreator:function(){
 
         var self = this;
@@ -107,7 +105,6 @@ waveMenu.prototype = {
         style = { font:'25px cyber', fill:'white'};
         //pelaajan pisteet
         var points = this.game.add.text(515,25,this.playerData.playerData.points,style);
-        //var points = this.game.add.text(475,25,"Points: "+"5500",style);//demo
 
         //checkoutin otsikko
         var checkOutLabel = this.game.add.text(0,80,"Complete Wave",style);
@@ -124,19 +121,17 @@ waveMenu.prototype = {
         checkoutBtnText.x  = (this.checkoutBtn.width/2)-(checkoutBtnText.width/2);
         this.checkoutBtn.addChild(checkoutBtnText);
 
-
         //aallon kasaus
-        //style = { font:'25px calibri', fill:'white'};
         this.subMenu = 1;
         this.subFunctions = [wave1,wave2,wave3];
 
-        var fighterLine = this.game.add.group();
+        var destroyerLine = this.game.add.group();
         var hunterLine = this.game.add.group();
         var commanderLine = this.game.add.group();
-        //fighter line
-        var fighterPic = this.game.add.image(25,130,'menuBack');
-		//fighterPic.scale.setTo(0.1,0.1);
-        var shipName = this.game.add.text(100,130,"Fighter:  50 points",style);
+        //destroyer line
+        var destroyerPic = this.game.add.image(32.5,110,'destroyer');
+		destroyerPic.scale.setTo(0.35,0.35);
+        var shipName = this.game.add.text(100,130,"Destroyer:  50 points",style);
         var minus = this.game.add.button(480,130,'minus',function() {
             if (self.waveCreateData[self.subMenu - 1][0] > 0){
                 self.waveCreateData[self.subMenu - 1][0] -= 1;
@@ -148,20 +143,19 @@ waveMenu.prototype = {
             self.waveCreateData[self.subMenu-1][0]+=1;
             self.subFunctions[self.subMenu-1]();
         });
-        fighterLine.addChild(fighterPic);
-        fighterLine.addChild(shipName);
-        fighterLine.addChild(shipAmount);
-        fighterLine.addChild(minus);
-        fighterLine.addChild(plus);
+        destroyerLine.addChild(destroyerPic);
+        destroyerLine.addChild(shipName);
+        destroyerLine.addChild(shipAmount);
+        destroyerLine.addChild(minus);
+        destroyerLine.addChild(plus);
         //hunter line
-        var hunterPic = this.game.add.image(25,200,'hunter');
+        var hunterPic = this.game.add.image(25,190,'hunter');
 		hunterPic.scale.setTo(0.35,0.35);
         shipName = this.game.add.text(100,200,"Hunter:  75 points",style);
         minus = this.game.add.button(480,200,'minus',function() {
             if (self.waveCreateData[self.subMenu - 1][1] > 0){
                 self.waveCreateData[self.subMenu - 1][1] -= 1;
                 self.subFunctions[self.subMenu-1]();
-
             }
         });
         shipAmount = this.game.add.text(540,200,this.waveCreateData[this.subMenu-1][1],style);
@@ -222,7 +216,7 @@ waveMenu.prototype = {
             }
         });
         var shipLines = this.game.add.group();
-        shipLines.addChild(fighterLine);
+        shipLines.addChild(destroyerLine);
         shipLines.addChild(hunterLine);
         shipLines.addChild(commanderLine);
         shipLines.name = "shipLines";
@@ -235,7 +229,7 @@ waveMenu.prototype = {
         function wave1(){
             //alert("workkii");
             self.subMenu = 1;
-            fighterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
+            destroyerLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
             hunterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][1];
             commanderLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][2];
             self.wave1Btn.setFrames(0,2,1);
@@ -245,7 +239,7 @@ waveMenu.prototype = {
         }
         function wave2(){
             self.subMenu = 2;
-            fighterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
+            destroyerLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
             hunterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][1];
             commanderLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][2];
             self.wave1Btn.setFrames(0, 1, 2);
@@ -255,7 +249,7 @@ waveMenu.prototype = {
         }
         function wave3(){
             self.subMenu = 3;
-            fighterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
+            destroyerLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][0];
             hunterLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][1];
             commanderLine.getChildAt(2).text = self.waveCreateData[self.subMenu-1][2];
             self.wave1Btn.setFrames(0, 1, 2);
@@ -274,7 +268,7 @@ waveMenu.prototype = {
                 item.getChildAt(item.length-2).visible = true;
             });
             checkOutLabel.visible = false;
-            fighterLine.y = 0;//Jälleen kerran..miksi näin??? Ei tämän pitäisi olla 0
+            destroyerLine.y = 0;//Jälleen kerran..miksi näin??? Ei tämän pitäisi olla 0
             hunterLine.y = 0;
             commanderLine.y = 0;
             self.waveTotalCost.y = 350;
@@ -297,10 +291,10 @@ waveMenu.prototype = {
                     item.getChildAt(item.length - 1).visible = false;//minus ja plus nappulat ovat kaksi viimeistä
                     item.getChildAt(item.length - 2).visible = false;
                 });
-                fighterLine.getChildAt(2).text = self.waveCreateData[3][0];
+                destroyerLine.getChildAt(2).text = self.waveCreateData[3][0];
                 hunterLine.getChildAt(2).text = self.waveCreateData[3][1];
                 commanderLine.getChildAt(2).text = self.waveCreateData[3][2];
-                fighterLine.y += 25;
+                destroyerLine.y += 25;
                 hunterLine.y += 25;
                 commanderLine.y += 25;
                 self.waveTotalCost.y += 25;

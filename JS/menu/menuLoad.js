@@ -45,6 +45,8 @@ menuLoad.prototype = {
             this.game.load.image('needle', 'assets/menuelements/needle.png');
             this.game.load.image('slider', 'assets/menuelements/slider.png');
 			 
+        		this.game.load.image('destroyer', 'assets/sprites/fighter.png');
+
 			 this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
 			 this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
 

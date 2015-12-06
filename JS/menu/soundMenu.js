@@ -140,7 +140,7 @@ soundMenu.prototype = {
         } else if (this.masterneedle.x > 324) {
             this.mastervolume = 2.0;
         }
-        this.musicVolume()
+        this.musicVolume();
         //this.fxVolume();
     }, // säädetään musiikkivolume musiikkisliderin neulan x:n mukaan
     musicVolume:function() {

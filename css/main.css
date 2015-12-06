@@ -231,3 +231,10 @@ canvas{
     position: absolute;
     display: none;
 }
+.capsLockWarning{
+    color: crimson;
+    position: absolute;
+    margin: 110px 0 0 200px;
+    
+}
+

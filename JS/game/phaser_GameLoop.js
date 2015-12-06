@@ -377,7 +377,7 @@ mainGame.prototype = {
                     if (fire(this.minesBul, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
                     }
-                    // ari lisäsi 24.11.2015
+                 
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "shotgun") {
                     if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;

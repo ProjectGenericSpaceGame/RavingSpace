@@ -128,27 +128,6 @@ gameLoad.prototype = {
                 this.musicLoadStatus = true;
                 this.enterText = this.game.add.text(1000,700,"Press ENTER to start",{fill:"white",font:"20px cyber"});
         }
-        //luodaan alus ja moottorivana
-        this.shipAccessories  = this.game.add.group();
-        this.ship = this.game.add.sprite(650, 400, 'ship');
-        this.ship.scale.setTo(0.5,0.5);
-        //aluksen moottoritrail
-        this.shipTrail = this.game.add.group();
-        var trail1 = this.game.add.emitter(0,60,1000);
-        var trail2 = this.game.add.emitter(0,60,1000);
-        trail1.width = 15;
-        trail2.width = 4;
-        trail1.makeParticles("trail6");
-        trail2.makeParticles("trail7");
-        trail2.lifespan = 100;
-        trail1.lifespan = 250;
-        this.shipTrail.add(trail1);
-        this.shipTrail.add(trail2);
-        this.shipTrail.forEach(function(em){
-            em.setXSpeed(30, -30);
-            em.setYSpeed(200, 180);
-            em.setRotation(0);
-        });
 
 		waiter = this.game.time.create();
 		this.clipSizes = [35, 30, 5, 1];
@@ -178,6 +157,27 @@ gameLoad.prototype = {
 		
 		this.bg = this.game.add.sprite(0, 0, 'background');
 		this.bg.scale.setTo(1,1.1);
+        //luodaan alus ja moottorivana
+        this.shipAccessories  = this.game.add.group();
+        this.ship = this.game.add.sprite(650, 400, 'ship');
+        this.ship.scale.setTo(0.5,0.5);
+        //aluksen moottoritrail
+        this.shipTrail = this.game.add.group();
+        var trail1 = this.game.add.emitter(0,60,1000);
+        var trail2 = this.game.add.emitter(0,60,1000);
+        trail1.width = 15;
+        trail2.width = 4;
+        trail1.makeParticles("trail6");
+        trail2.makeParticles("trail7");
+        trail2.lifespan = 100;
+        trail1.lifespan = 250;
+        this.shipTrail.add(trail1);
+        this.shipTrail.add(trail2);
+        this.shipTrail.forEach(function(em){
+            em.setXSpeed(30, -30);
+            em.setYSpeed(200, 180);
+            em.setRotation(0);
+        });
         // asteroidit
 		this.asteroids = this.game.add.group();
 		this.asteroids.create(300, 156, 'asteroid1');
@@ -721,14 +721,6 @@ gameLoad.prototype = {
         date = null;
         this.loader.bringToTop();
         this.game.world.bringToTop(this.loaderTrail);
-        var trail = this.loaderTrail.getChildAt(0);
-        trail.forEach(function(kid){
-            trail.bringToTop(kid);
-        });
-        var trail = this.loaderTrail.getChildAt(1);
-        trail.forEach(function(kid){
-            trail.bringToTop(kid);
-        });
 	},
     start : function(){
         if(this.musicLoadStatus) {

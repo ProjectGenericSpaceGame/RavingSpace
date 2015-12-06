@@ -77,18 +77,79 @@ gameLoad.prototype = {
 		//abilityjen visuaaliy
 		this.game.load.image('shield', 'assets/particles/shield.png');
 		//dropit
-		this.game.load.image('dropBoom', 'assets/placeholders/weapon0.png');
-		this.game.load.image('dropApi', 'assets/placeholders/ability3.png');
+		this.game.load.image('this.dropBoom', 'assets/placeholders/weapon0.png');
+		this.game.load.image('this.dropApi', 'assets/placeholders/ability3.png');
+        //pausemenun elementit
+        this.game.load.image('needle', 'assets/menuelements/needle.png');
+        this.game.load.image('slider', 'assets/menuelements/slider.png');
+        this.game.load.image('menuHeader', 'assets/placeholders/header3.png');
+        //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
+        this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
         //tausta lopetusnäytölle
         this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
+        //musiikki
+        this.game.load.audio('highOctane','assets/sounds/HighOctane.mp3');
 
 	},
-    init:function(loadout,playerData){
+    init:function(loadout,playerData,loader){
         this.loadout = loadout;
 		this.playerData = playerData;
+        this.loader = loader;
     },
 	create: function(){
+        this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.start,this);
 		var self = this;
+        var loadertrail1 = this.game.add.emitter(645,480,1000);
+        var loadertrail2 = this.game.add.emitter(645,480,1000);
+        loadertrail1.width = 15;
+        loadertrail2.width = 4;
+        loadertrail1.makeParticles("trail6");
+        loadertrail2.makeParticles("trail7");
+        loadertrail1.gravity = 300;
+        loadertrail2.gravity = 300;
+        loadertrail1.setYSpeed(200,210);
+        loadertrail1.setXSpeed(30, -30);
+        loadertrail2.setYSpeed(200,210);
+        loadertrail2.setXSpeed(30, -30);
+        loadertrail1.start(false,400,20);
+        loadertrail2.start(false,550,20);
+        this.loaderTrail = this.game.add.group();
+        this.loaderTrail.add(loadertrail1);
+        this.loaderTrail.add(loadertrail2);
+        //lisätään musiikit
+        this.musicLoadStatus = false;
+        this.musics = {
+            tracks: [],
+            index: 0
+        };
+        this.musics.tracks.push(this.game.add.audio('highOctane'));
+        this.game.sound.setDecodedCallback(this.musics.tracks,audioReady, this);
+        function audioReady(){
+                this.musicLoadStatus = true;
+                this.enterText = this.game.add.text(1000,700,"Press ENTER to start",{fill:"white",font:"20px cyber"});
+        }
+        //luodaan alus ja moottorivana
+        this.shipAccessories  = this.game.add.group();
+        this.ship = this.game.add.sprite(650, 400, 'ship');
+        this.ship.scale.setTo(0.5,0.5);
+        //aluksen moottoritrail
+        this.shipTrail = this.game.add.group();
+        var trail1 = this.game.add.emitter(0,60,1000);
+        var trail2 = this.game.add.emitter(0,60,1000);
+        trail1.width = 15;
+        trail2.width = 4;
+        trail1.makeParticles("trail6");
+        trail2.makeParticles("trail7");
+        trail2.lifespan = 100;
+        trail1.lifespan = 250;
+        this.shipTrail.add(trail1);
+        this.shipTrail.add(trail2);
+        this.shipTrail.forEach(function(em){
+            em.setXSpeed(30, -30);
+            em.setYSpeed(200, 180);
+            em.setRotation(0);
+        });
+
 		waiter = this.game.time.create();
 		this.clipSizes = [35, 30, 5, 1];
 		var getWave = $.ajax({
@@ -135,12 +196,9 @@ gameLoad.prototype = {
         
         this.asteroid3 = this.asteroids.getChildAt(2);
         this.asteroid3.health = 25;
-		//luodaan alus ja moottorivana
-        this.shipAccessories  = this.game.add.group();
-		this.ship = this.game.add.sprite(650, 400, 'ship');
-		this.ship.scale.setTo(0.5,0.5);
+
         // luodaan ryhmä aseille js abiltyille
-        var guns = this.game.add.group();
+        this.guns = this.game.add.group();
         var abilities = this.game.add.group();
 		// perusaseen tiedot
         this.gun = this.game.add.image(0,-90);
@@ -166,7 +224,7 @@ gameLoad.prototype = {
 		this.mines.fireRate = 0;
         this.mines.reload = 2000;
         this.mines.clip = 1;
-		guns.laserLocation = null;
+		this.guns.laserLocation = null;
         //supernopeus
         this.superSpeed = this.game.add.image(0,0);
         this.superSpeed.name = "superSpeed";//kyvyillä ei ole omaa ammusryhmää joten niille luodaan sprite suoraan isäksi
@@ -193,20 +251,20 @@ gameLoad.prototype = {
             if(this.loadout[o] != null){
                 //aseet
                 if(this.loadout[o] == "weapon0") {
-                    guns.add(this.gun);
+                    this.guns.add(this.gun);
                     this.clips.push(this.clipSizes[0]);
                     this.reloading.push(false);
                 } else if(this.loadout[o] == "weapon1"){
-                    guns.add(this.laser);
-					guns.laserLocation = guns.length-1;
+                    this.guns.add(this.laser);
+					this.guns.laserLocation = this.guns.length-1;
                     this.clips.push(this.clipSizes[1]);
                     this.reloading.push(false);
                 } else if(this.loadout[o] == "weapon2"){
-                    guns.add(this.shotgun);
+                    this.guns.add(this.shotgun);
                     this.clips.push(this.clipSizes[2]);
                     this.reloading.push(false);
                 } else if(this.loadout[o] == "weapon3"){
-                    guns.add(this.mines);
+                    this.guns.add(this.mines);
                     this.clips.push(this.clipSizes[3]);
                     this.reloading.push(false);
                 } //tästä alkaa abilityt
@@ -221,26 +279,9 @@ gameLoad.prototype = {
                 }
             }
         }
-        //aluksen moottoritrail
-		this.shipTrail = this.game.add.group();
-		var trail1 = this.game.add.emitter(0,60,1000);
-		var trail2 = this.game.add.emitter(0,60,1000);
-		trail1.width = 15;
-		trail2.width = 4;
-		trail1.makeParticles("trail6");
-		trail2.makeParticles("trail7");
-		trail2.lifespan = 100;
-		trail1.lifespan = 250;
-		this.shipTrail.add(trail1);
-		this.shipTrail.add(trail2);
-		this.shipTrail.forEach(function(em){
-			em.setXSpeed(30, -30);
-			em.setYSpeed(200, 180);
-			em.setRotation(0);
-		});
 
 		this.ship.addChild(this.shipTrail);
-		this.ship.addChild(guns);
+		this.ship.addChild(this.guns);
         this.shipAccessories.add(abilities);
         this.ship.health = 3;
         this.ship.dying = false;
@@ -297,31 +338,31 @@ gameLoad.prototype = {
 		this.enemyBullets.setAll('checkWorldBounds', true);
 		
 		//vihujen dropit
-		var dropBoom = this.game.add.group();
-		dropBoom.enableBody = true;
-		dropBoom.physicsBodyType = Phaser.Physics.ARCADE;
-        dropBoom.createMultiple(20,'dropBoom',0);
-		dropBoom.setAll("anchor.x",0.5);
-		dropBoom.setAll("anchor.y",0.5);
-		dropBoom.setAll("name","drop");
+		this.dropBoom = this.game.add.group();
+		this.dropBoom.enableBody = true;
+		this.dropBoom.physicsBodyType = Phaser.Physics.ARCADE;
+        this.dropBoom.createMultiple(20,'this.dropBoom',0);
+		this.dropBoom.setAll("anchor.x",0.5);
+		this.dropBoom.setAll("anchor.y",0.5);
+		this.dropBoom.setAll("name","drop");
 
-		var dropApi= this.game.add.group();
-		dropApi.createMultiple(20,'dropApi',0);
-		dropApi.enableBody = true;
-		dropApi.physicsBodyType = Phaser.Physics.ARCADE;
-		dropApi.setAll("anchor.x",0.5);
-		dropApi.setAll("anchor.y",0.5);
-		dropApi.setAll("name","drop");
+		this.dropApi= this.game.add.group();
+		this.dropApi.createMultiple(20,'this.dropApi',0);
+		this.dropApi.enableBody = true;
+		this.dropApi.physicsBodyType = Phaser.Physics.ARCADE;
+		this.dropApi.setAll("anchor.x",0.5);
+		this.dropApi.setAll("anchor.y",0.5);
+		this.dropApi.setAll("name","drop");
 		
 		
 		//käsitellään hyökkäystieto
 		this.attackInfo = this.attackInfo.split("'");
-		var enemyAmount = [0,0,0];
+		this.enemyAmount = [0,0,0];
 
 		for(var i = 0;i < 3;i++){
-			enemyAmount[i] = (parseInt((this.attackInfo[i].substring(0,2)))+(parseInt(this.attackInfo[i].substring(2,4)))+(parseInt(this.attackInfo[i].substring(4,6))));
+			this.enemyAmount[i] = (parseInt((this.attackInfo[i].substring(0,2)))+(parseInt(this.attackInfo[i].substring(2,4)))+(parseInt(this.attackInfo[i].substring(4,6))));
 		}
-		var spawnPool = [(enemyAmount[0]+1-1),(enemyAmount[1]+1-1),(enemyAmount[2]+1-1)];
+		this.spawnPool = [(this.enemyAmount[0]+1-1),(this.enemyAmount[1]+1-1),(this.enemyAmount[2]+1-1)];
 
         var enemyFireRates = [500,600,1500];
 		//Luodaan viholliset
@@ -457,7 +498,7 @@ gameLoad.prototype = {
                 'pause':Phaser.Keyboard.ESC
             }
 		);
-        this.cursors.abilChangeHotkeys = {//tällä päästään vaihtamaan HUDin paikka helposti ilman pitkiä if-lauseita, ks gameLoop changeHUDposition
+        this.cursors.abilChangeHotkeys = {//tällä päästään vaihtamaan this.HUDin paikka helposti ilman pitkiä if-lauseita, ks gameLoop changethis.HUDposition
             'z':1,
             'x':2
         };
@@ -468,14 +509,14 @@ gameLoad.prototype = {
 		this.music = null;
 
         //pelaajan HP kenttä
-		var playerhealth = this.HPbar();
-        playerhealth.fixedToCamera = true;
-        playerhealth.cameraOffset.setTo(1100,180);
-        playerhealth.scale.setTo(0.4,0.3);
-        playerhealth.fullHealthLength = playerhealth.getChildAt(1).width;//health palkki
-        playerhealth.getChildAt(0).width = 0; //respawn palkki
+		this.playerhealth = this.HPbar();
+        this.playerhealth.fixedToCamera = true;
+        this.playerhealth.cameraOffset.setTo(1100,180);
+        this.playerhealth.scale.setTo(0.4,0.3);
+        this.playerhealth.fullHealthLength = this.playerhealth.getChildAt(1).width;//health palkki
+        this.playerhealth.getChildAt(0).width = 0; //respawn palkki
 
-        //kasataan HUD
+        //kasataan this.HUD
         var wepTray = this.game.add.image(0,0,'wepTray');
         wepTray.fixedToCamera = true;
         wepTray.cameraOffset.setTo(1115,20);//100 korkea
@@ -566,8 +607,8 @@ gameLoad.prototype = {
 
 
 
-		//kasataan HUD
-        var HUD = {
+		//kasataan this.HUD
+        this.HUD = {
             banner:banner,
             webTray:wepTray,
             abTray:abTray,
@@ -576,11 +617,12 @@ gameLoad.prototype = {
             points:pointsText
         };
 
-		//pause valikko, tässä olisi voinut hyödyntää soundMenua mutta tämän yrittäminen johti jostain syystä tilin hajoamiseen
+		//pause valikko
 		var styleA = { font:'25px cyber', fill:'white'};
 		var styleB = { font:'20px cyber', fill:'black'};
         this.pauseMenu = this.game.add.group();
 		// mastervolumen säädin
+        this.pausebbg = this.game.add.sprite(150, 100,  "menuButtonBG");
 		this.mastervolLabel = this.game.add.text(330, 300, 'Master volume', styleA);
 		this.masterGroup = this.game.add.group();
 		this.masterGroup.x = 630;
@@ -629,7 +671,7 @@ gameLoad.prototype = {
 		this.fxGroup.add(this.fxneedle);
 
 		// alustetaan äänten on/off painike
-		this.onoffButton = this.game.add.button(590, 560, 'menuHeader', this.onOff, this);
+		this.onoffButton = this.game.add.button(530, 620, 'menuHeader', this.onOff, this);
 		this.onoffButton.scale.setTo(0.08, 0.5);
 		var onoffText = this.game.add.text(210,20,"On/Off",styleB);
 		this.onoffButton.addChild(onoffText);
@@ -642,21 +684,16 @@ gameLoad.prototype = {
 		this.resetButton.addChild(resetText);
 		this.resetButton.getChildAt(0).scale.setTo(10, 1.5);
 
-		// alustetaan äänien tallennus painike
-		this.saveButton = this.game.add.button(530, 620, 'menuHeader', this.save, this);
-		this.saveButton.scale.setTo(0.08, 0.5);
-		var saveText = this.game.add.text(400,20,"Save",styleB);
-		this.saveButton.addChild(saveText);
-		this.saveButton.getChildAt(0).scale.setTo(10, 1.5);
-
 		//alustetaan takaisin nappula
-		this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
-		this.backButton.scale.setTo(0.08, 0.5);
-		var backText = this.game.add.text(400,20,"Return to main menu",styleB);
+		this.backButton = this.game.add.button(590, 560, 'menuHeader', this.back, this, 1, 0, 2);
+		this.backButton.scale.setTo(0.25, 0.5);
+        this.backButton.x = this.pausebbg.width/2;
+		var backText = this.game.add.text(400,25,"Return to main menu",styleB);
+        backText.x = this.backButton.width/2;
 		this.backButton.addChild(backText);
-		this.backButton.getChildAt(0).scale.setTo(10, 1.5);
+		this.backButton.getChildAt(0).scale.setTo((1/0.25), 1.1);
 
-
+        this.pauseMenu.add(this.pausebbg);
 		this.pauseMenu.add(this.mastervolLabel);
 		this.pauseMenu.add(this.masterGroup);
 		this.pauseMenu.add(this.musicvolLabel);
@@ -664,10 +701,17 @@ gameLoad.prototype = {
 		this.pauseMenu.add(this.effectsvolLabel);
 		this.pauseMenu.add(this.fxGroup);
 		this.pauseMenu.add(this.onoffButton);
-		this.pauseMenu.add(this.saveButton);
 		this.pauseMenu.add(this.backButton);
 		this.pauseMenu.add(this.resetButton);
-        this.pauseMenu.kill();
+        this.pauseMenu.forEach(function(item){
+            if(item.name != "group") {
+                item.kill();
+            } else {
+                item.forEach(function(itemitem){
+                    itemitem.kill();
+                })
+            }
+        });
 
 		points = 0;
 		enemiesKilled = 0;
@@ -675,45 +719,63 @@ gameLoad.prototype = {
         var date = new Date();
         totalTime = date.getTime();
         date = null;
-		game.state.start("mainGame",false,false,
-			this.asteroids,
-			this.ship,
-			this.shipAccessories,
-			guns,
-			this.bullets,
-			this.enemies,
-			this.enemy1,
-			this.enemy2,
-			this.enemy3,
-			this.asteroid1,
-			this.asteroid2,
-			this.asteroid3,
-			this.cursors,
-			this.bg,
-			this.text,
-			this.shipTrail,
-			this.attackInfo,
-			this.attackID,
-			enemyAmount,
-			spawnPool,
-			this.lap,
-			this.enemyBullets,
-			this.music,
-			this.clipText,
-			playerhealth,
-			HUD,
-			this.laserBul,
-			this.clips,
-			this.reloading,
-			this.minesBul,
-			this.minesExpl,
-			dropBoom,
-			dropApi,
-			this.playerData,
-			this.abilityReloading,
-            this.pauseMenu
-		);
+        this.loader.bringToTop();
+        this.game.world.bringToTop(this.loaderTrail);
+        var trail = this.loaderTrail.getChildAt(0);
+        trail.forEach(function(kid){
+            trail.bringToTop(kid);
+        });
+        var trail = this.loaderTrail.getChildAt(1);
+        trail.forEach(function(kid){
+            trail.bringToTop(kid);
+        });
 	},
+    start : function(){
+        if(this.musicLoadStatus) {
+            this.musics.tracks[rnd.integerInRange(0,this.musics.tracks.length-1)].play();
+            this.loader.destroy();
+            this.loaderTrail.destroy();
+            this.enterText.destroy();
+            game.state.start("mainGame", false, false,
+                this.asteroids,
+                this.ship,
+                this.shipAccessories,
+                this.guns,
+                this.bullets,
+                this.enemies,
+                this.enemy1,
+                this.enemy2,
+                this.enemy3,
+                this.asteroid1,
+                this.asteroid2,
+                this.asteroid3,
+                this.cursors,
+                this.bg,
+                this.text,
+                this.shipTrail,
+                this.attackInfo,
+                this.attackID,
+                this.enemyAmount,
+                this.spawnPool,
+                this.lap,
+                this.enemyBullets,
+                this.music,
+                this.clipText,
+                this.playerhealth,
+                this.HUD,
+                this.laserBul,
+                this.clips,
+                this.reloading,
+                this.minesBul,
+                this.minesExpl,
+                this.dropBoom,
+                this.dropApi,
+                this.playerData,
+                this.abilityReloading,
+                this.pauseMenu
+            );
+        }
+    } ,
 	HPbar: function(){
 		//pelaajan HP kenttä
         var HPbar = this.game.add.group();

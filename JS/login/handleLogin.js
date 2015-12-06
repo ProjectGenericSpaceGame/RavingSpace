@@ -1,4 +1,4 @@
-
+﻿
 var hashPass;
 var getRandom;
 var checkRegisterInfo;
@@ -85,7 +85,7 @@ $(document).ready(function(){
 
     // hankitaan uusi suola
     getRandom = function(){
-        var possible = "b8EFGHdefMNTUXYZVghiOC#¤%KaIJP)=?@56opAQRL\"&WtSjklmyncu/(\$\^\*\'vw34sxD79Bqrz012\!";
+        var possible = "b8EFGHdefMNTUXYZVghiOC#%KaIJP)=?@56opAQRL&WtSjklmyncu/(\$\^\*vw34sxD79Bqrz012\!";
         var length = 10;
         var rnd = new Chance();
         var toPick = [];

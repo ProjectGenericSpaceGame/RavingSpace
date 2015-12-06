@@ -256,7 +256,7 @@ loadoutMenu.prototype = {
              if(this.selectedLoadout[i] !== undefined){
                 this.noWeapons.visible = false;
                 // kutsutaan gameLoad -tilaa
-                this.game.state.start('gameLoad',true,true,
+                this.game.state.start('gamePreload',true,true,
                     this.selectedLoadout,
 					this.playerData
                 );

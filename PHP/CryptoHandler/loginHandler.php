@@ -50,9 +50,9 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/ind
     $failedAttempts = $row['failedTries'];
     $loginFollowID = $row['loginFollowID'];
     $tryLock = $row['fail1'];
-    echo strlen($DBhash);
-    echo "µµ";
-    echo $toCompare."+".$DBhash;
+    //echo strlen($DBhash);
+    //echo "µµ";
+    //echo $toCompare."+".$DBhash;
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
     $_SESSION['log'] = 1;
     $return = true;

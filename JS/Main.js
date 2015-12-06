@@ -4,7 +4,7 @@ var game;
 const SET_GUNS = 4;//DO NOT MODIFY OR GAME WILL BREAK
 const SET_ABILITIES = 4;//DO NOT MODIFY OR GAME WILL BREAK
 var rnd; 
-var points;
+var points = 0;
 var enemiesKilled;
 var deaths;
 var totalTime;
@@ -36,6 +36,7 @@ game.state.add('scores', scoresSubMenu);
 game.state.add('custom', customSubMenu);
 game.state.add('shopMenu', shopMenu);
 game.state.add('waveMenu', waveMenu);
+game.state.add('gamePreload', preload);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
 game.state.add('endGame', endGame);

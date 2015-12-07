@@ -25,10 +25,14 @@ function makeGame(){
     $('main').css("position","relative");
     $('main').css("top","-75px");
     
-game = new Phaser.Game(1280, 800, Phaser.CANVAS, 'phaserGame');
+    game = new Phaser.Game(1280, 800, Phaser.CANVAS, 'phaserGame');
+    $("main").css({height:"100%",width:"100%"});
+    $("#phaserGame").css({height:"inherit"});
+    $("canvas").css({height:"inherit",width:"inherit"});
 rnd = game.rnd;   
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
+game.state.add('setMenuLoader', setMenuLoader);
 //game.state.add("customMenu", customMenu);
 game.state.add('settings', settingsSubMenu);
 game.state.add('soundMenu', soundMenu);
@@ -42,7 +46,7 @@ game.state.add('mainGame', mainGame);
 game.state.add('endGame', endGame);
 game.state.add('loadoutMenu', loadoutMenu);
 
-game.state.start('menuLoad');
+game.state.start('setMenuLoader');
    
 }
 // game.state.start("gameLoad");
@@ -202,8 +206,8 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
             var x = game.input.worldX;
             var y = game.input.worldY;
             var distance = game.math.distance(x,y,gun.world.x,gun.world.y);
-            var offsetX = (x+distance-x)*0.3;
-            var offsetY = (y+distance-y)*0.3;
+            var offsetX = (x+distance-x)*0.2;
+            var offsetY = (y+distance-y)*0.2;
             bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet.scale.setTo(1,1);
             bullet.name = "shotgun";
@@ -427,7 +431,12 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,enColGrp){
                     enemy.getChildAt(0).getChildAt(1).body.x = -(enemy.getChildAt(0).getChildAt(1).width/2);
 					enemy.getChildAt(0).getChildAt(1).y = 0;//mitä helvettiä
                     enemy.getChildAt(0).getChildAt(1).body.y = 0;
-                    
+                    enemy.getChildAt(0).getChildAt(2).anchor.x = 0;
+                    enemy.getChildAt(0).getChildAt(2).width = enemy.getChildAt(0).fullHealthLength;
+                    enemy.getChildAt(0).getChildAt(2).x = -(enemy.getChildAt(0).getChildAt(1).width/2);//mitä helvettiä
+                    enemy.getChildAt(0).getChildAt(2).body.x = -(enemy.getChildAt(0).getChildAt(1).width/2);
+                    enemy.getChildAt(0).getChildAt(2).y = 0;//mitä helvettiä
+                    enemy.getChildAt(0).getChildAt(2).body.y = 0;
 
                 enemy.body.setCollisionGroup(enColGrp);
                 //enemy.body.collides([enColGrp,plrColGrp]);//törmäykset asetetaan kun vihu on päässyt pelialueelle

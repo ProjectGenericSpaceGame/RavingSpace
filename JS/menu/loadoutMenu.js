@@ -258,7 +258,8 @@ loadoutMenu.prototype = {
                 // kutsutaan gameLoad -tilaa
                 this.game.state.start('gamePreload',true,true,
                     this.selectedLoadout,
-					this.playerData
+					this.playerData,
+                    this.surroundings
                 );
              }
         }

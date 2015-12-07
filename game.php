@@ -24,6 +24,7 @@
     <script src="JS/libs/moment.js"></script>
 
     <script src="JS/menu/menuLoad.js"></script>
+    <script src="JS/menu/setMenuLoader.js"></script>
     <script src="JS/menu/mainMenu.js"></script>
     <script src="JS/menu/loadoutMenu.js"></script>
 

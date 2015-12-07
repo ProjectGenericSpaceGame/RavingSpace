@@ -14,6 +14,7 @@ $(document).ready(function(){
             $('.signupDialog').css("display","none");
         }
         $('.loginDialog').css("display","block");
+        $('#RSlogo').css("margin-top","20px");
     });
 
     $('.cancelLogin').click(function(){
@@ -50,6 +51,7 @@ $(document).ready(function(){
                     if (returnValue == true) {
                         $('.loginDialog').css("display", "none");
                         $('.signupDialog').css("display", "none");
+                        $('#RSlogo').css("display","none");
                         sessionStorage.setItem("playerID",user);
                         window.location.reload(false);
                     } else if (returnValue == "credsFirst") {
@@ -174,6 +176,7 @@ $(document).ready(function(){
             $('.loginDialog').css("display","none");
         }
         $('.signupDialog').css("display","block");
+        $('#RSlogo').css("margin-top","20px");
     });
 
     $('.info').hover(function(){

@@ -6,17 +6,17 @@ var menuLoad = function(game){
 menuLoad.prototype = {
         
     preload: function(){
-        
-        
+
             // ladataan valikon elementit
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
             //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');    
-            this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
+            this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder3.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
-        
+            this.game.load.image('RSlogo', 'assets/menuelements/RSlogo.png');
+
             this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship_Old.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
@@ -54,29 +54,46 @@ menuLoad.prototype = {
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
 
         //this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.mp3');
-        //this.game.load.audio('dystopia', 'assets/sounds/dystopia.mp3');
+        this.game.load.audio('dystopia', 'assets/sounds/dystopia.mp3');
           
         },
-  
+        init:function(loader){
+            this.loader = loader;
+        },
         create: function(){
             var self = this;
+            this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.startMenu,this);
             var textStyle = { font: "20px cyber"};
              var nameStyle = { font: "20px Calibri", fill:"blue"};
             var headingStyle = { font: "35px cyber", fill:"white"};
-            
+
+            this.menuMusics = {
+                tracks: [],
+                index: 0
+            };
+            this.menuMusics.tracks.push(this.game.add.audio('dystopia'));
+            this.game.sound.setDecodedCallback(this.menuMusics.tracks,audioReady, this);
+            function audioReady(){
+                this.musicLoadStatus = true;
+                this.enterText = this.game.add.text(1000,700,"Press ENTER to start",{fill:"white",font:"20px cyber"});
+
+            }
+
             //this.music = game.sound.play('testi');
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
            
             this.menuheader = this.game.add.sprite(0,0, "menuHeader");
             //var decos = this.game.add.sprite(0,0, "menuHeaderDeco");
             //decos.y = this.menuheader.height-decos.height;
-            var logotext = this.game.add.text(550, 20, "Raving Space");
+            var logotext = this.game.add.image(0, 0, "RSlogo");
+            logotext.scale.setTo(0.7,0.7);
+            logotext.x = this.menuheader.width/2-logotext.width/2;
             this.menuheader.addChild(logotext);
             //this.menuheader.addChild(decos);
 
             
             this.menubbg = this.game.add.sprite(150, 100,  "menuButtonBG");
-            this.menubbg.tint = 0x858585;
+            //this.menubbg.tint = 0x858585;
             //alustetaan valikon otsikko ja viiva
             this.menuLabel = this.game.add.text(this.game.width/2, 120, '', headingStyle);
             
@@ -234,14 +251,14 @@ menuLoad.prototype = {
 
 
             //tässä kasataan jutut
-            var surroundings = {
+            this.surroundings = {
                 menubg:this.menubg,
                 menuheader:this.menuheader,
                 menubbg:this.menubbg,
                 menuLabel:this.menuLabel,
                 headUnder:this.headUnder,
                 backButton:this.backButton,
-                musics:["dustsucker","dystopia"]
+                musics:this.menuMusics
             };//demo
             
            // lisätään pelaajan pisteet sekä rahat yläpalkkiin
@@ -257,15 +274,23 @@ menuLoad.prototype = {
              this.menuheader.addChild(playerDisplayName);
              // luodaan ryhmä painikkeille. 
             this.buttonGroup = this.game.add.group();
-            //kutsutaan menua
-            this.game.state.start('mainMenu',false,false,
-                this.playerData,
-                this.globalScores,
-                this.playerWaves,
-                this.buttonGroup,
-                surroundings
-            );
+            this.loader.bringToTop();
+
         },
+    //kutsutaan menua
+
+    startMenu:function(){
+        this.menuMusics.tracks[rnd.integerInRange(0,this.menuMusics.tracks.length-1)].play();
+        this.loader.destroy();
+        this.enterText.destroy();
+        this.game.state.start('mainMenu',false,false,
+            this.playerData,
+            this.globalScores,
+            this.playerWaves,
+            this.buttonGroup,
+            this.surroundings
+        );
+    },
         compare:function(a,b){
             if(a[1] == b[1]){
                 return 0;

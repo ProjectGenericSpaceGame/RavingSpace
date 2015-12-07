@@ -11,6 +11,7 @@ body{
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 #loader {
@@ -23,6 +24,7 @@ body{
 	background-image: url("../assets/loader/loading.gif");
 	background-position: center;
 	background-repeat: no-repeat;
+    background-size: 13vw;
 }
 
 header{
@@ -236,5 +238,9 @@ canvas{
     position: absolute;
     margin: 110px 0 0 200px;
     
+}
+#RSlogo{
+    float: left;
+    margin: 325px 0 0 345px;
 }
 

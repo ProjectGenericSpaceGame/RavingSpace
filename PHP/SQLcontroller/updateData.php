@@ -47,8 +47,27 @@
             $DBcon->query($select);
         }
 	}
-	function shoppingEvent(){
-		
+	function shoppingEvent($playerName,$DBcon){
+		$loginFollowID = $_POST['loginFollowID'];//tätä voidaan käyttää myös shipIDnä sillä sama luku
+        $shipData = $_POST['shipData'];
+        $playerMoney = $_POST['money'];
+		$select = "select fail2 from loginAttempts where loginFollowID = $loginFollowID";
+		$query = $DBcon->query($select);//tulokset ovat $query muuttujassa
+		$row = $query->fetch_array(MYSQLI_BOTH);
+		if($row['fail2'] == "in") {
+            $select = "update shipStates set ";
+            for($i = 0;$i < count($shipData);$i++){
+                if($i !=  count($shipData)-1) {
+                    $select .= "wep$i = $shipData[$i],";
+                } else {
+                    $select .= "wep$i = $shipData[$i]";
+                }
+            }
+            $select .= " where shipStates.shipID = '$loginFollowID')";
+            $DBcon->query($select);
+            $select = "update playerData set money = $playerMoney where playerData.playerID = '$playerName'";
+            $DBcon->query($select);
+		}
 	}
 	function finishedGame($playerName,$DBcon){
 		$attackID = $_POST['attackID'];
@@ -96,7 +115,7 @@
 		newWave($playerName,$DBcon);
 	} 
 	else if($usage == 3){
-		shoppingEvent();
+		shoppingEvent($playerName,$DBcon);
 	} 
 	else if($usage == 4){
 		finishedGame($playerName,$DBcon);

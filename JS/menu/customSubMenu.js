@@ -32,7 +32,7 @@ customSubMenu.prototype = {
         this.shopButton.addChild(text2);
 
         //alustetaan takaisin nappula
-        var style = { font:'25px cyber', fill:'black'};
+        var style = { font:'20px cyber', fill:'black'};
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
         this.backButton.scale.setTo(0.08, 0.5);
         var backText = this.game.add.text(400,20,"Back",style);

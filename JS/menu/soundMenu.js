@@ -12,7 +12,7 @@ soundMenu.prototype = {
     preload:function(){
         //do some murdering here
         this.buttonGroup.removeAll();
-        this.game.load.audio('testi', 'assets/sounds/testi.mp3');
+        //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
 
     },
     create:function(){

@@ -53,9 +53,10 @@ menuLoad.prototype = {
         this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
 
-        //this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.mp3');
+        this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.mp3');
         this.game.load.audio('dystopia', 'assets/sounds/dystopia.mp3');
-          
+        this.game.load.audio('swagger', 'assets/sounds/swagger.mp3');
+
         },
         init:function(loader){
             this.loader = loader;
@@ -69,9 +70,16 @@ menuLoad.prototype = {
 
             this.menuMusics = {
                 tracks: [],
-                index: 0
+                lastIndex: 0,
+                isPlaying: 0
             };
             this.menuMusics.tracks.push(this.game.add.audio('dystopia'));
+            this.menuMusics.tracks.push(this.game.add.audio('swagger'));
+            this.menuMusics.tracks.push(this.game.add.audio('dustsucker'));
+            for(var i = 0;i<this.menuMusics.tracks.length-1;i++){
+                this.menuMusics.tracks[i].volume = volumes.music;
+                this.menuMusics.tracks[i].onStop.add(this.nextSong,this);
+            }
             this.game.sound.setDecodedCallback(this.menuMusics.tracks,audioReady, this);
             function audioReady(){
                 this.musicLoadStatus = true;
@@ -280,26 +288,28 @@ menuLoad.prototype = {
     //kutsutaan menua
 
     startMenu:function(){
-        this.menuMusics.tracks[rnd.integerInRange(0,this.menuMusics.tracks.length-1)].play();
-        this.loader.destroy();
-        this.enterText.destroy();
-        this.game.state.start('mainMenu',false,false,
-            this.playerData,
-            this.globalScores,
-            this.playerWaves,
-            this.buttonGroup,
-            this.surroundings
-        );
+        if(this.musicLoadStatus) {
+            this.menuMusics.tracks[rnd.integerInRange(0, this.menuMusics.tracks.length - 1)].play();
+            this.loader.destroy();
+            this.enterText.destroy();
+            this.game.state.start('mainMenu', false, false,
+                this.playerData,
+                this.globalScores,
+                this.playerWaves,
+                this.buttonGroup,
+                this.surroundings
+            );
+        }
     },
-        compare:function(a,b){
+    compare:function(a,b){
             if(a[1] == b[1]){
                 return 0;
             } else if(a[1] < b[1]){
                 return 1;
             }
             return -1;
-        },
-            logout:function(){
+    },
+    logout:function(){
             // funktio uloskirjaukselle
                 console.log("Logged out");
                 this.game.destroy();
@@ -314,6 +324,17 @@ menuLoad.prototype = {
                 } else {
                     window.location.pathname = "RavingSpace";
                 }
+    },
+    nextSong : function(){
+        this.menuMusics.lastIndex = this.menuMusics.isPlaying;
+        while(true){
+            var toPlay = rnd.integerInRange(0,this.menuMusics.tracks.length-1);
+            if(toPlay != this.menuMusics.lastIndex){
+                break;
+            }
         }
+        this.menuMusics.tracks[toPlay].play();
+        this.menuMusics.isPlaying = toPlay;
+    }
 
 };

@@ -43,7 +43,7 @@ var mainGame = function(game){
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
     //tämän funktion parametreistä ei tarvitse tietää muuta kuin että ne kaikki ovat createssa luodut muuttujat
-    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading,pauseMenu) {
+    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading,pauseMenu,musics) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.shipAccessories = shipAccessories;
@@ -80,6 +80,7 @@ mainGame.prototype = {
         this.playerData = playerData;
         this.abilityReloading = abilityReloading;
         this.pauseMenu = pauseMenu;
+        this.musics = musics;
         //Loput muuttujat
         this.isOnPaused = false;
         this.asteroidAmmount = 3;
@@ -370,6 +371,7 @@ mainGame.prototype = {
                 if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "basic") {
                     if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
+                        this.musics.sounds.playerBasic.play();
                     }
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "laser") {
                     laserFire();
@@ -381,6 +383,7 @@ mainGame.prototype = {
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "shotgun") {
                     if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
+                        this.musics.sounds.playerShotgun.play();
                     }
                 }
 
@@ -430,7 +433,7 @@ mainGame.prototype = {
                         this.HUD.banner.revive();
                         this.game.add.tween(this.HUD.banner).to({alpha: 1}, 400, "Linear", true, 1000);
                     } else if (this.lap >= 3 && this.asteroids.countLiving() > 0 && next == "next") {
-                        this.game.state.start('endGame', false, false, this.HUD, this.ship, this.playerData, this.attackLoot, this.attackID);
+                        this.game.state.start('endGame', false, false, this.HUD, this.ship, this.playerData, this.attackLoot, this.attackID,this.musics);
                     }
                 }, this);
                 if (this.timers[2] <= 0 && this.HUD.banner.alive) {
@@ -470,7 +473,7 @@ mainGame.prototype = {
                     boundsBullet = b.world;
                     self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);//droppi kaatuu tähän, bullet ja drop molemmat arcade
                     if (self.bulletArray.length != 0 && self.timers[4] == 1) {
-                        hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0), self.dropBoom, self.dropApi);
+                        hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0), self.dropBoom, self.dropApi,self.musics);
                         if (b.name == "mine") {
                             var boom = self.minesExpl.getFirstDead();
                             boom.reset(b.x, b.y);
@@ -482,7 +485,7 @@ mainGame.prototype = {
                             });
                         }
                     } else if (self.bulletArray.length != 0 && self.timers[4] == 2) {//jos pelaajaan osumista tutkitaan
-                        hitDetector(b, enm, null, self.lap, self.HPbar);
+                        hitDetector(b, enm, null, self.lap, self.HPbar,null,null,self.musics);
                         if (self.ship.health == 0.001) {
                             self.attackLoot += 300;
                         }

@@ -89,6 +89,10 @@ gameLoad.prototype = {
         this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
         //musiikki
         this.game.load.audio('highOctane','assets/sounds/HighOctane.mp3');
+        //äänet
+        this.game.load.audio('wep1sound','assets/sounds/PlayerWeaponBasic.wav');
+        this.game.load.audio('wep3sound','assets/sounds/PlayerWeaponShotgun.wav');
+        this.game.load.audio('shipBoomSound','assets/sounds/ShipExplosion.wav');
 
 	},
     init:function(loadout,playerData,loader,surroundings){
@@ -122,12 +126,25 @@ gameLoad.prototype = {
         this.musicLoadStatus = false;
         this.musics = {
             tracks: [],
-            index: 0
+            lastIndex: 0,
+            isPlaying:0,
+            sounds:{
+                playerBasic:"",
+                playerLaser:"",
+                playerShotgun:"",
+                enemyBasic:"",
+                enemyLaser:"",
+                shipBoom:""
+            }
         };
       
         this.musics.tracks.push(this.game.add.audio('highOctane'));
-		for(var i = 0;i<this.musics.tracks;i++){
+        this.musics.sounds.playerBasic = this.game.add.audio('wep1sound');
+        this.musics.sounds.playerShotgun = this.game.add.audio('wep3sound');
+        this.musics.sounds.shipBoom = this.game.add.audio('shipBoomSound');
+		for(var i = 0;i<this.musics.tracks.length-1;i++){
 			this.musics.tracks[i].volume = volumes.music;
+            this.musics.tracks[i].onStop.add(this.nextSong,this);
 		}
         this.game.sound.setDecodedCallback(this.musics.tracks,audioReady, this);
         function audioReady(){
@@ -743,7 +760,9 @@ gameLoad.prototype = {
 	},
 	update : function(){
 		if(this.musicLoadStatus && game.input.keyboard.isDown(Phaser.Keyboard.ENTER)) {
-			this.musics.tracks[rnd.integerInRange(0,this.musics.tracks.length-1)].play();
+            var toPlay = rnd.integerInRange(0,this.musics.tracks.length-1);
+			this.musics.tracks[toPlay].play();
+            this.musics.isPlaying = toPlay;
 			this.loader.destroy();
 			this.loaderTrail.destroy();
 			this.enterText.destroy();
@@ -784,7 +803,8 @@ gameLoad.prototype = {
 				this.dropApi,
 				this.playerData,
 				this.abilityReloading,
-				this.pauseMenu
+				this.pauseMenu,
+                this.musics
 			);
 		}
 	} ,
@@ -814,11 +834,17 @@ gameLoad.prototype = {
 		//console.log(this.musicneedle.x);
 		console.log(this.sound.volume);
 		volumes.music = this.musicneedle.x*(1/this.musicneedle.width)*volumes.master;
+        for(var i = 0;i<this.musics.tracks;i++){
+            this.musics.tracks[i].volume = volumes.music;
+        }
 	}, // säädetään efektivolume efektisliderin neulan x:n mukaan
 	fxVolume:function() {
 		//console.log(this.fxneedle.x);
 		console.log(this.sound.volume);
 		volumes.sounds = this.fxneedle.x*(1/this.fxneedle.width)*volumes.master;
+        for(var property in this.musics.sounds){
+            this.musics.sounds[property].volume = 0.4;
+        }
 	},
     // asettaa sliderit takaisin keskelle ja ajaa volume funktiot
     reset:function(){
@@ -838,6 +864,18 @@ gameLoad.prototype = {
         this.masterGroup.removeAll();
         this.musicGroup.removeAll();
         this.fxGroup.removeAll();
-        this.game.state.start('menuLoad');
+		this.musics.tracks[this.musics.isPlaying].stop();
+        this.game.state.start('setMenuLoader',true,true);
+    },
+    nextSong : function(){
+        this.musics.lastIndex = this.musics.isPlaying;
+        while(true){
+            var toPlay = rnd.integerInRange(0,this.musics.tracks.length-1);
+            if(toPlay != this.musics.lastIndex){
+                break;
+            }
+        }
+        this.musics.tracks[toPlay].play();
+        this.musics.isPlaying = toPlay;
     }
 };

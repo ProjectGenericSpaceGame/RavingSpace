@@ -5,12 +5,13 @@ var endGame = function(game){
 
 };
 endGame.prototype = {
-    init:function(HUD,ship,playerData,attackLoot,attackID){
+    init:function(HUD,ship,playerData,attackLoot,attackID,musics){
         this.HUD = HUD;
         this.ship = ship;
 		this.playerData = playerData;
         this.attackLoot = attackLoot;
         this.attackID = attackID;
+        this.musics;
     },
     create:function(){
         var style = {fill:"white",font:"30px cyber"};
@@ -98,6 +99,7 @@ endGame.prototype = {
             alert("Your data successfully was successfully updated:"+returnData);
             self.playerData.playerData.points += points;
         });
-        this.game.state.start('menuLoad');
+        this.musics.tracks[this.musics.tracks.isPlaying].stop();
+        this.game.state.start('setMenuLoader');
     }
 };

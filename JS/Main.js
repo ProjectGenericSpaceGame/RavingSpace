@@ -277,7 +277,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target,destroyerBullets){
         }
     }
 }
-function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
+function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,musics){
     var dmg;
     if(bullet.name == "laser"){
         dmg = 0.1;
@@ -330,6 +330,9 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         tween.onComplete.add(function(){
             boom.destroy();
         },this);
+        if(musics != null) {
+            musics.sounds.shipBoom.play();
+        }
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
         //boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
         boom2.x = rnd.integerInRange(-3,3);
@@ -341,6 +344,9 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         tween2.frameBased = true;
         var to2 = rnd.realInRange(7,5);
         tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, rnd.integerInRange(300,600), "Linear", true, 150);
+        if(musics != null) {
+            musics.sounds.shipBoom.play();
+        }
         tween2.onComplete.add(function(){
             boom2.destroy();
             enemy.kill();

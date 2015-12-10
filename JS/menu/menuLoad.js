@@ -33,6 +33,7 @@ menuLoad.prototype = {
             this.game.load.image('abSpeed', 'assets/GUI/superSpeed.png');
             
             // kaupan kuvakkeet
+            this.game.load.spritesheet('shopselect','assets/placeholders/shopselect.png', 270, 260);
             this.game.load.image('bullet', 'assets/sprites/bullet.png');
             this.game.load.image('laser', 'assets/particles/laser2.png');
             this.game.load.image('shotgun', 'assets/sprites/bullet2.png');

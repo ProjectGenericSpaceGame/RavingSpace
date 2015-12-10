@@ -39,25 +39,14 @@
 <main>
     <div id="phaserGame"></div>
     <div class="fontLoader"></div>
-<<<<<<< HEAD
-    <div class="loginDialog">
-
-=======
     <image src="assets/menuelements/RSlogo.png" alt="RSlogo" id="RSlogo"></image>
     <div class="loginDialog">
-            
->>>>>>> origin/master
             <h class="dialogHeader">Login</h>
             <div class="line"></div>
             <p class="userLabel">Username</p>
             <input class="username input" type="text"/>
             
             <span class="capsLockWarning" style="display:none">CAPS LOCK is active</span>
-
-<<<<<<< HEAD
-        
-=======
->>>>>>> origin/master
             <p class="passLabel">Password</p>
             <input class="password input" type="password" value="" autocomplete="off"/>
 
@@ -99,11 +88,6 @@
     <div class="infoDialog">
         <p class="infoText">You can only reset your password if you add your email. </br> Fields marked with * are mandatory</p>
     </div>
-<<<<<<< HEAD
-    <image src="assets/menuelements/RSlogo.png" alt="RSlogo" id="RSlogo"></image>
-=======
-    
->>>>>>> origin/master
 </main>
 <footer></footer>
 </body>

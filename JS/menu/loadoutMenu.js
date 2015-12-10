@@ -268,6 +268,7 @@ loadoutMenu.prototype = {
 					this.playerData,
                     this.surroundings,
                     this.musics
+
                 );
              }
         }

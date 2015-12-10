@@ -11,8 +11,8 @@ menuLoad.prototype = {
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
             //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
-            this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');    
-            this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder4.png');
+            this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');
+            this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
             this.game.load.image('RSlogo', 'assets/menuelements/RSlogo.png');
@@ -33,6 +33,11 @@ menuLoad.prototype = {
             this.game.load.image('abSpeed', 'assets/GUI/superSpeed.png');
             
             // kaupan kuvakkeet
+            this.game.load.image('bullet', 'assets/sprites/bullet.png');
+            this.game.load.image('laser', 'assets/particles/laser2.png');
+            this.game.load.image('shotgun', 'assets/sprites/bullet2.png');
+            this.game.load.image('mines', 'assets/sprites/mine.png');
+            this.game.load.spritesheet('shopselect','assets/placeholders/shopselect.png', 270, 260);
             this.game.load.image('bullet', 'assets/sprites/bullet.png');
             this.game.load.image('laser', 'assets/particles/laser2.png');
             this.game.load.image('shotgun', 'assets/sprites/bullet2.png');

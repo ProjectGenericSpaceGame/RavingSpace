@@ -63,7 +63,6 @@ endGame.prototype = {
         {
             this.HUD.banner.frame = 3;
         }
-
         this.HUD.banner.revive();
         this.game.add.tween(this.HUD.banner).to({alpha:1},400,"Linear",true,1000);
         this.game.time.events.add(5000,function(){

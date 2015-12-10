@@ -121,6 +121,8 @@ canvas{
 }
 
 .loginDialog, .signupDialog{
+    opacity: 0.93;
+    position: fixed;
     background-color: #f0f0f0;
     display: none;
     width: 454px;
@@ -150,9 +152,12 @@ canvas{
     font-size: 20px;
 }
 .input{
+    -moz-box-sizing: content-box; 
+    -webkit-box-sizing: content-box; 
     width: 235px;
     height: 25px;
     border: 0px;
+    padding-left: 5px;
     border-radius: 4px;
     -moz-box-shadow: 0 0 2px #888888;
     -webkit-box-shadow: 0 0 2px #888888;
@@ -160,7 +165,7 @@ canvas{
 }
 
 .username{
-    margin: 10px 50px 20px 20px;
+    margin: 10px 48px 20px 20px;
     float: right;
 }
 
@@ -177,12 +182,13 @@ canvas{
 }
 
 .password{
-    margin: 10px 50px 0 0;
+    margin: 10px 48px 0 0;
     float: right; 
 }
 
 .password-retype{
-    margin: 30px 50px 0 0;
+    opacity: 1;
+    margin: 30px 48px 0 0;
     float: right;
 }
 
@@ -200,7 +206,7 @@ canvas{
 }
 
 .email{
-    margin: 30px 0px 22px 68px;
+    margin: 30px 0px 22px 67px;
     float: left;
 }
 
@@ -225,9 +231,15 @@ canvas{
     border-color: #000000;
     border-radius: 4px;
     background-color: #f0f0f0;
-    float: right;
-    margin: 310px 80px 0 0;
+    /*float: right;
+    margin: 310px 80px 0 0; */
+    margin: 10% auto;
+    left: 750px;
+    right: 0;
+    top: 200px;
     padding: 10px;
+    position: fixed;
+    box-shadow: 2px 2px 2px #696960;
 }
 .hidden{
     position: absolute;
@@ -240,7 +252,14 @@ canvas{
     
 }
 #RSlogo{
+/*<<<<<<< HEAD
     float: left;
     margin: 325px 0 0 345px;
+=======*/
+    position: fixed;
+    margin: 10% auto;
+    left: 0;
+    right: 0;
+    z-index: 0;
 }
 

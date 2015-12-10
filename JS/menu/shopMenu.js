@@ -56,12 +56,8 @@ shopMenu.prototype = {
         for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
             this.availableAbilities[i-10] = this.playerData.shipData[i];
         }
-        
         console.log("available wep: "+this.availableWeapons);
         console.log("available ab: "+this.availableAbilities);
-        
-        
-
         // Aseet
         this.weaponsLabel = this.game.add.text(220, 260, 'Weapons', styleA);
         this.weaponTray = this.game.add.sprite(250, 300,  'menuHeader');
@@ -73,76 +69,83 @@ shopMenu.prototype = {
         this.weaponsGroup.y = 300;
         
         // perusase
-        this.basicIcon = this.game.add.sprite(75, 15, 'bullet');
+        this.basicIcon = this.game.add.sprite(75, 25, 'bullet');
         this.basicIcon.scale.setTo(2, 2);
-        this.basicLabel = this.game.add.text(30, 60, 'Basic Gun', styleB);
-        this.basicpriceLabel = this.game.add.text(60, 100, 'Free', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.wepSelected, this, 0, 1, 2);
+        this.basicLabel = this.game.add.text(30, 70, 'Basic Gun', styleB);
+        this.basicpriceLabel = this.game.add.text(60, 110, 'Free', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect', this.wepSelected, this, 1, 0, 2);
         this.button.name = 'weapon'+0;
-        this.button.tint = 0x858585;
+        //this.button.tint = 0x858585;
         this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
+        //this.bselectbutton = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 0, 1, 2);
+        //this.bselectbutton.scale.setTo(0.4, 0,4);
         this.basicGroup = this.game.add.group();
         this.weaponsGroup.add(this.basicGroup);
         this.basicGroup.x = 10;
-        this.basicGroup.y = 10;
+        this.basicGroup.y = 0;
         this.basicGroup.add(this.basicIcon);
         this.basicGroup.add(this.basicLabel);
         this.basicGroup.add(this.basicpriceLabel);
         this.basicGroup.add(this.button);
-        
-        // haulikko
-        this.shotgunIcon = this.game.add.sprite(80, 10, 'shotgun');
-        this.shotgunIcon.scale.setTo(1.5, 1.5);
-        this.shotgunLabel = this.game.add.text(40, 60, 'Shotgun', styleB);
-        this.shotgunpriceLabel = this.game.add.text(65, 100, '200', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.wepSelected, this, 0, 1, 2);
-        this.button.name = 'weapon'+1;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
-        this.shotgunGroup = this.game.add.group();
-        this.weaponsGroup.add(this.shotgunGroup);
-        this.shotgunGroup.x = 205;
-        this.shotgunGroup.y = 10;
-        this.shotgunGroup.add(this.shotgunIcon);
-        this.shotgunGroup.add(this.shotgunLabel);
-        this.shotgunGroup.add(this.shotgunpriceLabel);
-        this.shotgunGroup.add(this.button);
+        //this.basicGroup.add(this.bselectbutton);
         
         // laser
-        this.laserIcon = this.game.add.sprite(70, 5, 'laser');
+        this.laserIcon = this.game.add.sprite(70, 15, 'laser');
         this.laserIcon.scale.setTo(0.5, 0.5);
-        this.laserLabel = this.game.add.text(50, 60, 'Laser', styleB);
-        this.laserpriceLabel = this.game.add.text(60, 100, '600', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.wepSelected, this, 0, 1, 2);
-        this.button.name = 'weapon'+2;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.laserLabel = this.game.add.text(50, 70, 'Laser', styleB);
+        this.laserpriceLabel = this.game.add.text(60, 110, '600', styleB);
+        //this.bselectbutton = this.game.add.button(0, 0, 'menuHeader',this.wepSelected, this, 0, 1, 2);
+        //this.bselectbutton.scale.setTo(0.13, 1,7);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
+        this.button.name = 'weapon'+1;
+        //this.button.tint = 0x858585;
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
         this.laserGroup = this.game.add.group();
         this.weaponsGroup.add(this.laserGroup);
         this.laserGroup.x = 400;
-        this.laserGroup.y = 10;
+        this.laserGroup.y = 0;
         this.laserGroup.add(this.laserIcon);
         this.laserGroup.add(this.laserLabel);
         this.laserGroup.add(this.laserpriceLabel);
         this.laserGroup.add(this.button);
         
+        // haulikko
+        this.shotgunIcon = this.game.add.sprite(80, 20, 'shotgun');
+        this.shotgunIcon.scale.setTo(1.5, 1.5);
+        this.shotgunLabel = this.game.add.text(40, 70, 'Shotgun', styleB);
+        this.shotgunpriceLabel = this.game.add.text(65, 110, '200', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
+        this.button.name = 'weapon'+2;
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
+        this.shotgunGroup = this.game.add.group();
+        this.weaponsGroup.add(this.shotgunGroup);
+        this.shotgunGroup.x = 205;
+        this.shotgunGroup.y = 0;
+        this.shotgunGroup.add(this.shotgunIcon);
+        this.shotgunGroup.add(this.shotgunLabel);
+        this.shotgunGroup.add(this.shotgunpriceLabel);
+        this.shotgunGroup.add(this.button);
+        
         // miinat
-        this.minesIcon = this.game.add.sprite(60, 5, 'mines');
+        this.minesIcon = this.game.add.sprite(60, 15, 'mines');
         //this.minesIcon.scale.setTo(0.2, 0.2);
-        this.minesLabel = this.game.add.text(55, 60, 'Mines', styleB);
-        this.minespriceLabel = this.game.add.text(60, 100, '1000', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.wepSelected, this, 0, 1, 2);
+        this.minesLabel = this.game.add.text(55, 70, 'Mines', styleB);
+        this.minespriceLabel = this.game.add.text(60, 110, '1000', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
         this.button.name = 'weapon'+3;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
         this.minesGroup = this.game.add.group();
         this.weaponsGroup.add(this.minesGroup);
         this.minesGroup.x = 590;
-        this.minesGroup.y = 10;
+        this.minesGroup.y = 0;
         this.minesGroup.add(this.minesIcon);
         this.minesGroup.add(this.minesLabel);
         this.minesGroup.add(this.minespriceLabel);
@@ -159,76 +162,76 @@ shopMenu.prototype = {
         this.abilitiesGroup.y = 500;
         
         // Nopeus tehoste
-        this.speedIcon = this.game.add.sprite(70, 5, 'abSpeed');
+        this.speedIcon = this.game.add.sprite(70, 15, 'abSpeed');
         this.speedIcon.scale.setTo(0.5, 0.5);
-        this.speedLabel = this.game.add.text(20, 60, 'Speed Boost', styleB);
-        this.speedpriceLabel = this.game.add.text(65, 100, '250', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.abSelected, this, 0, 1, 2);
+        this.speedLabel = this.game.add.text(20, 70, 'Speed Boost', styleB);
+        this.speedpriceLabel = this.game.add.text(65, 110, '250', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
         this.button.name = 'ability'+0;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
         this.speedGroup = this.game.add.group();
         this.abilitiesGroup.add(this.speedGroup);
         this.speedGroup.x = 10;
-        this.speedGroup.y = 10;
+        this.speedGroup.y = 0;
         this.speedGroup.add(this.speedIcon);
         this.speedGroup.add(this.speedLabel);
         this.speedGroup.add(this.speedpriceLabel);
         this.speedGroup.add(this.button);
         
         // EMP tehoste
-        this.empIcon = this.game.add.sprite(65, 5, 'ability1');
+        this.empIcon = this.game.add.sprite(65, 15, 'ability1');
         this.empIcon.scale.setTo(0.5, 0.5);
-        this.empLabel = this.game.add.text(62, 60, 'EMP', styleB);
-        this.emppriceLabel = this.game.add.text(65, 100, '450', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.abSelected, this, 0, 1, 2);
+        this.empLabel = this.game.add.text(62, 70, 'EMP', styleB);
+        this.emppriceLabel = this.game.add.text(65, 110, '450', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
         this.button.name = 'ability'+1;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
         this.empGroup = this.game.add.group();
         this.abilitiesGroup.add(this.empGroup);
         this.empGroup.x = 205;
-        this.empGroup.y = 10;
+        this.empGroup.y = 0;
         this.empGroup.add(this.empIcon);
         this.empGroup.add(this.empLabel);
         this.empGroup.add(this.emppriceLabel);
         this.empGroup.add(this.button);
         
         // Suoja tehoste
-        this.shieldIcon = this.game.add.sprite(65, 5, 'ability2');
+        this.shieldIcon = this.game.add.sprite(65, 15, 'ability2');
         this.shieldIcon.scale.setTo(0.5, 0.5);
-        this.shieldLabel = this.game.add.text(50, 60, 'Shield', styleB);
-        this.shieldpriceLabel = this.game.add.text(65, 100, '700', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.abSelected, this, 0, 1, 2);
+        this.shieldLabel = this.game.add.text(50, 70, 'Shield', styleB);
+        this.shieldpriceLabel = this.game.add.text(65, 110, '700', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
         this.button.name = 'ability'+2;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
         this.shieldGroup = this.game.add.group();
         this.abilitiesGroup.add(this.shieldGroup);
         this.shieldGroup.x = 400;
-        this.shieldGroup.y = 10;
+        this.shieldGroup.y = 0;
         this.shieldGroup.add(this.shieldIcon);
         this.shieldGroup.add(this.shieldLabel);
         this.shieldGroup.add(this.shieldpriceLabel);
         this.shieldGroup.add(this.button);
         
         // SF tehoste
-        this.sfIcon = this.game.add.sprite(60, 5, 'ability3');
+        this.sfIcon = this.game.add.sprite(60, 15, 'ability3');
         this.sfIcon.scale.setTo(0.5, 0.5);
-        this.sfLabel = this.game.add.text(65, 60, 'SF', styleB);
-        this.sfpriceLabel = this.game.add.text(60, 100, '900', styleB);
-        this.button = this.game.add.button(0, 0, 'menuHeader',this.abSelected, this, 0, 1, 2);
+        this.sfLabel = this.game.add.text(65, 70, 'SF', styleB);
+        this.sfpriceLabel = this.game.add.text(60, 110, '900', styleB);
+        this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
         this.button.name = 'ability'+3;
-        this.button.tint = 0x858585;
-        this.button.alpha = 0.0;
-        this.button.scale.setTo(0.13, 1.7);
+        this.button.alpha = 1.0;
+        this.button.setFrames(1,0,2);
+        this.button.scale.setTo(0.6, 0.58);
         this.sfGroup = this.game.add.group();
         this.abilitiesGroup.add(this.sfGroup);
         this.sfGroup.x = 590;
-        this.sfGroup.y = 10;
+        this.sfGroup.y = 0;
         this.sfGroup.add(this.sfIcon);
         this.sfGroup.add(this.sfLabel);
         this.sfGroup.add(this.sfpriceLabel);
@@ -251,7 +254,11 @@ shopMenu.prototype = {
             // tarkistetaan onko pelaaja ostanut aseen
             if (this.availableWeapons[i] == 1){
                 console.log("Aseita ostettu: "+i);
+                this.weaponsGroup.getChildAt(i).getChildAt(0).alpha = 0.5;
+                this.weaponsGroup.getChildAt(i).getChildAt(1).alpha = 0.5;
+                this.weaponsGroup.getChildAt(i).getChildAt(2).alpha = 0.5;
                 this.weaponsGroup.getChildAt(i).getChildAt(3).alpha = 0.5;
+                this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(2,2,2);
                 
             } 
         }
@@ -260,7 +267,11 @@ shopMenu.prototype = {
             // tarkistetaan onko pelaaja ostanut abilityn
             if (this.availableAbilities[j] == 1){
                 console.log("Kykyja ostettu: "+j);
+                this.abilitiesGroup.getChildAt(j).getChildAt(0).alpha = 0.5;
+                this.abilitiesGroup.getChildAt(j).getChildAt(1).alpha = 0.5;
+                this.abilitiesGroup.getChildAt(j).getChildAt(2).alpha = 0.5;
                 this.abilitiesGroup.getChildAt(j).getChildAt(3).alpha = 0.5;
+                this.abilitiesGroup.getChildAt(j).getChildAt(3).setFrames(2,2,2);
             }
         }
         },
@@ -270,7 +281,14 @@ shopMenu.prototype = {
             this.wep = button;
             var p = this.wep.name.replace( /^\D+/g, '');
             this.windex = parseInt(p);
-                if (this.weaponsGroup.getChildAt(p).getChildAt(3).alpha == 0.5) {
+            for (i = 0; i <= 3; i++){
+                if (this.weaponsGroup.getChildAt(i).getChildAt(3).alpha == 1.0){
+                this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(1,0,2);
+                }
+            }
+            this.weaponsGroup.getChildAt(p).getChildAt(3).setFrames(2,2,2);
+            if (this.weaponsGroup.getChildAt(p).getChildAt(3).alpha == 0.5) {
+                    this.weaponsGroup.getChildAt(p).getChildAt(3).setFrames(2,2,2);
                     this.windex = null;
                 }
             console.log(this.windex);
@@ -281,7 +299,14 @@ shopMenu.prototype = {
             this.ab = button;
             var p = this.ab.name.replace( /^\D+/g, '');
             this.aindex = parseInt(p);
-                if (this.abilitiesGroup.getChildAt(p).getChildAt(3).alpha == 0.5) {
+            for (i = 0; i <= 3; i++){
+                if (this.abilitiesGroup.getChildAt(i).getChildAt(3).alpha == 1.0){
+                this.abilitiesGroup.getChildAt(i).getChildAt(3).setFrames(1,0,2);
+                }
+            }
+            this.abilitiesGroup.getChildAt(p).getChildAt(3).setFrames(2,2,2);
+            if (this.abilitiesGroup.getChildAt(p).getChildAt(3).alpha == 0.5) {
+                    this.abilitiesGroup.getChildAt(p).getChildAt(3).setFrames(2,2,2);
                     this.aindex = null;
                 }
             console.log(this.aindex);
@@ -290,8 +315,8 @@ shopMenu.prototype = {
         // osto-painikkeen toiminto
         purchase: function() {
              var i = this.windex;
-             var j = this.aindex;         
-                if (i == 1) {            
+             var j = this.aindex;
+                if (i == 2) {
                  if (this.playerData.playerData.money >= 200){
                     this.playerData.playerData.money -= 200;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
@@ -299,7 +324,7 @@ shopMenu.prototype = {
                     console.log("Weapon "+i+" bought.");
                     this.windex = null;
                     }
-             } else if (i == 2) {
+             } else if (i == 1) {
                  if (this.playerData.playerData.money >= 600) {
                     console.log("Weapon "+i+" bought.");
                     this.playerData.playerData.money -= 600;

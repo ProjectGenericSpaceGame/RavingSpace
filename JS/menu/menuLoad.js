@@ -12,7 +12,7 @@ menuLoad.prototype = {
             //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');    
-            this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder3.png');
+            this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
             this.game.load.image('menuBack', 'assets/placeholders/back.png');
             this.game.load.image('menuNext', 'assets/placeholders/next.png');
             this.game.load.image('RSlogo', 'assets/menuelements/RSlogo.png');

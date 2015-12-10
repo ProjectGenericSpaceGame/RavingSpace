@@ -9,12 +9,14 @@ $(document).ready(function(){
     $('#loader').css("display","none");
     // kirjautumisruutu / rekisteröitymisruutu
     $('.login').click(function(){
+        $('.password').val('');
+        $('.username').val('');
+        $('.capsLockWarning').css("display","none");
         var other =  $('.signupDialog').css("display");
         if(other == "block"){
             $('.signupDialog').css("display","none");
         }
         $('.loginDialog').css("display","block");
-        $('#RSlogo').css("margin-top","20px");
     });
 
     $('.cancelLogin').click(function(){
@@ -111,13 +113,17 @@ $(document).ready(function(){
 
     $('.password-retype').on('input', function() {
         // tarkistetaan, että salasanat täsmäävät
+        //if(event.which == 20){ alert("caaappsss")};
         var check = checkRegisterInfo();
         if(check == false){
             $('.password-retype').css("border","2px solid #a50716");
-            $('.password-retype').css("margin","26px 48px 0 0");
+            $('.password-retype').css("margin","26px 46px 0 0");
+            //$('.email').css("margin-top","30px");
         } else{
-            $('.password-retype').css("border","2px solid #07a547");
-            $('.password-retype').css("margin","26px 48px 0 0");
+            //$('.password-retype').css("border","2px solid #07a547");
+            //$('.password-retype').css("margin","26px 48px 0 0");
+            $('.password-retype').css("border","");
+            $('.password-retype').css("margin","");
         }
     });
     // login -painike rekisteröitymisruudussa
@@ -169,14 +175,18 @@ $(document).ready(function(){
             return true;
         }
     }
-    
+    // Kun painetaan Sign Up -painiketta
     $('.signUp').click(function(){
+        //Tyhjennetääm tekstikentät
+        $('.email').val('');
+        $('.username-register').val('');
+        $('.password-retype').val('');
+        $('.username-register').val('');
         var other =  $('.loginDialog').css("display");
         if(other == "block"){
             $('.loginDialog').css("display","none");
         }
         $('.signupDialog').css("display","block");
-        $('#RSlogo').css("margin-top","20px");
     });
 
     $('.info').hover(function(){

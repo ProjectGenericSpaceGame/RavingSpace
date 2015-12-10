@@ -84,9 +84,9 @@ gameLoad.prototype = {
         this.game.load.image('slider', 'assets/menuelements/slider.png');
         this.game.load.image('menuHeader', 'assets/placeholders/header3.png');
         //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
-        this.game.load.image('menuButtonBG', 'assets/placeholders/menubgplaceholder.png');
+        this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
         //tausta lopetusnäytölle
-        this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
+        this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuBG_dark.png', 400, 70);
         //musiikki
         this.game.load.audio('highOctane','assets/sounds/HighOctane.mp3');
         //äänet

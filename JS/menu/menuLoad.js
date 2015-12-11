@@ -42,6 +42,7 @@ menuLoad.prototype = {
             this.game.load.image('laser', 'assets/particles/laser2.png');
             this.game.load.image('shotgun', 'assets/sprites/bullet2.png');
             this.game.load.image('mines', 'assets/sprites/mine.png');
+            this.game.load.image('shopshield', 'assets/particles/shield.png');
             
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             //this.game.load.audio('testi', 'assets/sounds/testi.mp3');

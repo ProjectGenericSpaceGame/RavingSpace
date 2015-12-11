@@ -25,7 +25,7 @@ shopMenu.prototype = {
         
         // valitun aseen muuttuja
         this.windex = null;
-        // valitun tehsoteen muuttuja
+        // valitun tehosteen muuttuja
         this.aindex = null;
         
         //alustetaan takaisin nappula
@@ -56,8 +56,9 @@ shopMenu.prototype = {
         for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
             this.availableAbilities[i-10] = this.playerData.shipData[i];
         }
-        console.log("available wep: "+this.availableWeapons);
-        console.log("available ab: "+this.availableAbilities);
+        // console.log("available wep: "+this.availableWeapons);
+        // console.log("available ab: "+this.availableAbilities);
+        
         // Aseet
         this.weaponsLabel = this.game.add.text(220, 260, 'Weapons', styleA);
         this.weaponTray = this.game.add.sprite(250, 300,  'menuHeader');
@@ -75,12 +76,9 @@ shopMenu.prototype = {
         this.basicpriceLabel = this.game.add.text(60, 110, 'Free', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect', this.wepSelected, this, 1, 0, 2);
         this.button.name = 'weapon'+0;
-        //this.button.tint = 0x858585;
         this.button.alpha = 0.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
-        //this.bselectbutton = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 0, 1, 2);
-        //this.bselectbutton.scale.setTo(0.4, 0,4);
         this.basicGroup = this.game.add.group();
         this.weaponsGroup.add(this.basicGroup);
         this.basicGroup.x = 10;
@@ -89,18 +87,14 @@ shopMenu.prototype = {
         this.basicGroup.add(this.basicLabel);
         this.basicGroup.add(this.basicpriceLabel);
         this.basicGroup.add(this.button);
-        //this.basicGroup.add(this.bselectbutton);
         
         // laser
         this.laserIcon = this.game.add.sprite(70, 15, 'laser');
         this.laserIcon.scale.setTo(0.5, 0.5);
         this.laserLabel = this.game.add.text(50, 70, 'Laser', styleB);
         this.laserpriceLabel = this.game.add.text(60, 110, '600', styleB);
-        //this.bselectbutton = this.game.add.button(0, 0, 'menuHeader',this.wepSelected, this, 0, 1, 2);
-        //this.bselectbutton.scale.setTo(0.13, 1,7);
         this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
         this.button.name = 'weapon'+1;
-        //this.button.tint = 0x858585;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -133,10 +127,10 @@ shopMenu.prototype = {
         this.shotgunGroup.add(this.button);
         
         // miinat
-        this.minesIcon = this.game.add.sprite(60, 15, 'mines');
+        this.minesIcon = this.game.add.sprite(65, 15, 'mines');
         //this.minesIcon.scale.setTo(0.2, 0.2);
-        this.minesLabel = this.game.add.text(55, 70, 'Mines', styleB);
-        this.minespriceLabel = this.game.add.text(60, 110, '1000', styleB);
+        this.minesLabel = this.game.add.text(50, 70, 'Mines', styleB);
+        this.minespriceLabel = this.game.add.text(56, 110, '1000', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
         this.button.name = 'weapon'+3;
         this.button.alpha = 1.0;
@@ -162,10 +156,10 @@ shopMenu.prototype = {
         this.abilitiesGroup.y = 500;
         
         // Nopeus tehoste
-        this.speedIcon = this.game.add.sprite(70, 15, 'abSpeed');
+        this.speedIcon = this.game.add.sprite(65, 15, 'abSpeed');
         this.speedIcon.scale.setTo(0.5, 0.5);
-        this.speedLabel = this.game.add.text(20, 70, 'Speed Boost', styleB);
-        this.speedpriceLabel = this.game.add.text(65, 110, '250', styleB);
+        this.speedLabel = this.game.add.text(55, 70, 'Dash', styleB);
+        this.speedpriceLabel = this.game.add.text(60, 110, '250', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
         this.button.name = 'ability'+0;
         this.button.alpha = 1.0;
@@ -200,8 +194,8 @@ shopMenu.prototype = {
         this.empGroup.add(this.button);
         
         // Suoja tehoste
-        this.shieldIcon = this.game.add.sprite(65, 15, 'ability2');
-        this.shieldIcon.scale.setTo(0.5, 0.5);
+        this.shieldIcon = this.game.add.sprite(58, 15, 'shopshield');
+        this.shieldIcon.scale.setTo(0.35, 0.35);
         this.shieldLabel = this.game.add.text(50, 70, 'Shield', styleB);
         this.shieldpriceLabel = this.game.add.text(65, 110, '700', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
@@ -253,7 +247,8 @@ shopMenu.prototype = {
         for (i = 0; i <= 3; i++){
             // tarkistetaan onko pelaaja ostanut aseen
             if (this.availableWeapons[i] == 1){
-                console.log("Aseita ostettu: "+i);
+                //console.log("Aseita ostettu: "+i);
+                //asetetaan ostetut aseet läpinäkyväksi
                 this.weaponsGroup.getChildAt(i).getChildAt(0).alpha = 0.5;
                 this.weaponsGroup.getChildAt(i).getChildAt(1).alpha = 0.5;
                 this.weaponsGroup.getChildAt(i).getChildAt(2).alpha = 0.5;
@@ -266,7 +261,8 @@ shopMenu.prototype = {
         for (j = 0; j <= 3; j++){
             // tarkistetaan onko pelaaja ostanut abilityn
             if (this.availableAbilities[j] == 1){
-                console.log("Kykyja ostettu: "+j);
+                //console.log("Kykyja ostettu: "+j);
+                //asetetaan ostetut kyvyt läpinäkyväksi
                 this.abilitiesGroup.getChildAt(j).getChildAt(0).alpha = 0.5;
                 this.abilitiesGroup.getChildAt(j).getChildAt(1).alpha = 0.5;
                 this.abilitiesGroup.getChildAt(j).getChildAt(2).alpha = 0.5;
@@ -281,9 +277,14 @@ shopMenu.prototype = {
             this.wep = button;
             var p = this.wep.name.replace( /^\D+/g, '');
             this.windex = parseInt(p);
+            // vaihdetaan painikkeiden framet jos ei ostettu, jotta uusi valinta erottuu muista
             for (i = 0; i <= 3; i++){
                 if (this.weaponsGroup.getChildAt(i).getChildAt(3).alpha == 1.0){
                 this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(1,0,2);
+                }
+            } for (j = 0; j <= 3; j++){
+                if (this.abilitiesGroup.getChildAt(j).getChildAt(3).alpha == 1.0){
+                this.abilitiesGroup.getChildAt(j).getChildAt(3).setFrames(1,0,2);
                 }
             }
             this.weaponsGroup.getChildAt(p).getChildAt(3).setFrames(2,2,2);
@@ -299,9 +300,14 @@ shopMenu.prototype = {
             this.ab = button;
             var p = this.ab.name.replace( /^\D+/g, '');
             this.aindex = parseInt(p);
+            // vaihdetaan painikkeiden framet jos ei ostettu, jotta uusi valinta erottuu muista
             for (i = 0; i <= 3; i++){
                 if (this.abilitiesGroup.getChildAt(i).getChildAt(3).alpha == 1.0){
                 this.abilitiesGroup.getChildAt(i).getChildAt(3).setFrames(1,0,2);
+                }
+            } for (j = 0; j <= 3; j++){
+                if (this.weaponsGroup.getChildAt(j).getChildAt(3).alpha == 1.0){
+                this.weaponsGroup.getChildAt(j).getChildAt(3).setFrames(1,0,2);
                 }
             }
             this.abilitiesGroup.getChildAt(p).getChildAt(3).setFrames(2,2,2);
@@ -373,6 +379,7 @@ shopMenu.prototype = {
                     this.aindex = null;
                  }
              }
+            // päivitetään ostetut aseet/kyvyt jotta grafiikka vaihtuu heti ostettaessa
             console.log(this.windex+" & "+this.aindex);
             for(var i = 0; i <= SET_GUNS-1; i++){
                 this.availableWeapons[i] = this.playerData.shipData[i];
@@ -381,6 +388,7 @@ shopMenu.prototype = {
             this.availableAbilities[i-10] = this.playerData.shipData[i];
             }
             this.boughtCheck();
+            // lähetetään oston tiedot php-tiedostoon
             var thingBought = $.ajax({
                         method:"POST",
                         url:"PHP/SQLcontroller/updateData.php",

@@ -21,15 +21,15 @@ menuLoad.prototype = {
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
             // aseet
-            this.game.load.image('weapon0', 'assets/placeholders/weapon0.png');
-            this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
-            this.game.load.image('weapon2', 'assets/placeholders/weapon2.png');
+            this.game.load.image('weapon0', 'assets/placeholders/weapon0_final.png');
+            this.game.load.image('weapon1', 'assets/placeholders/weapon1_final.png');
+            this.game.load.image('weapon2', 'assets/placeholders/weapon2_final.png');
             this.game.load.image('weapon3', 'assets/sprites/mine.png');
             // tehosteet
-            this.game.load.image('ability0', 'assets/placeholders/ability0.png');
-            this.game.load.image('ability1', 'assets/placeholders/ability1.png');
-            this.game.load.image('ability2', 'assets/placeholders/ability2.png');
-            this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+            this.game.load.image('ability0', 'assets/placeholders/ability0_final.png');
+            this.game.load.image('ability1', 'assets/placeholders/ability1_final.png');
+            this.game.load.image('ability2', 'assets/placeholders/ability2_final.png');
+            this.game.load.image('ability3', 'assets/placeholders/ability3_final.png');
             this.game.load.image('abSpeed', 'assets/GUI/superSpeed.png');
             
             // kaupan kuvakkeet
@@ -59,8 +59,8 @@ menuLoad.prototype = {
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
 
         this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.ogg');
-        //this.game.load.audio('dystopia', 'assets/sounds/dystopia.ogg');
-        //this.game.load.audio('swagger', 'assets/sounds/swagger.ogg');
+        this.game.load.audio('dystopia', 'assets/sounds/dystopia.ogg');
+        this.game.load.audio('swagger', 'assets/sounds/swagger.ogg');
 
         },
         init:function(loader){
@@ -76,20 +76,24 @@ menuLoad.prototype = {
             this.menuMusics = {
                 tracks: [],
                 lastIndex: 0,
-                isPlaying: 0
+                isPlaying: 0,
+                tracksMaker:[]
             };
-            //this.menuMusics.tracks.push(this.game.add.audio('dystopia'));
-            //this.menuMusics.tracks.push(this.game.add.audio('swagger'));
+            this.menuMusics.tracks.push(this.game.add.audio('dystopia'));
+            this.menuMusics.tracksMaker.push("Zajed - Dystopia");
+            this.menuMusics.tracks.push(this.game.add.audio('swagger'));
+            this.menuMusics.tracksMaker.push("vanguard182 - Swagger");
            this.menuMusics.tracks.push(this.game.add.audio('dustsucker'));
-            for(var i = 0;i<this.menuMusics.tracks.length-1;i++){
+            this.menuMusics.tracksMaker.push("Jens Kiilstofte (Machinimasound) - Dustsucker");
+            for(var i = 0;i<this.menuMusics.tracks.length;i++){
                 this.menuMusics.tracks[i].volume = volumes.music;
-                this.menuMusics.tracks[i].onStop.add(this.nextSong,this);
+                this.menuMusics.tracks[i].addMarker(this.menuMusics.tracks[i].key,0,this.menuMusics.tracks[i].duration,volumes.music);
+                this.menuMusics.tracks[i].onMarkerComplete.add(this.nextSong,this);
             }
             this.game.sound.setDecodedCallback(this.menuMusics.tracks,audioReady, this);
             function audioReady(){
                 this.musicLoadStatus = true;
                 this.enterText = this.game.add.text(1000,700,"Press ENTER to start",{fill:"white",font:"20px cyber"});
-
             }
 
             //this.music = game.sound.play('testi');
@@ -262,7 +266,7 @@ menuLoad.prototype = {
                 */
             //this.playerWaves = JSON.parse(this.playerWaves);
 
-
+            this.songName = this.game.add.text(25,775,"Now Playing: ",{ font: "20px cyber", fill:"white"});
             //tässä kasataan jutut
             this.surroundings = {
                 menubg:this.menubg,
@@ -271,7 +275,8 @@ menuLoad.prototype = {
                 menuLabel:this.menuLabel,
                 headUnder:this.headUnder,
                 backButton:this.backButton,
-                musics:this.menuMusics
+                musics:this.menuMusics,
+                songName: this.songName
             };//demo
             
            // lisätään pelaajan pisteet sekä rahat yläpalkkiin
@@ -294,7 +299,9 @@ menuLoad.prototype = {
 
     startMenu:function(){
         if(this.musicLoadStatus) {
-            this.menuMusics.tracks[rnd.integerInRange(0, this.menuMusics.tracks.length - 1)].play();
+            var toPlay = rnd.integerInRange(0, this.menuMusics.tracks.length - 1);
+            this.menuMusics.tracks[toPlay].play(this.menuMusics.tracks[toPlay].key);
+            this.surroundings.songName.text += this.menuMusics.tracksMaker[toPlay];
             this.loader.destroy();
             this.enterText.destroy();
             this.game.state.start('mainMenu', false, false,
@@ -302,8 +309,7 @@ menuLoad.prototype = {
                 this.globalScores,
                 this.playerWaves,
                 this.buttonGroup,
-                this.surroundings,
-                this.menuMusics
+                this.surroundings
             );
         }
     },
@@ -332,15 +338,16 @@ menuLoad.prototype = {
                 }
     },
     nextSong : function(){
-        this.menuMusics.lastIndex = this.menuMusics.isPlaying;
+        this.surroundings.musics.lastIndex = this.surroundings.musics.isPlaying;
         while(true){
-            var toPlay = rnd.integerInRange(0,this.menuMusics.tracks.length-1);
-            if(toPlay != this.menuMusics.lastIndex){
+            var toPlay = rnd.integerInRange(0,this.surroundings.musics.tracks.length-1);
+            if(toPlay != this.surroundings.musics.lastIndex){
                 break;
             }
         }
-        this.menuMusics.tracks[toPlay].play();
-        this.menuMusics.isPlaying = toPlay;
+        this.surroundings.musics.tracks[toPlay].play(this.surroundings.musics.tracks[toPlay].key);
+        this.surroundings.songName.text = "Now Playing: "+this.surroundings.musics.tracksMaker[toPlay];
+        this.surroundings.musics.isPlaying = toPlay;
     }
 
 };

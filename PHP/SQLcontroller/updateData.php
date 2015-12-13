@@ -95,6 +95,7 @@
         $attackOwnerMoney = $row['money'];
         $attackOwnerMoney += $attackLoot;
         $attackOwner = $row['playerID'];
+		echo $attackOwner;
         //echo "".$attackID." ".$attackLoot." ".$points." ".$scoreID." ".$scoreToUpdate."+ ";
 		//tässä päivitetään aallon tiedot
         $wasTester = false;

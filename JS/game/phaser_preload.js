@@ -2,10 +2,10 @@ var preload = function(game){
 
 };
 preload.prototype = {
-    init:function(loadout,playerData,surroundings,musics){
+    init:function(loadout,playerData,surroundings){
         this.loadout = loadout;
         this.playerData = playerData;
-        this.surrounding = surroundings;
+        this.surroundings = surroundings;
     },
     preload:function(){
         //ladataan latausruutu
@@ -18,7 +18,7 @@ preload.prototype = {
             this.loadout,
             this.playerData,
             this.loader,
-            this.surrounding
+            this.surroundings
         );
     }
 };

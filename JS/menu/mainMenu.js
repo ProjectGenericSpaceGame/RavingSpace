@@ -67,8 +67,7 @@ mainMenu.prototype = {
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
-            this.surroundings,
-            this.menuMusics
+            this.surroundings
         );
     },
     settingsStart: function(){
@@ -77,8 +76,7 @@ mainMenu.prototype = {
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
-            this.surroundings,
-            this.menuMusics
+            this.surroundings
         );
     },
     scoresStart: function(){

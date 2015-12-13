@@ -5,13 +5,12 @@ var settingsSubMenu = function(game){
 
 };
 settingsSubMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings,musics){
+    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
-        this.menuMusics = musics;
     },
     preload:function(){
         //do some murdering here
@@ -58,8 +57,7 @@ settingsSubMenu.prototype = {
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
-            this.surroundings,
-            this.menuMusics
+            this.surroundings
         );
     },
     accountStart:function(){

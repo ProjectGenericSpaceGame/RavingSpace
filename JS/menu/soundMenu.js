@@ -2,13 +2,12 @@ var soundMenu = function(game){
 
 };
 soundMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings,musics){
+    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
         this.playerData = playerData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
         this.surroundings = surroundings;
-        this.musics = musics;
     },
     preload:function(){
         //do some murdering here
@@ -148,8 +147,8 @@ soundMenu.prototype = {
         } else if (this.musicneedle.x > 324) {
             volumes.music = 1.0 * volumes.master;
         }
-        for(var i = 0;i<this.musics.tracks.length;i++){
-            this.musics.tracks[i].volume = volumes.music;
+        for(var i = 0;i<this.surroundings.musics.tracks.length;i++){
+            this.surroundings.musics.tracks[i].volume = volumes.music;
         }
     }, // säädetään efektivolume efektisliderin neulan x:n mukaan
     fxVolume:function() {

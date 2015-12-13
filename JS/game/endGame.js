@@ -88,7 +88,7 @@ endGame.prototype = {
         tempArray = null;
 		var updateData = $.ajax({
                 method:"POST",
-                //async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                async:false,
                 url:"PHP/SQLcontroller/updateData.php",
                 data:{
 					playerName:this.playerData.playerData.playerName,
@@ -104,8 +104,19 @@ endGame.prototype = {
         updateData.done(function(returnData){
             alert("Your data successfully was successfully updated:"+returnData);
             self.playerData.playerData.points += points;
+            self.ship = null;
+            self.HUD = null;
+            for(var i = 0;i<self.musics.tracks.length;i++) {
+                self.musics.tracks[i].destroy();
+            }
+            for(var property in self.musics.sounds){
+                if(property != "enemyLaser" && property != "enemyBasic" && property != "playerLaser"){
+                    self.musics.sounds[property].destroy();
+                }
+            }
+            self.cache.destroy();
+            window.location.reload(true);
         });
-        this.musics.tracks[this.musics.isPlaying].stop();
-        this.game.state.start('setMenuLoader');
+
     }
 };

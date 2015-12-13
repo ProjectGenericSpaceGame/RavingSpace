@@ -357,7 +357,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,music
                 if(random == 5){
                     dropBoom.getFirstDead().reset(enemy.x,enemy.y);
                 } else if(random == 10){
-                    dropAbi.getFirstDead().reset(enemy.x,enemy.y);
+                    dropAbi.getFirstDead().reset(enemy.x,enemy.y).ability = rnd.integerInRange(0,3);
                 }
             }
             if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
@@ -397,7 +397,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,music
             //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
             //alert(HPbar.x);
         }
-    } else if(enemy.name == "drop"){
+    } else if(enemy.name == "drop"){//tätä ei ajeta ikinä
         enemy.health = 0.001;
         enemy.kill();
     }

@@ -6,13 +6,12 @@ var loadoutMenu = function(game){
 
 loadoutMenu.prototype = {
     
-        init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings,musics){
+        init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
             this.playerData = playerData;
             this.globalScores = globalScores;
             this.playerWaves = playerWaves;
             this.buttonGroup = buttonGroup;
             this.surroundings = surroundings;
-            this.musics = musics;
         
     },
     
@@ -119,6 +118,7 @@ loadoutMenu.prototype = {
          // Mikäli asevalikko ei ole auki se avataan
         if (this.am == false){
             this.sweapon = this.game.add.sprite(900, 200, 'availableTray');
+            this.sweapon.alpha = 0.7;
             this.thingsGroup.add(this.sweapon);
             
             for (i = 0; i <= 3; i++){
@@ -159,8 +159,8 @@ loadoutMenu.prototype = {
     
     selectAbility: function(button){
         this.preab = button;
-        this.x = 830;
-        this.y = 410;
+        this.x = 829;
+        this.y = 409;
         var i;
         // Mikäli toinen asevalikko on auki se suljetaan
         if(this.am == true){
@@ -170,6 +170,7 @@ loadoutMenu.prototype = {
         // Mikäli tehostevalikko ei ole auki se avataan
         if (this.im == false){
             this.sability = this.game.add.sprite(825, 405, 'availableTray');
+            this.sability.alpha = 0.6;
             this.thingsGroup.add(this.sability);
             
             for (i = 0; i <= 3; i++){
@@ -192,7 +193,7 @@ loadoutMenu.prototype = {
                     this.button = this.game.add.button(this.x, this.y, 'ability' + i, this.abpressed, this);
                     this.button.name = 'ability' + i;
                     this.thingsGroup.add(this.button);
-                    this.x += 92.5;
+                    this.x += 92;
                     }
                 
                 }    
@@ -248,7 +249,7 @@ loadoutMenu.prototype = {
         this.ASA[num] = 1;
       
         // Lisätään sen tehosteen kuvake paikkaan josta pelaaja painoi.
-        var icon = this.game.add.sprite(3,3, p.key);
+        var icon = this.game.add.sprite(0,0, p.key);
         this.preab.name = p.name;
         this.preab.addChild(icon);
         this.preab.hasChild = true;
@@ -262,13 +263,15 @@ loadoutMenu.prototype = {
         for (var i = 0; i <= 2; i++){
              if(this.selectedLoadout[i] !== undefined){
                 this.noWeapons.visible = false;
+                 for(var k = 0;k<this.surroundings.musics.tracks.length;k++){
+                     this.surroundings.musics.tracks[k].destroy();
+                 }
                 // kutsutaan gameLoad -tilaa
+                 this.cache.destroy();
                 this.game.state.start('gamePreload',true,true,
                     this.selectedLoadout,
 					this.playerData,
-                    this.surroundings,
-                    this.musics
-
+                    this.surroundings
                 );
              }
         }

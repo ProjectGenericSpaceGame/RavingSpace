@@ -52,8 +52,8 @@ gameLoad.prototype = {
         this.game.load.image('respawnTimer', 'assets/GUI/respawn.png');
 		//ladataan bannerit ja weapon-/ability trayt
         this.game.load.spritesheet('banner', 'assets/GUI/banners.png',1280,179);
-        this.game.load.image('wepTray', 'assets/GUI/wepTray.png');
-        this.game.load.image('abTray', 'assets/GUI/abTray.png');
+        this.game.load.image('wepTray', 'assets/GUI/wepTray_new.png');
+        this.game.load.image('abTray', 'assets/GUI/abTray_new.png');
         this.game.load.image('trayChoser', 'assets/GUI/trayChosen.png');
         //lataamisen näyttämistray
         this.game.load.image('trayReloading', 'assets/GUI/trayReloading.png');
@@ -65,17 +65,18 @@ gameLoad.prototype = {
 		this.game.load.image('laser2', 'assets/particles/laser2.png');
 		this.game.load.image('laser3', 'assets/particles/laser3.png');
 		// aseet
-		this.game.load.image('weapon0', 'assets/placeholders/weapon0.png');
-		this.game.load.image('weapon1', 'assets/placeholders/weapon1.png');
-		this.game.load.image('weapon2', 'assets/placeholders/weapon2.png');
+		this.game.load.image('weapon0', 'assets/placeholders/weapon0_final.png');
+		this.game.load.image('weapon1', 'assets/placeholders/weapon1_final.png');
+		this.game.load.image('weapon2', 'assets/placeholders/weapon2_final.png');
 		this.game.load.image('weapon3', 'assets/placeholders/weapon3.png');
 		// tehosteet
 		this.game.load.image('ability0', 'assets/GUI/superSpeed.png');
-		this.game.load.image('ability1', 'assets/placeholders/ability1.png');
-		this.game.load.image('ability2', 'assets/placeholders/ability2.png');
-		this.game.load.image('ability3', 'assets/placeholders/ability3.png');
+		this.game.load.image('ability1', 'assets/placeholders/ability1_final.png');
+		this.game.load.image('ability2', 'assets/placeholders/ability2_final.png');
+		this.game.load.image('ability3', 'assets/placeholders/ability3_final.png');
 		//abilityjen visuaaliy
 		this.game.load.image('shield', 'assets/particles/shield.png');
+		this.game.load.image('EMP', 'assets/particles/EMPfield.png');
 		//dropit
 		this.game.load.image('this.dropBoom', 'assets/placeholders/weapon0.png');
 		this.game.load.image('this.dropApi', 'assets/placeholders/ability3.png');
@@ -94,6 +95,7 @@ gameLoad.prototype = {
         this.game.load.audio('wep1sound','assets/sounds/PlayerWeaponBasic.ogg');
         this.game.load.audio('wep3sound','assets/sounds/PlayerWeaponShotgun.ogg');
         this.game.load.audio('shipBoomSound','assets/sounds/ShipExplosion.ogg');
+        this.game.load.audio('wep2sound','assets/sounds/playerWeaponLaser.wav');
 
 	},
     init:function(loadout,playerData,loader,surroundings){
@@ -141,10 +143,11 @@ gameLoad.prototype = {
       
         this.musics.tracks.push(this.game.add.audio('highOctane'));
         this.musics.sounds.playerBasic = this.game.add.audio('wep1sound');
+        this.musics.sounds.playerLaser = this.game.add.audio('wep2sound');
         this.musics.sounds.playerShotgun = this.game.add.audio('wep3sound');
         this.musics.sounds.shipBoom = this.game.add.audio('shipBoomSound');
-		for(var i = 0;i<this.musics.tracks.length-1;i++){
-			this.musics.tracks[i].volume = volumes.music;
+		for(var i = 0;i<this.musics.tracks.length;i++){
+			this.musics.tracks[i].volume = volumes.music*volumes.master;
             this.musics.tracks[i].onStop.add(this.nextSong,this);
 		}
         this.game.sound.setDecodedCallback(this.musics.tracks,audioReady, this);
@@ -177,7 +180,7 @@ gameLoad.prototype = {
 			self.game.state.start('menuLoad');
 		});
 		//this.attackInfo = "051006'302112'352713";
-		this.attackInfo = "100000'000002'000001";
+		this.attackInfo = "100503'120905'151410";
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
@@ -256,10 +259,18 @@ gameLoad.prototype = {
         this.superSpeed = this.game.add.image(0,0);
         this.superSpeed.name = "superSpeed";//kyvyillä ei ole omaa ammusryhmää joten niille luodaan sprite suoraan isäksi
         this.superSpeed.reload = 5000;
-        this.superSpeed.clip = 0.7; //clips on abilityillä lähtöarvo johon palataan, nimetty näin että voidaan hyödyntää samaa reload funktiota sekä aseille että abilityille
+        this.superSpeed.clip = 0.7;//clips on abilityillä lähtöarvo johon palataan, nimetty näin että voidaan hyödyntää samaa reload funktiota sekä aseille että abilityille
+        this.superSpeed.isTemp = false;
         //EMP
         this.EMP = this.game.add.sprite(0,0,"EMP");
+        this.game.physics.p2.enable(this.EMP);
+        this.EMP.body.kinematic = true;
+		this.EMP.anchor.x = 0.5;
+		this.EMP.anchor.y = 0.5;
+        this.EMP.scale.setTo(0.01,0.01);
+		this.EMP.reload = 20000;
         this.EMP.name = "EMP";
+        this.EMP.isTemp = false;
         this.EMP.kill();
         //Kilpi
         this.shield = this.game.add.sprite(0,0,"shield");
@@ -268,7 +279,15 @@ gameLoad.prototype = {
         this.shield.anchor.y = 0.5;
         this.shield.reload = 10000;
         this.shield.name = "shield";
+        this.shield.isTemp = false;
         this.shield.kill();
+        //ampumanopeus
+        this.fireRate = this.game.add.image(0,0);
+        this.fireRate.name = "fireRateBoost";//kyvyillä ei ole omaa ammusryhmää joten niille luodaan sprite suoraan isäksi
+        this.fireRate.reload = 9000;
+        this.fireRate.clip = 0; //clips on abilityillä lähtöarvo johon palataan, nimetty näin että voidaan hyödyntää samaa reload funktiota sekä aseille että abilityille
+        this.fireRate.boostedGun = 0;//gun that received buff
+        this.fireRate.isTemp = false;
 
         this.clips = [];
         this.reloading = [];
@@ -299,10 +318,18 @@ gameLoad.prototype = {
                     abilities.add(this.superSpeed);
                     this.abilityReloading.push(false);
                 }
+				else if(this.loadout[o] == "ability1"){
+					abilities.add(this.EMP);
+					this.abilityReloading.push(false);
+				}
                 else if(this.loadout[o] == "ability2"){
                     abilities.add(this.shield);
                     this.abilityReloading.push(false);
 					this.shipAccessories.shieldPos = abilities.length-1;
+                }
+                else if(this.loadout[o] == "ability3"){
+                    abilities.add(this.fireRate);
+                    this.abilityReloading.push(false);
                 }
             }
         }
@@ -310,6 +337,8 @@ gameLoad.prototype = {
 		this.ship.addChild(this.shipTrail);
 		this.ship.addChild(this.guns);
         this.shipAccessories.add(abilities);
+        var pickUpAbilities = [jQuery.extend(true,{},this.superSpeed),jQuery.extend(true,{},this.EMP),jQuery.extend(true,{},this.shield),jQuery.extend(true,{},this.fireRate)];//vihujen tiputtamat dropit valitsevat tästä
+        this.shipAccessories.pickUpAbilities = pickUpAbilities;
         this.ship.health = 3;
         this.ship.dying = false;
         this.ship.shield = false;
@@ -380,7 +409,8 @@ gameLoad.prototype = {
 		this.dropApi.setAll("anchor.x",0.5);
 		this.dropApi.setAll("anchor.y",0.5);
 		this.dropApi.setAll("name","drop");
-		
+		this.dropApi.setAll("ability","");
+
 		
 		//käsitellään hyökkäystieto
 		this.attackInfo = this.attackInfo.split("'");
@@ -413,6 +443,7 @@ gameLoad.prototype = {
                 enemy.name = ".";
 				enemy.fireRate  = enemyFireRates[0];
 				enemy.worth = 100;
+                enemy.isStunned = false;
 				var healthbar = this.HPbar();
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
@@ -452,6 +483,7 @@ gameLoad.prototype = {
 				enemy.maxHealth = 0.5;
 				enemy.fireRate  = enemyFireRates[1];
 				enemy.worth = 125;
+                enemy.isStunned = false;
 				var healthbar = this.HPbar();
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
@@ -485,6 +517,7 @@ gameLoad.prototype = {
                 enemy.altTarget = rnd.integerInRange(0,2);
 				enemy.fireRate  = enemyFireRates[2];
 				enemy.worth = 350;
+                enemy.isStunned = false;
 				var healthbar = this.HPbar();
 				healthbar.scale.setTo(0.25,0.1);
 				healthbar.renderable = false;
@@ -538,8 +571,9 @@ gameLoad.prototype = {
             }
 		);
         this.cursors.abilChangeHotkeys = {//tällä päästään vaihtamaan this.HUDin paikka helposti ilman pitkiä if-lauseita, ks gameLoop changethis.HUDposition
-            'z':1,
-            'x':2
+            90:1,
+            88:2,
+			67:3
         };
         //kierrosmuuttuja kertoo mikä kierros menossa
         this.lap = 1;
@@ -611,7 +645,7 @@ gameLoad.prototype = {
                 if(abIcons.length == 1){
                     reloadTrayAb.x = 12.5;
                 } else {
-                    reloadTray.x = 54*i+12.5;
+                    reloadTray.x = 54*(i-3)+12.5;
                 }
                 reloadTrayAb.alpha = 0;
                 abIcons.addChild(reloadTrayAb);
@@ -805,7 +839,8 @@ gameLoad.prototype = {
 				this.playerData,
 				this.abilityReloading,
 				this.pauseMenu,
-                this.musics
+                this.musics,
+                this.pickUpAbilities
 			);
 		}
 	} ,
@@ -866,7 +901,8 @@ gameLoad.prototype = {
         this.musicGroup.removeAll();
         this.fxGroup.removeAll();
 		this.musics.tracks[this.musics.isPlaying].stop();
-        this.game.state.start('setMenuLoader',true,true);
+		this.cache.destroy();
+        window.location.reload(true);
     },
     nextSong : function(){
         this.musics.lastIndex = this.musics.isPlaying;

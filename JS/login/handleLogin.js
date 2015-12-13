@@ -2,6 +2,7 @@
 var hashPass;
 var getRandom;
 var checkRegisterInfo;
+var caps = 0;
 
 $(document).ready(function(){
 
@@ -114,16 +115,13 @@ $(document).ready(function(){
     }
 
     $('.password-retype').on('input', function() {
-        // tarkistetaan, että salasanat täsmäävät
-        //if(event.which == 20){ alert("caaappsss")};
+        var first = $('.password-register').val();
+        var second = $('.password-retype').val();
         var check = checkRegisterInfo();
-        if(check == false){
+        if(check == false && first.length !== 0 && second.length !== 0){
             $('.password-retype').css("border","2px solid #a50716");
             $('.password-retype').css("margin","26px 46px 0 0");
-            //$('.email').css("margin-top","30px");
-        } else{
-            //$('.password-retype').css("border","2px solid #07a547");
-            //$('.password-retype').css("margin","26px 48px 0 0");
+        } else {
             $('.password-retype').css("border","");
             $('.password-retype').css("margin","");
         }
@@ -173,9 +171,12 @@ $(document).ready(function(){
         
         if(first != second){
             return false;
+        }if(first.length == 0 || second.length == 0){
+            return false;
         } else{
             return true;
         }
+        
     }
     // Kun painetaan Sign Up -painiketta
     $('.signUp').click(function(){
@@ -195,21 +196,33 @@ $(document).ready(function(){
     $('.info').hover(function(){
         $('.infoDialog').css("display","block");
     });
+    
 
     $('.info').mouseout(function(){
         $('.infoDialog').css("display","none");
     });
  
-    // Tutkitaan onko caps lock pohjassa
-   $('.password').keypress(function(e) {
+   $("input[type='password']").keypress( function(e) {
         var s = String.fromCharCode( e.which );
-        // tarkistetaan, että sift ei ole pohjassa ja sift pohjassa s on pieni s. 
-        if ( s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey ) {
-             $('.capsLockWarning').css("display","block");
-        } else{
-            $('.capsLockWarning').css("display","none");
-        } 
-            
+        if (s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey) { 
+            $('.capsLockWarning').css("display","block");
+            caps = 1;
+        }else{
+            caps = 0;
+        }
     });
-       // kirjautumis/rekisteröitymisruutu loppuu
+    
+    $( "body" ).keyup(function( event ) {
+        var s = String.fromCharCode( event.key );
+        console.log(s);
+        console.log(s.toUpperCase());
+        if(event.keyCode == 20 && caps == 0){
+             $('.capsLockWarning').css("display","block");
+            caps = 1;
+        }else if(event.keyCode == 20 && caps == 1){
+             $('.capsLockWarning').css("display","none");
+            caps= 0;
+        }
+    });
+
 });

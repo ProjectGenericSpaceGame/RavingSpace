@@ -72,7 +72,9 @@
 
         <p class="passLabelRetype">Retype Password *</p>
         <input class="password-retype input" type="password" value="" autocomplete="off"/>
-
+        
+        <span class="capsLockWarning" style="display:none">CAPS LOCK is active</span>
+        
         <p class="emailLabel">Email</p>
         <input class="email input" type="text"/>
 

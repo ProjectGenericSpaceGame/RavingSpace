@@ -44,11 +44,11 @@
             <h class="dialogHeader">Login</h>
             <div class="line"></div>
             <p class="userLabel">Username</p>
-            <input class="username input" type="text"/>
+            <input class="username input username-login" type="text"/>
             
             <span class="capsLockWarning" style="display:none">CAPS LOCK is active</span>
             <p class="passLabel">Password</p>
-            <input class="password input" type="password" value="" autocomplete="off"/>
+            <input class="password input password-login" type="password" value="" autocomplete="off"/>
 
             <p class="forgot"><a href="forgotyourpass.html">Forgot your password or username?</a></p>
 

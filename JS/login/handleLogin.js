@@ -3,6 +3,7 @@ var hashPass;
 var getRandom;
 var checkRegisterInfo;
 var caps = 0;
+var enter = 0;
 
 $(document).ready(function(){
 
@@ -18,16 +19,18 @@ $(document).ready(function(){
             $('.signupDialog').css("display","none");
         }
         $('.loginDialog').css("display","block");
-        //$('#RSlogo').css("margin-top","20px");Ronnie lisäsi
     });
 
     $('.cancelLogin').click(function(){
         $('.loginDialog').css("display","none");
         $('.signupDialog').css("display","none");
-        //$('#RSlogo').css("margin-top","325px");ronnie lisäsi
     });
     
     $('.loginCheck').click(function(){
+        loginNow();
+    });
+    // kirjaudutaan
+    loginNow = function(){
         var pss =  $('.password').val();
         var user = $('.username').val();
         var location = window.location.href;
@@ -60,17 +63,17 @@ $(document).ready(function(){
                         sessionStorage.setItem("playerID",user);
                         window.location.reload(false);
                     } else if (returnValue == "credsFirst") {
+                        $('#loader').css("display","none");
+                        $('.loginDialog').css("display", "block");
                         alert('Username or password is wrong');
-                        $('#loader').css("display","none");
-                        $('.loginDialog').css("display", "block");
                     } else if (returnValue == "lock") {
+                        $('#loader').css("display","none");
+                        $('.loginDialog').css("display", "block");
                         alert("You have tried login too many times");
-                        $('#loader').css("display","none");
-                        $('.loginDialog').css("display", "block");
                     } else if (returnValue == "creds") {
-                        alert("Username or password is wrong");
                         $('#loader').css("display","none");
                         $('.loginDialog').css("display", "block");
+                        alert("Username or password is wrong");
                     } else { 
                         $('.loginDialog').css("display", "none");
                         $('.signupDialog').css("display", "none");
@@ -88,7 +91,7 @@ $(document).ready(function(){
         } else {
             alert('please provide username and password');
         }
-    });
+    }
 
     // hankitaan uusi suola
     getRandom = function(){
@@ -190,7 +193,6 @@ $(document).ready(function(){
             $('.loginDialog').css("display","none");
         }
         $('.signupDialog').css("display","block");
-        //$('#RSlogo').css("margin-top","20px");ronnie lisäsi
     });
 
     $('.info').hover(function(){
@@ -202,7 +204,8 @@ $(document).ready(function(){
         $('.infoDialog').css("display","none");
     });
  
-   $("input[type='password']").keypress( function(e) {
+    // tarkistetaan onko caps lock pohjassa kun kirjoitetaan salasanakenttään
+    $("input[type='password']").keypress( function(e) {
         var s = String.fromCharCode( e.which );
         if (s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey) { 
             $('.capsLockWarning').css("display","block");
@@ -211,7 +214,7 @@ $(document).ready(function(){
             caps = 0;
         }
     });
-    
+    // tarkistetaan painetaanko caps lockia
     $( "body" ).keyup(function( event ) {
         var s = String.fromCharCode( event.key );
         console.log(s);
@@ -222,6 +225,15 @@ $(document).ready(function(){
         }else if(event.keyCode == 20 && caps == 1){
              $('.capsLockWarning').css("display","none");
             caps= 0;
+        }
+    });
+    // jos painetaan enteriä salasanan tai käyttäjätunnuksen syöttämisen jälkeen
+    $('.password-login, .username-login').keyup(function(event){
+        if(event.keyCode == 13){
+            // ohjataan kirjautumaan
+            loginNow();
+            // poistetaan valinta tekstikentästä jotta kirjautumista ei vahingossa yritetä uudestaan jos kuittaa alertin entterillä
+            this.blur();   
         }
     });
 

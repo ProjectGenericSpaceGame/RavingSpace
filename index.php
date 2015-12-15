@@ -1,6 +1,5 @@
 <?php
 	session_start();
-    //$_SESSION['log'] = 3;
     if($_SESSION['log'] != 1) {
         $_SESSION['log'] = 0;
     } else if($_SESSION['log'] == 1){
@@ -20,8 +19,6 @@
     <script src="JS/libs/jquery-1.11.2.min.js"></script>
     <script src="JS/libs/jssha/src/sha512.js"></script>
     <script src="JS/libs/chance.js"></script>
-
-    <!-- <script src="JS/timer.js"></script> -->
 </head>
 <body>
 <!-- Lautausruutu ---->    

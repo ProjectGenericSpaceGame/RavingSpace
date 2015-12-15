@@ -12,15 +12,10 @@ soundMenu.prototype = {
     preload:function(){
         //do some murdering here
         this.buttonGroup.removeAll();
-        //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
 
     },
     create:function(){
 
-        //this.sound = this.game.add.audio('testi');
-        //this.sound.play();
-        //this.mastervolume = 1.0;
-        
         var styleA = { font:'25px cyber', fill:'white'};
         var styleB = { font:'20px cyber', fill:'black'};
         //otsikko
@@ -115,14 +110,11 @@ soundMenu.prototype = {
         
     }, // säädetään mastervolume-muuttuja/kerroin mastersliderin neulan x:n mukaan
     masterVolume:function() {
-        //console.log(this.masterneedle.x);
-        console.log(this.mastervolume);
         volumes.master = this.masterneedle.x*(1/this.masterslider.width);
         this.musicVolume();
         this.fxVolume();
     }, // säädetään musiikkivolume musiikkisliderin neulan x:n mukaan
     musicVolume:function() {
-        //console.log(this.musicneedle.x);
         console.log(volumes.music);
         if (this.musicneedle.x < 1) {
             volumes.music = 0.0 * volumes.master;
@@ -155,7 +147,6 @@ soundMenu.prototype = {
         }
     }, // säädetään efektivolume efektisliderin neulan x:n mukaan
     fxVolume:function() {
-        //console.log(this.fxneedle.x);
         console.log(volumes.sounds);
         if (this.fxneedle.x < 1) {
             volumes.sounds = 0.0 * volumes.master;

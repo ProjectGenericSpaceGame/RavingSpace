@@ -33,7 +33,6 @@ waveMenu.prototype = {
         this.surroundings.menuLabel.text = "Attack Waves";
         this.surroundings.menuLabel.x = (this.game.width/2)-(this.surroundings.menuLabel.width/2);
 
-        //style = { font:'30px calibri', fill:'black'};
         this.createWaveBtn = this.game.add.button(200,225,'buttonSprite',this.waveCreator,this,0, 1, 2);
         var border = this.game.add.graphics(0,0);
         //lisätään border
@@ -434,7 +433,6 @@ waveMenu.prototype = {
         mask.beginFill(0xFFFFFF,1);
         mask.drawRect(20,75,640,447.5);
         this.waveListContainer.addChild(mask);
-        //mask.drawRect(0,522.5,680,600);
         this.waveListContainer.mask = mask;
         this.browseWaveBtn.setFrames(0,2,1);
         this.createWaveBtn.setFrames(0, 1, 2);

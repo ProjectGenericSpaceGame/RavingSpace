@@ -1,4 +1,4 @@
-
+// tässä käsitellään aloitusruutuun liittyvät toiminnot
 var hashPass;
 var getRandom;
 var checkRegisterInfo;
@@ -116,7 +116,7 @@ $(document).ready(function(){
         var hash = shaObj.getHash("HEX");
         return hash;
     }
-
+    // salasanojen tarkistus
     $('.password-retype').on('input', function() {
         var first = $('.password-register').val();
         var second = $('.password-retype').val();
@@ -217,8 +217,6 @@ $(document).ready(function(){
     // tarkistetaan painetaanko caps lockia
     $( "body" ).keyup(function( event ) {
         var s = String.fromCharCode( event.key );
-        console.log(s);
-        console.log(s.toUpperCase());
         if(event.keyCode == 20 && caps == 0){
              $('.capsLockWarning').css("display","block");
             caps = 1;

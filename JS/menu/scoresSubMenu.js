@@ -24,10 +24,6 @@ scoresSubMenu.prototype = {
         this.selfScoreIter = 0; //tällä seurataan missä omassa pisteessä pelaaja on menossa
 
         // tästä painikkeesta päästään high scoreihin
-        /*this.highscoresButton = this.game.add.button(200, 200, 'buttonSprite', this.highscoresStart, this, 0, 1, 2);
-        var text1 = this.game.add.text(150,20,"High scores");
-        this.highscoresButton.addChild(text1)*/
-
         this.highscoresButton = this.game.add.button(200,225,'buttonSprite',this.highscoresStart,this,0, 1, 2);
         var border = this.game.add.graphics(0,0);
         //lisätään border
@@ -43,10 +39,6 @@ scoresSubMenu.prototype = {
         this.highscoresButton.scale.setTo(0.4,0.8);
         this.highscoresButton.getChildAt(1).scale.setTo(2, 1);
         // tästä painikkeesta löydät omat pisteesi
-        /*this.finduButton = this.game.add.button(200, 300, 'buttonSprite', this.finduStart, this, 0, 1, 2);
-        var text2 = this.game.add.text(130,20,"Find yourself");
-        this.finduButton.addChild(text2);*/
-
         this.finduButton = this.game.add.button(200,300,'buttonSprite',this.findYourself,this,0, 1, 2);
         var border2 = this.game.add.graphics(0,0);
         //lisätään border
@@ -63,7 +55,6 @@ scoresSubMenu.prototype = {
         this.finduButton.getChildAt(1).scale.setTo(2, 1);
 
         // tästä painikkeesta etsit edellisen 
-        //this.findprevButton = this.game.add.button(400, 325, 'menuBack', this.findprevStart, this, 1, 0, 2);
         this.finduNavi = this.game.add.sprite(220,300,'buttonSprite',2);
         var border22 = this.game.add.graphics(0,0);
         //lisätään border
@@ -81,14 +72,8 @@ scoresSubMenu.prototype = {
         this.finduNavi.scale.setTo(0.3,0.65);
         this.finduNavi.getChildAt(1).scale.setTo((1/0.3), (1/0.65));
         this.finduNavi.getChildAt(2).scale.setTo((1/0.3), (1/0.65));
-
-        // tästä painikkeesta etsit seuraavan
-        //this.findnextButton = this.game.add.button(400, 325, 'menuNext', this.findnextStart, this, 1, 0, 2);
         
         // tästä painikkeesta tarkastat omat pisteesti
-        /*this.checkscoresButton = this.game.add.button(200, 400, 'buttonSprite', this.checkscoresStart, this, 0, 1, 2);
-        var text2 = this.game.add.text(100,20,"Check own scores");
-        this.checkscoresButton.addChild(text2);*/
         this.checkScoresButton = this.game.add.button(200,375,'buttonSprite',this.highscoresStart,this,0, 1, 2);
         var border3 = this.game.add.graphics(0,0);
         //lisätään border
@@ -100,8 +85,7 @@ scoresSubMenu.prototype = {
         this.checkScoresButton.addChild(border3);
         var textCheck = this.game.add.text(75,17,"Check own",style);
         var textCheck2 = this.game.add.text(115,35,"scores",style);//!!!! huomaa x:n outo arvo suhteessa nappulan leveyteen! skaalauksen vaikutus tekstin suhteeseen nappulaan?
-        //textCheck.x = this.checkScoresButton.width/2*0.4-textCheck.width/2*0.5;
-        //textCheck2.x = this.checkScoresButton.width/2*0.4-textCheck2.width/2*0.5;
+       
         this.checkScoresButton.addChild(textCheck);
         this.checkScoresButton.addChild(textCheck2);
         this.checkScoresButton.scale.setTo(0.4,0.8);
@@ -227,10 +211,7 @@ scoresSubMenu.prototype = {
         mask.beginFill(0xFFFFFF,1);
         mask.drawRect(20,75,640,447.5);
         this.waveListContainer.addChild(mask);
-        //mask.drawRect(0,522.5,680,600);
         this.waveListContainer.mask = mask;
-        //this.browseWaveBtn.setFrames(0,2,1);
-        //this.createWaveBtn.setFrames(0, 1, 2);
 
         //this adds mouse scroll support
         this.game.input.mouse.mouseWheelCallback = function(){

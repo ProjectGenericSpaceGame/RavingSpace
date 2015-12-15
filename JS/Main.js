@@ -51,46 +51,7 @@ game.state.add('loadoutMenu', loadoutMenu);
 game.state.start('setMenuLoader');
    
 }
-// game.state.start("gameLoad");
-/*
- //globaalit muuttujat
- var asteroids;
- var ship;
- var gun;
- var bullets;
- var fireRate = 450;
- var nextFire = 0;
- var enemies;
- var enemy1;
- var enemy2;
- var enemy3;
- var cursors;
- var bg;
- var Ycoord;
- var Xcoord;
- var r;
- var deg = "0"; //deg on radiaani arvo
- var degWas = 0; //last mouse position
- var text;
- var style;
- var pi = Math.PI;
- var shipRot;
- var direct;
- var corRot;
- var corDeg;
- var flipped = false;
- var execTime = 0;
- var IntMouseTrack = -1;
- var moving = false;
- var genRand;
- var shipTrail;
- var lap = 1;
- var spawnNext = "undefined";
- var waiter;
- //Väliaikaiset demomuuttujat
- //Nämä ovat esimerkiksi tietokannasta tulevia arvoja ennen kuin itse tietokantaa on tehty
- var attackInfo = "231509'302112'352713"; //jaetaan kahden sarjoihin ja kuuden sarjoihin, 23, 15, 09|30,21,12|35,27,13
- */
+
 document.addEventListener( "contextmenu", function(e) {
     e.preventDefault();
 });
@@ -179,7 +140,6 @@ function randNumber(lap){
     randNumbers[3] = parseInt(spawnCoordY+1-1);
     spawnCoordX = null;
     spawnCoordY = null;
-    //console.log(randNumbers[0], randNumbers[1]);
     return randNumbers;
 }
 
@@ -296,8 +256,6 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
     } else{
         bullet.kill();
     }
-
-    //console.log("got this far?");
     if(((enemy.health-dmg) <= 0 && enemy.health != 0.001) && enemy.name != "drop"){
         enemy.health = 0.001;
 
@@ -325,8 +283,6 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
 
         //räjähdys kuolessa
         var boom = game.add.sprite(0,0,'boom');
-        //boom.x = enemy.body.x-boom.width*0.1/2;
-        //boom.y = enemy.body.y-boom.height*0.1/2;
         boom.scale.setTo(0.1,0.1);
         enemy.addChild(boom);
         var tween = game.add.tween(boom);
@@ -338,9 +294,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
         },this);
 
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
-        //boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
         boom2.x = rnd.integerInRange(-3,3);
-        //boom2.y = enemy.body.y-boom.height*0.1/2+rnd.integerInRange(-3,3);
         boom2.y = rnd.integerInRange(-3,3);
         boom2.scale.setTo(0.1,0.1);
         enemy.addChild(boom2);
@@ -367,7 +321,6 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
             }
             if((enemy.name == 0 || enemy.name == 1 || enemy.name == 2) && enemy.name !== ""){
                 if(enemy.ray !== null){
-                    //enemy.ray.clear();
                     enemy.ray = null;
                     enemy.wait = 0;
                 }
@@ -401,7 +354,6 @@ function asteroidHitDetector(bullet, asteroid, asteroidAmmount){
         asteroid.kill();
         asteroidAmmount--;
         if(asteroidAmmount == 0){
-            //alert("Game Over");
             return 0;
         }
         else{
@@ -461,7 +413,7 @@ function spawnEnemy(spawnPool,enemyAmount,enemies,lap,enColGrp){
     return null;
 }
 
-// Resisez the game based on the window size
+// Resize the game based on the window size
 
 function resizeGame() {
 
@@ -469,23 +421,6 @@ function resizeGame() {
     var windowHeight = $(window).height();
     var widthScale = windowWidth/1280;
     var heightScale = windowHeight/800;
-    /*if (windowWidth <= PELIMAAILMAN KOKO){
-     //if (game.scale > 1) game.scale = 1;
-
-     //if (windowWidth !== game.width){
-     //game.width = windowWidth*widthScale;
-     //game.height = windowHeight*heightScale;
-     game.camera.width = windowWidth;
-     game.camera.height = windowHeight;
-
-     game.world.setBounds(0,0,windowWidth*widthScale,windowHeight*heightScale)
-     //game.height = windowHeight*heightScale;
-
-     if (game.renderType === Phaser.WEBGL){
-     game.renderer.resize(windowWidth, windowHeight);
-     }
-     //}
-     //}*/
     game.scale.scaleMode = 0;
 }	// By Roni 2015
 function formatWave(data){
@@ -505,7 +440,6 @@ function formatWave(data){
             struct += "'";
         }
     }
-    //struct = ""+data[0][0]+""+data[0][1]+""+""+data[0][2]+"'"+data[1][0]+""+data[1][1]+""+""+data[1][2]+"'"+data[2][0]+""+data[2][1]+""+""+data[2][2]+"";
     formatted.waveStruct = struct;
     return formatted;
 }
@@ -530,7 +464,6 @@ function acquireTarget(target,enemy){
             degr = (Math.atan((Xcoord/Ycoord)*(0-1)))+((3*pi)/2);
             break;
         default:
-        ////console.log("lol");
     }
     degr = pi*(2+1/2)-degr;
     Ycoord = null;
@@ -563,11 +496,9 @@ function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading){
         game.time.events.add(gun.reload, function () {
             clips[pos] = gun.clip;
             reloading[pos] = false;
-            //reloadTween.stop();
             reloadSprite.kill();
             $("canvas").css("cursor", "url('assets/sprites/cursor.png'),none");
         }, this);
-        //waiter.start();
         reloading[pos] = true;
         $("canvas").css("cursor", "none");
     } else if(usage == 2){
@@ -579,16 +510,10 @@ function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading){
         trayTweenAb.onComplete.add(function () {
             trayAb.y = 22;
             trayAb.alpha = 0;
-            //clips[pos] = gun.clip;
             reloading[pos] = false;
-            //reloadTween.stop();
         });
         reloading[pos] = true;
     }
-    //return reloadSprite;
-
-    //$("canvas").css("cursor","url('assets/sprites/reload.png'),none");
-
 }
 function checkRange(x,y,x2,y2,usage,off){
     if(!off > 0){off = 0}

@@ -99,17 +99,14 @@ mainGame.prototype = {
         this.HUDchangeEvent = false; //mahdollistaa tehoste HUDin käytön hiiren rullalla ilman että tehoste laukeaa
 
         this.clipSizes = [35, 30, 5, 1];
-        //reloading = false;
         this.frameSkip = 0;
         this.timers = [0,60,300,0,1,0];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff,aaltojen delay,scrolldelay,panosten hallinta bullet collision limitter
-		//this.text3 = this.game.add.text(0,0,"");
         this.reloadSprite = game.add.sprite(0, 0, "reloadTray");
         this.fixed = false;//debug, to be removed
     },
     create: function () {
         var self = this;
         //fysiikat voidaan sallia vain pyörivässä statessa
-		//this.game.physics.p2.setImpactEvents(true);
         this.game.physics.p2.enable(this.ship);
         this.game.camera.follow(this.ship);
         this.game.physics.p2.defaultRestitution = 0.8;
@@ -117,13 +114,11 @@ mainGame.prototype = {
         this.asteroids.forEach(function (item) {
             item.body.clearCollision();
         });
-        //this.game.physics.p2.setBounds(0,0,this.game.world.width,this.game.world.height,true,true,true,true,true);
         //luodaan törmäysryhmät
         this.playerCollisonGroup = this.game.physics.p2.createCollisionGroup();
         this.enemiesCollisonGroup = this.game.physics.p2.createCollisionGroup();
         this.boomCollisonGroup = this.game.physics.p2.createCollisionGroup();
 
-        //this.game.physics.p2.setBounds(0,0,1600,1000,true,true,true,true,true);
         this.game.physics.p2.updateBoundsCollisionGroup();
         this.ship.body.setCollisionGroup(this.playerCollisonGroup);
         this.ship.body.collides([this.enemiesCollisonGroup]);
@@ -486,18 +481,7 @@ mainGame.prototype = {
             var hunterAI;
             var destroyerAI;
             var boundsBullet;
-           /* if (this.frameSkip == 0) {
-                eachEnemyAliveFn = function () {
-                };
-                eachBulletAliveFn = function () {
-                };
-                commanderAI = function () {
-                };
-                hunterAI = function () {
-                };
-                destroyerAI = function () {
-                };
-                this.frameSkip = 1;}*/
+          
             if(this.frameSkip == 0 ||this.frameSkip == 1){
                 if(this.frameSkip == 1){
                     this.frameSkip = 2;

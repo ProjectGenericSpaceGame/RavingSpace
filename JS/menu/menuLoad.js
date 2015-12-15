@@ -9,7 +9,6 @@ menuLoad.prototype = {
 
             // ladataan valikon elementit
             this.game.load.image('menuHeader', 'assets/placeholders/header3.png'); 
-            //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');
             this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
@@ -45,22 +44,17 @@ menuLoad.prototype = {
             
             this.game.load.image('slot', 'assets/placeholders/slot.png');
             //this.game.load.audio('testi', 'assets/sounds/testi.mp3');
-			 this.game.load.image('minus', 'assets/menuelements/minus.png');
-			 this.game.load.image('plus', 'assets/menuelements/plus.png');
+            this.game.load.image('minus', 'assets/menuelements/minus.png');
+            this.game.load.image('plus', 'assets/menuelements/plus.png');
             this.game.load.image('needle', 'assets/menuelements/needle.png');
             this.game.load.image('slider', 'assets/menuelements/slider.png');
-			 
-        		this.game.load.image('destroyer', 'assets/sprites/fighter.png');
+            this.game.load.image('destroyer', 'assets/sprites/fighter.png');
 
-			 this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
-			 this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
+            this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
+            this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
 
-        this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
-        this.game.load.image('flasher', 'assets/placeholders/flasher.png');
-
-        /*this.game.load.audio('dustsucker', 'assets/sounds/playerWeaponLaser.ogg');
-        this.game.load.audio('dystopia', 'assets/sounds/playerWeaponLaser.ogg');
-        this.game.load.audio('swagger', 'assets/sounds/playerWeaponLaser.ogg');*/
+            this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
+            this.game.load.image('flasher', 'assets/placeholders/flasher.png');
 
         },
         init:function(loader){
@@ -114,30 +108,17 @@ menuLoad.prototype = {
                     //musics.gameTracks[i].onended = this.nextSong;
                     musics.gameTracks[i].oncanplaythrough = this.tracksLoaded++;
                 }
-                /*this.game.sound.setDecodedCallback(this.menuMusics.tracks, audioReady, this);
-                function audioReady() {
-                    this.musicLoadStatus = true;
-                    this.enterText = this.game.add.text(1000, 700, "Press ENTER to start", {
-                        fill: "white",
-                        font: "20px cyber"
-                    });
-                }*/
             }
-            //this.music = game.sound.play('testi');
+         
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
            
             this.menuheader = this.game.add.sprite(0,0, "menuHeader");
-            //var decos = this.game.add.sprite(0,0, "menuHeaderDeco");
-            //decos.y = this.menuheader.height-decos.height;
             var logotext = this.game.add.image(0, 0, "RSlogo");
             logotext.scale.setTo(0.7,0.7);
             logotext.x = this.menuheader.width/2-logotext.width/2;
             this.menuheader.addChild(logotext);
-            //this.menuheader.addChild(decos);
-
-            
+    
             this.menubbg = this.game.add.sprite(150, 100,  "menuButtonBG");
-            //this.menubbg.tint = 0x858585;
             //alustetaan valikon otsikko ja viiva
             this.menuLabel = this.game.add.text(this.game.width/2, 120, '', headingStyle);
             
@@ -206,93 +187,8 @@ menuLoad.prototype = {
             scoreSort.sort(this.compare);
             this.globalScores = scoreSort;
 
-
-            //sessionStorage.setItem("playerID",this.playerData.playerData.playerName);asetettu handleLoginissa
             sessionStorage.setItem("loginFollowID",this.playerData.loginFollowID);
-            /*this.playerData = {
-                "playerData":{
-                    "playerName":"testi1",
-                    "email":"test1@testmail.io",
-                    "money":14034,
-                    "points":16045
-                },
-                "shipData":[1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
-                "playerScores":[
-                    25000,21566,20145,19563,18054,12056,11753,10654,9236,4067
-                ],
-				"scoreID":1,
-				"shipID":1,
-                "loginFollowID":1
-            };//demo
-            sessionStorage.setItem("playerID",this.playerData.playerData.playerName);
-            sessionStorage.setItem("loginFollowID",this.playerData.loginFollowID);
-            this.globalScores = {"highScores":[["testi1",25000],["testi1",21566],["testi1",20145],["testi1",19563],["testi1",18054],["testi1",12056],["testi1",11753],["testi1",10654],["testi1",9236],["testi1",4067],["testi2",100],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi2",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi3",0],["testi4",0],["testi4",22798],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi4",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi5",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi6",0],["testi7",30000],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi7",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi8",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi9",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi10",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["testi11",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test12",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test13",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test14",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0],["test15",0]]};//demo
-            var scoreSort = [];
-            for(var i = 0;i < this.globalScores.highScores.length;i++) {
-                scoreSort.push(this.globalScores.highScores[i]);
-            }
-            scoreSort.sort(this.compare);
-            this.globalScores = scoreSort;
-            this.playerWaves = {"playerWaves":[
-                {
-                    "waveStruct":"101104'151207'231009",
-                    "waveStatus":"Unused",
-                    "profit":0
-                },
-                {
-                    "waveStruct":"151221'262239'322517",
-                    "waveStatus":"Unused",
-                    "profit":0
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                },
-                {
-                    "waveStruct":"103521'223459'424617",
-                    "waveStatus":"Destroyed",
-                    "profit":400
-                }
-                ]}; //demo
-                */
-            //this.playerWaves = JSON.parse(this.playerWaves);
-
+           
             songName = this.game.add.text(25,775,"Now Playing: ",{ font: "20px cyber", fill:"white"});
             //tässä kasataan jutut
             this.surroundings = {

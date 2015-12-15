@@ -20,7 +20,7 @@ gameLoad.prototype = {
         this.game.world.setBounds(0, 0, 1600, 1000);
         //Ladataan tausta ja asteroidit
         this.game.load.image('background', 'assets/sprites/VS_background_purple.png');
-        this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroid1.png');
+        this.game.load.image('asteroid1', 'assets/sprites/VS_peli_asteroid1_FIX.png');
         this.game.load.image('asteroid2', 'assets/sprites/VS_peli_asteroid2.png');
         this.game.load.image('asteroid3', 'assets/sprites/VS_peli_asteroid3.png');
         //Ladataan alus
@@ -29,8 +29,6 @@ gameLoad.prototype = {
         this.game.load.spritesheet('destroyer', 'assets/sprites/fighter.png');
         this.game.load.image('hunter', 'assets/sprites/playerHunter.png');
         this.game.load.image('commander', 'assets/sprites/hunterFinal.png');
-        //this.game.load.spritesheet('enemy2', 'assets/sprites/enemies.png',97,195);
-        //this.game.load.spritesheet('enemy3', 'assets/sprites/enemies.png',195,290);
         //Ladataan trail-partikkelit
         this.game.load.image('trail6', 'assets/particles/VS_peli_trail6.png');
         this.game.load.image('trail7', 'assets/particles/VS_peli_trail7.png');
@@ -39,8 +37,6 @@ gameLoad.prototype = {
         this.game.load.image('bullet2', 'assets/sprites/bullet2.png');
         this.game.load.image('bullet3', 'assets/sprites/bullet3.png');
         this.game.load.image('mine', 'assets/sprites/mine.png');
-        //Musiikkia
-        //this.game.load.audio('soldier', 'assets/sounds/extar.opus');
         //explosion
         this.game.load.image('boom', 'assets/particles/explosion3.png');
         this.game.load.image('boom2', 'assets/particles/explosion2.png');
@@ -68,9 +64,9 @@ gameLoad.prototype = {
         this.game.load.image('weapon0', 'assets/placeholders/weapon0_final.png');
         this.game.load.image('weapon1', 'assets/placeholders/weapon1_final.png');
         this.game.load.image('weapon2', 'assets/placeholders/weapon2_final.png');
-        this.game.load.image('weapon3', 'assets/placeholders/weapon3.png');
+        this.game.load.image('weapon3', 'assets/sprites/mine.png');
         // tehosteet
-        this.game.load.image('ability0', 'assets/GUI/superSpeed.png');
+        this.game.load.image('ability0', 'assets/placeholders/ability0_final.png');
         this.game.load.image('ability1', 'assets/placeholders/ability1_final.png');
         this.game.load.image('ability2', 'assets/placeholders/ability2_final.png');
         this.game.load.image('ability3', 'assets/placeholders/ability3_final.png');
@@ -84,18 +80,10 @@ gameLoad.prototype = {
         this.game.load.image('needle', 'assets/menuelements/needle.png');
         this.game.load.image('slider', 'assets/menuelements/slider.png');
         this.game.load.image('menuHeader', 'assets/placeholders/header3.png');
-        //this.game.load.image('menuHeaderDeco', 'assets/placeholders/header3deco.png');
         this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
         //tausta lopetusnäytölle
-        //this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
         this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuBG_dark.png', 400, 70);
-        //musiikki
-        //this.game.load.audio('highOctane', 'assets/sounds/playerWeaponLaser.ogg');
-        //äänet
-       /* this.game.load.audio('wep1sound', 'assets/sounds/PlayerWeaponBasic.ogg');
-        this.game.load.audio('wep3sound', 'assets/sounds/PlayerWeaponShotgun.ogg');
-        this.game.load.audio('shipBoomSound', 'assets/sounds/ShipExplosion.ogg');
-        this.game.load.audio('wep2sound', 'assets/sounds/playerWeaponLaser.wav');*/
+
 
     },
     init: function (loadout, playerData, loader, surroundings) {
@@ -865,6 +853,9 @@ gameLoad.prototype = {
         for (var i = 0; i < musics.gameTracks.length; i++) {
             musics.gameTracks[i].volume = volumes.music;
         }
+        for(var i = 0;i<musics.menuTracks.length;i++){
+            musics.menuTracks[i].volume = volumes.music;
+        }
     }, // säädetään efektivolume efektisliderin neulan x:n mukaan
     fxVolume: function () {
         //console.log(this.fxneedle.x);
@@ -885,7 +876,16 @@ gameLoad.prototype = {
     },
     // vaihda mute on/off
     onOff: function () {
-        this.game.sound.mute = !this.game.sound.mute;
+        mute = !mute;
+            for (var property in musics.sounds) {
+                musics.sounds[property].muted = true;;
+            }
+            for (var i = 0; i < musics.menuTracks.length; i++) {
+                musics.menuTracks[i].muted = mute;
+            }
+            for (var i = 0; i < musics.gameTracks.length; i++) {
+                musics.gameTracks[i].muted = mute;
+            }
     },
     // back-painike takaisin päävalikkoon
     back: function () {

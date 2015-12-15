@@ -1,0 +1,1046 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3cd4144b-0599-4795-b20d-c2bab6d13469" name="Default" comment="">
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\KelmscottRoman.zip" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\PHP\CryptoHandler\loginHandlerV2.php" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\PHP\CryptoHandler\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\PHP\SQLcontroller\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\PHP\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\GUI\banners.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\GUI\healtbar.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\GUI\superSpeed.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\particles\EMP.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\particles\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\ability0.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\ability1.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\ability2.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\ability3.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\back.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\buttonplaceholder.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\cursor.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\explosion2.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\header3.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\menuButtonSprite.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\menuButtonSpriteEmpty.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\menuButtonSpriteEmpty.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\menubgplaceholder.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\next.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\plus.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\slotOld.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\weapon0.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\weapon1.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\weapon1Old.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\weapon2.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\placeholders\weapon3.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\shit fuck.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\HighOctane.mp3" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\PlayerWeaponBasic.wav" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\PlayerWeaponShotgun.wav" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\ShipExplosion.wav" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\Soldier-of-the-StormAAC.opus" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\Soldier-of-the-Storm_01.pkf" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\dustsucker.mp3" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\dystopia.mp3" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\extar.opus" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\playerWeaponLaser.wav" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\playerWeaponLaser.xmp" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\playerWeaponLaser_extd.wav" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\swagger.mp3" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\testi.mp3" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sounds\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\VS_background_purple.png.filepart" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\VS_peli_asteroidi1_FIX.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\enemies.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\old.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\playerHunterOld.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\reload.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\reload2.png" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\shield.psd" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\assets\sprites\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\css\New Text Document.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\css\txt.txt" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\index.html" afterPath="" />
+      <change type="DELETED" beforePath="R:\RavingSpace\public_html\RavingSpace\indexHTML.html" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JS/Main.js" afterPath="$PROJECT_DIR$/JS/Main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JS/menu/menuLoad.js" afterPath="$PROJECT_DIR$/JS/menu/menuLoad.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JS/game/phaser_GameLoop.js" afterPath="$PROJECT_DIR$/JS/game/phaser_GameLoop.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JS/game/phaser_create.js" afterPath="$PROJECT_DIR$/JS/game/phaser_create.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JS/menu/soundMenu.js" afterPath="$PROJECT_DIR$/JS/menu/soundMenu.js" />
+    </list>
+    <ignored path="RavingSpace.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="RavingSpace" />
+  </component>
+  <component name="FileEditorManager">
+    <splitter split-orientation="horizontal" split-proportion="0.26775613">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="phaser_preload.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/game/phaser_preload.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="phaser_create.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/JS/game/phaser_create.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="1.0184332">
+                  <caret line="67" column="20" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="20" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="game.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/game.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-13.076923">
+                  <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Main.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/Main.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-5.7586207">
+                  <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="updateData.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/PHP/SQLcontroller/updateData.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="97" column="26" selection-start-line="97" selection-start-column="26" selection-end-line="97" selection-end-column="26" />
+                  <folding>
+                    <marker date="1450045094456" expanded="true" signature="1074:1128" placeholder="select fail2..loginAttempts..." />
+                    <marker date="1450045094456" expanded="true" signature="1328:1441" placeholder="insert into ..." />
+                    <marker date="1450045094456" expanded="true" signature="1503:1606" placeholder="insert into ..." />
+                    <marker date="1450045094456" expanded="true" signature="1550:1606" placeholder="select MAX(a..attackWaves..." />
+                    <marker date="1450045094456" expanded="true" signature="1668:1737" placeholder="update playe..." />
+                    <marker date="1450045094456" expanded="true" signature="2107:2161" placeholder="select fail2..loginAttempts..." />
+                    <marker date="1450045094456" expanded="true" signature="2343:2364" placeholder="update shipS..." />
+                    <marker date="1450045094456" expanded="true" signature="2965:3049" placeholder="update playe..." />
+                    <marker date="1450045094456" expanded="true" signature="3421:3613" placeholder="SELECT playe..playersAttacks..." />
+                    <marker date="1450045094456" expanded="true" signature="4311:4403" placeholder="update attac..." />
+                    <marker date="1450045094456" expanded="true" signature="4529:4608" placeholder="update playe..." />
+                    <marker date="1450045094456" expanded="true" signature="4703:4776" placeholder="update playe..." />
+                    <marker date="1450045094456" expanded="true" signature="4899:5333" placeholder="update highS..." />
+                    <marker date="1450045094456" expanded="true" signature="5489:5550" placeholder="update login..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="loadoutMenu.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/menu/loadoutMenu.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="269" column="18" selection-start-line="269" selection-start-column="18" selection-end-line="269" selection-end-column="18" />
+                  <folding>
+                    <marker date="1450208202943" expanded="true" signature="10743:10801" placeholder="//..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="soundMenu.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/menu/soundMenu.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="202" column="36" selection-start-line="202" selection-start-column="36" selection-end-line="202" selection-end-column="36" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/index.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-14.384615">
+                  <caret line="22" column="6" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="endGame.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/game/endGame.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="116" column="13" selection-start-line="116" selection-start-column="13" selection-end-line="116" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="setMenuLoader.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/menu/setMenuLoader.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="22" column="2" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="phaser_GameLoop.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/JS/game/phaser_GameLoop.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.39631337">
+                  <caret line="842" column="35" selection-start-line="842" selection-start-column="35" selection-end-line="842" selection-end-column="35" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="menuLoad.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/menu/menuLoad.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="1.3448275">
+                  <caret line="16" column="79" selection-start-line="16" selection-start-column="79" selection-end-line="16" selection-end-column="79" />
+                  <folding>
+                    <element signature="e#71#80#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="handleLogin.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/JS/login/handleLogin.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="219" column="20" selection-start-line="219" selection-start-column="20" selection-end-line="219" selection-end-column="20" />
+                  <folding>
+                    <marker date="1450208202940" expanded="true" signature="9102:9112" placeholder="{...}" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/main.css" />
+        <option value="$USER_HOME$/Documents/uusiomasivu/index.html" />
+        <option value="$USER_HOME$/Documents/uusiomasivu/main.css" />
+        <option value="$PROJECT_DIR$/JS/menu/scoresSubMenu.js" />
+        <option value="$PROJECT_DIR$/JS/menu/waveMenu.js" />
+        <option value="S:/testDBConnection.php" />
+        <option value="$PROJECT_DIR$/../testDBConnection.php" />
+        <option value="$PROJECT_DIR$/css/txt.txt" />
+        <option value="$PROJECT_DIR$/JS/timer.js" />
+        <option value="$PROJECT_DIR$/JS/libs/textInputCreator.js" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/indexGH.php" />
+        <option value="$PROJECT_DIR$/PHP/SQLcontroller/playerData.php" />
+        <option value="$PROJECT_DIR$/PHP/SQLcontroller/playerWaves.php" />
+        <option value="$PROJECT_DIR$/PHP/SQLcontroller/highScores.php" />
+        <option value="$PROJECT_DIR$/game.php" />
+        <option value="$PROJECT_DIR$/PHP/CryptoHandler/serveSalt.php" />
+        <option value="$PROJECT_DIR$/PHP/CryptoHandler/loginHandler.php" />
+        <option value="$PROJECT_DIR$/PHP/CryptoHandler/newUser.php" />
+        <option value="$PROJECT_DIR$/PHP/SQLcontroller/getWave.php" />
+        <option value="$PROJECT_DIR$/PHP/CryptoHandler/cryptoClass.php" />
+        <option value="$PROJECT_DIR$/JS/MainBU.js" />
+        <option value="$PROJECT_DIR$/JS/menu/shopMenu.js" />
+        <option value="$PROJECT_DIR$/JS/login/handleLogin.js" />
+        <option value="$PROJECT_DIR$/css/main.css" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/JS/menu/mainMenu.js" />
+        <option value="$PROJECT_DIR$/JS/menu/settingsSubMenu.js" />
+        <option value="$PROJECT_DIR$/JS/game/phaser_preload.js" />
+        <option value="$PROJECT_DIR$/JS/menu/accountSettings.js" />
+        <option value="$PROJECT_DIR$/JS/menu/customSubMenu.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/game/phaser_create.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/game/phaser_GameLoop.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/game/phaser_preload.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/menu/accountSettings.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/menu/customSubMenu.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/menu/mainMenu.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/menu/scoresSubMenu.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/menu/shopMenu.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/JS/menu/soundMenu.js" />
+        <option value="$PROJECT_DIR$/../StateTesti/PHP/SQLcontroller/highScores.php" />
+        <option value="$PROJECT_DIR$/../StateTesti/css/main.css" />
+        <option value="$PROJECT_DIR$/PHP/SQLcontroller/updateData.php" />
+        <option value="$PROJECT_DIR$/JS/menu/loadoutMenu.js" />
+        <option value="$PROJECT_DIR$/JS/menu/setMenuLoader.js" />
+        <option value="$PROJECT_DIR$/JS/game/endGame.js" />
+        <option value="$PROJECT_DIR$/JS/Main.js" />
+        <option value="$PROJECT_DIR$/JS/menu/soundMenu.js" />
+        <option value="$PROJECT_DIR$/JS/menu/menuLoad.js" />
+        <option value="$PROJECT_DIR$/JS/game/phaser_create.js" />
+        <option value="$PROJECT_DIR$/JS/game/phaser_GameLoop.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsBuildToolPackageJson" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true">
+    <include_path>
+      <path value="." />
+      <path value="C:\xampp\php\PEAR" />
+    </include_path>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Blade files</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SQLcontroller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JS" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JS" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="menu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JS" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="login" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JS" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="game" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RavingSpace" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Font" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="JavaScriptLanguageLevel" value="ES6" />
+    <property name="TODO_SCOPE" value="Current File" />
+    <property name="js-jscs-nodeInterpreter" value="C:\Program Files (x86)\nodejs\node.exe" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/JS/menu/mainMenu.js" />
+    <property name="FullScreen" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="R:\RavingSpace\public_html\RavingSpace\PHP\SQLcontroller" />
+      <recent name="R:\RavingSpace\public_html\RavingSpace\JS\menu" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server" server_id="4485b110-4ef3-4208-88a6-40cc26199650" server_name="RavingSpace">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3cd4144b-0599-4795-b20d-c2bab6d13469" name="Default" comment="" />
+      <created>1444684586653</created>
+      <option name="number" value="Default" />
+      <updated>1444684586653</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17135416" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26487094" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.023231257" sideWeight="0.50416666" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32946146" sideWeight="0.49583334" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/JS/Main.js</url>
+          <line>48</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/kelmscott_roman/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/scoresSubMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="318" column="24" selection-start-line="318" selection-start-column="24" selection-end-line="318" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/waveMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="335" column="31" selection-start-line="335" selection-start-column="31" selection-end-line="335" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PHP/CryptoHandler/serveSalt.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PHP/CryptoHandler/newUser.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PHP/CryptoHandler/loginHandler.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PHP/CryptoHandler/cryptoClass.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="15" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="238" column="15" selection-start-line="238" selection-start-column="15" selection-end-line="238" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/settingsSubMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="78" selection-start-line="7" selection-start-column="78" selection-end-line="7" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/accountSettings.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/customSubMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/phaser_menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/shopMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44140196">
+          <caret line="394" column="23" selection-start-line="394" selection-start-column="23" selection-end-line="394" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/game/phaser_GameLoop.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/game/phaser_preload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/game/phaser_create.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="31" selection-start-line="0" selection-start-column="31" selection-end-line="0" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/accountSettings.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/customSubMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/loadoutMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/mainMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/menuLoad.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/scoresSubMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/setMenuLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/shopMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/soundMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/menu/waveMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/PHP/SQLcontroller/getWave.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/JS/game/endGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/PHP/SQLcontroller/highScores.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/PHP/SQLcontroller/playerData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PHP/SQLcontroller/playerWaves.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-29.884615">
+          <caret line="59" column="20" selection-start-line="58" selection-start-column="4" selection-end-line="59" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/PHP/SQLcontroller/playerWaves.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/PHP/SQLcontroller/updateData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/game.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../StateTesti/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/mainMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="78" column="29" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/game/phaser_preload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PHP/SQLcontroller/updateData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="97" column="26" selection-start-line="97" selection-start-column="26" selection-end-line="97" selection-end-column="26" />
+          <folding>
+            <marker date="1450045094456" expanded="true" signature="1074:1128" placeholder="select fail2..loginAttempts..." />
+            <marker date="1450045094456" expanded="true" signature="1328:1441" placeholder="insert into ..." />
+            <marker date="1450045094456" expanded="true" signature="1503:1606" placeholder="insert into ..." />
+            <marker date="1450045094456" expanded="true" signature="1550:1606" placeholder="select MAX(a..attackWaves..." />
+            <marker date="1450045094456" expanded="true" signature="1668:1737" placeholder="update playe..." />
+            <marker date="1450045094456" expanded="true" signature="2107:2161" placeholder="select fail2..loginAttempts..." />
+            <marker date="1450045094456" expanded="true" signature="2343:2364" placeholder="update shipS..." />
+            <marker date="1450045094456" expanded="true" signature="2965:3049" placeholder="update playe..." />
+            <marker date="1450045094456" expanded="true" signature="3421:3613" placeholder="SELECT playe..playersAttacks..." />
+            <marker date="1450045094456" expanded="true" signature="4311:4403" placeholder="update attac..." />
+            <marker date="1450045094456" expanded="true" signature="4529:4608" placeholder="update playe..." />
+            <marker date="1450045094456" expanded="true" signature="4703:4776" placeholder="update playe..." />
+            <marker date="1450045094456" expanded="true" signature="4899:5333" placeholder="update highS..." />
+            <marker date="1450045094456" expanded="true" signature="5489:5550" placeholder="update login..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/login/handleLogin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="219" column="20" selection-start-line="219" selection-start-column="20" selection-end-line="219" selection-end-column="20" />
+          <folding>
+            <marker date="1450208202940" expanded="true" signature="9102:9112" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.076923">
+          <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/setMenuLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="2" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/game/endGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="116" column="13" selection-start-line="116" selection-start-column="13" selection-end-line="116" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/loadoutMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="269" column="18" selection-start-line="269" selection-start-column="18" selection-end-line="269" selection-end-column="18" />
+          <folding>
+            <marker date="1450208202943" expanded="true" signature="10743:10801" placeholder="//..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/Main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.7586207">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/soundMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="202" column="36" selection-start-line="202" selection-start-column="36" selection-end-line="202" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.384615">
+          <caret line="22" column="6" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/menu/menuLoad.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.3448275">
+          <caret line="16" column="79" selection-start-line="16" selection-start-column="79" selection-end-line="16" selection-end-column="79" />
+          <folding>
+            <element signature="e#71#80#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/game/phaser_create.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0184332">
+          <caret line="67" column="20" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JS/game/phaser_GameLoop.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39631337">
+          <caret line="842" column="35" selection-start-line="842" selection-start-column="35" selection-end-line="842" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

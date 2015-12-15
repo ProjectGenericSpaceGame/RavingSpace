@@ -15,6 +15,7 @@ var volumes = {
 };
 var songName;
 var stateChange = false; //we use this prevent end of song event during state change
+mute = false;
 
 //Pelin funktio
 function makeGame(){

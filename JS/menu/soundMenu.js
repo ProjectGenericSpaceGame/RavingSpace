@@ -186,7 +186,16 @@ soundMenu.prototype = {
         },   
     // vaihda mute on/off
     onOff:function(){
-        this.game.sound.mute = !this.game.sound.mute;
+        mute = !mute;
+        for (var property in musics.sounds) {
+            musics.sounds[property].muted = true;;
+        }
+        for (var i = 0; i < musics.gameTracks.length; i++) {
+            musics.gameTracks[i].muted = mute;
+        }
+        for (var i = 0; i < musics.menuTracks.length; i++) {
+            musics.menuTracks[i].muted = mute;
+        }
         },
     // back-painike takaisin settings-valikkoon
     back:function(){

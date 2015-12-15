@@ -12,8 +12,6 @@ menuLoad.prototype = {
             this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
             this.game.load.image('menuBG', 'assets/sprites/VS_background_orange.png');
             this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
-            this.game.load.image('menuBack', 'assets/placeholders/back.png');
-            this.game.load.image('menuNext', 'assets/placeholders/next.png');
             this.game.load.image('RSlogo', 'assets/menuelements/RSlogo.png');
 
             this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship_Old.png');
@@ -29,7 +27,7 @@ menuLoad.prototype = {
             this.game.load.image('ability1', 'assets/placeholders/ability1_final.png');
             this.game.load.image('ability2', 'assets/placeholders/ability2_final.png');
             this.game.load.image('ability3', 'assets/placeholders/ability3_final.png');
-            this.game.load.image('abSpeed', 'assets/GUI/superSpeed.png');
+            this.game.load.image('abSpeed', 'assets/placeholders/ability0_final.png');
             
             // kaupan kuvakkeet
             this.game.load.image('bullet', 'assets/sprites/bullet.png');

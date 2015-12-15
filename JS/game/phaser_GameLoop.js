@@ -826,7 +826,7 @@ mainGame.prototype = {
 
             this.fixed = "";
             //frameSkip rajoittaa raskaiden funktioiden ajamista joka toiseen ruutuun
-            if (this.frameSkip == 2) {
+            if (this.frameSkip == 2||this.frameSkip == 1) {
                 // Asteroidin jahtaajan tekoäly
                 this.enemy1.forEachAlive(destroyerAI, this); // Asteroidin jahtaajan tekoäly loppuu
                 // Pelaajan jahtaajan tekoäly

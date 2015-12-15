@@ -57,12 +57,6 @@ loadoutMenu.prototype = {
         var styleB = { font:'25px cyber', fill:'black'};
         var styleW = { font:'25px cyber', fill:'white'};
         var styleR = { font:'25px cyber', fill:'red'};
-
-                
-        this.noWeapons = this.game.add.text(0, 200, 'Select atleast one weapon!' ,styleR);
-        this.noWeapons.x = (this.game.width/2)-(this.noWeapons.width/2);
-        this.noWeapons.visible = false;
-        this.thingsGroup.add(this.noWeapons);
         
         // Go -painike. Sitä painamalla aloitetaan peli
         this.goButton = this.game.add.button(975, 680, 'buttonSprite', this.gameStart, this, 0, 1, 2);
@@ -102,6 +96,10 @@ loadoutMenu.prototype = {
             this.buttonGroup.add(this.button);
             this.ax += 150;
         }
+        this.noWeapons = this.game.add.text(0, 200, 'Select atleast one weapon!' ,styleR);
+        this.noWeapons.x = (this.game.width/2)-(this.noWeapons.width/2);
+        this.noWeapons.visible = false;
+        this.buttonGroup.add(this.noWeapons);
         
     },
     
@@ -136,6 +134,7 @@ loadoutMenu.prototype = {
                         this.prewep.hasChild = false;
                         var num = this.prewep.name.replace( /^\D+/g, '');
                         this.WSA[parseInt(num)] = 0;
+                        this.selectedLoadout[this.prewep.slotLocation] = null;
                     // mikäli painetulla asepaikalla ei ole lasta tulostetaan aseita mikäli ne ovat vielä saatavilla    
                     }
                     if(this.WSA[i] == 0){
@@ -187,6 +186,7 @@ loadoutMenu.prototype = {
                         this.preab.hasChild = false;
                         var num = this.preab.name.replace( /^\D+/g, '');
                         this.ASA[parseInt(num)] = 0;
+                        this.selectedLoadout[this.preab.slotLocation +3] = null;
                     }
                     // jos tehosteet ovat käytössä, tulostetaan niiden kuvakkeet
                     if (this.ASA[i] == 0){
@@ -228,6 +228,7 @@ loadoutMenu.prototype = {
         var scaleX = (this.buttonGroup.getChildAt(5).width-15)/icon.width;
         var scaleY = (this.buttonGroup.getChildAt(5).height-15)/icon.height;
         icon.scale.setTo(scaleX,scaleY);
+        this.prewep.slotLocation = slotnum;
         this.prewep.name = p.name;
         this.prewep.addChild(icon);
         this.prewep.hasChild = true;
@@ -235,6 +236,7 @@ loadoutMenu.prototype = {
         this.am = false;
         if(this.noWeapons.visible == true){
             this.noWeapons.visible = false;
+            game.state.update();
         }
      }, 
     
@@ -250,6 +252,7 @@ loadoutMenu.prototype = {
       
         // Lisätään sen tehosteen kuvake paikkaan josta pelaaja painoi.
         var icon = this.game.add.sprite(0,0, p.key);
+        this.preab.slotLocation = s;
         this.preab.name = p.name;
         this.preab.addChild(icon);
         this.preab.hasChild = true;
@@ -261,10 +264,11 @@ loadoutMenu.prototype = {
        // console.log(this.wepslot1.getChiltAt(0));
         // Tutkitaan onko pelaaja valinnut yhtään asetta.
         for (var i = 0; i <= 2; i++){
-             if(this.selectedLoadout[i] !== undefined){
+             if(this.selectedLoadout[i] !== undefined && this.selectedLoadout[i] !== null){
                 this.noWeapons.visible = false;
-                 for(var k = 0;k<this.surroundings.musics.tracks.length;k++){
-                     this.surroundings.musics.tracks[k].destroy();
+                 for(var k = 0;k<musics.menuTracks.length;k++){
+                     musics.menuTracks[k].pause();
+                     musics.menuTracks[k].currentTime = 0;
                  }
                 // kutsutaan gameLoad -tilaa
                  this.cache.destroy();
@@ -277,7 +281,8 @@ loadoutMenu.prototype = {
         }
         this.noWeapons.visible = true;
     },
- 
+    update:function(){
+    },
     back:function(){
         
         this.thingsGroup.removeAll();

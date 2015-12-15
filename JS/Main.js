@@ -13,6 +13,8 @@ var volumes = {
     music:0.5,
     sounds:0.5
 };
+var songName;
+var stateChange = false; //we use this prevent end of song event during state change
 
 //Pelin funktio
 function makeGame(){
@@ -24,7 +26,7 @@ function makeGame(){
     $('.signupDialog').css("display","none");
     $('main').css("position","relative");
     $('main').css("top","-75px");
-    
+    sessionStorage.setItem("startOrReturn","start");
     game = new Phaser.Game(1280, 800, Phaser.CANVAS, 'phaserGame');
     $("main").css({height:"100%",width:"100%"});
     $("#phaserGame").css({height:"inherit"});
@@ -188,7 +190,7 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
     {
         nextFire = game.time.now + fireRate;
 
-        var bullet = bullets.getFirstDead();
+        var bullet = bullets.getFirstDead(true);
         bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
         if(gun.name == "laser"){
             //gun.revive();
@@ -277,7 +279,7 @@ function enemyFire(user,gun,enemyBullets,fireRate,target,destroyerBullets){
         }
     }
 }
-function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,musics){
+function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
     var dmg;
     if(bullet.name == "laser"){
         dmg = 0.1;
@@ -288,8 +290,10 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,music
     } else if(bullet.name == "shotgun") {
         dmg = 0.35;
         bullet.kill();
-    } else {
+    } else if(bullet.name != "drop"){
         dmg  = 0.25;
+        bullet.kill();
+    } else{
         bullet.kill();
     }
 
@@ -332,9 +336,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,music
         tween.onComplete.add(function(){
             boom.destroy();
         },this);
-        if(musics != null) {
-            musics.sounds.shipBoom.play();
-        }
+
         var boom2 = game.add.sprite(0,0,'boom2');//Toinen räjähdys samaan
         //boom2.x = enemy.body.x-boom.width*0.1/2+rnd.integerInRange(-3,3);
         boom2.x = rnd.integerInRange(-3,3);
@@ -346,8 +348,11 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,music
         tween2.frameBased = true;
         var to2 = rnd.realInRange(7,5);
         tween2.to({height:boom2.height*to2,y:boom2.y-(boom2.height*to2-boom2.height)/2,width:boom2.width*to2,x:boom2.x-(boom2.width*to2-boom2.width)/2}, rnd.integerInRange(300,600), "Linear", true, 150);
-        if(musics != null) {
-            musics.sounds.shipBoom.play();
+        musics.sounds.shipBoom[musics.nextFreeBoom].play();
+        if(musics.nextFreeBoom < 2){//we pool boom sounds because there can be multiple explosion at once
+            musics.nextFreeBoom++;
+        } else {
+            musics.nextFreeBoom = 0;
         }
         tween2.onComplete.add(function(){
             boom2.destroy();
@@ -383,19 +388,7 @@ function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,music
                     HPbar.alpha = 0;
                 }
             });
-            //alert(HPbar.getChildAt(1).width);
-            //HPbar.getChildAt(1).body.x = 10.6;
-            //HPbar.getChildAt(1).body.offset = 0;
-            //HPbar.getChildAt(1).x = HPbar.zeroPosition;
-            //HPbar.getChildAt(1).x = 10.6;
-            //HPbar.getChildAt(1).anchor.x = 0;
-            //HPbar.getChildAt(1).x -= 33.4;
-            //HPbar.getChildAt(1).body.width = HPbar.fullHealthLength*(enemy.health/2.5);
             HPbar.getChildAt(1).width = HPbar.fullHealthLength*(enemy.health/enemy.maxHealth);
-            //HPbar.getChildAt(1).anchor.x = 1;
-            //alert(HPbar.zeroPosition);
-            //alert(HPbar.getChildAt(1).x+""+HPbar.getChildAt(1).anchor);
-            //alert(HPbar.x);
         }
     } else if(enemy.name == "drop"){//tätä ei ajeta ikinä
         enemy.health = 0.001;

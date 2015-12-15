@@ -9,7 +9,7 @@ var pi;
 var spawnNext;
 var testi;
 var mainGame = function(game){
-	//muuttujien luonti
+	//muuttujien luonti(globaaleja)
 	nextFire = 0;
 	deg = "0"; //deg on radiaani arvo
 	degWas = 0; //last mouse position
@@ -31,19 +31,24 @@ var mainGame = function(game){
         Panosmäärän sijainti
         Kontrollit
         Ampuminen
+        Tehosteet
         Hyökkäyksen hallinta
         Panosten osuminen
         Asteroidin jahtaajan tekoäly
+        Pelaajan jahtaajan tekoäly
         pomon tekoäly
-    checkRange
     tryBuff
-    reload
+    changeHUDslot
+    boomCollision
+    dropBoomStarter
+    shieldHit
+    pause
      */
 };
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
     //tämän funktion parametreistä ei tarvitse tietää muuta kuin että ne kaikki ovat createssa luodut muuttujat
-    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading,pauseMenu,musics) {
+    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading,pauseMenu) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.shipAccessories = shipAccessories;
@@ -80,7 +85,6 @@ mainGame.prototype = {
         this.playerData = playerData;
         this.abilityReloading = abilityReloading;
         this.pauseMenu = pauseMenu;
-        this.musics = musics;
         //Loput muuttujat
         this.isOnPaused = false;
         this.asteroidAmmount = 3;
@@ -89,6 +93,8 @@ mainGame.prototype = {
         this.flipped = false;
         this.IntMouseTrack = -1;
         this.kick = 60;
+        this.pickedAbilityExists = false;
+        this.pickedAbilityShield = false;
         this.attackLoot = 0;
         this.HUDchangeEvent = false; //mahdollistaa tehoste HUDin käytön hiiren rullalla ilman että tehoste laukeaa
 
@@ -98,13 +104,13 @@ mainGame.prototype = {
         this.timers = [0,60,300,0,1,0];//custom ajastimet, tällä hetkellä: peruscombo,pomon buff,aaltojen delay,scrolldelay,panosten hallinta bullet collision limitter
 		//this.text3 = this.game.add.text(0,0,"");
         this.reloadSprite = game.add.sprite(0, 0, "reloadTray");
-        this.fixed = false;//dedug, to be removed
+        this.fixed = false;//debug, to be removed
     },
     create: function () {
         var self = this;
         //fysiikat voidaan sallia vain pyörivässä statessa
 		//this.game.physics.p2.setImpactEvents(true);
-        this.game.physics.p2.enable(this.ship,true);
+        this.game.physics.p2.enable(this.ship);
         this.game.camera.follow(this.ship);
         this.game.physics.p2.defaultRestitution = 0.8;
         this.game.physics.p2.enable(this.asteroids);
@@ -112,6 +118,7 @@ mainGame.prototype = {
             item.body.clearCollision();
         });
         //this.game.physics.p2.setBounds(0,0,this.game.world.width,this.game.world.height,true,true,true,true,true);
+        //luodaan törmäysryhmät
         this.playerCollisonGroup = this.game.physics.p2.createCollisionGroup();
         this.enemiesCollisonGroup = this.game.physics.p2.createCollisionGroup();
         this.boomCollisonGroup = this.game.physics.p2.createCollisionGroup();
@@ -130,22 +137,19 @@ mainGame.prototype = {
                 item.body.collides([this.enemiesCollisonGroup]);
             }
         },this);
-
-		/*if(this.guns.laserLocation != null){
-			this.guns.getChildAt(this.guns.laserLocation).body.setCollisionGroup(this.laserColGroup);
-			this.guns.getChildAt(this.guns.laserLocation).body.collides([this.enemiesCollisonGroup]);
-			//this.guns.getChildAt(this.guns.laserLocation).body.onBeginContact.add(this.laserHit,this);
-		}*/
-        //this.ship.body.collideWorldBounds = true;
-        //this.music.play();
+        this.shipAccessories.getChildAt(1).getChildAt(1).body.setCollisionGroup(this.boomCollisonGroup);
+        this.shipAccessories.getChildAt(1).getChildAt(1).body.collides([this.enemiesCollisonGroup]);
+        //lisätään kuuntelija hiiren rullalle
         this.game.input.mouse.mouseWheelCallback = function(){self.changeHUDSlot()};
         $("canvas").css("cursor","url('assets/sprites/cursor.png'),none");//asetetaan kursori, ei toimi jos tekee createssa
         this.game.physics.p2.enableBody(this.reloadSprite);
         this.reloadSprite.kill();
         this.ship.body.mass = 0.7;
+        //tästä avataan pausevalikko
         this.game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(this.pause,this);
     },
     update: function () {
+        //mikäli pause menu ei ole auki
         if(!this.isOnPaused) {
             testi = 0;
             var self = this;
@@ -167,11 +171,6 @@ mainGame.prototype = {
                 }
 
             });
-            //tutkii onko panoksia osumassa vihollisiin
-            /*this.game.physics.arcade.overlap(this.bullets, this.enemy1, hitDetector, null, this);
-             this.game.physics.arcade.overlap(this.bullets, this.enemy2, hitDetector, null, this);
-             this.game.physics.arcade.overlap(this.bullets, this.enemy3, hitDetector, null, this);
-             this.game.physics.arcade.overlap(this.enemyBullets, this.ship, hitDetector, null, this);*/
             var Ycoord;
             var Xcoord;
             //calculate deg
@@ -188,12 +187,6 @@ mainGame.prototype = {
             else {
                 Xcoord = this.game.input.mousePointer.x - (this.ship.body.x - this.game.camera.x);
             }
-            //console.log(Ycoord+"ja X:"+Xcoord);
-            //console.log(this.ship.body.y+"ja hiiri:"+this.game.input.mousePointer.y);
-            //console.log(this.game.camera.width);
-            //var X2 = Xcoord * Xcoord;
-            //var Y2 = Ycoord * Ycoord;
-            //var YX2 = X2 + Y2;
             //Yksikköympyrä arvoja joihin lisätään tarvittaessa edelliset
             switch (true) {
                 case (Xcoord > 0 && Ycoord > 0):
@@ -214,17 +207,11 @@ mainGame.prototype = {
             //rotation arvo yli ~7.8 tai alle ~-7.8
             if (this.ship.body.rotation > 2 * pi + (pi / 2) || this.ship.body.rotation < -1 * ((2 * pi) + (pi / 2))) {
                 this.ship.body.rotation = Math.round((pi / 2) * 10) / 10;
-                //this.flipped = true;
-                //console.log("nollattu"+(2*pi));
             }//mikäli raja-arvojen sisällä mutta negatiivinen
             else if (this.ship.body.rotation < pi / 2) {
                 this.ship.body.rotation = Math.round((2 * pi - (this.ship.body.rotation * -1)) * 10) / 10;
-                //this.flipped = true;
             }
 
-            //var shipRot = this.ship.body.rotation;
-            //console.log(this.ship.body.rotation);
-            //console.log(shipRot+"####"+deg+"###"+(2*pi-deg));
             //Pyöristetään ja korreloidaan
             var corDeg = Math.round(((2 * pi - deg) + (pi / 2)) * 10) / 10;//hiiren arvo
             var corRot = Math.round(this.ship.body.rotation * 10) / 10;//aluksen arvo
@@ -240,72 +227,17 @@ mainGame.prototype = {
                 }
             }
             this.ship.body.rotation = ((2 * pi - deg) + (pi / 2));
-            /*
-             //tutkitaan hiiren liikkeen suuntaa
-             if (((corDeg < degWas && this.direct == "right")
-             || (corDeg > degWas && this.direct == "left"))
-             && !((degWas > 6.0 && corDeg < 3.0)
-             || (degWas < 3.0 && corDeg > 6.0))
-             && this.flipped != true
-             ) {
-             //Tallennetaan se kulma missä hiiren liike vaihtaa suuntaa
-             this.IntMouseTrack = corDeg;
-             }
 
-             if (corDeg > degWas && !(degWas < 2 && corDeg > 6 )) {
-             this.direct = "right";
-             }
-             else if (corDeg < degWas && !(degWas > 7.5 && corDeg < 3)) {
-             this.direct = "left";
-             }
-             //Tämä korjaa direct muuttujan jos nykyisellä suunnalla on lyhyempi matka kohteeseen kuin vaihtamalla suuntaa
-
-             if (this.IntMouseTrack != -1 && corDeg > corRot && corDeg <= this.IntMouseTrack && this.flipped == false) {
-             this.direct = "right";
-             this.fixed = "normal fix";
-             } else if (this.IntMouseTrack != -1 && corDeg < corRot && corDeg >= this.IntMouseTrack && this.flipped == false) {
-             this.direct = "left";
-             this.fixed = "normal fix";
-             } else if (this.IntMouseTrack != -1 && corDeg < corRot && corDeg <= this.IntMouseTrack && this.flipped == true && this.direct == "left") {
-             this.direct = "right";
-             this.fixed = "flip fix";
-             } else if (this.IntMouseTrack != -1 && corDeg > corRot && corDeg >= this.IntMouseTrack && this.flipped == true && this.direct == "right") {
-             this.direct = "left";
-             this.fixed = "flip fix";
-             }
-             //mikäli aluksen kulma on tavoitellussa pisteessä
-             if (corRot == corDeg) {
-             this.ship.body.setZeroRotation();
-             //this.moving = false;
-             }
-             //Mikäli hiiri ei ole liikkeessä mutta ei myöskään tavoitteessa
-             else if (corRot != corDeg) {
-             if (this.direct == "right") {
-             for (var i = 0; i <= 3; i++) {
-             if (corRot != corDeg) {
-             //console.log("runned"+i);
-             this.ship.body.rotation = Math.round((corRot + 0.1)*10)/10;
-             }
-             else {
-             break;
-             }
-             }
-             }
-             else if (this.direct == "left") {
-             this.ship.body.rotation = Math.round((corRot - 0.1)*10)/10;
-             }
-             }*/
-            //text.text = String(this.IntMouseTrack+"+"+this.direct+"+"+corDeg+"+"+this.flipped+"+"+this.lap+"+"+corRot+"+"+lastRot+"+"+this.ship.rotation);
-            //text.text = String(this.clips[0] + "+" + reloading[this.HUD.webTray.trayPosition-1] + "+" + this.ship.health);
-            //text.text = String("");
-            //text2.text = String("");
-            //text2.text = String(this.fixed);
             text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
             this.HUD.points.text = "Points: " + points;
             this.clipText.text = this.clips[this.HUD.webTray.trayPosition - 1];
-            if (this.ship.shield) {
+            if (this.ship.shield && !this.pickedAbilityShield) {
                 this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).x = this.ship.x;
                 this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).y = this.ship.y;
+            }
+            else if(this.ship.shield && this.pickedAbilityShield){
+                this.shipAccessories.getChildAt(1).getChildAt(2).x = this.ship.x;
+                this.shipAccessories.getChildAt(1).getChildAt(2).y = this.ship.y;
             }
             //liikutetaan hiiren viereen
             this.clipText.x = parseFloat(this.game.input.activePointer.worldX + 40);
@@ -319,14 +251,6 @@ mainGame.prototype = {
                 //alert("performance issue: " + execTime);
             }
 
-            /*
-             if (corRot >= 6.0 && lastRot <= 3.0) {
-             this.flipped = false;
-             }
-             if (corRot <= 3.0 && lastRot >= 6.0) {
-             this.flipped = false;w
-             }*/
-            //console.log(corRot+"...."+corDeg);
             degWas = Math.round((corDeg + 1 - 1) * 10) / 10;
             lastRot = Math.round(this.ship.body.rotation * 10) / 10;
 
@@ -349,14 +273,17 @@ mainGame.prototype = {
             else if (this.cursors.right.isDown) {
                 this.ship.body.applyForce([-Math.cos(this.ship.body.rotation) * 7, -Math.sin(this.ship.body.rotation) * 7], 0, 0);
             }
+            //lataus
             if (this.cursors.reload.isDown && !this.reloading[this.HUD.webTray.trayPosition - 1]) {
                 reload(this.reloadSprite, this.clips, this.HUD.webTray.trayPosition - 1, this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), 1, this.reloading);
             }
+            //aseen&abilityn vaihto
             if (this.cursors.abil1.isDown || this.cursors.abil2.isDown || this.cursors.abil3.isDown || this.cursors.wep1.isDown || this.cursors.wep2.isDown || this.cursors.wep3.isDown) {
                 this.changeHUDSlot(true, this.game.input.keyboard.lastKey.event.which);
             }
 
             //ampuminen
+            //laserFire kutsuu itseään niin kauan että lipas on tyhjä
             var laserFire = function () {
                 if (fire(self.laserBul, self.guns.getChildAt(self.HUD.webTray.trayPosition - 1), self.guns.getChildAt(self.HUD.webTray.trayPosition - 1).fireRate, corRot, self.ship)) {
                     self.clips[self.HUD.webTray.trayPosition - 1]--;
@@ -364,21 +291,29 @@ mainGame.prototype = {
                 if (fire(self.laserBul, self.guns.getChildAt(self.HUD.webTray.trayPosition - 1), self.guns.getChildAt(self.HUD.webTray.trayPosition - 1).fireRate, corRot, self.ship)) {
                     self.clips[self.HUD.webTray.trayPosition - 1]--;
                 }
+                if(self.clips[self.HUD.webTray.trayPosition - 1] <= 0){
+                    self.game.time.events.add(1000, function () {
+                        musics.sounds.playerLaser.currentTime = 0;
+                    }, self);
+                }
                 if (self.clips[self.HUD.webTray.trayPosition - 1] > 0) {
                     self.game.time.events.add(5, function () {
                         laserFire();
                     }, self);
                 }
             };
+            //mikäli valitussa aseessa on panoksia, sitä ei ladata ja pelaaja on hengissä
+            //fire palauttaa true mikäli ammutiin panos
             if (this.game.input.activePointer.leftButton.isDown && this.clips[this.HUD.webTray.trayPosition - 1] > 0 && !this.reloading[this.HUD.webTray.trayPosition - 1] && this.ship.alive) {
                 if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "basic") {
                     if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
-                        this.musics.sounds.playerBasic.play();
+                        musics.sounds.playerBasic.currentTime = 0;
+                        musics.sounds.playerBasic.play();
                     }
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "laser") {
-                    if(!this.musics.sounds.playerLaser.isPlaying) {
-                        this.musics.sounds.playerLaser.play();
+                    if(!musics.sounds.playerLaser.currentTime > 0) {
+                        musics.sounds.playerLaser.play();
                     }
                     laserFire();
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "mines") {
@@ -389,62 +324,122 @@ mainGame.prototype = {
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "shotgun") {
                     if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
-                        this.musics.sounds.playerShotgun.play();
+                        musics.sounds.playerShotgun.currentTime = 0;
+                        musics.sounds.playerShotgun.play();
                     }
                 }
-
-
+                //mikäli panokset loppuivat, aktivoidaan lataus
             } else if (!this.reloading[this.HUD.webTray.trayPosition - 1] && this.clips[this.HUD.webTray.trayPosition - 1] <= 0) {
                 reload(this.reloadSprite, this.clips, this.HUD.webTray.trayPosition - 1, this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), 1, this.reloading);
             }
-
+            //tehosteet
             if (this.game.input.activePointer.rightButton.justReleased(40) && !this.abilityReloading[this.HUD.abTray.trayPosition - 1] && !this.HUDchangeEvent && this.shipAccessories.getChildAt(0).length != 0) {
+                var tempFired = false;
                 var mass = this.ship.body.mass + 1 - 1;
-                if (this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "superSpeed") {
-                    this.game.time.events.add(1000, function () {
-                        this.ship.body.mass = mass + 1 - 1;
-                        mass = null;
+                if(this.HUD.abTray.trayPosition <= this.shipAccessories.pickUpStartSlotIndex){
+                    if (this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "superSpeed") {
+                        //superspeed pienentää aluksen massaa tietyksi aikaa
+                        this.game.time.events.add(1000, function () {
+                            this.ship.body.mass = mass + 1 - 1;
+                            mass = null;
+                            reload(null, null, this.HUD.abTray.trayPosition - 1, this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
+                        }, this);
+                        this.ship.body.mass *= 0.1;
+                        this.abilityReloading[this.HUD.abTray.trayPosition - 1] = true;
+                    } else if (this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "shield") {
+                        //kilpi luo aluksen ympärille spriten johon panokset kuolevat ennen osumista pelaajaan
+                        this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).revive();
+                        this.game.time.events.add(5000, function () {
+                            this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).kill();
+                            this.ship.shield = false;
+                            reload(null, null, this.HUD.abTray.trayPosition - 1, this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
+                        }, this);
+                        this.ship.shield = true;
+                    }
+                    else if (this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "EMP") {
+                        //EMP asettaa viholliselle sen isStuunned arvon kohtaan true mikäli se osuu viholliseen
+                        var EMP = this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1);
+                        EMP.reset(this.ship.x, this.ship.y);
                         reload(null, null, this.HUD.abTray.trayPosition - 1, this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
-                    }, this);
-                    this.ship.body.mass *= 0.1;
-                    this.abilityReloading[this.HUD.abTray.trayPosition - 1] = true;
-                } else if (this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "shield") {
-                    this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).revive();
-                    this.game.time.events.add(5000, function () {
-                        this.shipAccessories.getChildAt(0).getChildAt(this.shipAccessories.shieldPos).kill();
-                        this.ship.shield = false;
+                        var tween = this.game.add.tween(EMP.scale).to({x: 3, y: 3}, 500, "Linear", true);
+                        tween.onComplete.add(function () {
+                            EMP.scale.setTo(0.01, 0.01);
+                            EMP.kill();
+                        }, this);
+                    }
+                    else if (this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "fireRateBoost") {
+                        //fireRate pienentää aseiden odotusaikaa ennen seuraavaa panosta
+                        var returnValue = this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate;
+                        var buffedGun = this.HUD.webTray.trayPosition - 1;
+                        this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate /= 2;
                         reload(null, null, this.HUD.abTray.trayPosition - 1, this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
-                    }, this);
-                    this.ship.shield = true;
+                        this.game.time.events.add(3500, function () {
+                            this.guns.getChildAt(buffedGun).fireRate = returnValue;
+                        }, this)
+                    }
                 }
-                else if(this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "EMP"){
-                    var EMP = this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1);
-                    EMP.reset(this.ship.x,this.ship.y);
-                    reload(null,null,this.HUD.abTray.trayPosition - 1,this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
-                    var tween = this.game.add.tween(EMP.scale).to({x: 3,y:3}, 500, "Linear", true);
-                    tween.onComplete.add(function(){
-                        EMP.scale.setTo(0.01,0.01);
-                        EMP.kill();
-                    },this);
+                else if(this.pickedAbilityExists && this.HUD.abTray.trayPosition > this.shipAccessories.pickUpStartSlotIndex) {
+                    //sama juttu mutta kerta käyttöisille
+                    console.log("starting ability...");
+                    if (this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is).name == "superSpeed") {
+                        var abil = this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is);
+                        this.game.time.events.add(1000, function () {
+                            this.ship.body.mass = mass + 1 - 1;
+                            mass = null;
+                        }, this);
+                        this.ship.body.mass *= 0.1;
+                        this.abilityReloading[this.HUD.abTray.trayPosition - 1] = true;
+                        tempFired = true;
+                    } else if (this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is).name == "shield") {
+                        var abil = this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is);
+                        abil.revive();
+                        this.game.time.events.add(5000, function () {
+                            abil.kill();
+                            this.ship.shield = false;
+                            this.pickedAbilityShield = false;
+                        }, this);
+                        this.ship.shield = true;
+                        this.pickedAbilityShield = true;
+                        tempFired = true;
+                    }
+                    else if (this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is).name == "EMP") {
+                        var EMPtemp = this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is);
+                        EMPtemp.reset(this.ship.x, this.ship.y);
+                        EMPtemp.x = this.ship.x;
+                        EMPtemp.body.x = this.ship.x;
+                        EMPtemp.body.y = this.ship.y;
+                        var tween = this.game.add.tween(EMPtemp.scale).to({x: 3, y: 3}, 500, "Linear", true);
+                        tween.onComplete.add(function () {
+                            EMPtemp.scale.setTo(0.01, 0.01);
+                            EMPtemp.kill();
+                        }, this);
+                        tempFired = true;
+                    }
+                    else if (this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is).name == "fireRateBoost") {
+                        var abil = this.shipAccessories.getChildAt(1).getChildAt(this.HUD.abTray.getChildAt(1).getChildAt(this.shipAccessories.pickUpStartSlotIndex*2+1).is);
+                        var returnValue = parseInt(this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate)+1-1;
+                        var buffedGun = this.HUD.webTray.trayPosition - 1;
+                        this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate /= 2;
+                        this.game.time.events.add(3500, function () {
+                            this.guns.getChildAt(buffedGun).fireRate = returnValue;
+                        }, this);
+                        tempFired = true;
+                    }
                 }
-                else if(this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).name == "fireRateBoost"){
-                    var returnValue = this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate;
-                    var buffedGun = this.HUD.webTray.trayPosition - 1;
-                    this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate /= 2;
-                    reload(null,null,this.HUD.abTray.trayPosition - 1,this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
-                    this.game.time.events.add(3500,function(){
-                        this.guns.getChildAt(buffedGun).fireRate = returnValue;
-                    },this)
-                }
-                if(this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1).isTemp){
+                //kertakäyttöinen poistetaan käytön jälkeen
+                if(tempFired){
+                    console.log("removing ability...");
                     var rem = this.abilityReloading.splice(this.HUD.abTray.trayPosition-1,1);
                     rem = null;
-                    this.shipAccessories.getChildAt(0).removeChildAt(this.HUD.abTray.trayPosition-1);
-                    this.HUD.abTray.getChildAt(1).removeChildAt((this.HUD.webTray.trayPosition) * 2 - 1);
-                    this.HUD.abTray.getChildAt(1).removeChildAt((this.HUD.webTray.trayPosition) * 2 - 2);
+                    this.pickedAbilityExists = false;
+                    console.log(this.shipAccessories.pickUpStartSlotIndex * 2+2);
+                    var removed1 = this.HUD.abTray.getChildAt(1).removeChildAt(this.shipAccessories.pickUpStartSlotIndex * 2+2);
+                    var removed2 = this.HUD.abTray.getChildAt(1).removeChildAt(this.shipAccessories.pickUpStartSlotIndex * 2+1);
+                    removed1.destroy();
+                    removed2.destroy();
 
                 }
-            }
+            }//mikäli tehosteen käyttö estettiin HUDchangeEventillä, se asetetaan takasin falseksi tässä
             else if (this.HUDchangeEvent && !this.game.input.activePointer.rightButton.isDown && !this.game.input.activePointer.rightButton.justReleased(40)) {
                 this.HUDchangeEvent = false;
             }
@@ -454,11 +449,12 @@ mainGame.prototype = {
             if ((spawnNext == true || spawnNext == "undefined") && this.timers[2] <= 0) {
                 var randNumbers = randNumber(this.lap);
                 this.game.time.events.add((randNumbers[1] * 1000), function () {
-                    var next = spawnEnemy(this.spawnPool, this.enemyAmount, this.enemies, this.lap, this.enemiesCollisonGroup);
+                    //spawnEnemy muuttaa spawnNext muuttujan trueksi kun se on saanut luotua vihollisen
+                    var next = spawnEnemy(this.spawnPool, this.enemyAmount, this.enemies, this.lap, this.enemiesCollisonGroup);//palauttaa next jos on aika aloittaa seuraava kierros
                     if (next === "next" && this.lap != 3) {
                         this.lap++;
                         this.enemy1 = this.enemies.getChildAt(this.lap - 1).getChildAt(0);
-                        //tällä hetkellä kaatuu kun kierros kolme ohi koska tapahtuu outOfBounds, käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
+                        //käytetään lap arvo 4:jää pelin päättymisen seuraamiseen
                         this.enemy2 = this.enemies.getChildAt(this.lap - 1).getChildAt(1);
                         this.enemy3 = this.enemies.getChildAt(this.lap - 1).getChildAt(2);
                         this.timers[2] = 460;
@@ -471,6 +467,7 @@ mainGame.prototype = {
                         },this);
                     }
                 }, this);
+                //poistetaan banneri tietyn ajan kuluttua
                 if (this.timers[2] <= 0 && this.HUD.banner.alive) {
                     this.game.add.tween(this.HUD.banner).to({alpha: 0}, 200, "Linear", true).onComplete.add(function () {
                         this.HUD.banner.kill()
@@ -489,7 +486,7 @@ mainGame.prototype = {
             var hunterAI;
             var destroyerAI;
             var boundsBullet;
-            if (this.frameSkip == 0) {
+           /* if (this.frameSkip == 0) {
                 eachEnemyAliveFn = function () {
                 };
                 eachBulletAliveFn = function () {
@@ -500,15 +497,22 @@ mainGame.prototype = {
                 };
                 destroyerAI = function () {
                 };
-                this.frameSkip = 1;
-            } else {
-                this.frameSkip = 2;
+                this.frameSkip = 1;}*/
+            if(this.frameSkip == 0 ||this.frameSkip == 1){
+                if(this.frameSkip == 1){
+                    this.frameSkip = 2;
+                } else if(this.frameSkip == 0){
+                    this.frameSkip = 1;
+                }
+
                 var enm;
+                //tässä tutkitaan panoksen osumista käyttökohteen mukaan
                 eachBulletAliveFn = function (b) {
                     boundsBullet = b.world;
-                    self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);//droppi kaatuu tähän, bullet ja drop molemmat arcade
+                    //tämä tutkii annettusta pisteesta osuuko se P2 bodyyn
+                    self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);
                     if (self.bulletArray.length != 0 && self.timers[4] == 1) {
-                        hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0), self.dropBoom, self.dropApi,self.musics);
+                        hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0), self.dropBoom, self.dropApi);
                         if (b.name == "mine") {
                             var boom = self.minesExpl.getFirstDead();
                             boom.reset(b.x, b.y);
@@ -520,27 +524,22 @@ mainGame.prototype = {
                             });
                         }
                     } else if (self.bulletArray.length != 0 && self.timers[4] == 2) {//jos pelaajaan osumista tutkitaan
-                        hitDetector(b, enm, null, self.lap, self.HPbar,null,null,self.musics);
+                        hitDetector(b, enm, null, self.lap, self.HPbar,null,null);
                         if (self.ship.health == 0.001) {
                             self.attackLoot += 300;
                         }
-                        if(b.name == "drop" && !(self.shipAccessories.getChildAt(0).length >= 3)){
-                            var lenght = self.shipAccessories.getChildAt(0).length+1-1;
-                            self.shipAccessories.getChildAt(0).add(self.shipAccessories.pickUpAbilities[b.ability]);
-                            if(lenght != self.shipAccessories.getChildAt(0).length) {
-                                self.shipAccessories.getChildAt(0).removeChildAt(lenght-1);
+                        if(b.name == "drop" && !(self.pickedAbilityExists)){//jos pelaaja osui poimittavaan abilityyn
                                 var abil = game.add.sprite(0, 22, "ability" + b.ability);
-                                abil.x = 54 * (self.shipAccessories.getChildAt(0).length) + 12.5;
+                                abil.x = 54 * 2 + 12.5;
                                 abil.scale.setTo(0.4, 0.4);
+                                abil.is = b.ability;
                                 self.HUD.abTray.getChildAt(1).addChild(abil);
                                 var reloadTrayAb = game.add.sprite(0, 22, 'trayReloading');
-                                reloadTrayAb.x = 54 * (self.shipAccessories.getChildAt(0).length) + 12.5;
+                                reloadTrayAb.x = 54 * 2 + 12.5;
                                 reloadTrayAb.alpha = 0;
                                 self.HUD.abTray.getChildAt(1).addChild(reloadTrayAb);
-                                self.shipAccessories.getChildAt(0).add(self.shipAccessories.pickUpAbilities[b.ability]);
-                                self.shipAccessories.pickUpAbilities[b.ability].isTemp = true;
+                                self.pickedAbilityExists = true;
                                 self.abilityReloading.push(false);
-                            }
                         }
                     } else if (self.bulletArray.length != 0 && self.timers[4] == 3) {
                         //asteroidHitDetector palauttaa 0 jos ei ole enää asteroideja, 1 jos asteroidi tuhottiin, 2 jos vain osuma
@@ -557,7 +556,7 @@ mainGame.prototype = {
                         }
                     }
                 };
-                eachEnemyAliveFn = function (en) {
+                eachEnemyAliveFn = function (en) {//jokainen vihollinen ja pelaaja kutsuu tätä. Tämä asettaa
                     enm = en;
                     if (self.timers[4] == 1) {
                         self.bullets.forEachAlive(eachBulletAliveFn);
@@ -566,7 +565,7 @@ mainGame.prototype = {
                     } else if (self.timers[4] == 2) {
                         self.enemyBullets.forEachAlive(eachBulletAliveFn);
                         self.dropApi.forEachAlive(eachBulletAliveFn);
-                    } else {
+                    } else {//tämä tutkii asteroidin tuhoajien panokset
                         for (var u = 0; u < destroyerBullets.length; u++) {
                             eachBulletAliveFn(destroyerBullets[u]);
                         }
@@ -576,7 +575,7 @@ mainGame.prototype = {
                 destroyerAI = function (enemy) {
                     if(!enemy.isStunned) {
                         var num;
-                        if (this.timers[5] >= 5) {
+                        if (this.timers[5] >= 5) {//tutkitaan panosten osumista
                             eachEnemyAliveFn(enemy);
                         }
                         if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000 || enemy.name == "r") {
@@ -626,7 +625,7 @@ mainGame.prototype = {
 
                             //Tämä ajetaan kohteen ja massan saaneellee viholliselle normaalisti
                         } else if (enemy.name == 0 || enemy.name == 1 || enemy.name == 2) {
-                            if (this.asteroids.getChildAt(enemy.name).alive == true) {
+                            if (this.asteroids.getChildAt(enemy.name).alive == true) {//jos kohde hengissä
                                 var target = this.asteroids.getChildAt(enemy.name);
                                 var dir = acquireTarget(target, enemy);
                                 enemy.body.rotation = dir + 1 - 1;
@@ -635,6 +634,7 @@ mainGame.prototype = {
                                     enemy.body.thrust(100);
                                 }
                                 if (checkRange(enemy.body.x, enemy.body.y, target.x, target.y, 1, enemy.targetOff) && enemy.ray == null && enemy.wait == 0) {
+                                    //vihollisen panokset ovat näkymättömiä, laser on vain efekti
                                     enemy.getChildAt(2).emitParticle();
                                     var gun = null;
                                     enemyFire(enemy, gun, this.enemyBullets, enemy.fireRate, this.asteroids.getChildAt(enemy.name), destroyerBullets);
@@ -667,13 +667,16 @@ mainGame.prototype = {
                                 target = null;
                             }
                         }
-                    } else {
+                    } else {//jos vihollinen on osunut EMP pulssiin
                         enemy.body.setZeroVelocity();
+                        if (this.timers[5] >= 5) {
+                            eachEnemyAliveFn(enemy);
+                        }
                     }
                 };
                 hunterAI = function (enemy) {
                     if(!enemy.isStunned) {
-                        if (this.timers[5] >= 5) {
+                        if (this.timers[5] >= 5) {//tutkitaan panosten osumista
                             eachEnemyAliveFn(enemy);
                         }
                         if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000 || enemy.name == "") {
@@ -720,11 +723,16 @@ mainGame.prototype = {
                         if (this.frameSkip == 0) {
                             enemy.rendeable = false;
                         }
+                    } else {
+                        enemy.body.setZeroVelocity();
+                        if (this.timers[5] >= 5) {
+                            eachEnemyAliveFn(enemy);
+                        }
                     }
                 };// Pelaajan jahtaajan tekoäly loppuu
                 commanderAI = function (enemy) {
                     if(!enemy.isStunned) {
-                        if (this.timers[5] >= 5) {
+                        if (this.timers[5] >= 5) {//tutkitaan panosten osumista
                             eachEnemyAliveFn(enemy);
                         }
                         if (enemy.x > 1600 || enemy.x < 0 || enemy.y < 0 || enemy.y > 1000 || enemy.name == "") {
@@ -742,7 +750,7 @@ mainGame.prototype = {
                             dir = null;
 
                             var inRange = false;
-                            if (enemy.buffTimer <= 0) {
+                            if (enemy.buffTimer <= 0) {//mikäli aika yrittää buffia
                                 var buff = function (en) {
                                     if (checkRange(en.x, en.y, enemy.x, enemy.y, 4)) {
                                         inRange = true;
@@ -757,7 +765,7 @@ mainGame.prototype = {
                                 enemy.buffTimer = 60;
                             }
                             enemy.buffTimer -= 2;
-                            if (!this.asteroids.getChildAt(enemy.altTarget).alive) {
+                            if (!this.asteroids.getChildAt(enemy.altTarget).alive) {//mikäli vaihtoehtoinen kohde ei ole hengissä
                                 var newTarget = -1;
                                 while (newTarget == enemy.altTarget || newTarget == -1) {
                                     newTarget = rnd.integerInRange(0, 2);
@@ -782,7 +790,7 @@ mainGame.prototype = {
                             } else if (!this.ship.alive && !checkRange(altTargetX, altTargetY, enemy.x, enemy.y, 3)) {
                                 enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.altTarget), enemy);
                                 enemy.body.thrust(100);
-                            } else if (!this.ship.alive && checkRange(altTargetX, altTargetY, enemy.x, enemy.y, 3)) {
+                            } else if (!this.ship.alive && checkRange(altTargetX, altTargetY, enemy.x, enemy.y, 3)) {///mikäli pelaaja on kuollut, hyökätäänasteroidien kimppuun
                                 enemy.body.thrust(0);
                                 enemy.body.rotation = acquireTarget(this.asteroids.getChildAt(enemy.altTarget), enemy);
                                 var gun;
@@ -809,9 +817,6 @@ mainGame.prototype = {
                                 enemy.body.mass = rnd.realInRange(0.85, 1.25);
                                 enemy.body.damping = rnd.realInRange(0.8, 0.99);
                             }
-                            //dir = acquireTarget(this.ship, enemy);
-                            //enemy.body.rotation = dir;
-                            //enemy.body.thrust(60);
 
                             if (enemy.body.force.destination[0] == 0) {
                                 enemy.name = "inPlay";
@@ -826,10 +831,17 @@ mainGame.prototype = {
                             enemy.rendeable = false;
                         }
                     }
+                    else{
+                        enemy.body.setZeroVelocity();
+                        if (this.timers[5] >= 5) {
+                            eachEnemyAliveFn(enemy);
+                        }
+                    }
                 };//pomon tekoälyloppuu
             }
 
             this.fixed = "";
+            //frameSkip rajoittaa raskaiden funktioiden ajamista joka toiseen ruutuun
             if (this.frameSkip == 2) {
                 // Asteroidin jahtaajan tekoäly
                 this.enemy1.forEachAlive(destroyerAI, this); // Asteroidin jahtaajan tekoäly loppuu
@@ -875,7 +887,7 @@ mainGame.prototype = {
         }
     },
     tryBuff: function(en){
-		var chance = rnd.integerInRange(0,6);
+		var chance = rnd.integerInRange(0,6); //1/6 mahdollisuus buffille
         if(chance == 1){
             if(en.health < en.maxHealth){//oletus buff on parantaminen
                 en.health += 0.25;
@@ -888,7 +900,6 @@ mainGame.prototype = {
 				tween.onComplete.add(function(){
 					healed.kill();
 				});
-                //alert("heal"+en.health);
             } else if(en.fireRate == en.parent.fireRate){//vaihtoehto on tulitusnopeuden kasvatus
                 en.fireRate = en.fireRate/2;
 				var boosted  = this.HUD.buffTrays2.getFirstDead(true);
@@ -920,12 +931,12 @@ mainGame.prototype = {
                 this.HUD.webTray.trayPosition = actualKeys[key];
                 this.HUD.webTray.getChildAt(0).x += 54 * to;
                 this.timers[3]++;
-                this.game.time.events.add(175, function () {
+                this.game.time.events.add(175, function () {//tällä rajoitetaan rullaa jolloin HUDia on helpompi käyttää
                     this.timers[3] = 0
                 }, this);
                 }
-            } else {
-                if (this.cursors.abilChangeHotkeys[key] < this.shipAccessories.getChildAt(0).length) {
+            } else {//jos vaihdetaan tehostetta
+                if (this.cursors.abilChangeHotkeys[key] < 4) {
                     to = this.cursors.abilChangeHotkeys[key] - this.HUD.abTray.trayPosition;
                     this.HUD.abTray.trayPosition = this.cursors.abilChangeHotkeys[key];
                     this.HUD.abTray.getChildAt(0).x += 54 * to;
@@ -972,7 +983,7 @@ mainGame.prototype = {
             }
         }
     },
-    boomCollision : function(a,b,shapeCaller,shapeCollided,c){
+    boomCollision : function(a,b,shapeCaller,shapeCollided,c){//tätä hyödynnetään kun täytyy ajaa logiikkaa kahden P2 bodyn törmätessä
         if(a != null) {//tämä callback ajetaan myös silloin kun vihut törmäävät toisiinsa
             if (shapeCollided.body.parent.sprite.key == "boom") {
                 shapeCaller.body.mass = 9999;
@@ -986,9 +997,9 @@ mainGame.prototype = {
             }
         }
     },
-    dropBoomStarter: function(drop,bullet){
+    dropBoomStarter: function(drop,bullet){//tämä hoitaa räjähtävät dropit ja sen räjähdyksen aktivoinnin. Räjähdyn on P2 fysiikoilla ja funktio yläpuolella hoitaa sen
         hitDetector(bullet,drop,1,this.lap,null);
-        if(drop.health == 0.001){
+        if(drop.health == 0.001){//kuolleiden asioiden healtiksi asetetaan 0.001
             var boom = this.minesExpl.getFirstDead();
             boom.reset(drop.x,drop.y);
             var tween = this.game.add.tween(boom.scale);
@@ -1017,16 +1028,12 @@ mainGame.prototype = {
                 game.physics.arcade.isPaused = (game.physics.arcade.isPaused) ? false : true;
                 game.physics.p2.resume();
             } else {
-                /*var lap = this.enemies.getChildAt(this.lap);
-                lap.forEach(function(group){
-                        group.forEachAlive(function(enemy){
-                            enemy.body.setZeroVelocity();
-                        })
-                });*/
-                //this.ship.body.setZeroVelocity();
+               //laitetaan molemman fysiikka moottorit pauselle
                 game.physics.p2.pause();
                 game.physics.arcade.isPaused = (game.physics.arcade.isPaused) ? false : true;
+                //merkataan peli pauselle (estää update loopin logiikan)
                 this.isOnPaused = true;
+                //herätetään pause -menu
                 this.pauseMenu.forEach(function(item){
                     if(item.name != "group") {
                         item.revive();

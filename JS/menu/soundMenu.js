@@ -147,8 +147,11 @@ soundMenu.prototype = {
         } else if (this.musicneedle.x > 324) {
             volumes.music = 1.0 * volumes.master;
         }
-        for(var i = 0;i<this.surroundings.musics.tracks.length;i++){
-            this.surroundings.musics.tracks[i].volume = volumes.music;
+        for(var i = 0;i<musics.menuTracks.length;i++){
+            musics.menuTracks[i].volume = volumes.music;
+        }
+        for(var i = 0;i<musics.gameTracks.length;i++){
+            musics.gameTracks[i].volume = volumes.music;
         }
     }, // säädetään efektivolume efektisliderin neulan x:n mukaan
     fxVolume:function() {
@@ -176,6 +179,9 @@ soundMenu.prototype = {
             volumes.sounds = 0.9 * volumes.master;
         } else if (this.fxneedle.x > 324) {
             volumes.sounds = 1.0 * volumes.master;
+        }
+        for (var property in musics.sounds) {
+            musics.sounds[property].volume = volumes.sounds;
         }
     },
     // asettaa sliderit takaisin keskelle ja ajaa volume funktiot

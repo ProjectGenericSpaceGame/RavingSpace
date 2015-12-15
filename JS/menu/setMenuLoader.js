@@ -12,6 +12,7 @@ setMenuLoader.prototype = {
     },
     create:function(){
         resizeGame();
+        stateChange = false;
         this.loader = this.game.add.sprite(0,0,'loadScreen');
         this.loader.bringToTop();
         $("#loader").css({marginTop:"82vh",marginLeft:"15vw",width:"15%",height:"10%",backgroundColor:"transparent",display:"block"});

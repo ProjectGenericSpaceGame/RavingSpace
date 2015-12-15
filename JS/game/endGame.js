@@ -71,6 +71,11 @@ endGame.prototype = {
 
     },
     backToMenu:function(){
+        stateChange = true;
+        for(var k = 0;k<musics.gameTracks.length;k++){
+            musics.gameTracks[k].pause();
+            musics.gameTracks[k].currentTime = 0;
+        }
         //tässä katsotaan meneekö uusi piste taulukon alkuun (on pienenpi kuin muut)
         //jos ei ole pienin, poistetaan taulukon pienin (0 index)
         var self = this;
@@ -106,16 +111,12 @@ endGame.prototype = {
             self.playerData.playerData.points += points;
             self.ship = null;
             self.HUD = null;
-            for(var i = 0;i<self.musics.tracks.length;i++) {
-                self.musics.tracks[i].destroy();
-            }
-            for(var property in self.musics.sounds){
-                if(property != "enemyLaser" && property != "enemyBasic" && property != "playerLaser"){
-                    self.musics.sounds[property].destroy();
-                }
+            for(var i = 0;i<musics.gameTracks.length;i++) {
+                musics.gameTracks[i].pause();
+                musics.gameTracks[i].currentTime = 0;
             }
             self.cache.destroy();
-            window.location.reload(true);
+            game.state.start('setMenuLoader',true,true);
         });
 
     }

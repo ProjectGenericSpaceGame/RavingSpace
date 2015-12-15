@@ -24,7 +24,7 @@ menuLoad.prototype = {
             this.game.load.image('weapon0', 'assets/placeholders/weapon0_final.png');
             this.game.load.image('weapon1', 'assets/placeholders/weapon1_final.png');
             this.game.load.image('weapon2', 'assets/placeholders/weapon2_final.png');
-            this.game.load.image('weapon3', 'assets/sprites/mine.png');
+            this.game.load.image('weapon3', 'assets/sprites/mineSlot.png');
             // tehosteet
             this.game.load.image('ability0', 'assets/placeholders/ability0_final.png');
             this.game.load.image('ability1', 'assets/placeholders/ability1_final.png');
@@ -36,7 +36,6 @@ menuLoad.prototype = {
             this.game.load.image('bullet', 'assets/sprites/bullet.png');
             this.game.load.image('laser', 'assets/particles/laser2.png');
             this.game.load.image('shotgun', 'assets/sprites/bullet2.png');
-            this.game.load.image('mines', 'assets/sprites/mine.png');
             this.game.load.spritesheet('shopselect','assets/placeholders/shopselect.png', 270, 260);
             this.game.load.image('bullet', 'assets/sprites/bullet.png');
             this.game.load.image('laser', 'assets/particles/laser2.png');
@@ -59,9 +58,9 @@ menuLoad.prototype = {
         this.game.load.image('textFieldBG', 'assets/placeholders/textFieldBG.png');
         this.game.load.image('flasher', 'assets/placeholders/flasher.png');
 
-        this.game.load.audio('dustsucker', 'assets/sounds/dustsucker.ogg');
-        this.game.load.audio('dystopia', 'assets/sounds/dystopia.ogg');
-        this.game.load.audio('swagger', 'assets/sounds/swagger.ogg');
+        /*this.game.load.audio('dustsucker', 'assets/sounds/playerWeaponLaser.ogg');
+        this.game.load.audio('dystopia', 'assets/sounds/playerWeaponLaser.ogg');
+        this.game.load.audio('swagger', 'assets/sounds/playerWeaponLaser.ogg');*/
 
         },
         init:function(loader){
@@ -69,34 +68,61 @@ menuLoad.prototype = {
         },
         create: function(){
             var self = this;
+            this.tracksLoaded = 0;
             this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.startMenu,this);
             var textStyle = { font: "20px cyber"};
              var nameStyle = { font: "20px Calibri", fill:"blue"};
             var headingStyle = { font: "35px cyber", fill:"white"};
+            if(sessionStorage.getItem('startOrReturn') == "start") {
+                musics = {
+                    menuTracks: [],
+                    lastIndex: 0,
+                    isPlaying: 0,
+                    tracksMaker: [],
+                    gameTracks:[],
+                    sounds: {
+                        playerBasic: "",
+                        playerLaser: "",
+                        playerShotgun: "",
+                        enemyBasic: "",
+                        shipBoom:[],
+                        enemyLaser: ""
+                    },
+                    nextFreeBoom:0
+                };
+                musics.menuTracks.push(new Audio('assets/sounds/dystopia.ogg'));
+                musics.tracksMaker.push("Zajed - Dystopia");
+                musics.menuTracks.push(new Audio('assets/sounds/swagger.ogg'));
+                musics.tracksMaker.push("vanguard182 - Swagger");
+                musics.menuTracks.push(new Audio('assets/sounds/dustsucker.ogg'));
+                musics.tracksMaker.push("Jens Kiilstofte (Machinimasound) - Dustsucker");
+                musics.gameTracks.push(new Audio('assets/sounds/HighOctane.ogg'));
 
-            this.menuMusics = {
-                tracks: [],
-                lastIndex: 0,
-                isPlaying: 0,
-                tracksMaker:[]
-            };
-            this.menuMusics.tracks.push(this.game.add.audio('dystopia'));
-            this.menuMusics.tracksMaker.push("Zajed - Dystopia");
-            this.menuMusics.tracks.push(this.game.add.audio('swagger'));
-            this.menuMusics.tracksMaker.push("vanguard182 - Swagger");
-           this.menuMusics.tracks.push(this.game.add.audio('dustsucker'));
-            this.menuMusics.tracksMaker.push("Jens Kiilstofte (Machinimasound) - Dustsucker");
-            for(var i = 0;i<this.menuMusics.tracks.length;i++){
-                this.menuMusics.tracks[i].volume = volumes.music;
-                this.menuMusics.tracks[i].addMarker(this.menuMusics.tracks[i].key,0,this.menuMusics.tracks[i].duration,volumes.music);
-                this.menuMusics.tracks[i].onMarkerComplete.add(this.nextSong,this);
+                musics.sounds.playerBasic = new Audio('assets/sounds/PlayerWeaponBasic.ogg');
+                musics.sounds.playerLaser = new Audio('assets/sounds/playerWeaponLaser.ogg');
+                musics.sounds.playerShotgun = new Audio('assets/sounds/PlayerWeaponShotgun.ogg');
+                musics.sounds.shipBoom.push(new Audio('assets/sounds/ShipExplosion.ogg'));
+                musics.sounds.shipBoom.push(new Audio('assets/sounds/ShipExplosion.ogg'));
+                musics.sounds.shipBoom.push(new Audio('assets/sounds/ShipExplosion.ogg'));
+                for (var i = 0; i < musics.menuTracks.length; i++) {
+                    musics.menuTracks[i].volume = volumes.music;
+                    musics.menuTracks[i].onended = this.nextSong;
+                    musics.menuTracks[i].oncanplaythrough = this.tracksLoaded++;
+                }
+                for (var i = 0; i < musics.gameTracks.length; i++) {
+                    musics.gameTracks[i].volume = volumes.music;
+                    //musics.gameTracks[i].onended = this.nextSong;
+                    musics.gameTracks[i].oncanplaythrough = this.tracksLoaded++;
+                }
+                /*this.game.sound.setDecodedCallback(this.menuMusics.tracks, audioReady, this);
+                function audioReady() {
+                    this.musicLoadStatus = true;
+                    this.enterText = this.game.add.text(1000, 700, "Press ENTER to start", {
+                        fill: "white",
+                        font: "20px cyber"
+                    });
+                }*/
             }
-            this.game.sound.setDecodedCallback(this.menuMusics.tracks,audioReady, this);
-            function audioReady(){
-                this.musicLoadStatus = true;
-                this.enterText = this.game.add.text(1000,700,"Press ENTER to start",{fill:"white",font:"20px cyber"});
-            }
-
             //this.music = game.sound.play('testi');
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
            
@@ -267,7 +293,7 @@ menuLoad.prototype = {
                 */
             //this.playerWaves = JSON.parse(this.playerWaves);
 
-            this.songName = this.game.add.text(25,775,"Now Playing: ",{ font: "20px cyber", fill:"white"});
+            songName = this.game.add.text(25,775,"Now Playing: ",{ font: "20px cyber", fill:"white"});
             //tässä kasataan jutut
             this.surroundings = {
                 menubg:this.menubg,
@@ -275,9 +301,7 @@ menuLoad.prototype = {
                 menubbg:this.menubbg,
                 menuLabel:this.menuLabel,
                 headUnder:this.headUnder,
-                backButton:this.backButton,
-                musics:this.menuMusics,
-                songName: this.songName
+                backButton:this.backButton
             };//demo
             
            // lisätään pelaajan pisteet sekä rahat yläpalkkiin
@@ -294,15 +318,25 @@ menuLoad.prototype = {
              // luodaan ryhmä painikkeille. 
             this.buttonGroup = this.game.add.group();
             this.loader.bringToTop();
-
+            this.enterText = this.game.add.text(1000, 700, "Press ENTER to start", {
+                fill: "white",
+                font: "20px cyber"
+            });
         },
+    update: function(){
+      if(this.tracksLoaded == musics.menuTracks.length+musics.gameTracks.length){
+          this.musicLoadStatus = true;
+          sessionStorage.setItem('startOrReturn',"return")
+      }
+
+    },
     //kutsutaan menua
 
     startMenu:function(){
         if(this.musicLoadStatus) {
-            var toPlay = rnd.integerInRange(0, this.menuMusics.tracks.length - 1);
-            this.menuMusics.tracks[toPlay].play(this.menuMusics.tracks[toPlay].key);
-            this.surroundings.songName.text += this.menuMusics.tracksMaker[toPlay];
+            var toPlay = rnd.integerInRange(0, musics.menuTracks.length - 1);
+            musics.menuTracks[toPlay].play(musics.menuTracks[toPlay].key);
+            songName.text += musics.tracksMaker[toPlay];
             this.loader.destroy();
             this.enterText.destroy();
             this.game.state.start('mainMenu', false, false,
@@ -339,16 +373,16 @@ menuLoad.prototype = {
                 }
     },
     nextSong : function(){
-        this.surroundings.musics.lastIndex = this.surroundings.musics.isPlaying;
+        musics.lastIndex = musics.isPlaying;
         while(true){
-            var toPlay = rnd.integerInRange(0,this.surroundings.musics.tracks.length-1);
-            if(toPlay != this.surroundings.musics.lastIndex){
+            var toPlay = rnd.integerInRange(0,musics.menuTracks.length-1);
+            if(toPlay != musics.lastIndex){
                 break;
             }
         }
-        this.surroundings.musics.tracks[toPlay].play(this.surroundings.musics.tracks[toPlay].key);
-        this.surroundings.songName.text = "Now Playing: "+this.surroundings.musics.tracksMaker[toPlay];
-        this.surroundings.musics.isPlaying = toPlay;
+        musics.menuTracks[toPlay].play();
+        songName.text = "Now Playing: "+musics.tracksMaker[toPlay];
+        musics.isPlaying = toPlay;
     }
 
 };

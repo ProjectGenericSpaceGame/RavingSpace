@@ -223,7 +223,7 @@ mainGame.prototype = {
             }
             this.ship.body.rotation = ((2 * pi - deg) + (pi / 2));
 
-            text2.text = String(this.enemyAmount + "+" + this.spawnPool + "+" + this.attackInfo);
+            text2.text = "";
             this.HUD.points.text = "Points: " + points;
             this.clipText.text = this.clips[this.HUD.webTray.trayPosition - 1];
             if (this.ship.shield && !this.pickedAbilityShield) {

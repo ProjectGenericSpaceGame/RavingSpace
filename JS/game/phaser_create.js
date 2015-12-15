@@ -130,42 +130,6 @@ gameLoad.prototype = {
             musics.gameTracks[i].volume = volumes.music;
             musics.gameTracks[i].onended = this.nextSong;
         }
-        /*this.musicLoadStatus = false;
-        this.musics = {
-            tracks: [],
-            lastIndex: 0,
-            isPlaying: 0,
-            sounds: {
-                playerBasic: "",
-                playerLaser: "",
-                playerShotgun: "",
-                enemyBasic: "",
-                enemyLaser: "",
-                shipBoom: ""
-            }
-        };
-
-        this.musics.tracks.push(this.game.add.audio('highOctane'));
-        this.musics.sounds.playerBasic = this.game.add.audio('wep1sound');
-        this.musics.sounds.playerLaser = this.game.add.audio('wep2sound');
-        this.musics.sounds.playerShotgun = this.game.add.audio('wep3sound');
-        this.musics.sounds.shipBoom = this.game.add.audio('shipBoomSound');
-        for (var i = 0; i < this.musics.tracks.length; i++) {
-            this.musics.tracks[i].volume = volumes.music * volumes.master;
-            this.musics.tracks[i].addMarker(this.musics.tracks[i].key, 0, this.musics.tracks[i].duration, volumes.music * volumes.master);
-            this.musics.tracks[i].onMarkerComplete.add(this.nextSong, this);
-        }
-        this.game.sound.setDecodedCallback(this.musics.tracks, audioReady, this);
-        function audioReady() {
-            this.musicLoadStatus = true;
-            this.enterText = this.game.add.text(1000, 700, "Press ENTER to start", {fill: "white", font: "20px cyber"});
-            this.backToMenuText = this.game.add.text(50, 700, "Press BACKSPACE to get back to the menu", {
-                fill: "white",
-                font: "20px cyber"
-            });
-
-        }*/
-
         waiter = this.game.time.create();
         this.clipSizes = [35, 30, 5, 1];
         var getWave = $.ajax({
@@ -188,7 +152,7 @@ gameLoad.prototype = {
             self.game.state.start('menuLoad');
         });
         //this.attackInfo = "051006'302112'352713";
-        this.attackInfo = "100503'120905'151208";
+        //this.attackInfo = "100503'120905'151208";
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -260,7 +224,7 @@ gameLoad.prototype = {
         this.mines = this.game.add.image(0, 40);
         this.mines.name = "mines";
         this.mines.fireRate = 0;
-        this.mines.reload = 2000;
+        this.mines.reload = 20000;
         this.mines.clip = 1;
         this.guns.laserLocation = null;
         //supernopeus

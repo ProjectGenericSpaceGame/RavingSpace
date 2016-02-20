@@ -105,6 +105,11 @@ mainGame.prototype = {
         this.fixed = false;//debug, to be removed
     },
     create: function () {
+        // It's extreme important that this check is made in this state or browser will freeze!!
+            if(game.physics.p2.paused){
+                game.physics.p2.resume();
+             }
+        // Please read the note above
         var self = this;
         //fysiikat voidaan sallia vain pyörivässä statessa
         this.game.physics.p2.enable(this.ship);
@@ -508,11 +513,11 @@ mainGame.prototype = {
                             });
                         }
                     } else if (self.bulletArray.length != 0 && self.timers[4] == 2) {//jos pelaajaan osumista tutkitaan
-                        hitDetector(b, enm, null, self.lap, self.HPbar,null,null);
-                        if (self.ship.health == 0.001) {
-                            self.attackLoot += 300;
-                        }
-                        if(b.name == "drop" && !(self.pickedAbilityExists)){//jos pelaaja osui poimittavaan abilityyn
+                            hitDetector(b, enm, null, self.lap, self.HPbar, null, null);
+                            if (self.ship.health == 0.001) {
+                                self.attackLoot += 300;
+                            }
+                            if (b.name == "drop" && !(self.pickedAbilityExists)) {//jos pelaaja osui poimittavaan abilityyn
                                 var abil = game.add.sprite(0, 22, "ability" + b.ability);
                                 abil.x = 54 * 2 + 12.5;
                                 abil.scale.setTo(0.4, 0.4);
@@ -524,7 +529,8 @@ mainGame.prototype = {
                                 self.HUD.abTray.getChildAt(1).addChild(reloadTrayAb);
                                 self.pickedAbilityExists = true;
                                 self.abilityReloading.push(false);
-                        }
+                            }
+
                     } else if (self.bulletArray.length != 0 && self.timers[4] == 3) {
                         //asteroidHitDetector palauttaa 0 jos ei ole enää asteroideja, 1 jos asteroidi tuhottiin, 2 jos vain osuma
                         var whatHappens = asteroidHitDetector(b, enm, self.asteroidAmmount);
@@ -552,6 +558,9 @@ mainGame.prototype = {
                     } else {//tämä tutkii asteroidin tuhoajien panokset
                         for (var u = 0; u < destroyerBullets.length; u++) {
                             eachBulletAliveFn(destroyerBullets[u]);
+                        }
+                        if(!self.ship.alive){
+                            self.enemyBullets.forEachAlive(eachBulletAliveFn);
                         }
                     }
                 };
@@ -714,6 +723,7 @@ mainGame.prototype = {
                         }
                     }
                 };// Pelaajan jahtaajan tekoäly loppuu
+                //isojen vihujen tekoäly alkaa
                 commanderAI = function (enemy) {
                     if(!enemy.isStunned) {
                         if (this.timers[5] >= 5) {//tutkitaan panosten osumista

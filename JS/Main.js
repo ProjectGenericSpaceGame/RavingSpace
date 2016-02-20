@@ -50,6 +50,8 @@ game.state.add('endGame', endGame);
 game.state.add('loadoutMenu', loadoutMenu);
 
 game.state.start('setMenuLoader');
+
+    game.state.add('test',test);
    
 }
 

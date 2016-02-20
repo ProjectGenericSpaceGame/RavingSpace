@@ -100,8 +100,9 @@
 		//tässä päivitetään aallon tiedot
         $wasTester = false;
         for($i = 0;$i<15;$i++){//kannassa on 15 testikäyttäj, katsotaan ettei ollut heidän aaltonsa
-            if($attackOwner == "testi".($i+1)){
-                $wasTester == true;
+			echo "testi".($i+1)."ja tulos: ".$attackOwner == "testi".($i+1);
+            if($attackOwner == "testi".($i+1) || $attackOwner == "test".($i+1)){
+                $wasTester = true;
             }
         }
         if(!$wasTester) {

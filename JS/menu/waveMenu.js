@@ -349,6 +349,9 @@ waveMenu.prototype = {
         }
 
     },
+    update:function(){
+
+    },
     waveBrowser:function(){
         var self = this;
         this.centerWindow.removeAll();

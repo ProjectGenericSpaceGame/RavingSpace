@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
     <link rel="stylesheet" href="css/main.css" />
 
-    <script src="JS/libs/phaser.min.js"></script>
+    <script src="JS/libs/phaser.js"></script>
     <script src="JS/libs/jquery-1.11.2.min.js"></script>
     <script src="JS/libs/jssha/src/sha512.js"></script>
     <script src="JS/libs/Nonsense.js"></script>
@@ -39,6 +39,7 @@
     <script src="JS/menu/shopMenu.js"></script>
     <script src="JS/menu/waveMenu.js"></script>
     <script src="JS/menu/soundMenu.js"></script>
+
 
     <script src="JS/libs/textInputCreator.js"></script>
     <!-- <script src="JS/timer.js"></script> -->

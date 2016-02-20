@@ -88,7 +88,6 @@
         <p class="infoText">You can only reset your password if you add your email. </br> Fields marked with * are mandatory</p>
     </div>
 </main>
-<footer></footer>
 </body>
 <script>
     if($("#redirect").length > 0){

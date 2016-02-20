@@ -29,7 +29,8 @@ soundMenu.prototype = {
        this.masterGroup.y = 300;
        this.masterslider = this.game.add.sprite(0, 0, 'slider');
        this.masterslider.scale.setTo(1,2);
-       this.masterneedle = this.game.add.sprite(170, 1, 'needle');
+       this.masterneedle = this.game.add.sprite(0, 1, 'needle');
+       this.masterneedle.x = this.masterslider.width*volumes.master;
        this.masterneedle.inputEnabled = true;
        this.masterneedle.input.enableDrag();
        this.masterneedle.input.boundsSprite = this.masterslider;
@@ -45,7 +46,8 @@ soundMenu.prototype = {
         this.musicGroup.y = 370;
         this.musicslider = this.game.add.sprite(0, 0, 'slider');
         this.musicslider.scale.setTo(1,2);
-        this.musicneedle = this.game.add.sprite(170, 1, 'needle');
+        this.musicneedle = this.game.add.sprite(0, 1, 'needle');
+        this.musicneedle.x = this.musicslider.width*volumes.music;
         this.musicneedle.inputEnabled = true;
         this.musicneedle.input.enableDrag();
         this.musicneedle.input.boundsSprite = this.musicslider;
@@ -61,7 +63,8 @@ soundMenu.prototype = {
         this.fxGroup.y = 440;
         this.fxslider = this.game.add.sprite(0, 0, 'slider');
         this.fxslider.scale.setTo(1,2);
-        this.fxneedle = this.game.add.sprite(170, 1, 'needle');
+        this.fxneedle = this.game.add.sprite(0, 1, 'needle');
+        this.fxneedle.x = this.fxslider.width*volumes.sounds;
         this.fxneedle.inputEnabled = true;
         this.fxneedle.input.enableDrag();
         this.fxneedle.input.boundsSprite = this.fxslider;

@@ -109,14 +109,12 @@ endGame.prototype = {
         updateData.done(function(returnData){
             alert("Your data successfully was successfully updated:"+returnData);
             self.playerData.playerData.points += points;
-            self.ship = null;
-            self.HUD = null;
             for(var i = 0;i<musics.gameTracks.length;i++) {
                 musics.gameTracks[i].pause();
                 musics.gameTracks[i].currentTime = 0;
             }
             self.cache.destroy();
-            game.state.start('setMenuLoader',true,true);
+            game.state.start('setMenuLoader',true,true); //TODO kaatuu staten aloitukseen, sprite on null, miksi...
         });
 
     }

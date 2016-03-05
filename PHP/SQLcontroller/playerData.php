@@ -1,39 +1,24 @@
 <?php
-	//alustetaan tiedot
-	$returnObject = "";
-if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
-		$playerName = $_POST['playerName'];
-		$servername = "mysql.labranet.jamk.fi";
-		$user = "H3492";
-		$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
+    if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
+		require_once('../db-init.php');
 	} else {
-		$playerName = $_POST['playerName'];
-		$servername = "localhost";
-		$user = "root";
-		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
+		require_once('../db-initDEV.php');
 	}
-	//avataan yhteys
+	$returnObject = "";
+    $playerName = $_POST['playerName'];
 	//query
 	$select =
 	"select * from playerData
 	inner join shipStates
-	on shipStates.shipID = playerData.shipID
+	on shipStates.playerID = playerData.playerID
 	inner join loginAttempts
-	on loginAttempts.loginFollowID = playerData.loginFollowID
-	WHERE playerData.playerID = '$playerName'";
+	on loginAttempts.loginfollowID = playerData.loginfollowID
+	WHERE playerData.playerID = '$playerName';";
 
-	$query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-	$row = $query->fetch_assoc();
-	if($row['fail2'] == "in") {
-        $scoreID = $row['scoreID'];
+	$query = $db->prepare($select);//tulokset ovat $query muuttujassa
+	$query->execute();
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+	if($row['loggedIn'] == "in") {
         $shipID = $row['shipID'];
         $loginFollowID = $row['loginFollowID'];
 		//rakennetaan returnObject muuttuja
@@ -43,32 +28,55 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/gam
 			'","money":' . $row['money'] .
 			',"points":' . $row['points'] . '},';
 		//pelaajan aluksen tiedot
-		$returnObject .= '"shipData":[' .
-			$row['wep1'] . ',' . $row['wep2'] . ',' . $row['wep3'] . ',' . $row['wep4'] . ',' . $row['wep5'] . ',' . $row['wep6'] . ',' . $row['wep7'] . ',' . $row['wep8'] . ',' . $row['wep9'] . ',' . $row['wep10'] . ',' .
-			$row['pwer1'] . ',' . $row['pwer2'] . ',' . $row['pwer3'] . ',' . $row['pwer4'] . ',' . $row['pwer5'] . ',' . $row['pwer6'] . ',' . $row['pwer7'] . ',' . $row['pwer8'] . ',' . $row['pwer9'] . ',' . $row['pwer10'] . '],';
-		$scoreID = $row['scoreID'];
-		$select = "select * from highScores where scoreID = $scoreID";
-		$query = $DBcon->query($select);
-		$lenght = $query->field_count;
-		$row = $query->fetch_array();
-		$k = 0;
-		$returnObject .= '"playerScores":[';
-		while ($k < $lenght) {
-			if ($k != 0) {
-				if ($row[$k] != null && $k != 1) {
-					$returnObject .= ',' . $row[$k];
-				} else if ($row[$k] != null && $k == 1) {
-					$returnObject .= $row[$k];
-				} else if ($row[$k] == null && $k == 1) {
-					$returnObject .= '0';
-				} else {
-					$returnObject .= ',0';
-				}
-			}
-			$k++;
-		}
+        $returnObject .= '"shipPowers":[';
+        $selectPowers = "SELECT has FROM shipPowers
+                         WHERE shipID = '$shipID'";
+        $query = $db->prepare($selectPowers);
+	    $query->execute();
+        $amount = $query->rowCount();
+        $i = 0;
+        while($rowPower = $query->fetch(PDO::FETCH_ASSOC)){
+            if($i+1 == $amount){
+               $returnObject .= '"'.$rowPower['has'].'"'; 
+            }else if ($i <= $amount){
+               $returnObject .= $rowPower['has'].",";      
+            }
+		    $i++;    
+        }
+        $returnObject .= '],';
+        $returnObject .= '"shipGuns":[';
+        $selectGuns = "SELECT has FROM shipGuns
+                        WHERE shipID = '$shipID'";
+        $query = $db->prepare($selectGuns);
+	    $query->execute();
+        $amount = $query->rowCount();
+        $i = 0;
+        while($rowGun = $query->fetch(PDO::FETCH_ASSOC)){
+            if($i+1 == $amount){
+               $returnObject .= '"'.$rowGun['has'].'"'; 
+            }else if ($i <= $amount){
+               $returnObject .= '"'.$rowGun['has'].'"'.",";      
+            }
+		    $i++;    
+        }
+        $returnObject .= '],';
+		$playerID = $row['playerID'];
+		$select = "SELECT * FROM highScores where playerID = '$playerID';";
+		$query = $db->prepare($select);
+        $query->execute();
+        $a = $query->rowCount();
+        $i = 0;
+        $returnObject .= '"playerScores":[';
+        while($row = $query->fetch(PDO::FETCH_ASSOC)){
+            if($i+1 == $a){
+               $returnObject .= $row['score']; 
+            }else if($i <= $a){
+                $returnObject .= $row['score'].",";
+            }
+		  $i++;
+        }
 		$returnObject .= '],';
-		$returnObject .= '"scoreID":' . $scoreID . ",";
+       /* $returnObject .= '"scoreID":' . $scoreID . ","; */
 		$returnObject .= '"ship":' . $shipID . ",";
 		$returnObject .= '"loginFollowID":' . $loginFollowID;
 		$returnObject .= '}';
@@ -76,8 +84,5 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/gam
     else {
         $returnObject = true;
     }
-	//suljetaan yhteys
-	$query->close();
-	$DBcon->close();
 	echo $returnObject;
 ?>

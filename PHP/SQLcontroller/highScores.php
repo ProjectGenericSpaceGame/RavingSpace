@@ -4,6 +4,7 @@
 	} else {
 		require_once('../db-initDEV.php');
 	}
+
     /** @var PDO $db */
     $db = new DBcon();
     $db = $db->returnCon();
@@ -32,7 +33,11 @@
                 if($iter == $len) {
                     $returnObject .= '["' . $tempString . '",' . $row[$iter] . ']';
                 } else {
+<<<<<<< HEAD
                     $returnObject .= '["' . $tempString . '",' . $row['score'].'],';
+=======
+                    $returnObject .= '["' . $tempString .'",'.$row['score'].'],';
+>>>>>>> origin/master
                 }
                 $iter++;
             }*/

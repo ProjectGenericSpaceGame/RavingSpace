@@ -9,30 +9,17 @@ $tryLock;
 //$_SESSION['log'] = 1;
 $bcrypt = new Bcrypt(15);
 //$_POST['userName'] = 'testi1';
-
-if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/index.php" || $_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
-    $userName = $_POST['userName'];
-    $givenHash = $_POST['givenHash'];
-    $newPassWord = $_POST['newPass'];
-    $servername = "mysql.labranet.jamk.fi";
-    $user = "H3492";
-    $pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";
-    $DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-    if ($DBcon->connect_error) {
-        die("Connection failed: " . $DBcon->connect_error);
-    }
+$userName = $_POST['userName'];
+$givenHash = $_POST['givenHash'];
+$newPassWord = $_POST['newPass'];
+if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
+    require_once('../db-init.php');
 } else {
-    $servername = "localhost";
-    $userName = $_POST['userName'];
-    $givenHash = $_POST['givenHash'];
-    $newPassWord = $_POST['newPass'];
-    $user = "root";
-    $pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-    $DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-    if ($DBcon->connect_error) {
-        die("Connection failed: " . $DBcon->connect_error);
-    }
+    require_once('../db-initDEV.php');
 }
+/** @var PDO $DBcon */
+$DBcon = new DBcon();
+$DBcon = $DBcon->returnCon();
 
     $newRandom = substr($givenHash, -10);
     $toCompare = substr($givenHash, 0, -10);
@@ -40,19 +27,29 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/ind
     //echo "µµ";
     //echo strlen($newRandom);
 
-    $select = "select passHash, playerData.loginFollowID, loginAttempts.failedTries, loginAttempts.fail1 from playerData
+    $select = "select passHash, playerData.loginFollowID, loginAttempts.failedTries, loginAttempts.lockTime from playerData
     inner join loginAttempts on loginAttempts.loginFollowID = playerData.loginFollowID
     where playerID = '$userName'";
-    $query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-    $row = $query->fetch_assoc();
+    $query = $DBcon->prepare($select);
+    $query->execute();//tulokset ovat $row muuttujassa
+    $checkExistense = "SELECT * FROM playerData WHERE playerData = $userName";
+    $queryExistence = $DBcon->prepare($select);
+    $queryExistence->execute();
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if($queryExistence->fetchColumn() == false){//If given username doesn't exist, stop execution
+        sleep(4);//Sleepd for 4 seconds to simulate proper username
+        echo "credsFirst";
+        die();
+    }
 
     $DBhash = substr($row['passHash'],0,-10);
     $failedAttempts = $row['failedTries'];
     $loginFollowID = $row['loginFollowID'];
-    $tryLock = $row['fail1'];
+    $tryLock = $row['lockTime'];
     //echo strlen($DBhash);
     //echo "µµ";
     //echo $toCompare."+".$DBhash;
+// $bcrypt->verify makes BCrypt hash out of given "clear"(SHA512 hash) password so we don't need to do this manually before comparing.
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
     $_SESSION['log'] = 1;
     $return = true;
@@ -62,12 +59,18 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     //query
     $select = "update playerData set passHash = '$toDB' where playerID = '$userName'";
     //echo "daa?";
-    $DBcon->query($select);
+    $query = $DBcon->prepare($select);
+    $query->execute();
     //echo "daa?";
-    $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
-    $DBcon->query($select);
-    $select = "update loginAttempts set fail2 = 'in' where loginFollowID = $loginFollowID";
-    $DBcon->query($select);
+    $timestamp = date('l jS \of F Y h:i:s A');
+    $select = "update loginAttempts set failedTries = $failedAttempts, loggedIn = 'in', lastSuccesful = '$timestamp' where loginFollowID = $loginFollowID";
+    $query = $DBcon->prepare($select);
+    $query->execute();
+    /*$select = "update loginAttempts set  where loginFollowID = $loginFollowID";
+    $query = $DBcon->prepare($select);
+    $query->execute();
+
+    $select = "update loginAttempts set  where loginFollowID = $loginFollowID";*/
     //echo "daa?";
 } else if($bcrypt->verify($toCompare, $DBhash) != 1 && $failedAttempts < 4){// jos salis väärin ja yrityksiä vielä jäljellä
     $_SESSION['log'] = 0;
@@ -75,13 +78,14 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     if($failedAttempts >= 4){
         $time = time();
         //query
-        $select = "update loginAttempts set fail1 = '$time' where loginFollowID = $loginFollowID";
-        $DBcon->query($select);
+        $select = "update loginAttempts set failedTries = $failedAttempts, lockTime = '$time' where loginFollowID = $loginFollowID";
+    } else {
+        $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
     }
     $return = "credsFirst";
     //query
-    $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
-    $DBcon->query($select);
+    $query = $DBcon->prepare($select);
+    $query->execute();
 
 } else if($failedAttempts >= 4  && (time()-$tryLock)<(10*60)){// jos ei yrityksiä jäljellä ja lukossa
     $_SESSION['log'] = 0;
@@ -89,24 +93,27 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     //query
 } else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60) && $bcrypt->verify($toCompare, $DBhash) == 1){//jos lukitus loppunut ja oikein
     $_SESSION['log'] = 0;
-    $return = true;
+    $return = "trueRR";
     $toDB = $bcrypt->hash($newPassWord).$newRandom;
     $failedAttempts = 0;
     //query
     $select = "update playerData set passHash = '$toDB' where playerID = '$userName'";
-    $DBcon->query($select);
+    $query = $DBcon->prepare($select);
+    $query->execute();
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
-    $DBcon->query($select);
+    $query = $DBcon->prepare($select);
+    $query->execute();
 } else if($failedAttempts >= 4 && (time()-$tryLock)>(10*60)){// jos väärin ja lukitus loppu
     $_SESSION['log'] = 0;
     $return = "creds";
     $failedAttempts = 1;
     //query
     $select = "update loginAttempts set failedTries = $failedAttempts where loginFollowID = $loginFollowID";
-    $DBcon->query($select);
+    $query = $DBcon->prepare($select);
+    $query->execute();
 }
 
 //$query->close();
-$DBcon->close();
+$DBcon = null;
 echo $return;
 ?>

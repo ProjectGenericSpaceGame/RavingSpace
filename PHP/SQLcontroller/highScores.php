@@ -1,52 +1,43 @@
 <?php
+    if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
+		require_once('../db-init.php');
+	} else {
+		require_once('../db-initDEV.php');
+	}
+    /** @var PDO $db */
+    $db = new DBcon();
+    $db = $db->returnCon();
 	//alustetaan tiedot
 	$returnObject = "";
-	//avataan yhteys
-if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php") {
-		$servername = "mysql.labranet.jamk.fi";
-		$user = "H3492";
-		$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername, $user, $pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
-	} else {
-		$servername = "localhost";
-		$user = "root";
-		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername, $user, $pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
-	}
-	//query
 	$select =
-	"Select playerData.playerID,score1,score2,score3,score4,score5,score6,score7,score8,score9,score10 from highScores
-    inner join playerData
-    on playerData.scoreID = highScores.scoreID";
+	"SELECT playerID,score, highScores.date FROM highScores";
 
-	$query = $DBcon->query($select);//tulokset ovat $query muuttujassa
+	$query = $db->prepare($select);//tulokset ovat $query muuttujassa
+    $query->execute();
 	//rakennetaan returnObject muuttuja
-	//aallon tiedot
+	//Pisteet
 	$returnObject ='{"highScores":[';
-    $len = $query->num_rows;
-		while($row = $query->fetch_array(MYSQLI_BOTH)){
+    $len = $query->rowCount();
+		while($row = $query->fetch(PDO::FETCH_ASSOC)){
             $tempString = $row['playerID']."";
+            if($row['date'] == ""){
+                $date = '"N/A"';
+            } else {
+                $date =  $row['playerID'];
+            }
             //$tempStruckArr = str_split($tempString,6);
-            $iter = 1;
+            $returnObject .= '["' . $tempString . '",' . $row['score'] . ",".$date.'],';
+            /*$iter = 1;
 			while($iter < count($row)/2){
-                if($row[$iter] != 0) {
-                    $returnObject .= '["' . $tempString . '",' . $row[$iter] . '],';
+                if($iter == $len) {
+                    $returnObject .= '["' . $tempString . '",' . $row[$iter] . ']';
                 } else {
-                    $returnObject .= '["' . $tempString .'",0],';
+                    $returnObject .= '["' . $tempString . '",' . $row['score'].'],';
                 }
                 $iter++;
-            }
+            }*/
 		}
 	$returnObject = substr($returnObject,0,-1).']}';
-	//suljetaan yhteys
-	$query->close();
-	$DBcon->close();
-
+    $db = null;
 	echo $returnObject;
 ?>

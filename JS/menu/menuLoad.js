@@ -18,16 +18,15 @@ menuLoad.prototype = {
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
             // aseet
-            this.game.load.image('weapon0', 'assets/placeholders/weapon0_final.png');
-            this.game.load.image('weapon1', 'assets/placeholders/weapon1_final.png');
-            this.game.load.image('weapon2', 'assets/placeholders/weapon2_final.png');
-            this.game.load.image('weapon3', 'assets/sprites/mineSlot.png');
+            this.game.load.image('weapon_basic', 'assets/placeholders/weapon0_final.png');
+            this.game.load.image('weapon_laser', 'assets/placeholders/weapon1_final.png');
+            this.game.load.image('weapon_shotgun', 'assets/placeholders/weapon2_final.png');
+            this.game.load.image('weapon_mines', 'assets/sprites/mineSlot.png');
             // tehosteet
-            this.game.load.image('ability0', 'assets/placeholders/ability0_final.png');
-            this.game.load.image('ability1', 'assets/placeholders/ability1_final.png');
-            this.game.load.image('ability2', 'assets/placeholders/ability2_final.png');
-            this.game.load.image('ability3', 'assets/placeholders/ability3_final.png');
-            this.game.load.image('abSpeed', 'assets/placeholders/ability0_final.png');
+            this.game.load.image('ability_SuperSpeed', 'assets/placeholders/ability0_final.png');
+            this.game.load.image('ability_EMP', 'assets/placeholders/ability1_final.png');
+            this.game.load.image('ability_Shield', 'assets/placeholders/ability2_final.png');
+            this.game.load.image('ability_FireRateBoost', 'assets/placeholders/ability3_final.png');
             
             // kaupan kuvakkeet
             this.game.load.image('bullet', 'assets/sprites/bullet.png');
@@ -161,6 +160,7 @@ menuLoad.prototype = {
                 if(returnValue == true){
                     self.logout();
                 } else {
+                    console.log(returnValue);
                     self.playerWaves = JSON.parse(returnValue);
                 }
             });
@@ -175,6 +175,7 @@ menuLoad.prototype = {
              });
              getFromDB.done(function(returnValue){
              //self.globalScores = returnValue;});
+                 console.log(returnValue);
                 self.globalScores = JSON.parse(returnValue);});
             getFromDB.fail(function(){alert("database unreachable!")});
             //Nyt tehdään pistelistasta array vertailua varten

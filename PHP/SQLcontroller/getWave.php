@@ -1,42 +1,36 @@
 <?php
+    if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
+		require_once('../db-init.php');
+	} else {
+		require_once('../db-initDEV.php');
+	}
+    /** @var PDO $db */
+    $db = new DBcon();
+    $db = $db->returnCon();
 	//alustetaan tiedot
 	$returnObject = "";
-	$playerName = (string)$_POST['playername'];
+	$playerName = $_POST['playername'];
+    //$playerName = "testi1";
     $loginFollowID = (integer)$_POST['loginFollow'];
+    //$loginFollowID = 1;
 	$isIn = false;
-	//avataan yhteys
-if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php") {
-		$servername = "mysql.labranet.jamk.fi";
-		$user = "H3492";
-		$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername, $user, $pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
-	} else {
-		$servername = "localhost";
-		$user = "root";
-		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername, $user, $pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
-	}
 	//query
-	$select = "select fail2 from loginAttempts where loginFollowID = $loginFollowID";
-	$query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-    $row = $query->fetch_array(MYSQLI_BOTH);
-    if($row['fail2'] == "in"){
+	$select = "select loggedIn from loginAttempts where loginFollowID = $loginFollowID";
+	$query = $db->prepare($select);//tulokset ovat $query muuttujassa
+    $query->execute();
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if($row['loggedIn'] == "in"){
         $select =
             "SELECT attackID, waveData from attackWaves where attackState = 'Unused'";
         //haluamme vain yhden aallon vaikka query palauttaa kaikki, tutkimme siis rivien määrää ja valitsemme sattuman varaisesti yhden (tulossetti on array)
-        $query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-        $len = $query->num_rows;
+        $stmt = $db->prepare($select);//tulokset ovat $query muuttujassa
+        $stmt->execute();
+        $len = $stmt->rowCount();
         $rand = rand(1,$len);
         //rakennetaan returnObject muuttuja
         //aallon tiedot
         for($i = 0;$i<$rand;$i++){
-            $row = $query->fetch_array(MYSQLI_BOTH);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
         }
         $struck = (string)$row['waveData'];
         if(strlen($struck) < 18){
@@ -47,9 +41,7 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/gam
         $id = $row['attackID'];
         $returnObject = '{ "attackInfo":"'.$struck.'","attackID":'.$id.'}';
     }
-	//suljetaan yhteys
-	$query->close();
-	$DBcon->close();
-
+	// tulostetaan haetut tiedot
+    $db = null;
 	echo $returnObject;
 ?>

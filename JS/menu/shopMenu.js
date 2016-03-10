@@ -49,12 +49,12 @@ shopMenu.prototype = {
         // lajitellaan pelaajan ostamat aseet
         this.availableWeapons = [];
         for(var i = 0; i <= SET_GUNS-1; i++){
-            this.availableWeapons[i] = this.playerData.shipData[i];
+            this.availableWeapons[i] = this.playerData.shipGuns[i];
         }
         // lajitellaan pelaajan ostamat tehosteet
         this.availableAbilities = [];
-        for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
-            this.availableAbilities[i-10] = this.playerData.shipData[i];
+        for(var i = 0; i <= SET_ABILITIES-1; i++){
+            this.availableAbilities[i] = this.playerData.shipPowers[i];
         }
         // console.log("available wep: "+this.availableWeapons);
         // console.log("available ab: "+this.availableAbilities);
@@ -81,6 +81,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.basicGroup = this.game.add.group();
         this.weaponsGroup.add(this.basicGroup);
+        this.basicGroup.name = "basic";
         this.basicGroup.x = 10;
         this.basicGroup.y = 0;
         this.basicGroup.add(this.basicIcon);
@@ -100,6 +101,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.laserGroup = this.game.add.group();
         this.weaponsGroup.add(this.laserGroup);
+        this.laserGroup.name = "laser";
         this.laserGroup.x = 400;
         this.laserGroup.y = 0;
         this.laserGroup.add(this.laserIcon);
@@ -119,6 +121,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.shotgunGroup = this.game.add.group();
         this.weaponsGroup.add(this.shotgunGroup);
+        this.shotgunGroup.name = "shotgun";
         this.shotgunGroup.x = 205;
         this.shotgunGroup.y = 0;
         this.shotgunGroup.add(this.shotgunIcon);
@@ -138,6 +141,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.minesGroup = this.game.add.group();
         this.weaponsGroup.add(this.minesGroup);
+        this.minesGroup.name = "mines";
         this.minesGroup.x = 590;
         this.minesGroup.y = 0;
         this.minesGroup.add(this.minesIcon);
@@ -156,7 +160,7 @@ shopMenu.prototype = {
         this.abilitiesGroup.y = 500;
         
         // Nopeus tehoste
-        this.speedIcon = this.game.add.sprite(65, 15, 'abSpeed');
+        this.speedIcon = this.game.add.sprite(65, 15, 'ability_SuperSpeed');
         this.speedIcon.scale.setTo(0.5, 0.5);
         this.speedLabel = this.game.add.text(55, 70, 'Dash', styleB);
         this.speedpriceLabel = this.game.add.text(60, 110, '250', styleB);
@@ -167,6 +171,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.speedGroup = this.game.add.group();
         this.abilitiesGroup.add(this.speedGroup);
+        this.speedGroup.name = "SuperSpeed";
         this.speedGroup.x = 10;
         this.speedGroup.y = 0;
         this.speedGroup.add(this.speedIcon);
@@ -175,7 +180,7 @@ shopMenu.prototype = {
         this.speedGroup.add(this.button);
         
         // EMP tehoste
-        this.empIcon = this.game.add.sprite(65, 15, 'ability1');
+        this.empIcon = this.game.add.sprite(65, 15, 'ability_EMP');
         this.empIcon.scale.setTo(0.5, 0.5);
         this.empLabel = this.game.add.text(62, 70, 'EMP', styleB);
         this.emppriceLabel = this.game.add.text(65, 110, '450', styleB);
@@ -186,6 +191,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.empGroup = this.game.add.group();
         this.abilitiesGroup.add(this.empGroup);
+        this.empGroup.name = "EMP";
         this.empGroup.x = 205;
         this.empGroup.y = 0;
         this.empGroup.add(this.empIcon);
@@ -205,6 +211,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.shieldGroup = this.game.add.group();
         this.abilitiesGroup.add(this.shieldGroup);
+        this.shieldGroup.name = "Shield";
         this.shieldGroup.x = 400;
         this.shieldGroup.y = 0;
         this.shieldGroup.add(this.shieldIcon);
@@ -213,7 +220,7 @@ shopMenu.prototype = {
         this.shieldGroup.add(this.button);
         
         // SF tehoste
-        this.sfIcon = this.game.add.sprite(60, 15, 'ability3');
+        this.sfIcon = this.game.add.sprite(60, 15, 'ability_FireRateBoost');
         this.sfIcon.scale.setTo(0.5, 0.5);
         this.sfLabel = this.game.add.text(65, 70, 'SF', styleB);
         this.sfpriceLabel = this.game.add.text(60, 110, '900', styleB);
@@ -224,6 +231,7 @@ shopMenu.prototype = {
         this.button.scale.setTo(0.6, 0.58);
         this.sfGroup = this.game.add.group();
         this.abilitiesGroup.add(this.sfGroup);
+        this.sfGroup.name = "FireRateBoost";
         this.sfGroup.x = 590;
         this.sfGroup.y = 0;
         this.sfGroup.add(this.sfIcon);
@@ -244,31 +252,37 @@ shopMenu.prototype = {
         },
         // ostettujen aseiden tarkastus
         boughtCheck: function(){
-        for (i = 0; i <= 3; i++){
-            // tarkistetaan onko pelaaja ostanut aseen
-            if (this.availableWeapons[i] == 1){
-                //console.log("Aseita ostettu: "+i);
-                //asetetaan ostetut aseet läpinäkyväksi
-                this.weaponsGroup.getChildAt(i).getChildAt(0).alpha = 0.5;
-                this.weaponsGroup.getChildAt(i).getChildAt(1).alpha = 0.5;
-                this.weaponsGroup.getChildAt(i).getChildAt(2).alpha = 0.5;
-                this.weaponsGroup.getChildAt(i).getChildAt(3).alpha = 0.5;
-                this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(2,2,2);
-                
-            } 
-        }
-        
-        for (j = 0; j <= 3; j++){
-            // tarkistetaan onko pelaaja ostanut abilityn
-            if (this.availableAbilities[j] == 1){
-                //console.log("Kykyja ostettu: "+j);
-                //asetetaan ostetut kyvyt läpinäkyväksi
-                this.abilitiesGroup.getChildAt(j).getChildAt(0).alpha = 0.5;
-                this.abilitiesGroup.getChildAt(j).getChildAt(1).alpha = 0.5;
-                this.abilitiesGroup.getChildAt(j).getChildAt(2).alpha = 0.5;
-                this.abilitiesGroup.getChildAt(j).getChildAt(3).alpha = 0.5;
-                this.abilitiesGroup.getChildAt(j).getChildAt(3).setFrames(2,2,2);
+        for (i = 0; i < this.weaponsGroup.length; i++){
+            for(var i = 0; i < this.availableWeapons.length;i++){
+                if (this.availableWeapons[i] == this.weaponsGroup.getChildAt(i).name){
+                    //console.log("Aseita ostettu: "+i);
+                    //asetetaan ostetut aseet läpinäkyväksi
+                    this.weaponsGroup.getChildAt(i).getChildAt(0).alpha = 0.5;
+                    this.weaponsGroup.getChildAt(i).getChildAt(1).alpha = 0.5;
+                    this.weaponsGroup.getChildAt(i).getChildAt(2).alpha = 0.5;
+                    this.weaponsGroup.getChildAt(i).getChildAt(3).alpha = 0.5;
+                    this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(2,2,2);
+
+                }
             }
+            // tarkistetaan onko pelaaja ostanut aseen
+
+        }
+
+        for (j = 0; j < this.abilitiesGroup.length; j++){
+            // tarkistetaan onko pelaaja ostanut abilityn
+            for(i = 0;i < this.availableAbilities.length;i++){
+                if (this.availableAbilities[i] == this.abilitiesGroup.getChildAt(j).name){
+                    //console.log("Kykyja ostettu: "+j);
+                    //asetetaan ostetut kyvyt läpinäkyväksi
+                    this.abilitiesGroup.getChildAt(j).getChildAt(0).alpha = 0.5;
+                    this.abilitiesGroup.getChildAt(j).getChildAt(1).alpha = 0.5;
+                    this.abilitiesGroup.getChildAt(j).getChildAt(2).alpha = 0.5;
+                    this.abilitiesGroup.getChildAt(j).getChildAt(3).alpha = 0.5;
+                    this.abilitiesGroup.getChildAt(j).getChildAt(3).setFrames(2,2,2);
+                }
+            }
+
         }
         },
         // kun ase valittu, selvitetään sen index arvo ja sijoitetaan se windex muuttujaan

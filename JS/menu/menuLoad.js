@@ -70,6 +70,7 @@ menuLoad.prototype = {
                     lastIndex: 0,
                     isPlaying: 0,
                     tracksMaker: [],
+                    tracksName: [],
                     gameTracks:[],
                     sounds: {
                         playerBasic: "",
@@ -79,15 +80,16 @@ menuLoad.prototype = {
                         shipBoom:[],
                         enemyLaser: ""
                     },
-                    nextFreeBoom:0
+                    nextFreeBoom:0,
+                    fullTrackList:""
                 };
-                musics.menuTracks.push(new Audio('assets/sounds/dystopia.ogg'));
+                /*musics.menuTracks.push(new Audio('assets/sounds/dystopia.ogg'));
                 musics.tracksMaker.push("Zajed - Dystopia");
                 musics.menuTracks.push(new Audio('assets/sounds/swagger.ogg'));
                 musics.tracksMaker.push("vanguard182 - Swagger");
                 musics.menuTracks.push(new Audio('assets/sounds/dustsucker.ogg'));
                 musics.tracksMaker.push("Jens Kiilstofte (Machinimasound) - Dustsucker");
-                musics.gameTracks.push(new Audio('assets/sounds/HighOctane.ogg'));
+                musics.gameTracks.push(new Audio('assets/sounds/HighOctane.ogg'));*/
 
                 musics.sounds.playerBasic = new Audio('assets/sounds/PlayerWeaponBasic.ogg');
                 musics.sounds.playerLaser = new Audio('assets/sounds/playerWeaponLaser.ogg');
@@ -95,16 +97,7 @@ menuLoad.prototype = {
                 musics.sounds.shipBoom.push(new Audio('assets/sounds/ShipExplosion.ogg'));
                 musics.sounds.shipBoom.push(new Audio('assets/sounds/ShipExplosion.ogg'));
                 musics.sounds.shipBoom.push(new Audio('assets/sounds/ShipExplosion.ogg'));
-                for (var i = 0; i < musics.menuTracks.length; i++) {
-                    musics.menuTracks[i].volume = volumes.music;
-                    musics.menuTracks[i].onended = this.nextSong;
-                    musics.menuTracks[i].oncanplaythrough = this.tracksLoaded++;
-                }
-                for (var i = 0; i < musics.gameTracks.length; i++) {
-                    musics.gameTracks[i].volume = volumes.music;
-                    //musics.gameTracks[i].onended = this.nextSong;
-                    musics.gameTracks[i].oncanplaythrough = this.tracksLoaded++;
-                }
+
             }
          
             this.menubg = this.game.add.sprite(0, 0,  "menuBG");
@@ -134,8 +127,41 @@ menuLoad.prototype = {
 
             //tänne tulee ajaxia ja kissoja
             var name = sessionStorage.getItem('playerID');
-            // ------>TESTATTU JA TOIMII<------
+            /*Haetaan eka musiikit*/
             var getFromDB = $.ajax({
+                method:"POST",
+                async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
+                url:"PHP/SQLcontroller/getSongs.php",
+                data:{playerName:name,location:window.location.href}
+            });
+            getFromDB.done(function(data){
+                console.log(data);
+                var jsonSongs = JSON.parse(data);
+                for(var n=0;n<jsonSongs.playerSongs.menu.length;n++){
+                    musics.menuTracks.push(new Audio("assets/sounds/"+jsonSongs.playerSongs.menu[n]["asset"]));
+                    musics.tracksMaker.push(jsonSongs.playerSongs.menu[n]["maker"]);
+                    musics.tracksName.push(jsonSongs.playerSongs.menu[n]["trackName"]);
+                }
+                for(n=0;n<jsonSongs.playerSongs.game.length;n++){
+                    musics.gameTracks.push(new Audio("assets/sounds/"+jsonSongs.playerSongs.game[n]["asset"]));
+                    /*musics.?.push(jsonSongs.playerSongs.game[n]["maker"]);*/
+                    /*musics.?.push(jsonSongs.playerSongs.menu[n]["trackName"]);*/
+                }
+                musics.fullTrackListn= jsonSongs.allTracks;
+                for (n = 0; n < musics.menuTracks.length; n++) {
+                    musics.menuTracks[n].volume = volumes.music;
+                    musics.menuTracks[n].onended = self.nextSong;
+                    musics.menuTracks[n].oncanplaythrough = self.tracksLoaded++;
+                }
+                for (n = 0; n < musics.gameTracks.length; n++) {
+                    musics.gameTracks[n].volume = volumes.music;
+                    //musics.gameTracks[n].onended = this.nextSong;
+                    musics.gameTracks[n].oncanplaythrough = self.tracksLoaded++;
+                }
+            });
+            getFromDB.fail(function(){alert("Couldn't load music!")});
+            // ------>TESTATTU JA TOIMII<------
+            getFromDB = $.ajax({
                 method:"POST",
                 async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/playerData.php",
@@ -231,7 +257,7 @@ menuLoad.prototype = {
         if(this.musicLoadStatus) {
             var toPlay = rnd.integerInRange(0, musics.menuTracks.length - 1);
             musics.menuTracks[toPlay].play(musics.menuTracks[toPlay].key);
-            songName.text += musics.tracksMaker[toPlay];
+            songName.text += musics.tracksName[toPlay]+" - "+musics.tracksMaker[toPlay];
             this.loader.destroy();
             this.enterText.destroy();
             this.game.state.start('mainMenu', false, false,
@@ -276,7 +302,7 @@ menuLoad.prototype = {
             }
         }
         musics.menuTracks[toPlay].play();
-        songName.text = "Now Playing: "+musics.tracksMaker[toPlay];
+        songName.text = "Now Playing: "+musics.tracksName[toPlay]+" - "+musics.tracksMaker[toPlay];
         musics.isPlaying = toPlay;
     }
 

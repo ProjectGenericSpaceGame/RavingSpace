@@ -319,7 +319,6 @@ waveMenu.prototype = {
                     self.playerWaves.playerWaves.push(newWave);
                     var waveDataForDB = newWave.waveStruct.split("'");
                     waveDataForDB = ""+waveDataForDB[0]+waveDataForDB[1]+waveDataForDB[2];//hyökkäystieto jaeteltu ' merkillä kierrosten välille
-                    //Tätä php filua ei vielä ole
                     var createWave = $.ajax({
                         method:"POST",
                         url:"PHP/SQLcontroller/updateData.php",

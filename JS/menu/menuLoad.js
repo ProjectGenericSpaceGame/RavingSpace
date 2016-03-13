@@ -111,11 +111,11 @@ menuLoad.prototype = {
            
             this.menuheader = this.game.add.sprite(0,0, "menuHeader");
             var logotext = this.game.add.image(0, 0, "RSlogo");
-            logotext.scale.setTo(0.7,0.7);
+            logotext.scale.setTo(0.5,0.5);
             logotext.x = this.menuheader.width/2-logotext.width/2;
             this.menuheader.addChild(logotext);
     
-            this.menubbg = this.game.add.sprite(150, 100,  "menuButtonBG");
+           this.menubbg = this.game.add.sprite(150, 100,  "menuButtonBG");
             //alustetaan valikon otsikko ja viiva
             this.menuLabel = this.game.add.text(this.game.width/2, 120, '', headingStyle);
             
@@ -146,6 +146,7 @@ menuLoad.prototype = {
                     self.logout();
                 } else {
                     self.playerData = JSON.parse(returnValue);
+                    console.log("Pelaajan data"+self.playerData.shipPowers[0]);
                 }
             });
             getFromDB.fail(function(){alert("database unreachable!")});
@@ -165,9 +166,8 @@ menuLoad.prototype = {
                 }
             });
             getFromDB.fail(function(){alert("database unreachable!")});
-            //
-
-             getFromDB = $.ajax({
+            
+            getFromDB = $.ajax({
                  method:"POST",
                  async:false,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                  url:"PHP/SQLcontroller/highScores.php",
@@ -176,9 +176,10 @@ menuLoad.prototype = {
              getFromDB.done(function(returnValue){
              //self.globalScores = returnValue;});
                  console.log(returnValue);
-                self.globalScores = JSON.parse(returnValue);});
+                 self.globalScores = JSON.parse(returnValue);});
+            
             getFromDB.fail(function(){alert("database unreachable!")});
-            //Nyt tehdään pistelistasta array vertailua varten
+                // Nyt tehdään pistelistasta array vertailua varten
             var scoreSort = [];
             for(var i = 0;i < this.globalScores.highScores.length;i++) {
                 scoreSort.push(this.globalScores.highScores[i]);

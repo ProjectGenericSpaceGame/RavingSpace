@@ -22,8 +22,7 @@
     if($row['loggedIn'] == "in"){
         $select =
             "SELECT attackID, waveData from attackWaves where attackState = 'Unused'";
-        //haluamme vain yhden aallon vaikka query palauttaa kaikki, tutkimme siis rivien määrää ja valitsemme sattuman varaisesti yhden (tulossetti on array)
-        $stmt = $db->prepare($select);//tulokset ovat $query muuttujassa
+        $stmt = $db->prepare($select);
         $stmt->execute();
         $len = $stmt->rowCount();
         $rand = rand(1,$len);

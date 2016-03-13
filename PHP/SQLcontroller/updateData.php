@@ -2,123 +2,139 @@
 	//alustetaan tiedot
 	$returnObject = "";
 	$usage = $_POST['usage'];
-    $playerName = "";
+    // $usage memory list:    
+    // 2 newWave
+    // 3 shoppingEvent
+    // 4 finishedGame
+    // 5 loggOff
+    $playerName = $_POST['playerName'];
+    //$playerName = "testi1";
+    
 
-	if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
-		$playerName = $_POST['playerName'];
-		$servername = "mysql.labranet.jamk.fi";
-		$user = "H3492";
-		$pass = "cMcChhJ9jrWcjw3ajX4D3bDUrHBSn7gT";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
+    if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
+		require_once('../db-init.php');
 	} else {
-		$playerName = $_POST['playerName'];
-		$servername = "localhost";
-		$user = "root";
-		$pass = "";//vaihdetaan my�hemmin hakemaan toisesta tiedostosta
-		$DBcon = new mysqli($servername,$user,$pass, "H3492_3");
-		if ($DBcon->connect_error) {
-			die("Connection failed: " . $DBcon->connect_error);
-		}
+		require_once('../db-initDEV.php');
 	}
-	//query
-	
+    $db = new DBcon();
+    $db = $db->returnCon();
+
 	function updateAccountInfo(){
 	
 	}
-	function newWave($playerName,$DBcon){
+	function newWave($playerName,$db){
         $loginFollowID = $_POST['loginFollowID'];
+        //$loginFollowID = 1;
         $waveData = $_POST['wave'];
+        //$waveData = "101104151207231009";
         $points = $_POST['points'];
-        $select = "select fail2 from loginAttempts where loginFollowID = $loginFollowID";
-        $query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-        $row = $query->fetch_array(MYSQLI_BOTH);
-        if($row['fail2'] == "in") {
-            $select = "insert into attackWaves (waveData,attackLoot,attackState)
-                      values (".$waveData.",0,'Unused')";
-            $DBcon->query($select);
-            $select = "insert into playersAttacks (attackID,playerID) select MAX(attackID), '".$playerName."' from attackWaves";
-            $DBcon->query($select);
-            $select = "update playerData set points = $points where playerID = '$playerName'";//päivitetään pelaajan pisteet
+        //$points = "40000";
+        $select = "SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID";
+        $query = $db->prepare($select);
+        $query->execute();
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        if($row['loggedIn'] == "in") {
+            $select = "INSERT INTO attackWaves (waveData,attackLoot,attackState, playerID) VALUES (".$waveData.",0,'Unused','$playerName')";
+            $query = $db->prepare($select);
+            $query->execute();
+
+            $select = "UPDATE playerData SET points = $points WHERE playerID = '$playerName'";//päivitetään pelaajan pisteet
             echo $select;
-            echo $waveData;
-            $DBcon->query($select);
+            $query = $db->prepare($select);
+            $query->execute();
         }
 	}
-	function shoppingEvent($playerName,$DBcon){
+	function shoppingEvent($playerName,$db){
+        $echoobject = "";
 		$loginFollowID = $_POST['loginFollowID'];//tätä voidaan käyttää myös shipIDnä sillä sama luku
-        $shipData = $_POST['shipData'];
+        $weapons = $_POST['weapons'];
+        $abilities = $_POST['abilities'];
         $playerMoney = $_POST['money'];
-		$select = "select fail2 from loginAttempts where loginFollowID = $loginFollowID";
-		$query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-		$row = $query->fetch_array(MYSQLI_BOTH);
-		if($row['fail2'] == "in") {
-            $select = "update shipStates set ";
-            for($i = 0;$i < count($shipData);$i++){
-                if($i < count($shipData)/2){
-					if($i !=  count($shipData)/2-1) {
-						$select .= "wep".($i+1)." = $shipData[$i],";
-					} else {
-						$select .= "wep".($i+1)." = $shipData[$i],";
-					}
-				} else {
-					if($i !=  count($shipData)-1) {
-						$select .= "pwer".($i-9)." = $shipData[$i],";
-					} else {
-						$select .= "pwer".($i-9)." = $shipData[$i]";
-					}
-				}
+		$select = "SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID";
+		$query = $db->prepare($select);
+        $query->execute();
+		$row = $query->fetch(PDO::FETCH_ASSOC);
+		if($row['loggedIn'] == "in") {
+            for($i = 0; $i <= count($weapons)-1; $i++){
+                if($weapons[$i] != 'undefined' && $weapons[$i] != null){
+                    $select = "SELECT * FROM shipGuns WHERE shipID = $loginFollowID AND has = '$weapons[$i]';";
+                    $query = $db->prepare($select);
+                    $query->execute();
+                    $amount = $query->rowCount();
+                    if($amount == 0){
+                        $select = "INSERT INTO shipGuns (shipID, has) VALUES ($loginFollowID,'$weapons[$i]');";
+                        $query = $db->prepare($select);
+                        $query->execute();
+                    }
+                }
             }
-            $select .= " where shipStates.shipID = $loginFollowID";
-			echo $select;
-            $DBcon->query($select);
-            $select = "update playerData set money = $playerMoney where playerData.playerID = '$playerName'";
-            $DBcon->query($select);
-		}
-	}
-	function finishedGame($playerName,$DBcon){
+           for($i = 0; $i <= count($abilities)-1; $i++){
+                if($abilities[$i] != 'undefined' && $abilities[$i] != null){
+                    $select = "SELECT * FROM shipPowers WHERE shipID = $loginFollowID AND has = '$abilities[$i]';";
+                    $query = $db->prepare($select);
+                    $query->execute();
+                    $amount = $query->rowCount();
+                    $echoobject .= $abilities[$i];
+                    if($amount == 0){
+                        $select = "INSERT INTO shipPowers (shipID, has) VALUES ($loginFollowID,'$abilities[$i]');";
+                        $query = $db->prepare($select);
+                        $query->execute();
+                    }
+                }
+            }
+            echo $echoobject;
+            $select = "UPDATE playerData set money = $playerMoney WHERE playerData.playerID = '$playerName'";
+            $query = $db->prepare($select);
+            $query->execute();
+        }
+    }
+	
+	function finishedGame($playerName,$db){
 		$attackID = $_POST['attackID'];
 		$attackLoot = $_POST['attackLoot'];
 		$points = (integer)$_POST['points'];
 		$scoreID = $_POST['scoreID'];
 		$scoreToUpdate = $_POST['scoreToUpdate'];
-		//$DBcon = "";
         //haetaan aallon omistajan rahat päivitystä varten
-        $select = "SELECT playerData.playerID, playerData.money from playersAttacks
+        $select = "SELECT playerData.playerID, playerData.money FROM playersAttacks
         inner join playerData
         on playerData.playerID = playersAttacks.playerID
-        where playersAttacks.attackID = $attackID";
-        $query = $DBcon->query($select);//tulokset ovat $query muuttujassa
-        $row = $query->fetch_array(MYSQLI_BOTH);
+        WHERE playersAttacks.attackID = $attackID";
+        $query = $db->prepare($select);
+        $query->execute();
+        $row = $query->fetch(PDO::FETCH_ASSOC);
         $attackOwnerMoney = $row['money'];
         $attackOwnerMoney += $attackLoot;
         $attackOwner = $row['playerID'];
 		echo $attackOwner;
-        //echo "".$attackID." ".$attackLoot." ".$points." ".$scoreID." ".$scoreToUpdate."+ ";
 		//tässä päivitetään aallon tiedot
+        
+        // POISTETAAN vvvvvv
         $wasTester = false;
-        for($i = 0;$i<15;$i++){//kannassa on 15 testikäyttäj, katsotaan ettei ollut heidän aaltonsa
+        for($i = 0;$i<15;$i++){//kannassa on 15 testikäyttäjää, katsotaan ettei ollut heidän aaltonsa
 			echo "testi".($i+1)."ja tulos: ".$attackOwner == "testi".($i+1);
             if($attackOwner == "testi".($i+1) || $attackOwner == "test".($i+1)){
                 $wasTester = true;
             }
         }
+        // POISTETAAN ^^^^^^
+        
         if(!$wasTester) {
-            $select = "update attackWaves set attackState = 'Destroyed', attackLoot = $attackLoot where attackID = $attackID";
+            $select = "UPDATE attackWaves SET attackState = 'Destroyed', attackLoot = $attackLoot WHERE attackID = $attackID";
             $DBcon->query($select);
         }
 		//päivitetään käytetyn aallon omistajan tiedot
-        $select = "update playerData set money = $attackOwnerMoney where playerID = '$attackOwner'";
+        $select = "UPDATE playerData SET money = $attackOwnerMoney WHERE playerID = '$attackOwner'";
         echo $select;
-		$DBcon->query($select);
+		$db->prepare($select);
+        $db->execute();
 		//tässä taas pelaajan tiedot
 		$select = "update playerData set points = $points where playerID = '".$playerName."'";//päivitetään pelaajan pisteet
         echo $select;
-		$DBcon->query($select);
+		$db->prepare($select);
+        $db->execute();
 		if($scoreToUpdate != -1){
-			$select = "update highScores set
+			$select = "UPDATE highScores SET
 											score1 = $scoreToUpdate[9],
 											score2 = $scoreToUpdate[8],
 											score3 = $scoreToUpdate[7],
@@ -129,34 +145,34 @@
 											score8 = $scoreToUpdate[2],
 											score9 = $scoreToUpdate[1],
 											score10 = $scoreToUpdate[0]
-						where scoreID = $scoreID";
-						$DBcon->query($select);
+						WHERE scoreID = $scoreID";
+						$db->prepare($select);
+                        $db->execute();
 		}
 		
 	}
-	function logOff($returnObject,$DBcon){
+	function logOff($returnObject,$db){
 		$loginFollowID = intval($_POST['loginFollowID']);
-		$select = "update loginAttempts set fail2 = 'out' where loginFollowID = $loginFollowID";
-		$DBcon->query($select);
+		$select = "UPDATE loginAttempts SET loggedIn = 'out' WHERE loginFollowID = $loginFollowID";
+		$db->prepare($select);
+        $db->execute();
 	}
 
 	if($usage == 1){
 		updateAccountInfo();
 	} 
 	else if($usage == 2){
-		newWave($playerName,$DBcon);
+		newWave($playerName,$db);
 	} 
 	else if($usage == 3){
-		shoppingEvent($playerName,$DBcon);
+		shoppingEvent($playerName,$db);
 	} 
 	else if($usage == 4){
-		finishedGame($playerName,$DBcon);
+		finishedGame($playerName,$db);
 	}
 	else if($usage == 5){
-		logOff($returnObject,$DBcon);
+		logOff($returnObject,$db);
 	}
 	//suljetaan yhteys
-	//$query->close();
-	$DBcon->close();
-	//echo $returnObject;
+    $db = null;
 ?>

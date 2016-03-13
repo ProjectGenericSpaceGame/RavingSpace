@@ -55,7 +55,7 @@ $DBcon = $DBcon->returnCon();
         $select = "insert into shipGuns(shipID,has) values($newID,'basic')";
         $query = $DBcon->query($select);
         //basic songs
-        for($daa = 1;$daa < 4;$daa++){
+        for($daa = 1;$daa <= 4;$daa++){
             $addSong = "
             insert into hasSongs(playerID,songID)
             values('$playerName', '$daa')

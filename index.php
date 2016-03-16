@@ -1,6 +1,6 @@
 <?php
 	session_start();
-    if($_SESSION['log'] != 1) {
+    if(!(isset($_SESSION['log'])) || $_SESSION['log'] != 1) {
         $_SESSION['log'] = 0;
     } else if($_SESSION['log'] == 1){
         echo "<div class='hidden' id='redirect'>redirect</div>";
@@ -85,7 +85,7 @@
         
     </div>
     <div class="infoDialog">
-        <p class="infoText">You can only reset your password if you add your email. </br> Fields marked with * are mandatory</p>
+        <p class="infoText">You can only reset your password if you add your email. <br> Fields marked with * are mandatory</p>
     </div>
 </main>
 </body>

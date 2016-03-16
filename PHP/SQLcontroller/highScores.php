@@ -10,8 +10,7 @@
     $db = $db->returnCon();
 	//alustetaan tiedot
 	$returnObject = "";
-	$select =
-	"SELECT playerID,score, highScores.date FROM highScores";
+	$select = "SELECT playerID,score, highScores.date FROM highScores";
 
 	$query = $db->prepare($select);//tulokset ovat $query muuttujassa
     $query->execute();
@@ -26,21 +25,7 @@
             } else {
                 $date =  $row['playerID'];
             }
-            //$tempStruckArr = str_split($tempString,6);
             $returnObject .= '["' . $tempString . '",' . $row['score'] . ",".$date.'],';
-            /*$iter = 1;
-			while($iter < count($row)/2){
-                if($iter == $len) {
-                    $returnObject .= '["' . $tempString . '",' . $row[$iter] . ']';
-                } else {
-<<<<<<< HEAD
-                    $returnObject .= '["' . $tempString . '",' . $row['score'].'],';
-=======
-                    $returnObject .= '["' . $tempString .'",'.$row['score'].'],';
->>>>>>> origin/master
-                }
-                $iter++;
-            }*/
 		}
 	$returnObject = substr($returnObject,0,-1).']}';
     $db = null;

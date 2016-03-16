@@ -6,6 +6,7 @@
 	}
 	$returnObject = "";
     $playerName = $_POST['playerName'];
+    //$playerName = 'testi1';
     /** @var PDO $db */
     $db = new DBcon();
     $db = $db->returnCon();
@@ -42,7 +43,7 @@
             if($i+1 == $amount){
                $returnObject .= '"'.$rowPower['has'].'"'; 
             }else if ($i <= $amount){
-               $returnObject .= $rowPower['has'].",";      
+               $returnObject .= '"'.$rowPower['has'].'"'.",";      
             }
 		    $i++;    
         }

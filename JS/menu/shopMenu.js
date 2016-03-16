@@ -75,7 +75,8 @@ shopMenu.prototype = {
         this.basicLabel = this.game.add.text(30, 70, 'Basic Gun', styleB);
         this.basicpriceLabel = this.game.add.text(60, 110, 'Free', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect', this.wepSelected, this, 1, 0, 2);
-        this.button.name = 'weapon'+0;
+        //this.button.name = 'weapon'+0;
+        this.button.name = 'basic'+0;
         this.button.alpha = 0.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -95,7 +96,8 @@ shopMenu.prototype = {
         this.laserLabel = this.game.add.text(50, 70, 'Laser', styleB);
         this.laserpriceLabel = this.game.add.text(60, 110, '600', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
-        this.button.name = 'weapon'+1;
+        //this.button.name = 'weapon'+1;
+        this.button.name="laser"+1;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -115,7 +117,8 @@ shopMenu.prototype = {
         this.shotgunLabel = this.game.add.text(40, 70, 'Shotgun', styleB);
         this.shotgunpriceLabel = this.game.add.text(65, 110, '200', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
-        this.button.name = 'weapon'+2;
+        //this.button.name = 'weapon'+2;
+        this.button.name = "shotgun"+2;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -135,7 +138,8 @@ shopMenu.prototype = {
         this.minesLabel = this.game.add.text(50, 70, 'Mines', styleB);
         this.minespriceLabel = this.game.add.text(56, 110, '1000', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.wepSelected, this, 1, 0, 2);
-        this.button.name = 'weapon'+3;
+        //this.button.name = 'weapon'+3;
+        this.button.name = "mines"+3;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -165,7 +169,8 @@ shopMenu.prototype = {
         this.speedLabel = this.game.add.text(55, 70, 'Dash', styleB);
         this.speedpriceLabel = this.game.add.text(60, 110, '250', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
-        this.button.name = 'ability'+0;
+        //this.button.name = 'ability'+0;
+        this.button.name = "SuperSpeed"+0;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -185,7 +190,8 @@ shopMenu.prototype = {
         this.empLabel = this.game.add.text(62, 70, 'EMP', styleB);
         this.emppriceLabel = this.game.add.text(65, 110, '450', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
-        this.button.name = 'ability'+1;
+        //this.button.name = 'ability'+1;
+        this.button.name = "EMP"+1;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -205,7 +211,8 @@ shopMenu.prototype = {
         this.shieldLabel = this.game.add.text(50, 70, 'Shield', styleB);
         this.shieldpriceLabel = this.game.add.text(65, 110, '700', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
-        this.button.name = 'ability'+2;
+        //this.button.name = 'ability'+2;
+        this.button.name = "Shield"+2;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -225,7 +232,8 @@ shopMenu.prototype = {
         this.sfLabel = this.game.add.text(65, 70, 'SF', styleB);
         this.sfpriceLabel = this.game.add.text(60, 110, '900', styleB);
         this.button = this.game.add.button(0, 0, 'shopselect',this.abSelected, this, 1, 0, 2);
-        this.button.name = 'ability'+3;
+        //this.button.name = 'ability'+3;
+        this.button.name = "FireRateBoost"+3;
         this.button.alpha = 1.0;
         this.button.setFrames(1,0,2);
         this.button.scale.setTo(0.6, 0.58);
@@ -252,7 +260,7 @@ shopMenu.prototype = {
         },
         // ostettujen aseiden tarkastus
         boughtCheck: function(){
-        for (i = 0; i < this.weaponsGroup.length; i++){
+        for (var i = 0; i < this.weaponsGroup.length; i++){
             for(var i = 0; i < this.availableWeapons.length;i++){
                 if (this.availableWeapons[i] == this.weaponsGroup.getChildAt(i).name){
                     //console.log("Aseita ostettu: "+i);
@@ -266,10 +274,8 @@ shopMenu.prototype = {
                 }
             }
             // tarkistetaan onko pelaaja ostanut aseen
-
         }
-
-        for (j = 0; j < this.abilitiesGroup.length; j++){
+        for (var j = 0; j < this.abilitiesGroup.length; j++){
             // tarkistetaan onko pelaaja ostanut abilityn
             for(i = 0;i < this.availableAbilities.length;i++){
                 if (this.availableAbilities[i] == this.abilitiesGroup.getChildAt(j).name){
@@ -287,16 +293,20 @@ shopMenu.prototype = {
         },
         // kun ase valittu, selvitetään sen index arvo ja sijoitetaan se windex muuttujaan
         wepSelected: function(button){
-            this.aindex = null;
+            this.windex = null;
             this.wep = button;
-            var p = this.wep.name.replace( /^\D+/g, '');
-            this.windex = parseInt(p);
+            var p = this.wep.name.replace(/[^0-9\.]+/g, "");
+            this.windex = this.wep.name;
+            //var p = this.wep.name.replace( /^\D+/g, '');
+            //this.windex = parseInt(p);
+            console.log('P on: '+p);
+            console.log('valittu: '+this.windex);
             // vaihdetaan painikkeiden framet jos ei ostettu, jotta uusi valinta erottuu muista
-            for (i = 0; i <= 3; i++){
+            for (var i = 0; i <= 3; i++){
                 if (this.weaponsGroup.getChildAt(i).getChildAt(3).alpha == 1.0){
                 this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(1,0,2);
                 }
-            } for (j = 0; j <= 3; j++){
+            } for (var j = 0; j <= 3; j++){
                 if (this.abilitiesGroup.getChildAt(j).getChildAt(3).alpha == 1.0){
                 this.abilitiesGroup.getChildAt(j).getChildAt(3).setFrames(1,0,2);
                 }
@@ -310,10 +320,12 @@ shopMenu.prototype = {
         },
         // kun tehoste valittu, selvitetään sen index arvo ja sijoitetaan se aindex muuttujaan
         abSelected: function(button) {
-            this.windex = null;
+            this.aindex = null;
             this.ab = button;
-            var p = this.ab.name.replace( /^\D+/g, '');
-            this.aindex = parseInt(p);
+            this.aindex = this.ab.name;
+            var p = this.ab.name.replace(/[^0-9\.]+/g, "");
+            //var p = this.ab.name.replace( /^\D+/g, '');
+            //this.aindex = parseInt(p);
             // vaihdetaan painikkeiden framet jos ei ostettu, jotta uusi valinta erottuu muista
             for (i = 0; i <= 3; i++){
                 if (this.abilitiesGroup.getChildAt(i).getChildAt(3).alpha == 1.0){
@@ -334,75 +346,79 @@ shopMenu.prototype = {
         
         // osto-painikkeen toiminto
         purchase: function() {
-             var i = this.windex;
-             var j = this.aindex;
-                if (i == 2) {
+            if(this.aindex == null || this.aindex == undefined){
+                var j = null;
+            }else{
+                var j = this.aindex.replace( /^\D+/g, '');
+                var ab = (this.aindex).slice(0,this.aindex.length - 1);
+            }
+            if(this.windex == null || this.windex == undefined){
+                var i = null;
+            }else{
+                var i = this.windex.replace( /^\D+/g, '');
+                var wep = (this.windex).slice(0,this.windex.length - 1);
+            }
+            if (i == 2) {
                  if (this.playerData.playerData.money >= 200){
                     this.playerData.playerData.money -= 200;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    this.playerData.shipData[i] = 1;
-                    console.log("Weapon "+i+" bought.");
+                    this.availableWeapons[i] = wep;
+                    console.log("Weapon "+wep+" bought.");
                     this.windex = null;
                     }
              } else if (i == 1) {
                  if (this.playerData.playerData.money >= 600) {
-                    console.log("Weapon "+i+" bought.");
+                    console.log("Weapon "+wep+" bought.");
                     this.playerData.playerData.money -= 600;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    this.playerData.shipData[i] = 1;
+                    this.availableWeapons[i] = wep;
                     this.windex = null;
                  }
              } else if (i == 3){
                  if (this.playerData.playerData.money >= 1000) {
-                    console.log("Weapon "+i+" bought.");
+                    console.log("Weapon "+wep+" bought.");
                     this.playerData.playerData.money -= 1000;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    this.playerData.shipData[i] = 1;
+                    this.availableWeapons[i] = wep;
                     this.windex = null;
                  }
              } else if (j == 0) {
                  if (this.playerData.playerData.money >= 250) {
                     this.playerData.playerData.money -= 250;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    console.log("Ability "+j+" bought.");
-                    this.playerData.shipData[j+10] = 1;
+                    console.log("Ability "+ab+" bought.");
+                    this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              } else if (j == 1) {
                  if (this.playerData.playerData.money >= 450) {
                     this.playerData.playerData.money -= 450;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    console.log("Ability "+j+" bought.");
-                    this.playerData.shipData[j+10] = 1;
+                    console.log("Ability "+ab+" bought.");
+                    this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              } else if (j == 2) {
                  if (this.playerData.playerData.money >= 700) {
                     this.playerData.playerData.money -= 700;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    console.log("Ability "+j+" bought.");
-                    this.playerData.shipData[j+10] = 1;
+                    console.log("Ability "+ab+" bought.");
+                    this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              } else if (j == 3) {
                  if (this.playerData.playerData.money >= 900) {
                     this.playerData.playerData.money -= 900;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
-                    console.log("Ability "+j+" bought.");
-                    this.playerData.shipData[j+10] = 1;
+                    console.log("Ability "+ab+" bought.");
+                    this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              }
-            // päivitetään ostetut aseet/kyvyt jotta grafiikka vaihtuu heti ostettaessa
-            console.log(this.windex+" & "+this.aindex);
-            for(var i = 0; i <= SET_GUNS-1; i++){
-                this.availableWeapons[i] = this.playerData.shipData[i];
-            }
-            for(var i = 10; i <= 10+SET_ABILITIES-1; i++){
-            this.availableAbilities[i-10] = this.playerData.shipData[i];
-            }
+            // tarkistetaan mitä pelaaja on ostanut
             this.boughtCheck();
-            // lähetetään oston tiedot php-tiedostoon
+            
+            // päivitetään pelaajan tiedot tietokantaan
             var thingBought = $.ajax({
                         method:"POST",
                         url:"PHP/SQLcontroller/updateData.php",
@@ -412,11 +428,13 @@ shopMenu.prototype = {
                             loginFollowID: this.playerData.loginFollowID,
                             playerName:this.playerData.playerData.playerName,
                             money:this.playerData.playerData.money,
-                            shipData:this.playerData.shipData
+                            weapons:this.availableWeapons,
+                            abilities:this.availableAbilities
                         }
                     });
             thingBought.done(function(returnValue){
-                        alert("Purchase completed successfully");
+                     //   alert("Purchase completed successfully");
+                console.log(returnValue);
                     });
             thingBought.fail(function(returndata){
                         alert("Couldn't finish the purchase, database unreachable");

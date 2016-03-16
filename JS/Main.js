@@ -36,7 +36,7 @@ rnd = game.rnd;
 game.state.add('mainMenu', mainMenu);
 game.state.add('menuLoad', menuLoad);
 game.state.add('setMenuLoader', setMenuLoader);
-//game.state.add("customMenu", customMenu);
+game.state.add("accountSettings", accountSettings);
 game.state.add('settings', settingsSubMenu);
 game.state.add('soundMenu', soundMenu);
 game.state.add('scores', scoresSubMenu);

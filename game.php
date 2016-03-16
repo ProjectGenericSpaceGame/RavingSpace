@@ -39,6 +39,7 @@
     <script src="JS/menu/shopMenu.js"></script>
     <script src="JS/menu/waveMenu.js"></script>
     <script src="JS/menu/soundMenu.js"></script>
+    <script src="JS/menu/accountSettings.js"></script>
 
 
     <script src="JS/libs/textInputCreator.js"></script>

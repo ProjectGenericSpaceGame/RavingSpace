@@ -260,3 +260,10 @@ canvas{
     z-index: 0;
 }
 
+
+.accountSettingsINPUT {
+    width:25vw;
+    height:4vh;
+    font-size:3vh;
+    font-family:"Ubuntu";
+}

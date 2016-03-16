@@ -170,7 +170,7 @@ loadoutMenu.prototype = {
             this.sability.alpha = 0.6;
             this.thingsGroup.add(this.sability);
             
-            for (i = 0; i <= this.playerData.shipPowers.length; i++){
+            for (i = 0; i < this.playerData.shipPowers.length; i++){
                 // tarkistetaan saatavilla olevista tehosteista onko pelaaja avannut tehosteita.
                 //if (this.availableAbilities[i] == 1){
                     // mikäli aseita on 3 vierekkäin niin 4. ase laitetaan toiselle riville. purkkakoodia.
@@ -188,7 +188,7 @@ loadoutMenu.prototype = {
                     }
                     // jos tehosteet ovat käytössä, tulostetaan niiden kuvakkeet
                     if (this.ASA[i] == 0){
-                    this.button = this.game.add.button(this.x, this.y, 'ability_' + this.playerData.shipGuns[i], this.abpressed, this);
+                    this.button = this.game.add.button(this.x, this.y, 'ability_' + this.playerData.shipPowers[i], this.abpressed, this);
                     this.button.name = 'ability' + i;
                     this.thingsGroup.add(this.button);
                     this.x += 92;

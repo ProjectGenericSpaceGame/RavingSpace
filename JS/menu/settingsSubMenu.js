@@ -61,7 +61,13 @@ settingsSubMenu.prototype = {
         );
     },
     accountStart:function(){
-
+        this.game.state.start('accountSettings',false,false,
+            this.playerData,
+            this.globalScores,
+            this.playerWaves,
+            this.buttonGroup,
+            this.surroundings
+        );
     },
     back:function(){
         this.game.state.start('mainMenu',false,false,

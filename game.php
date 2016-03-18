@@ -43,6 +43,9 @@
 
 
     <script src="JS/libs/textInputCreator.js"></script>
+    <script src="JS/login/handleLogin.js"></script>
+    <script src="JS/libs/jssha/src/sha512.js"></script>
+    <script src="JS/libs/chance.js"></script>
     <!-- <script src="JS/timer.js"></script> -->
 </head>
 <body>

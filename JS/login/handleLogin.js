@@ -5,6 +5,7 @@ var checkRegisterInfo;
 var caps = 0;
 var enter = 0;
 
+
 $(document).ready(function(){
 
     // Poistetaan latausruutu

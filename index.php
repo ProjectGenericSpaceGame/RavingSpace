@@ -94,7 +94,7 @@
         $("#redirect").remove();
         if(window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/" || window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/index.php")
         {window.location.pathname = "~H3492/RavingSpace/game.php"}
-        else {window.location.pathname = "/game.php"}
+        else {window.location.pathname = "/RavingSpace/game.php"}
     }
 </script>
 <script src="JS/login/handleLogin.js"></script>

@@ -90,16 +90,17 @@
     }
 	
 	function finishedGame($playerName,$db){
+        date_default_timezone_set('Europe/Helsinki');
+        $date = date('m-d-Y h:i:s a');
+        $score = $_POST['post'];
 		$attackID = $_POST['attackID'];
 		$attackLoot = $_POST['attackLoot'];
 		$points = (integer)$_POST['points'];
 		$scoreID = $_POST['scoreID'];
 		$scoreToUpdate = $_POST['scoreToUpdate'];
         //haetaan aallon omistajan rahat päivitystä varten
-        $select = "SELECT playerData.playerID, playerData.money FROM playersAttacks
-        inner join playerData
-        on playerData.playerID = playersAttacks.playerID
-        WHERE playersAttacks.attackID = $attackID";
+        $select = "SELECT money FROM playersAttacks playerData
+        WHERE playerID = '$playerName'";
         $query = $db->prepare($select);
         $query->execute();
         $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -120,42 +121,32 @@
         // POISTETAAN ^^^^^^
         
         if(!$wasTester) {
-            $select = "UPDATE attackWaves SET attackState = 'Destroyed', attackLoot = $attackLoot WHERE attackID = $attackID";
-            $DBcon->query($select);
+            $select = "UPDATE attackWaves SET attackState = 'Destroyed', attackLoot = $attackLoot WHERE playerID = '$playerName'";
+            $query = $db->prepare($select);
+            $query->execute();
+            
         }
 		//päivitetään käytetyn aallon omistajan tiedot
         $select = "UPDATE playerData SET money = $attackOwnerMoney WHERE playerID = '$attackOwner'";
         echo $select;
-		$db->prepare($select);
-        $db->execute();
+		$query = $db->prepare($select);
+        $query->execute();
 		//tässä taas pelaajan tiedot
-		$select = "update playerData set points = $points where playerID = '".$playerName."'";//päivitetään pelaajan pisteet
+		$select = "UPDATE playerData SET points = $points where playerID = '$playerName'";//päivitetään pelaajan pisteet
         echo $select;
-		$db->prepare($select);
-        $db->execute();
-		if($scoreToUpdate != -1){
-			$select = "UPDATE highScores SET
-											score1 = $scoreToUpdate[9],
-											score2 = $scoreToUpdate[8],
-											score3 = $scoreToUpdate[7],
-											score4 = $scoreToUpdate[6],
-											score5 = $scoreToUpdate[5],
-											score6 = $scoreToUpdate[4],
-											score7 = $scoreToUpdate[3],
-											score8 = $scoreToUpdate[2],
-											score9 = $scoreToUpdate[1],
-											score10 = $scoreToUpdate[0]
-						WHERE scoreID = $scoreID";
-						$db->prepare($select);
-                        $db->execute();
+		$query = $db->prepare($select);
+        $query->execute();
+		/*if($scoreToUpdate != -1){*/
+			$select = "INSERT INTO highScores (scoreID, score, date, playerID) VALUES ($scoreID, $score, $date, '$playerID');";
+						$query = $db->prepare($select);
+                        $query->execute();
 		}
-		
 	}
 	function logOff($returnObject,$db){
 		$loginFollowID = intval($_POST['loginFollowID']);
 		$select = "UPDATE loginAttempts SET loggedIn = 'out' WHERE loginFollowID = $loginFollowID";
-		$db->prepare($select);
-        $db->execute();
+		$query = $db->prepare($select);
+        $query->execute();
 	}
 
 	if($usage == 1){

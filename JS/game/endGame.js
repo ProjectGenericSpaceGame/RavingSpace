@@ -101,7 +101,8 @@ endGame.prototype = {
                     attackLoot:this.attackLoot,
                     attackID:this.attackID,
                     scoreID:this.playerData.scoreID,
-                    scoreToUpdate:scoreToUpdate,
+                    //scoreToUpdate:scoreToUpdate,
+                    score:this.points,
                     points:this.playerData.playerData.points+points,
                     usage:4
 				}

@@ -43,6 +43,7 @@ game.state.add('scores', scoresSubMenu);
 game.state.add('custom', customSubMenu);
 game.state.add('shopMenu', shopMenu);
 game.state.add('waveMenu', waveMenu);
+game.state.add('workShop', workShop);
 game.state.add('gamePreload', preload);
 game.state.add('gameLoad', gameLoad);
 game.state.add('mainGame', mainGame);
@@ -544,5 +545,8 @@ function checkRange(x,y,x2,y2,usage,off){
         usage = null;
         return false;
     }
+}
+function centerButtonTest(btn,txt){
+    return [btn.width/2-txt.width/2,btn.height/2-txt.height/2];
 }
 

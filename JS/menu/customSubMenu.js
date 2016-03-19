@@ -31,6 +31,11 @@ customSubMenu.prototype = {
         var text2 = this.game.add.text(150,20,"Shop", textStyle);
         this.shopButton.addChild(text2);
 
+        //tämä painike avaa workshopin
+        this.workshopButton = this.game.add.button(200, 450, 'buttonSprite', this.workshopStart, this, 0, 1, 2);
+        var text3 = this.game.add.text(150,20,"Workshop", textStyle);
+        this.workshopButton.addChild(text3);
+
         //alustetaan takaisin nappula
         var style = { font:'20px cyber', fill:'black'};
         this.backButton = this.game.add.button(200, 120, 'menuHeader', this.back, this, 1, 0, 2);
@@ -41,6 +46,7 @@ customSubMenu.prototype = {
 
         this.buttonGroup.add(this.wavesButton);
         this.buttonGroup.add(this.shopButton);
+        this.buttonGroup.add(this.workshopButton);
         this.buttonGroup.add(this.backButton);
     },
     back:function(){
@@ -64,6 +70,16 @@ customSubMenu.prototype = {
     },
     waveCreatorStart:function(){
         this.game.state.start('waveMenu' ,false, false,
+            this.playerData,
+            this.globalScores,
+            this.playerWaves,
+            this.buttonGroup,
+            this.surroundings
+
+        );
+    },
+    workshopStart:function(){
+        this.game.state.start('workShop' ,false, false,
             this.playerData,
             this.globalScores,
             this.playerWaves,

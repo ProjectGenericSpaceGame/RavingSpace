@@ -172,6 +172,11 @@ menuLoad.prototype = {
                     self.logout();
                 } else {
                     self.playerData = JSON.parse(returnValue);
+                    self.playerData.shipStats = {//devausta varten, tulee myöhemmin kannasta TODO: siirrä hakemaan kannasta
+                        gunDmgBoost:1,
+                        gunSpeedBoost:1.75,
+                        gunReloadBoost:1.5
+                    };
                     console.log("Pelaajan data"+self.playerData.shipPowers[0]);
                 }
             });

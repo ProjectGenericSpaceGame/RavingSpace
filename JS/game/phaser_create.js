@@ -43,7 +43,7 @@ gameLoad.prototype = {
         this.game.load.image('boom', 'assets/particles/explosion3.png');
         this.game.load.image('boom2', 'assets/particles/explosion2.png');
         //reloadkursori
-        this.game.load.image('reloadTray', 'assets/sprites/reload3.png');
+        this.game.load.image('reloadTray', 'assets/sprites/reloadWhite.png');
         //HP elementit
         this.game.load.image('healthbar', 'assets/GUI/healthbar.png');
         this.game.load.image('health', 'assets/GUI/health.png');
@@ -85,6 +85,7 @@ gameLoad.prototype = {
         this.game.load.image('menuButtonBG', 'assets/placeholders/menuBG_dark.png');
         //tausta lopetusnäytölle
         this.game.load.spritesheet('buttonSprite', 'assets/placeholders/menuBG_dark.png', 400, 70);
+        this.game.load.spritesheet('backToMenuButton', 'assets/placeholders/menuButtonSpriteEmpty2.png', 400, 70);
 
 
     },
@@ -802,6 +803,7 @@ gameLoad.prototype = {
             tray.scale.setTo(0.7, 0.7);
         });
         var pointsText = this.game.add.text(20, 20, "Points: ", {fill: "white", font: "20px cyber"});
+            
         pointsText.fixedToCamera = true;
 
         //kasataan this.HUD

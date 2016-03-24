@@ -8,8 +8,6 @@
     // 4 finishedGame
     // 5 loggOff
     $playerName = $_POST['playerName'];
-    //$playerName = "testi1";
-    
 
     if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
 		require_once('../db-init.php');
@@ -24,11 +22,8 @@
 	}
 	function newWave($playerName,$db){
         $loginFollowID = $_POST['loginFollowID'];
-        //$loginFollowID = 1;
         $waveData = $_POST['wave'];
-        //$waveData = "101104151207231009";
         $points = $_POST['points'];
-        //$points = "40000";
         $select = "SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID";
         $query = $db->prepare($select);
         $query->execute();
@@ -92,21 +87,26 @@
 	function finishedGame($playerName,$db){
         date_default_timezone_set('Europe/Helsinki');
         $date = date('m-d-Y h:i:s a');
-        $score = $_POST['post'];
+        $score = $_POST['score'];
 		$attackID = $_POST['attackID'];
 		$attackLoot = $_POST['attackLoot'];
 		$points = (integer)$_POST['points'];
-		$scoreID = $_POST['scoreID'];
-		$scoreToUpdate = $_POST['scoreToUpdate'];
+		//$scoreID = $_POST['scoreID'];
+		//$scoreToUpdate = $_POST['scoreToUpdate'];
         //haetaan aallon omistajan rahat päivitystä varten
-        $select = "SELECT money FROM playersAttacks playerData
-        WHERE playerID = '$playerName'";
+        $select = "SELECT playerID FROM attackWaves WHERE attackID = '$attackID'";
+        $query = $db->prepare($select);
+        $query->execute();
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        $attackOwner = $row['playerID'];
+        
+        $select = "SELECT money FROM playerData
+        WHERE playerID = '$attackOwner'";
         $query = $db->prepare($select);
         $query->execute();
         $row = $query->fetch(PDO::FETCH_ASSOC);
         $attackOwnerMoney = $row['money'];
         $attackOwnerMoney += $attackLoot;
-        $attackOwner = $row['playerID'];
 		echo $attackOwner;
 		//tässä päivitetään aallon tiedot
         
@@ -121,13 +121,13 @@
         // POISTETAAN ^^^^^^
         
         if(!$wasTester) {
-            $select = "UPDATE attackWaves SET attackState = 'Destroyed', attackLoot = $attackLoot WHERE playerID = '$playerName'";
+            $select = "UPDATE attackWaves SET attackState = 'Destroyed', attackLoot = $attackLoot WHERE playerID = '$attackOwner'";
             $query = $db->prepare($select);
             $query->execute();
             
         }
 		//päivitetään käytetyn aallon omistajan tiedot
-        $select = "UPDATE playerData SET money = $attackOwnerMoney WHERE playerID = '$attackOwner'";
+        $select = "UPDATE playerData SET money = $attackOwnerMoney WHERE playerID = '$playerName'";
         echo $select;
 		$query = $db->prepare($select);
         $query->execute();
@@ -137,11 +137,10 @@
 		$query = $db->prepare($select);
         $query->execute();
 		/*if($scoreToUpdate != -1){*/
-			$select = "INSERT INTO highScores (scoreID, score, date, playerID) VALUES ($scoreID, $score, $date, '$playerID');";
-						$query = $db->prepare($select);
-                        $query->execute();
-		}
-	}
+        $select = "INSERT INTO highScores (score, date, playerID) VALUES ($score, '$date', '$playerName');";
+        $query = $db->prepare($select);
+        $query->execute();
+    }
 	function logOff($returnObject,$db){
 		$loginFollowID = intval($_POST['loginFollowID']);
 		$select = "UPDATE loginAttempts SET loggedIn = 'out' WHERE loginFollowID = $loginFollowID";

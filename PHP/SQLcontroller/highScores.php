@@ -23,9 +23,9 @@
             if($row['date'] == ""){
                 $date = '"N/A"';
             } else {
-                $date =  $row['playerID'];
+                $date = '"'.$row['date'].'"';
             }
-            $returnObject .= '["' . $tempString . '",' . $row['score'] . ",".$date.'],';
+            $returnObject .= '["' . $tempString . '",' . $row['score'] .",".$date.'],';
 		}
 	$returnObject = substr($returnObject,0,-1).']}';
     $db = null;

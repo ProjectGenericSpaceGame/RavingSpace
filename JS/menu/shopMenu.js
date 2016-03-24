@@ -433,7 +433,7 @@ shopMenu.prototype = {
                         }
                     });
             thingBought.done(function(returnValue){
-                     //   alert("Purchase completed successfully");
+                     alert("Purchase completed successfully");
                 console.log(returnValue);
                     });
             thingBought.fail(function(returndata){

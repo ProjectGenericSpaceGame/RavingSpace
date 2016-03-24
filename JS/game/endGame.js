@@ -41,7 +41,7 @@ endGame.prototype = {
         timeText.scale.setTo(0.5,1/8);
         timeText.x = (window.width*0.5/2)-(timeText.width/2);
         timeText.y *= 1/8;// korjaa scale offsetin
-        var OK = this.game.add.button(0,450,'buttonSprite',this.backToMenu, this,1,2,0);
+        var OK = this.game.add.button(0,450,'backToMenuButton',this.backToMenu, this,1,2,0);
         OK.scale.setTo(0.4,1/8);
         OK.x = (window.width*0.5/2)-(OK.width/2);
         OK.y *= 1/8;// korjaa scale offsetin
@@ -91,6 +91,7 @@ endGame.prototype = {
             scoreToUpdate = tempArray.slice();
         }
         tempArray = null;
+        console.log('pisteet ovat '+points);
 		var updateData = $.ajax({
                 method:"POST",
                 async:false,
@@ -100,9 +101,9 @@ endGame.prototype = {
 					location:window.location.href,
                     attackLoot:this.attackLoot,
                     attackID:this.attackID,
-                    scoreID:this.playerData.scoreID,
+                    //playerID:this.playerData.plaID,
                     //scoreToUpdate:scoreToUpdate,
-                    score:this.points,
+                    score:points,
                     points:this.playerData.playerData.points+points,
                     usage:4
 				}

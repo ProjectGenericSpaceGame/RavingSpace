@@ -144,18 +144,33 @@ workShop.prototype = {
         },
         
     editWeaponSystems:function(){
-        var self = this;
-        /*$.getScript( "JS/menu/workShop_gunEditor.js", function(data, textStatus){
-            if(textStatus == "success"){*/
-                gunEditor(self);
-           /* }
+        if(this.centerWindow.length == 0){
+            var self = this;
+            /*$.getScript( "JS/menu/workShop_gunEditor.js", function(data, textStatus){
+             if(textStatus == "success"){*/
+            gunEditor(self);
+            /* }
 
-        });*/
+             });*/
+        }
+
     },
     update:function(){
+        if(this.centerWindow.length > 2){
+            console.log(this.centerWindow.getChildAt(2).getChildAt(0).visible);
+        }
 
     },
     powerSystemEditor:function(){
+        if(this.centerWindow.length == 0){
+            var self = this;
+            /*$.getScript( "JS/menu/workShop_powerEditor.js", function(data, textStatus){
+             if(textStatus == "success"){*/
+            powerSystemEditor(self);
+            /* }
+
+             });*/
+        }
 
     },
     waveBrowser:function(){

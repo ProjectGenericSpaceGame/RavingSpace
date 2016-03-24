@@ -184,7 +184,7 @@
     shipLines.addChild(reloadLine);
     shipLines.name = "shipLines";
     self.centerWindow.addChild(shipLines);
-    self.centerWindow.addChild(self.waveTotalCost);
+    /*self.centerWindow.addChild(self.waveTotalCost);*/
     self.centerWindow.addChild(checkOutLabel);
     self.centerWindow.addChild(points);
     /*wave1();*/

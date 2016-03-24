@@ -175,7 +175,10 @@ menuLoad.prototype = {
                     self.playerData.shipStats = {//devausta varten, tulee myöhemmin kannasta TODO: siirrä hakemaan kannasta
                         gunDmgBoost:1,
                         gunSpeedBoost:1.75,
-                        gunReloadBoost:1.5
+                        gunReloadBoost:1.5,
+                        powerReloadBonus:1.5,
+                        powerAOEBonus:1.25,
+                        powerEffectTimeBonus:1
                     };
                     console.log("Pelaajan data"+self.playerData.shipPowers[0]);
                 }

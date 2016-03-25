@@ -2,8 +2,8 @@ var scoresSubMenu = function(game){
 
 };
 scoresSubMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -274,7 +274,7 @@ scoresSubMenu.prototype = {
             var self = this;
             this.playerScores = [];
             this.waveList.forEach(function (row) {
-                if (row.getChildAt(2).text == self.playerData.playerData.playerName) {
+                if (row.getChildAt(2).text == self.playerRelatedData.playerData.playerName) {
                     this.playerScores.push(row);
                 }
             }, this);
@@ -314,7 +314,7 @@ scoresSubMenu.prototype = {
     back:function(){
         this.centerWindow.removeAll();
         this.game.state.start('mainMenu',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

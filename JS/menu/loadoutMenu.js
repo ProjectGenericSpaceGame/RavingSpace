@@ -5,8 +5,8 @@ var loadoutMenu = function(game){
 };
 loadoutMenu.prototype = {
     
-        init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-            this.playerData = playerData;
+        init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+            this.playerRelatedData = playerRelatedData;
             this.globalScores = globalScores;
             this.playerWaves = playerWaves;
             this.buttonGroup = buttonGroup;
@@ -26,12 +26,12 @@ loadoutMenu.prototype = {
         // lajitellaan pelaajan ostamat aseet
         this.availableWeapons = [];
         for(var i = 0; i <= SET_GUNS-1; i++){
-            this.availableWeapons[i] = this.playerData.shipGuns[i];
+            this.availableWeapons[i] = this.playerRelatedData.shipGuns[i];
         }
         // lajitellaan pelaajan ostamat tehosteet
         this.availableAbilities = [];
         for(var i = 0; i <= SET_ABILITIES-1; i++){
-            this.availableAbilities[i] = this.playerData.shipPowers[i];
+            this.availableAbilities[i] = this.playerRelatedData.shipPowers[i];
         }
         this.WSA = []; // weapons still available
         this.ASA = []; // abilities still available
@@ -117,9 +117,9 @@ loadoutMenu.prototype = {
             this.sweapon.alpha = 0.7;
             this.thingsGroup.add(this.sweapon);
             
-            for (i = 0; i < this.playerData.shipGuns.length; i++){
+            for (i = 0; i < this.playerRelatedData.shipGuns.length; i++){
                 // tarkistetaan onko pelaaja ostanut aseen
-                //if (this.playerData.shipGuns[i] == 1){
+                //if (this.playerRelatedData.shipGuns[i] == 1){
                     // rivitellään aseet
                     if(this.x > 905 + (92.5 * 2)){
                         this.y += 95;
@@ -136,7 +136,7 @@ loadoutMenu.prototype = {
                     // mikäli painetulla asepaikalla ei ole lasta tulostetaan aseita mikäli ne ovat vielä saatavilla    
                     }
                     if(this.WSA[i] == 0){
-                        this.button = this.game.add.button(this.x+7, this.y+7, 'weapon_' + this.playerData.shipGuns[i], this.weppressed, this);
+                        this.button = this.game.add.button(this.x+7, this.y+7, 'weapon_' + this.playerRelatedData.shipGuns[i], this.weppressed, this);
                         this.button.name = 'weapon' + i;
                         var scaleX = (this.buttonGroup.getChildAt(5).width-15)/this.button.width;
                         var scaleY = (this.buttonGroup.getChildAt(5).height-15)/this.button.height;
@@ -170,7 +170,7 @@ loadoutMenu.prototype = {
             this.sability.alpha = 0.6;
             this.thingsGroup.add(this.sability);
             
-            for (i = 0; i < this.playerData.shipPowers.length; i++){
+            for (i = 0; i < this.playerRelatedData.shipPowers.length; i++){
                 // tarkistetaan saatavilla olevista tehosteista onko pelaaja avannut tehosteita.
                 //if (this.availableAbilities[i] == 1){
                     // mikäli aseita on 3 vierekkäin niin 4. ase laitetaan toiselle riville. purkkakoodia.
@@ -188,7 +188,7 @@ loadoutMenu.prototype = {
                     }
                     // jos tehosteet ovat käytössä, tulostetaan niiden kuvakkeet
                     if (this.ASA[i] == 0){
-                    this.button = this.game.add.button(this.x, this.y, 'ability_' + this.playerData.shipPowers[i], this.abpressed, this);
+                    this.button = this.game.add.button(this.x, this.y, 'ability_' + this.playerRelatedData.shipPowers[i], this.abpressed, this);
                     this.button.name = 'ability' + i;
                     this.thingsGroup.add(this.button);
                     this.x += 92;
@@ -271,7 +271,7 @@ loadoutMenu.prototype = {
                  this.cache.destroy();
                 this.game.state.start('gamePreload',true,true,
                     this.selectedLoadout,
-					this.playerData,
+					this.playerRelatedData,
                     this.surroundings
                 );
              }
@@ -285,7 +285,7 @@ loadoutMenu.prototype = {
         this.thingsGroup.removeAll();
         // palataan takaisin päävalikkoon
         this.game.state.start('mainMenu',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

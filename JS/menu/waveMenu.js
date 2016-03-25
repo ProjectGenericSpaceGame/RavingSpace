@@ -5,8 +5,8 @@ var waveMenu = function(game){
 };
 
 waveMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -103,7 +103,7 @@ waveMenu.prototype = {
         this.wave3Btn.addChild(round3);
         style = { font:'25px cyber', fill:'white'};
         //pelaajan pisteet
-        var points = this.game.add.text(515,25,this.playerData.playerData.points,style);
+        var points = this.game.add.text(515,25,this.playerRelatedData.playerData.points,style);
 
         //checkoutin otsikko
         var checkOutLabel = this.game.add.text(0,80,"Complete Wave",style);
@@ -302,7 +302,7 @@ waveMenu.prototype = {
                 self.wave2Btn.setFrames(0, 1, 2);
                 self.wave3Btn.setFrames(0, 1, 2);
             } else {
-                if(self.playerData.playerData.points < parseInt(self.waveTotalCost.text.substring(12)) && self.tweenActive == false){
+                if(self.playerRelatedData.playerData.points < parseInt(self.waveTotalCost.text.substring(12)) && self.tweenActive == false){
                     //do some animation
                     var newstyle = { font:'35px calibri', fill:'red'};
                     points.setStyle(newstyle);
@@ -313,8 +313,8 @@ waveMenu.prototype = {
                         points.setStyle(newstyle);
                         self.tweenActive = false;
                     },this);
-                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0 && self.playerData.playerData.points >= parseInt(self.waveTotalCost.text.substring(12))){
-                    self.playerData.playerData.points -= parseInt(self.waveTotalCost.text.substring(12));
+                } else if(parseInt(self.waveTotalCost.text.substring(12)) > 0 && self.playerRelatedData.playerData.points >= parseInt(self.waveTotalCost.text.substring(12))){
+                    self.playerRelatedData.playerData.points -= parseInt(self.waveTotalCost.text.substring(12));
                     var newWave = formatWave(self.waveCreateData);
                     self.playerWaves.playerWaves.push(newWave);
                     var waveDataForDB = newWave.waveStruct.split("'");
@@ -326,9 +326,9 @@ waveMenu.prototype = {
                             wave:waveDataForDB,
                             usage:2,
                             location:window.location.href,
-                            loginFollowID: self.playerData.loginFollowID,
-                            playerName:self.playerData.playerData.playerName,
-                            points:self.playerData.playerData.points
+                            loginFollowID: self.playerRelatedData.loginFollowID,
+                            playerName:self.playerRelatedData.playerData.playerName,
+                            points:self.playerRelatedData.playerData.points
                         }
                     });
                     createWave.done(function(returnValue){
@@ -338,8 +338,8 @@ waveMenu.prototype = {
                         alert("Couldn't create new wave, database unreachable");
                     });
                     self.waveCreateData = [[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
-                    points.text = self.playerData.playerData.points;
-					self.surroundings.menuheader.getChildAt(3).text = "Points: "+self.playerData.playerData.points;
+                    points.text = self.playerRelatedData.playerData.points;
+					self.surroundings.menuheader.getChildAt(3).text = "Points: "+self.playerRelatedData.playerData.points;
                     wave1();
                 } else if(parseInt(self.waveTotalCost.text.substring(12)) == 0){
                     alert("Can not create empty wave");
@@ -475,7 +475,7 @@ waveMenu.prototype = {
     back: function(){
         this.centerWindow.removeAll();
         this.game.state.start('custom',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

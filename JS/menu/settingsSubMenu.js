@@ -5,8 +5,8 @@ var settingsSubMenu = function(game){
 
 };
 settingsSubMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -53,7 +53,7 @@ settingsSubMenu.prototype = {
     },
     soundStart:function(){
         this.game.state.start('soundMenu',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -62,7 +62,7 @@ settingsSubMenu.prototype = {
     },
     accountStart:function(){
         this.game.state.start('accountSettings',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -71,7 +71,7 @@ settingsSubMenu.prototype = {
     },
     back:function(){
         this.game.state.start('mainMenu',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

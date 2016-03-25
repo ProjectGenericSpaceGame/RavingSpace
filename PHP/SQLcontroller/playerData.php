@@ -1,11 +1,12 @@
 <?php
+    session_start();
     if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
 		require_once('../db-init.php');
 	} else {
 		require_once('../db-initDEV.php');
 	}
 	$returnObject = "";
-    $playerName = $_POST['playerName'];
+    $playerName = $_SESSION['playerName'];
     //$playerName = 'testi1';
     /** @var PDO $db */
     $db = new DBcon();

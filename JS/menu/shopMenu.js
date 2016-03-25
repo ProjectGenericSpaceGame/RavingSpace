@@ -5,8 +5,8 @@ var shopMenu = function(game){
 };
 
 shopMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -49,12 +49,12 @@ shopMenu.prototype = {
         // lajitellaan pelaajan ostamat aseet
         this.availableWeapons = [];
         for(var i = 0; i <= SET_GUNS-1; i++){
-            this.availableWeapons[i] = this.playerData.shipGuns[i];
+            this.availableWeapons[i] = this.playerRelatedData.shipGuns[i];
         }
         // lajitellaan pelaajan ostamat tehosteet
         this.availableAbilities = [];
         for(var i = 0; i <= SET_ABILITIES-1; i++){
-            this.availableAbilities[i] = this.playerData.shipPowers[i];
+            this.availableAbilities[i] = this.playerRelatedData.shipPowers[i];
         }
         // console.log("available wep: "+this.availableWeapons);
         // console.log("available ab: "+this.availableAbilities);
@@ -359,57 +359,57 @@ shopMenu.prototype = {
                 var wep = (this.windex).slice(0,this.windex.length - 1);
             }
             if (i == 2) {
-                 if (this.playerData.playerData.money >= 200){
-                    this.playerData.playerData.money -= 200;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 if (this.playerRelatedData.playerData.money >= 200){
+                    this.playerRelatedData.playerData.money -= 200;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     this.availableWeapons[i] = wep;
                     console.log("Weapon "+wep+" bought.");
                     this.windex = null;
                     }
              } else if (i == 1) {
-                 if (this.playerData.playerData.money >= 600) {
+                 if (this.playerRelatedData.playerData.money >= 600) {
                     console.log("Weapon "+wep+" bought.");
-                    this.playerData.playerData.money -= 600;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                    this.playerRelatedData.playerData.money -= 600;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     this.availableWeapons[i] = wep;
                     this.windex = null;
                  }
              } else if (i == 3){
-                 if (this.playerData.playerData.money >= 1000) {
+                 if (this.playerRelatedData.playerData.money >= 1000) {
                     console.log("Weapon "+wep+" bought.");
-                    this.playerData.playerData.money -= 1000;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                    this.playerRelatedData.playerData.money -= 1000;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     this.availableWeapons[i] = wep;
                     this.windex = null;
                  }
              } else if (j == 0) {
-                 if (this.playerData.playerData.money >= 250) {
-                    this.playerData.playerData.money -= 250;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 if (this.playerRelatedData.playerData.money >= 250) {
+                    this.playerRelatedData.playerData.money -= 250;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
                     this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              } else if (j == 1) {
-                 if (this.playerData.playerData.money >= 450) {
-                    this.playerData.playerData.money -= 450;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 if (this.playerRelatedData.playerData.money >= 450) {
+                    this.playerRelatedData.playerData.money -= 450;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
                     this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              } else if (j == 2) {
-                 if (this.playerData.playerData.money >= 700) {
-                    this.playerData.playerData.money -= 700;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 if (this.playerRelatedData.playerData.money >= 700) {
+                    this.playerRelatedData.playerData.money -= 700;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
                     this.availableAbilities[j] = ab;
                     this.aindex = null;
                  }
              } else if (j == 3) {
-                 if (this.playerData.playerData.money >= 900) {
-                    this.playerData.playerData.money -= 900;
-                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerData.playerData.money;
+                 if (this.playerRelatedData.playerData.money >= 900) {
+                    this.playerRelatedData.playerData.money -= 900;
+                    this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
                     this.availableAbilities[j] = ab;
                     this.aindex = null;
@@ -425,9 +425,9 @@ shopMenu.prototype = {
                         data:{
                             usage:3,
                             location:window.location.href,
-                            loginFollowID: this.playerData.loginFollowID,
-                            playerName:this.playerData.playerData.playerName,
-                            money:this.playerData.playerData.money,
+                            loginFollowID: this.playerRelatedData.loginFollowID,
+                            playerName:this.playerRelatedData.playerData.playerName,
+                            money:this.playerRelatedData.playerData.money,
                             weapons:this.availableWeapons,
                             abilities:this.availableAbilities
                         }
@@ -445,7 +445,7 @@ shopMenu.prototype = {
         this.weaponsGroup.removeAll();
         this.abilitiesGroup.removeAll();
         this.game.state.start('custom',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

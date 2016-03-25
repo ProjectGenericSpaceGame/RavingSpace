@@ -89,9 +89,9 @@ gameLoad.prototype = {
 
 
     },
-    init: function (loadout, playerData, loader, surroundings) {
+    init: function (loadout, playerRelatedData, loader, surroundings) {
         this.loadout = loadout;
-        this.playerData = playerData;
+        this.playerRelatedData = playerRelatedData;
         this.loader = loader;
         this.surroundings = surroundings;
     },
@@ -123,13 +123,14 @@ gameLoad.prototype = {
         }
         waiter = this.game.time.create();
         this.clipSizes = [35, 30, 5, 1];
+        //tähän AJAX
         var getWave = $.ajax({
             method: "POST",
             async: false,
             url: "PHP/SQLcontroller/getWave.php",
             data: {
-                playername: self.playerData.playerData.playerName,
-                loginFollow: self.playerData.loginFollowID,
+                playername: self.playerRelatedData.playerData.playerName,
+                loginFollow: self.playerRelatedData.loginFollowID,
                 location: window.location.href
             }
         });
@@ -142,6 +143,8 @@ gameLoad.prototype = {
             alert("can't start game because can't reach database to fetch a attack wave");
             self.game.state.start('menuLoad');
         });
+        //AJAX Loppuu
+
         //this.attackInfo = "051006'302112'352713";
         //this.attackInfo = "000006'000905'000008";
         this.game.physics.startSystem(Phaser.Physics.P2JS);
@@ -972,7 +975,7 @@ gameLoad.prototype = {
             this.minesExpl,
             this.dropBoom,
             this.dropApi,
-            this.playerData,
+            this.playerRelatedData,
             this.abilityReloading,
             this.pauseMenu,
             this.pickUpAbilities
@@ -1022,7 +1025,7 @@ gameLoad.prototype = {
                 this.minesExpl,
                 this.dropBoom,
                 this.dropApi,
-                this.playerData,
+                this.playerRelatedData,
                 this.abilityReloading,
                 this.pauseMenu,
                 this.pickUpAbilities

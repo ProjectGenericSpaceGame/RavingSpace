@@ -2,8 +2,8 @@ var soundMenu = function(game){
 
 };
 soundMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -206,7 +206,7 @@ soundMenu.prototype = {
         this.musicGroup.removeAll();
         this.fxGroup.removeAll();
         this.game.state.start('settings',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

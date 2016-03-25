@@ -4,8 +4,8 @@ var accountSettings = function(game){
 
 };
 accountSettings.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -99,15 +99,15 @@ accountSettings.prototype = {
         this.backButton.getChildAt(0).scale.setTo(10, 1.5);
 
         //alustetaan inputit
-        $("#EMAILinput").val(this.playerData.playerData.email);
+        $("#EMAILinput").val(this.playerRelatedData.playerData.email);
         /*var getFromDB = $.ajax({
             method:"POST",
             async:true,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
             url:"PHP/SQLcontroller/accountSettingsHandler.php",
             data:{
-                playerName:this.playerData.playerData.playerName,
+                playerName:this.playerRelatedData.playerData.playerName,
                 location:window.location.href,
-                loginFollow:this.playerData.loginFollowID,
+                loginFollow:this.playerRelatedData.loginFollowID,
                 usage:"getPassLength"
             }
         });
@@ -135,7 +135,7 @@ accountSettings.prototype = {
     back:function(){
         $("input").remove();
         this.game.state.start('settings',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -147,7 +147,7 @@ accountSettings.prototype = {
         self.successText.text = "";
         self.errorText.text = "";
         var email = "N/A";
-        if($("#EMAILinput").val() != this.playerData.playerData.email){
+        if($("#EMAILinput").val() != this.playerRelatedData.playerData.email){
             email = $("#EMAILinput").val();
         }
         if($("#PASSWORDinput").val() == ""){
@@ -168,9 +168,9 @@ accountSettings.prototype = {
                 async:true,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/accountSettingsHandler.php",
                 data:{
-                    playerName:this.playerData.playerData.playerName,
+                    playerName:this.playerRelatedData.playerData.playerName,
                     location:window.location.href,
-                    loginFollow:this.playerData.loginFollowID,
+                    loginFollow:this.playerRelatedData.loginFollowID,
                     usage:"updateAccountData",
                     email:email,
                     password:hashedPass
@@ -188,7 +188,7 @@ accountSettings.prototype = {
                 } else if(data[0] == "success"){
                     self.errorText.text = "";
                     self.successText.text = "Data updated succesfully";
-                    self.playerData.playerData.email = $("#EMAILinput").val();
+                    self.playerRelatedData.playerData.email = $("#EMAILinput").val();
                 } else if(data[0] == "passwordError"){
                     if(data[1] == "emailSuccess"){
                         self.successText.text = "Email changed successfully";
@@ -220,7 +220,7 @@ accountSettings.prototype = {
     resetFields:function(){
         $("#PASSWORDinput").val("");
         $("#PASSWORD_CONFinput").val("");
-        $("#EMAILinput").val(this.playerData.playerData.email);
+        $("#EMAILinput").val(this.playerRelatedData.playerData.email);
     },
     resetAll:function(){
         var self = this;
@@ -231,9 +231,9 @@ accountSettings.prototype = {
                 async:true,//poistetaan myöhemmin kun implementoidaan latausruutu pyörimään siksi aikaa että vastaa
                 url:"PHP/SQLcontroller/accountSettingsHandler.php",
                 data:{
-                    playerName:this.playerData.playerData.playerName,
+                    playerName:this.playerRelatedData.playerData.playerName,
                     location:window.location.href,
-                    loginFollow:this.playerData.loginFollowID,
+                    loginFollow:this.playerRelatedData.loginFollowID,
                     usage:"resetAll",
                 }
             });
@@ -241,12 +241,12 @@ accountSettings.prototype = {
                 if(data == "success"){
                     self.successText.text = "Your account is now resetted";
                     self.errorText.text = "";
-                    self.playerData.playerData.money = 0;
+                    self.playerRelatedData.playerData.money = 0;
                     self.surroundings.menuheader.getChildAt(2).text = "Money: "+0;
-                    self.playerData.playerData.points = 0;
+                    self.playerRelatedData.playerData.points = 0;
                     self.surroundings.menuheader.getChildAt(3).text = "Points: "+0;
-                    self.playerData.shipGuns = ["basic"];
-                    self.playerData.shipPowers = [];
+                    self.playerRelatedData.shipGuns = ["basic"];
+                    self.playerRelatedData.shipPowers = [];
                 } else if(data == "fail"){
                     self.successText.text = "";
                     self.errorText.text = "Resetting account failed at least partially...";

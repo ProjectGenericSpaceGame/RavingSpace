@@ -5,8 +5,8 @@ var mainMenu = function(game){
 
 mainMenu.prototype = {
     
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings,musics){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings,musics){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -63,7 +63,7 @@ mainMenu.prototype = {
     loadoutStart: function(){
         // kutsutaan loadout -tilaa
         this.game.state.start('loadoutMenu',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -72,7 +72,7 @@ mainMenu.prototype = {
     },
     settingsStart: function(){
         this.game.state.start('settings',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -81,7 +81,7 @@ mainMenu.prototype = {
     },
     scoresStart: function(){
         this.game.state.start('scores',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -90,7 +90,7 @@ mainMenu.prototype = {
     },
     customStart: function(){
         this.game.state.start('custom',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

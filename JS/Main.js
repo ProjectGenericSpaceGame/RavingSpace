@@ -72,7 +72,7 @@ $(document).ready(function() {
                 async: false,
                 url: "PHP/SQLcontroller/updateData.php",
                 data: {
-                    playerData: sessionStorage.getItem("playerID"),
+                    playerRelatedData: sessionStorage.getItem("playerID"),
                     loginFollowID: sessionStorage.getItem("loginFollowID"),
                     location: window.location.href,
                     usage: 5
@@ -243,19 +243,18 @@ function enemyFire(user,gun,enemyBullets,fireRate,target,destroyerBullets){
         }
     }
 }
-function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi){
+function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,playerRelatedData){
     var dmg;
-    if(bullet.name == "laser"){
-        dmg = 0.1;
+    if(bullet.name == "laser" || bullet.name == "shotgun" || bullet.name == "basic"){
+        dmg = playerRelatedData.gunData.attachments[bullet.name].basedmg*playerRelatedData.shipStats.guns.gunDmgBoost/1000;
+        if(bullet.name != "laser"){
+            bullet.kill();
+        }
     } else if(bullet.name == "mine") {
         bullet.kill();
     } else if(bullet.key == "boom") {
-        dmg = 2.5;
-    } else if(bullet.name == "shotgun") {
-        dmg = 0.35;
-        bullet.kill();
+        dmg = playerRelatedData.gunData.attachments["mines"].basedmg;
     } else if(bullet.name != "drop"){
-        dmg  = 0.25;
         bullet.kill();
     } else{
         bullet.kill();

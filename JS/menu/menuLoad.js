@@ -171,8 +171,8 @@ menuLoad.prototype = {
                 if(returnValue == true){
                     self.logout();
                 } else {
-                    self.playerData = JSON.parse(returnValue);
-                    self.playerData.shipStats = {//devausta varten, tulee myöhemmin kannasta TODO: siirrä hakemaan kannasta
+                    self.playerRelatedData = JSON.parse(returnValue);
+                    self.playerRelatedData.shipStats = {//devausta varten, tulee myöhemmin kannasta TODO: siirrä hakemaan kannasta
                         guns:{
                             gunDmgBoost:1,
                             gunSpeedBoost:1.75,
@@ -184,8 +184,24 @@ menuLoad.prototype = {
                             powerEffectTimeBonus:1
                         }
                     };
-                    console.log("Pelaajan data"+self.playerData.shipPowers[0]);
+                    console.log("Pelaajan data"+self.playerRelatedData.shipPowers[0]);
                 }
+            });
+            getFromDB.fail(function(){alert("database unreachable!")});
+            //
+            getFromDB = $.ajax({
+                method:"POST",
+                async:false,
+                url:"PHP/SQLcontroller/shipData.php",
+                data:{
+                    playerName:name,
+                    location:window.location.href
+                }
+            });
+            getFromDB.done(function(returnValue) {
+                var shipData = returnValue.split("§");
+                self.playerRelatedData.shipStats = JSON.parse(shipData[0]);//devausta varten, tulee myöhemmin kannasta
+                self.playerRelatedData.gunData = JSON.parse(shipData[1]);//devausta varten, tulee myöhemmin kannasta
             });
             getFromDB.fail(function(){alert("database unreachable!")});
             //
@@ -225,7 +241,7 @@ menuLoad.prototype = {
             scoreSort.sort(this.compare);
             this.globalScores = scoreSort;
 
-            sessionStorage.setItem("loginFollowID",this.playerData.loginFollowID);
+            sessionStorage.setItem("loginFollowID",this.playerRelatedData.loginFollowID);
            
             songName = this.game.add.text(25,775,"Now Playing: ",{ font: "20px cyber", fill:"white"});
             //tässä kasataan jutut
@@ -239,10 +255,10 @@ menuLoad.prototype = {
             };//demo
             
            // lisätään pelaajan pisteet sekä rahat yläpalkkiin
-            var playerDisplayPoints = this.game.add.text(10, 15, "Points: "+this.playerData.playerData.points, textStyle);
-            var playerDisplayMoney = this.game.add.text(10, 40, "Money: "+this.playerData.playerData.money, textStyle);
+            var playerDisplayPoints = this.game.add.text(10, 15, "Points: "+this.playerRelatedData.playerData.points, textStyle);
+            var playerDisplayMoney = this.game.add.text(10, 40, "Money: "+this.playerRelatedData.playerData.money, textStyle);
             // lisätään pelaajan nimi yläpälkkiin
-            var playerDisplayName = this.game.add.text(0, 30, this.playerData.playerData.playerName, nameStyle);
+            var playerDisplayName = this.game.add.text(0, 30, this.playerRelatedData.playerData.playerName, nameStyle);
             playerDisplayName.x = (this.menuheader.width/2+450)-playerDisplayName.width/2;
            
             
@@ -274,7 +290,7 @@ menuLoad.prototype = {
             this.loader.destroy();
             this.enterText.destroy();
             this.game.state.start('mainMenu', false, false,
-                this.playerData,
+                this.playerRelatedData,
                 this.globalScores,
                 this.playerWaves,
                 this.buttonGroup,
@@ -298,7 +314,7 @@ menuLoad.prototype = {
                     method:"POST",
                     //sync:false,
                     url:"PHP/SQLcontroller/updateData.php",
-                    data:{playerData:sessionStorage.getItem("playerID"),loginFollowID:sessionStorage.getItem("loginFollowID"),location:window.location.href,usage:5}
+                    data:{playerRelatedData:sessionStorage.getItem("playerID"),loginFollowID:sessionStorage.getItem("loginFollowID"),location:window.location.href,usage:5}
                 });
                 if(window.location.href == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php") {
                     window.location.pathname = "~H3492/RavingSpace";

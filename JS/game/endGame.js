@@ -5,10 +5,10 @@ var endGame = function(game){
 
 };
 endGame.prototype = {
-    init:function(HUD,ship,playerData,attackLoot,attackID,musics,winner){
+    init:function(HUD,ship,playerRelatedData,attackLoot,attackID,musics,winner){
         this.HUD = HUD;
         this.ship = ship;
-		this.playerData = playerData;
+		this.playerRelatedData = playerRelatedData;
         this.attackLoot = attackLoot;
         this.attackID = attackID;
         this.musics = musics;
@@ -80,14 +80,14 @@ endGame.prototype = {
         //jos ei ole pienin, poistetaan taulukon pienin (0 index)
         var self = this;
         var scoreToUpdate;
-        var tempArray = this.playerData.playerScores.slice();
+        var tempArray = this.playerRelatedData.playerScores.slice();
         tempArray.push(points);
         tempArray.sort(function(a, b){return a-b});
         if(tempArray[0] == points){
             scoreToUpdate = -1;
         } else {
             tempArray.splice(0,1);//poistetaan huonoin pistemäärässä (taulukossa 11 arvoa tällä hetkellä)
-            this.playerData.playerScores = tempArray.slice();
+            this.playerRelatedData.playerScores = tempArray.slice();
             scoreToUpdate = tempArray.slice();
         }
         tempArray = null;
@@ -97,20 +97,20 @@ endGame.prototype = {
                 async:false,
                 url:"PHP/SQLcontroller/updateData.php",
                 data:{
-					playerName:this.playerData.playerData.playerName,
+					playerName:this.playerRelatedData.playerData.playerName,
 					location:window.location.href,
                     attackLoot:this.attackLoot,
                     attackID:this.attackID,
-                    //playerID:this.playerData.plaID,
+                    //playerID:this.playerRelatedData.plaID,
                     //scoreToUpdate:scoreToUpdate,
                     score:points,
-                    points:this.playerData.playerData.points+points,
+                    points:this.playerRelatedData.playerData.points+points,
                     usage:4
 				}
             });
         updateData.done(function(returnData){
             alert("Your data successfully was successfully updated:"+returnData);
-            self.playerData.playerData.points += points;
+            self.playerRelatedData.playerData.points += points;
             for(var i = 0;i<musics.gameTracks.length;i++) {
                 musics.gameTracks[i].pause();
                 musics.gameTracks[i].currentTime = 0;

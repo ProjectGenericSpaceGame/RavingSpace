@@ -2,9 +2,9 @@ var preload = function(game){
 
 };
 preload.prototype = {
-    init:function(loadout,playerData,surroundings){
+    init:function(loadout,playerRelatedData,surroundings){
         this.loadout = loadout;
-        this.playerData = playerData;
+        this.playerRelatedData = playerRelatedData;
         this.surroundings = surroundings;
     },
     preload:function(){
@@ -16,7 +16,7 @@ preload.prototype = {
         this.loader.bringToTop();
         this.game.state.start("gameLoad",false,false,
             this.loadout,
-            this.playerData,
+            this.playerRelatedData,
             this.loader,
             this.surroundings
         );

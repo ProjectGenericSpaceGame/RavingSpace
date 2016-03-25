@@ -2,8 +2,8 @@ var customSubMenu = function(game){
 
 };
 customSubMenu.prototype = {
-    init:function(playerData,globalScores,playerWaves,buttonGroup,surroundings){
-        this.playerData = playerData;
+    init:function(playerRelatedData,globalScores,playerWaves,buttonGroup,surroundings){
+        this.playerRelatedData = playerRelatedData;
         this.globalScores = globalScores;
         this.playerWaves = playerWaves;
         this.buttonGroup = buttonGroup;
@@ -51,7 +51,7 @@ customSubMenu.prototype = {
     },
     back:function(){
         this.game.state.start('mainMenu',false,false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -60,7 +60,7 @@ customSubMenu.prototype = {
     },
     shopStart:function(){
         this.game.state.start('shopMenu' ,false, false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -70,7 +70,7 @@ customSubMenu.prototype = {
     },
     waveCreatorStart:function(){
         this.game.state.start('waveMenu' ,false, false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,
@@ -80,7 +80,7 @@ customSubMenu.prototype = {
     },
     workshopStart:function(){
         this.game.state.start('workShop' ,false, false,
-            this.playerData,
+            this.playerRelatedData,
             this.globalScores,
             this.playerWaves,
             this.buttonGroup,

@@ -2,9 +2,9 @@ var setMenuLoader = function(game){
 
 };
 setMenuLoader.prototype = {
-    init:function(loadout,playerData){
+    init:function(loadout,playerRelatedData){
         this.loadout = loadout;
-        this.playerData = playerData;
+        this.playerRelatedData = playerRelatedData;
     },
     preload:function(){
         //ladataan latausruutu

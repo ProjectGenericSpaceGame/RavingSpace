@@ -48,7 +48,7 @@ var mainGame = function(game){
 mainGame.prototype = {
     //Latausvaiheessa alustetut muuttujat tuodaan tähän
     //tämän funktion parametreistä ei tarvitse tietää muuta kuin että ne kaikki ovat createssa luodut muuttujat
-    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerData,abilityReloading,pauseMenu) {
+    init: function (asteroids, ship, shipAccessories, gun, bullets, enemies, enemy1, enemy2, enemy3, asteroid1, asteroid2, asteroid3, cursors, bg, text, shipTrail, attackInfo, attackID, enemyAmount, spawnPool, lap,enemyBullets,music,clipText,HPbar,HUD,laserBul,clips,reloadingAr,minesBul,minesExpl,dropBoom,dropApi,playerRelatedData,abilityReloading,pauseMenu) {
         this.asteroids = asteroids;
         this.ship = ship;//
         this.shipAccessories = shipAccessories;
@@ -82,7 +82,7 @@ mainGame.prototype = {
         this.minesExpl = minesExpl;
         this.dropBoom = dropBoom;
         this.dropApi = dropApi;
-        this.playerData = playerData;
+        this.playerRelatedData = playerRelatedData;
         this.abilityReloading = abilityReloading;
         this.pauseMenu = pauseMenu;
         //Loput muuttujat
@@ -463,7 +463,7 @@ mainGame.prototype = {
                         this.game.add.tween(this.HUD.banner).to({alpha: 1}, 400, "Linear", true, 1000);
                     } else if (this.lap >= 3 && this.asteroids.countLiving() > 0 && next == "next") {
                         this.game.time.events.add(5000,function(){
-                            this.game.state.start('endGame', false, false, this.HUD, this.ship, this.playerData, this.attackLoot, this.attackID,this.musics,1);
+                            this.game.state.start('endGame', false, false, this.HUD, this.ship, this.playerRelatedData, this.attackLoot, this.attackID,this.musics,1);
                         },this);
                     }
                 }, this);
@@ -501,7 +501,7 @@ mainGame.prototype = {
                     //tämä tutkii annettusta pisteesta osuuko se P2 bodyyn
                     self.bulletArray = self.game.physics.p2.hitTest(boundsBullet, [enm]);
                     if (self.bulletArray.length != 0 && self.timers[4] == 1) {
-                        hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0), self.dropBoom, self.dropApi);
+                        hitDetector(b, enm, self.enemyAmount, self.lap, enm.getChildAt(0), self.dropBoom, self.dropApi,self.playerRelatedData);
                         if (b.name == "mine") {
                             var boom = self.minesExpl.getFirstDead();
                             boom.reset(b.x, b.y);
@@ -513,7 +513,7 @@ mainGame.prototype = {
                             });
                         }
                     } else if (self.bulletArray.length != 0 && self.timers[4] == 2) {//jos pelaajaan osumista tutkitaan
-                            hitDetector(b, enm, null, self.lap, self.HPbar, null, null);
+                            hitDetector(b, enm, null, self.lap, self.HPbar, null, null,self.playerRelatedData);
                             if (self.ship.health == 0.001) {
                                 self.attackLoot += 300;
                             }
@@ -536,7 +536,7 @@ mainGame.prototype = {
                         var whatHappens = asteroidHitDetector(b, enm, self.asteroidAmmount);
                         if (whatHappens == 0) {
                             this.game.time.events.add(2000,function(){
-                                self.game.state.start('endGame', false, false, self.HUD, self.ship, self.playerData, self.attackLoot, self.attackID,self.musics,2);
+                                self.game.state.start('endGame', false, false, self.HUD, self.ship, self.playerRelatedData, self.attackLoot, self.attackID,self.musics,2);
                             },this);
                         } else if(whatHappens == 1){
                             self.asteroidAmmount--;
@@ -982,7 +982,7 @@ mainGame.prototype = {
             if (shapeCollided.body.parent.sprite.key == "boom") {
                 shapeCaller.body.mass = 9999;
                 shapeCaller.body.damping = 0.999;
-                hitDetector(shapeCollided.body.parent.sprite, shapeCaller.body.parent.sprite, this.enemyAmount, this.lap, shapeCaller.body.parent.sprite.getChildAt(0),this.dropBoom,this.dropApi);
+                hitDetector(shapeCollided.body.parent.sprite, shapeCaller.body.parent.sprite, this.enemyAmount, this.lap, shapeCaller.body.parent.sprite.getChildAt(0),this.dropBoom,this.dropApi,this.playerRelatedData);
             } else if(shapeCollided.body.parent.sprite.key == "EMP"){
                 shapeCaller.body.parent.sprite.isStunned = true;
                 this.game.time.events.add(6000,function(){
@@ -992,7 +992,7 @@ mainGame.prototype = {
         }
     },
     dropBoomStarter: function(drop,bullet){//tämä hoitaa räjähtävät dropit ja sen räjähdyksen aktivoinnin. Räjähdyn on P2 fysiikoilla ja funktio yläpuolella hoitaa sen
-        hitDetector(bullet,drop,1,this.lap,null);
+        hitDetector(bullet,drop,1,this.lap,null,null,null,this.playerRelatedData);
         if(drop.health == 0.001){//kuolleiden asioiden healtiksi asetetaan 0.001
             var boom = this.minesExpl.getFirstDead();
             boom.reset(drop.x,drop.y);

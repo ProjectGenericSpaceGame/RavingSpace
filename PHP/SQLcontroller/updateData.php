@@ -1,5 +1,6 @@
 <?php
 	//alustetaan tiedot
+    session_start();
 	$returnObject = "";
 	$usage = $_POST['usage'];
     // $usage memory list:    
@@ -7,6 +8,7 @@
     // 3 shoppingEvent
     // 4 finishedGame
     // 5 loggOff
+    // 6 updateShipGuns
     $playerName = $_POST['playerName'];
 
     if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
@@ -14,6 +16,7 @@
 	} else {
 		require_once('../db-initDEV.php');
 	}
+    /** @var $db PDO */
     $db = new DBcon();
     $db = $db->returnCon();
 
@@ -21,14 +24,12 @@
 	
 	}
 	function newWave($playerName,$db){
+        /** @var $db PDO */
         $loginFollowID = $_POST['loginFollowID'];
         $waveData = $_POST['wave'];
         $points = $_POST['points'];
-        $select = "SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID";
-        $query = $db->prepare($select);
-        $query->execute();
-        $row = $query->fetch(PDO::FETCH_ASSOC);
-        if($row['loggedIn'] == "in") {
+        $isIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
+        if($isIn == "in") {
             $select = "INSERT INTO attackWaves (waveData,attackLoot,attackState, playerID) VALUES (".$waveData.",0,'Unused','$playerName')";
             $query = $db->prepare($select);
             $query->execute();
@@ -40,16 +41,14 @@
         }
 	}
 	function shoppingEvent($playerName,$db){
+        /** @var $db PDO */
         $echoobject = "";
 		$loginFollowID = $_POST['loginFollowID'];//tätä voidaan käyttää myös shipIDnä sillä sama luku
         $weapons = $_POST['weapons'];
         $abilities = $_POST['abilities'];
         $playerMoney = $_POST['money'];
-		$select = "SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID";
-		$query = $db->prepare($select);
-        $query->execute();
-		$row = $query->fetch(PDO::FETCH_ASSOC);
-		if($row['loggedIn'] == "in") {
+        $isIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
+        if($isIn == "in") {
             for($i = 0; $i <= count($weapons)-1; $i++){
                 if($weapons[$i] != 'undefined' && $weapons[$i] != null){
                     $select = "SELECT * FROM shipGuns WHERE shipID = $loginFollowID AND has = '$weapons[$i]';";
@@ -85,6 +84,7 @@
     }
 	
 	function finishedGame($playerName,$db){
+        /** @var $db PDO */
         date_default_timezone_set('Europe/Helsinki');
         $date = date('m-d-Y h:i:s a');
         $score = $_POST['score'];
@@ -100,14 +100,9 @@
         $row = $query->fetch(PDO::FETCH_ASSOC);
         $attackOwner = $row['playerID'];
         
-        $select = "SELECT money FROM playerData
-        WHERE playerID = '$attackOwner'";
-        $query = $db->prepare($select);
-        $query->execute();
-        $row = $query->fetch(PDO::FETCH_ASSOC);
-        $attackOwnerMoney = $row['money'];
+        $attackOwnerMoney = getFromDB("SELECT money FROM playerData WHERE playerID = '$attackOwner'","money",$db);
         $attackOwnerMoney += $attackLoot;
-		echo $attackOwner;
+		/*echo $attackOwner;*/
 		//tässä päivitetään aallon tiedot
         
         // POISTETAAN vvvvvv
@@ -142,27 +137,65 @@
         $query->execute();
     }
 	function logOff($returnObject,$db){
+        /** @var $db PDO */
 		$loginFollowID = intval($_POST['loginFollowID']);
 		$select = "UPDATE loginAttempts SET loggedIn = 'out' WHERE loginFollowID = $loginFollowID";
 		$query = $db->prepare($select);
         $query->execute();
 	}
+    function updateShipGuns($playerName, $db, $shipStates,$money){
+        /** @var $db PDO */
+        $loginFollowID = $_POST['loginFollowID'];
+        $isIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
+        if($isIn == "in") {
+            $correlationTable = array("gunDmgBoost"=>"gunDmgBonus","gunSpeedBoost"=>"gunBltSpeedBonus","gunReloadBoost"=>"gunReloadBonus");
+            $shipStates = json_decode($shipStates);
+            //selvitetään ensiksi shipID
+            $shipID = getFromDB("SELECT shipID FROM shipStates WHERE playerID = '$playerName'","shipID",$db);
+            //Ja nyt päivitetään
+            $toUpdate = "";
 
-	if($usage == 1){
-		updateAccountInfo();
-	} 
-	else if($usage == 2){
-		newWave($playerName,$db);
-	} 
-	else if($usage == 3){
-		shoppingEvent($playerName,$db);
-	} 
-	else if($usage == 4){
-		finishedGame($playerName,$db);
-	}
-	else if($usage == 5){
-		logOff($returnObject,$db);
-	}
+            foreach($shipStates as $state => $value){
+                // prepare must inside loop because column name changes...
+                $query = $db->prepare("UPDATE shipStates SET $correlationTable[$state]=? WHERE shipID=?");
+                $query->execute(array($value, $shipID));
+            }
+            $select = "UPDATE playerData set money = $money WHERE playerData.playerID = '$playerName'";
+            $query = $db->prepare($select);
+            $query->execute();
+        }
+    }
+    if($playerName == $_SESSION["playerName"]){
+        //tällä voimme varmistua käytön mukaan mitkä parametrin on asetettu, samalla voimme toteuttaa injektiotarkistukset näissä
+        if($usage == 1){
+            updateAccountInfo();
+        }
+        else if($usage == 2){
+            newWave($playerName,$db);
+        }
+        else if($usage == 3){
+            shoppingEvent($playerName,$db);
+        }
+        else if($usage == 4){
+            finishedGame($playerName,$db);
+        }
+        else if($usage == 5){
+            logOff($returnObject,$db);
+        } else if($usage == 6){
+            $shipStates = $_POST["shipStats"];
+            $money = $_POST["money"];
+            updateShipGuns($playerName,$db,$shipStates, $money);
+        }
+    }
+
+    function getFromDB($query,$toGet,$db){//tällä säästetään saman prepare->query->fetch rimpsun kirjoittelu
+        /** @var $db PDO */
+        $prepared = $db->prepare($query);
+        $prepared->execute();
+        $row = $prepared->fetch(PDO::FETCH_ASSOC);
+        return $row[$toGet];
+    }
+
 	//suljetaan yhteys
     $db = null;
 ?>

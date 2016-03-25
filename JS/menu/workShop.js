@@ -137,14 +137,14 @@ workShop.prototype = {
 
             }
         });
-
+        this.centerWindow = null;
         this.centerWindow = this.game.add.group();
         this.centerWindow.x = 420;
         this.centerWindow.y = 200;
         },
         
     editWeaponSystems:function(){
-        if(this.centerWindow.length == 0){
+        /*if(this.centerWindow.length == 0){*/
             var self = this;
             /*$.getScript( "JS/menu/workShop_gunEditor.js", function(data, textStatus){
              if(textStatus == "success"){*/
@@ -152,17 +152,17 @@ workShop.prototype = {
             /* }
 
              });*/
-        }
+       /* }*/
 
     },
     update:function(){
-        if(this.centerWindow.length > 2){
+        /*if(this.centerWindow.length > 2){
             console.log(this.centerWindow.getChildAt(2).getChildAt(0).visible);
-        }
+        }*/
 
     },
     powerSystemEditor:function(){
-        if(this.centerWindow.length == 0){
+        /*if(this.centerWindow.length == 0){*/
             var self = this;
             /*$.getScript( "JS/menu/workShop_powerEditor.js", function(data, textStatus){
              if(textStatus == "success"){*/
@@ -170,7 +170,6 @@ workShop.prototype = {
             /* }
 
              });*/
-        }
 
     },
     waveBrowser:function(){
@@ -295,7 +294,7 @@ workShop.prototype = {
         }
     },
     back: function(){
-        this.centerWindow.removeAll();
+        this.centerWindow.removeAll(true);
         /*weaponSystemEditor = null;
         powerSystemEditor = null;*/
         hullEditor = null;

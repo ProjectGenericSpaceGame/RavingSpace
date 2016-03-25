@@ -12,7 +12,7 @@
     };
     var style = { font:'15px cyber', fill:'black'};
     console.log(self);
-    self.centerWindow.removeAll();
+    self.centerWindow.removeAll(true);
     self.editPowersBtn.setFrames(0, 1, 2);
     self.editGunsBtn.setFrames(1,2,2);
     //jätetty koodin koska näitä voidaan käyttää sivuina tarpeen vaatiessa
@@ -35,7 +35,7 @@
     style = { font:'18px cyber', fill:'white'};
     var styleSmall = { font:'14px cyber', fill:'white'};
     //pelaajan pisteet
-    var points = self.game.add.text(515,25,self.playerData.playerData.money,style);
+    var money = self.game.add.text(515,25,self.playerData.playerData.money,style);
 
 
     //checkoutin otsikko
@@ -60,20 +60,29 @@
 
     var dmgLine = self.game.add.group();
     dmgLine.name = "gunDmgBoost";
-    dmgLine.price = 1000*self.playerData.shipStats.gunDmgBoost;
+    dmgLine.price = 1000*self.playerData.shipStats.guns.gunDmgBoost;
     var speedLine = self.game.add.group();
     speedLine.name = "gunSpeedBoost";
-    speedLine.price = 1000*self.playerData.shipStats.gunSpeedBoost;
+    speedLine.price = 1000*self.playerData.shipStats.guns.gunSpeedBoost;
     var reloadLine = self.game.add.group();
     reloadLine.name = "gunReloadBoost";
-    reloadLine.price = 1000*self.playerData.shipStats.gunReloadBoost;
+    reloadLine.price = 1000*self.playerData.shipStats.guns.gunReloadBoost;
+
+    var linePrice = game.add.text(0,0,"");
+    var lineInfo = game.add.text(0,0,"");
+    var plus = game.add.text(0,0,"");
+
     //destroyer line
     var dmgPic = self.game.add.image(32.5,110,'destroyer');
     dmgPic.scale.setTo(0.35,0.35);
-    var lineName = self.game.add.text(100,130,"Optimization Mod "+levels[self.playerData.shipStats.gunDmgBoost]+"",style);
-    if(levels[self.playerData.shipStats.gunReloadBoost] != 5){
-        var linePrice = self.game.add.text(100,150,"Price: "+(1000*self.playerData.shipStats.gunDmgBoost),styleSmall);
-        var lineInfo = self.game.add.text(100,170,"Your weapons do "+(self.playerData.shipStats.gunDmgBoost+0.25)+" times more damage",styleSmall);
+    var lineName = self.game.add.text(100,130,"Optimization Mod "+levels[self.playerData.shipStats.guns.gunDmgBoost]+"",style);
+    lineInfo = self.game.add.text(100,170,"Your weapons do "+(self.playerData.shipStats.guns.gunDmgBoost+0.25)+" times more damage",styleSmall);
+    dmgLine.addChild(dmgPic);
+    dmgLine.addChild(lineName);
+    dmgLine.addChild(lineInfo);
+    if(levels[self.playerData.shipStats.guns.gunDmgBoost] != 5){
+        linePrice = self.game.add.text(100,150,"Price: "+(1000*self.playerData.shipStats.guns.gunDmgBoost),styleSmall);
+
         /*var minus = self.game.add.button(480,120,'minus',function() {
             if (self.waveCreateData[self.subMenu - 1][0] > 0){
                 self.waveCreateData[self.subMenu - 1][0] -= 1;
@@ -81,28 +90,31 @@
             }
         });
         var shipAmount = self.game.add.text(540,130,self.waveCreateData[self.subMenu-1][0],style);*/
-        var plus = self.game.add.button(540,120,'plus',function(){
+        plus = self.game.add.button(540,120,'plus',function(){
             /*self.waveCreateData[self.subMenu-1][0]+=1;
             self.subFunctions[self.subMenu-1]();*/
             checkOut(dmgLine);
         });
+        dmgLine.addChild(linePrice);
+        dmgLine.addChild(plus);
+    } else {
+        lineInfo.text = "Your weapons do "+self.playerData.shipStats.guns.gunDmgBoost+" times more damage";
     }
 
-    dmgLine.addChild(dmgPic);
-    dmgLine.addChild(lineName);
-    dmgLine.addChild(linePrice);
-    dmgLine.addChild(lineInfo);
     /*dmgLine.addChild(shipAmount);
     dmgLine.addChild(minus);*/
-    dmgLine.addChild(plus);
+
     //hunter line
     var speedPic = self.game.add.image(25,200,'hunter');
     speedPic.scale.setTo(0.35,0.35);
-    lineName = self.game.add.text(100,220,"High Velocity Bullelts "+levels[self.playerData.shipStats.gunSpeedBoost]+"",style);
-    if(levels[self.playerData.shipStats.gunSpeedBoost] != 5){
-        linePrice = self.game.add.text(100,240,"Price:  "+(1000*self.playerData.shipStats.gunSpeedBoost),styleSmall);
-        lineInfo = self.game.add.text(100,260,"Bullets fly "+(self.playerData.shipStats.gunSpeedBoost+0.25)+" times faster",styleSmall);
-       /* minus = self.game.add.button(480,210,'minus',function() {
+    lineName = self.game.add.text(100,220,"High Velocity Bullelts "+levels[self.playerData.shipStats.guns.gunSpeedBoost]+"",style);
+    lineInfo = self.game.add.text(100,260,"Bullets fly "+(self.playerData.shipStats.guns.gunSpeedBoost+0.25)+" times faster",styleSmall);
+    speedLine.addChild(speedPic);
+    speedLine.addChild(lineName);
+    speedLine.addChild(lineInfo);
+    if(levels[self.playerData.shipStats.guns.gunSpeedBoost] != 5){
+        linePrice = self.game.add.text(100,240,"Price:  "+(1000*self.playerData.shipStats.guns.gunSpeedBoost),styleSmall);
+         /* minus = self.game.add.button(480,210,'minus',function() {
             if (self.waveCreateData[self.subMenu - 1][1] > 0){
                 self.waveCreateData[self.subMenu - 1][1] -= 1;
                 self.subFunctions[self.subMenu-1]();
@@ -114,24 +126,26 @@
             self.subFunctions[self.subMenu-1]();*/
             checkOut(speedLine);
         });
+        speedLine.addChild(linePrice);
+        speedLine.addChild(plus);
+    } else {
+        lineInfo.text = "Bullets fly "+self.playerData.shipStats.guns.gunSpeedBoost+" times faster";
     }
-
-    speedLine.addChild(speedPic);
-    speedLine.addChild(lineName);
-    speedLine.addChild(linePrice);
-    speedLine.addChild(lineInfo);
    /* speedLine.addChild(shipAmount);
     speedLine.addChild(minus);*/
-    speedLine.addChild(plus);
+
 
     //commander line
     var reloadPic = self.game.add.image(25,290,'commander');
     reloadPic.scale.setTo(0.35,0.32);
-    lineName = self.game.add.text(100,310,"Asynchronous Loader Mod "+levels[self.playerData.shipStats.gunReloadBoost]+"",style);
-    if(levels[self.playerData.shipStats.gunReloadBoost] != 5){
-        linePrice = self.game.add.text(100,330,"Price: "+(1000*self.playerData.shipStats.gunReloadBoost),styleSmall);
-        lineInfo = self.game.add.text(100,350,"Your guns reload "+(self.playerData.shipStats.gunReloadBoost+0.25)+" times faster",styleSmall);
-       /* minus = self.game.add.button(480,300,'minus',function() {
+    lineName = self.game.add.text(100,310,"Asynchronous Loader Mod "+levels[self.playerData.shipStats.guns.gunReloadBoost]+"",style);
+    lineInfo = self.game.add.text(100,350,"Your guns reload "+(self.playerData.shipStats.guns.gunReloadBoost+0.25)+" times faster",styleSmall);
+    reloadLine.addChild(reloadPic);
+    reloadLine.addChild(lineName);
+    reloadLine.addChild(lineInfo);
+    if(levels[self.playerData.shipStats.guns.gunReloadBoost] != 5){
+        linePrice = self.game.add.text(100,330,"Price: "+(1000*self.playerData.shipStats.guns.gunReloadBoost),styleSmall);
+         /* minus = self.game.add.button(480,300,'minus',function() {
             if (self.waveCreateData[self.subMenu - 1][2] > 0){
                 self.waveCreateData[self.subMenu - 1][2] -= 1;
                 self.subFunctions[self.subMenu-1]();
@@ -143,15 +157,14 @@
             self.subFunctions[self.subMenu-1]();*/
             checkOut(reloadLine);
         });
+        reloadLine.addChild(linePrice);
+        reloadLine.addChild(plus);
+    } else {
+        lineInfo.text = "Your guns reload "+self.playerData.shipStats.guns.gunReloadBoost+" times faster";
     }
-
-    reloadLine.addChild(reloadPic);
-    reloadLine.addChild(lineName);
-    reloadLine.addChild(linePrice);
-    reloadLine.addChild(lineInfo);
     /*reloadLine.addChild(shipAmount);
     reloadLine.addChild(minus);*/
-    reloadLine.addChild(plus);
+
 
     //kasataan
     /*self.centerWindow.addChild(self.wave1Btn);
@@ -186,7 +199,7 @@
     self.centerWindow.addChild(shipLines);
     /*self.centerWindow.addChild(self.waveTotalCost);*/
     self.centerWindow.addChild(checkOutLabel);
-    self.centerWindow.addChild(points);
+    self.centerWindow.addChild(money);
     /*wave1();*/
     //aaltovalikon funktiot
     function wave1(){
@@ -270,35 +283,37 @@
             if(self.playerData.playerData.money < self.checkoutBtn.selected.price && self.tweenActive == false){
                 //do some animation
                 var newstyle = { font:'35px calibri', fill:'red'};
-                points.setStyle(newstyle);
+                money.setStyle(newstyle);
                 self.tweenActive = true;
-                var tween = self.game.add.tween(points).to({width:points.width+20,height:points.height+10,x:points.x-10},300,"Linear",true,0,2,true);
+                var tween = self.game.add.tween(money).to({width:money.width+20,height:money.height+10,x:money.x-10},300,"Linear",true,0,2,true);
                 tween.onComplete.add(function(){
                     newstyle = { font:'35px calibri', fill:'black'};
-                    points.setStyle(newstyle);
+                    money.setStyle(newstyle);
                     self.tweenActive = false;
                 },self);
             } else if(self.checkoutBtn.selected.price > 0 && self.playerData.playerData.money >= self.checkoutBtn.selected.price){//jos tarpeeksi rahaa
                 self.playerData.playerData.money -= self.checkoutBtn.selected.price;
-                self.playerData.shipStats[self.checkoutBtn.selected.name] += 0.25;
-                /*var saveShipState = $.ajax({
+                self.playerData.shipStats.guns[self.checkoutBtn.selected.name] += 0.25;
+                var shipStat = JSON.stringify(self.playerData.shipStats.guns);
+                var saveShipState = $.ajax({
                     method:"POST",
                     url:"PHP/SQLcontroller/updateData.php",
                     data:{
-                        usage:2,
+                        usage:6,
                         location:window.location.href,
                         loginFollowID: self.playerData.loginFollowID,
                         playerName:self.playerData.playerData.playerName,
-                        points:self.playerData.playerData.points
+                        shipStats:shipStat,
+                        money:self.playerData.playerData.money
                     }
                 });
                 saveShipState.done(function(returnValue){
-                    alert("New wave created sucessfully");
+                    alert("Saved successfully");
                 });
                 saveShipState.fail(function(returndata){
                     alert("Couldn't create new wave, database unreachable");
-                });*/
-                points.text = self.playerData.playerData.money;
+                });
+                money.text = self.playerData.playerData.money;
                 self.surroundings.menuheader.getChildAt(2).text = "Money: "+self.playerData.playerData.money;
                 gunEditor(self);
             } else if(self.checkoutBtn.selected.price == 0){

@@ -12,7 +12,7 @@ function powerSystemEditor(self){
     };
     var style = { font:'15px cyber', fill:'black'};
     console.log(self);
-    self.centerWindow.removeAll();
+    self.centerWindow.removeAll(true);
     self.editGunsBtn.setFrames(0, 1, 2);
     console.log(self.centerWindow.length);
     self.editPowersBtn.setFrames(1,2,2);
@@ -36,7 +36,7 @@ function powerSystemEditor(self){
     style = { font:'18px cyber', fill:'white'};
     var styleSmall = { font:'14px cyber', fill:'white'};
     //pelaajan pisteet
-    var points = self.game.add.text(515,25,self.playerData.playerData.money,style);
+    var money = self.game.add.text(515,25,self.playerData.playerData.money,style);
 
 
     //checkoutin otsikko
@@ -61,21 +61,25 @@ function powerSystemEditor(self){
 
     var reloadLine = self.game.add.group();
     reloadLine.name = "powerReloadBonus";
-    reloadLine.price = 1000*self.playerData.shipStats.powerReloadBonus;
+    reloadLine.price = 1000*self.playerData.shipStats.powers.powerReloadBonus;
     var AOELine = self.game.add.group();
-    AOELine.name = "powerAOEbonus";
-    AOELine.price = 1000*self.playerData.shipStats.powerAOEBonus;
+    AOELine.name = "powerAOEBonus";
+    AOELine.price = 1000*self.playerData.shipStats.powers.powerAOEBonus;
     var efcTmiLine = self.game.add.group();
-    efcTmiLine.name = "powerEffectTimeBoAOE";
-    efcTmiLine.price = 1000*self.playerData.shipStats.powerEffectTimeBonus;
+    efcTmiLine.name = "powerEffectTimeBonus";
+    efcTmiLine.price = 1000*self.playerData.shipStats.powers.powerEffectTimeBonus;
+
     //pwer reload line
     var reloadPic = self.game.add.image(32.5,110,'destroyer');
     reloadPic.scale.setTo(0.35,0.35);
-    var lineName = self.game.add.text(100,130,"Liquid Cooling Mod "+levels[self.playerData.shipStats.powerReloadBonus]+"",style);
-    if(levels[self.playerData.shipStats.gunReloadBoost] != 5){
-        var linePrice = self.game.add.text(100,150,"Price: "+(1000*self.playerData.shipStats.powerReloadBonus),styleSmall);
-        var lineInfo = self.game.add.text(100,170,"Your powers reload "+(self.playerData.shipStats.powerReloadBonus+0.25)+" times faster",styleSmall);
-        /*var minus = self.game.add.button(480,120,'minus',function() {
+    var lineName = self.game.add.text(100,130,"Liquid Cooling Mod "+levels[self.playerData.shipStats.powers.powerReloadBonus]+"",style);
+    var lineInfo = self.game.add.text(100,170,"Your powers reload "+(self.playerData.shipStats.powers.powerReloadBonus+0.25)+" times faster",styleSmall);
+    reloadLine.addChild(reloadPic);
+    reloadLine.addChild(lineName);
+    reloadLine.addChild(lineInfo);
+    if(levels[self.playerData.shipStats.powers.powerReloadBonus] != 5){
+        var linePrice = self.game.add.text(100,150,"Price: "+(1000*self.playerData.shipStats.powers.powerReloadBonus),styleSmall);
+         /*var minus = self.game.add.button(480,120,'minus',function() {
          if (self.waveCreateData[self.subMenu - 1][0] > 0){
          self.waveCreateData[self.subMenu - 1][0] -= 1;
          self.subFunctions[self.subMenu-1]();
@@ -87,22 +91,24 @@ function powerSystemEditor(self){
              self.subFunctions[self.subMenu-1]();*/
             checkOut(reloadLine);
         });
+        reloadLine.addChild(linePrice);
+        reloadLine.addChild(plus);
+    } else {
+        lineInfo.text = "Your powers reload "+self.playerData.shipStats.powers.powerReloadBonus+" times faster";
     }
-
-    reloadLine.addChild(reloadPic);
-    reloadLine.addChild(lineName);
-    reloadLine.addChild(linePrice);
-    reloadLine.addChild(lineInfo);
     /*reloadLine.addChild(shipAmount);
      reloadLine.addChild(minus);*/
-    reloadLine.addChild(plus);
+
     //AOE line
     var AOEPic = self.game.add.image(25,200,'hunter');
     AOEPic.scale.setTo(0.35,0.35);
-    lineName = self.game.add.text(100,220,"High-Tec Capasitors Pack "+levels[self.playerData.shipStats.powerAOEBonus]+"",style);
-    if(levels[self.playerData.shipStats.powerAOEBonus] != 5){
-        linePrice = self.game.add.text(100,240,"Price:  "+(1000*self.playerData.shipStats.powerAOEBonus),styleSmall);
-        lineInfo = self.game.add.text(100,260,"Powers have "+(self.playerData.shipStats.powerAOEBonus+0.25)+" times larger area of effect",styleSmall);
+    lineName = self.game.add.text(100,220,"High-Tec Capasitors Pack "+levels[self.playerData.shipStats.powers.powerAOEBonus]+"",style);
+    lineInfo = self.game.add.text(100,260,"Powers have "+(self.playerData.shipStats.powers.powerAOEBonus+0.25)+" times larger area of effect",styleSmall);
+    AOELine.addChild(AOEPic);
+    AOELine.addChild(lineName);
+    AOELine.addChild(lineInfo);
+    if(levels[self.playerData.shipStats.powers.powerAOEBonus] != 5){
+        linePrice = self.game.add.text(100,240,"Price:  "+(1000*self.playerData.shipStats.powers.powerAOEBonus),styleSmall);
         /* minus = self.game.add.button(480,210,'minus',function() {
          if (self.waveCreateData[self.subMenu - 1][1] > 0){
          self.waveCreateData[self.subMenu - 1][1] -= 1;
@@ -115,24 +121,26 @@ function powerSystemEditor(self){
              self.subFunctions[self.subMenu-1]();*/
             checkOut(AOELine);
         });
+        AOELine.addChild(linePrice);
+        AOELine.addChild(plus);
+    } else {
+        lineInfo.text = "Powers have "+self.playerData.shipStats.powers.powerAOEBonus+" times larger area of effect";
     }
-
-    AOELine.addChild(AOEPic);
-    AOELine.addChild(lineName);
-    AOELine.addChild(linePrice);
-    AOELine.addChild(lineInfo);
     /* AOELine.addChild(shipAmount);
      AOELine.addChild(minus);*/
-    AOELine.addChild(plus);
+
 
     //commander line
     var efcTmiPic = self.game.add.image(25,290,'commander');
     efcTmiPic.scale.setTo(0.35,0.32);
-    lineName = self.game.add.text(100,310,"Tweaked Power Supply Mod "+levels[self.playerData.shipStats.powerEffectTimeBonus]+"",style);
-    if(levels[self.playerData.shipStats.powerEffectTimeBonus] != 5){
-        linePrice = self.game.add.text(100,330,"Price: "+(1000*self.playerData.shipStats.powerEffectTimeBonus),styleSmall);
-        lineInfo = self.game.add.text(100,350,"Your powers last "+(self.playerData.shipStats.powerEffectTimeBonus+0.25)+" times longer",styleSmall);
-        /* minus = self.game.add.button(480,300,'minus',function() {
+    lineName = self.game.add.text(100,310,"Tweaked Power Supply Mod "+levels[self.playerData.shipStats.powers.powerEffectTimeBonus]+"",style);
+    lineInfo = self.game.add.text(100,350,"Your powers last "+(self.playerData.shipStats.powers.powerEffectTimeBonus+0.25)+" times longer",styleSmall);
+    efcTmiLine.addChild(efcTmiPic);
+    efcTmiLine.addChild(lineName);
+    efcTmiLine.addChild(lineInfo);
+    if(levels[self.playerData.shipStats.powers.powerEffectTimeBonus] != 5){
+        linePrice = self.game.add.text(100,330,"Price: "+(1000*self.playerData.shipStats.powers.powerEffectTimeBonus),styleSmall);
+         /* minus = self.game.add.button(480,300,'minus',function() {
          if (self.waveCreateData[self.subMenu - 1][2] > 0){
          self.waveCreateData[self.subMenu - 1][2] -= 1;
          self.subFunctions[self.subMenu-1]();
@@ -144,15 +152,14 @@ function powerSystemEditor(self){
              self.subFunctions[self.subMenu-1]();*/
             checkOut(efcTmiLine);
         });
+        efcTmiLine.addChild(linePrice);
+        efcTmiLine.addChild(plus);
+    } else {
+        lineInfo.text = "Your powers last "+self.playerData.shipStats.powers.powerEffectTimeBonus+" times longer";
     }
-
-    efcTmiLine.addChild(efcTmiPic);
-    efcTmiLine.addChild(lineName);
-    efcTmiLine.addChild(linePrice);
-    efcTmiLine.addChild(lineInfo);
     /*efcTmiLine.addChild(shipAmount);
      efcTmiLine.addChild(minus);*/
-    efcTmiLine.addChild(plus);
+
 
     //kasataan
     /*self.centerWindow.addChild(self.wave1Btn);
@@ -187,7 +194,7 @@ function powerSystemEditor(self){
     self.centerWindow.addChild(shipLines);
     /*self.centerWindow.addChild(self.waveTotalCost);*/
     self.centerWindow.addChild(checkOutLabel);
-    self.centerWindow.addChild(points);
+    self.centerWindow.addChild(money);
     /*wave1();*/
     //aaltovalikon funktiot
     function wave1(){
@@ -271,37 +278,38 @@ function powerSystemEditor(self){
             if(self.playerData.playerData.money < self.checkoutBtn.selected.price && self.tweenActive == false){
                 //do some animation
                 var newstyle = { font:'35px calibri', fill:'red'};
-                points.setStyle(newstyle);
+                money.setStyle(newstyle);
                 self.tweenActive = true;
-                var tween = self.game.add.tween(points).to({width:points.width+20,height:points.height+10,x:points.x-10},300,"Linear",true,0,2,true);
+                var tween = self.game.add.tween(money).to({width:money.width+20,height:money.height+10,x:money.x-10},300,"Linear",true,0,2,true);
                 tween.onComplete.add(function(){
                     newstyle = { font:'35px calibri', fill:'black'};
-                    points.setStyle(newstyle);
+                    money.setStyle(newstyle);
                     self.tweenActive = false;
                 },self);
             } else if(self.checkoutBtn.selected.price > 0 && self.playerData.playerData.money >= self.checkoutBtn.selected.price){//jos tarpeeksi rahaa
                 self.playerData.playerData.money -= self.checkoutBtn.selected.price;
-                self.playerData.shipStats[self.checkoutBtn.selected.name] += 0.25;
-                /*var saveShipState = $.ajax({
+                self.playerData.shipStats.powers[self.checkoutBtn.selected.name] += 0.25;
+               /* var saveShipState = $.ajax({
                  method:"POST",
                  url:"PHP/SQLcontroller/updateData.php",
                  data:{
-                 usage:2,
+                 usage:6,
                  location:window.location.href,
                  loginFollowID: self.playerData.loginFollowID,
                  playerName:self.playerData.playerData.playerName,
-                 points:self.playerData.playerData.points
+                 shipStats:self.playerData.shipStats.powers
                  }
                  });
                  saveShipState.done(function(returnValue){
-                 alert("New wave created sucessfully");
+                 alert("Saved successfully");
                  });
                  saveShipState.fail(function(returndata){
                  alert("Couldn't create new wave, database unreachable");
                  });*/
-                points.text = self.playerData.playerData.money;
+                console.log(JSON.stringify(self.playerData.shipStats));
+                money.text = self.playerData.playerData.money;
                 self.surroundings.menuheader.getChildAt(2).text = "Money: "+self.playerData.playerData.money;
-                hullEditor(self);
+                powerSystemEditor(self);
             } else if(self.checkoutBtn.selected.price == 0){
                 alert("Can not create empty wave");
             }

@@ -52,6 +52,7 @@ $DBcon = $DBcon->returnCon();
 // $bcrypt->verify makes BCrypt hash out of given "clear"(SHA512 hash) password so we don't need to do this manually before comparing.
 if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$tryLock)>(10*60)){//jos salis oikein, ei lukossa ja ei liikaa yrityksiä
     $_SESSION['log'] = 1;
+    $_SESSION['playerName'] = $userName;
     $return = true;
     $toDB = $bcrypt->hash($newPassWord);
     $toDB .= $newRandom;

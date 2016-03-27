@@ -18,9 +18,11 @@ body
 
 #header
 {
+    background: #1d315a;
 	margin: 0;
 	padding: 0;
 	border-top: 3px solid #1d315a;
+    height: 75px;
 }
 
 #content
@@ -49,10 +51,11 @@ body
 
 #logo
 {
-    display:none;
-	padding: 10px 20px;
+	padding: 18px 20px;
 	font-size: 200%;
     color: #BF7E1D;
+    width: 30%;
+    float: left;
 }
 
 #mainmenu
@@ -60,11 +63,11 @@ body
 	/*background:white url(bg.gif) repeat-x left top; */
     background: #1d315a;
     height: 75px;
-   /* float: left; */
 }
 
 #mainmenu ul
 {
+    margin: 0 auto;
 	padding: 25px 20px 8px 20px;
 	margin: 0px;
 }

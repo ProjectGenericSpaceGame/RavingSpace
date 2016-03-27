@@ -4,29 +4,35 @@ body
 	padding: 0;
 	color: #555;
 	font: normal 10pt Arial,Helvetica,sans-serif;
-	background: #EFEFEF;
+	background: white;
 }
 
 #page
 {
-	margin-top: 5px;
-	margin-bottom: 5px;
 	background: white;
-	border: 1px solid #C9E0ED;
+}
+
+.container{
+    width: 100%;
 }
 
 #header
 {
 	margin: 0;
 	padding: 0;
-	border-top: 3px solid #C9E0ED;
+	border-top: 3px solid #1d315a;
 }
 
 #content
 {
     padding: 20px;
 }
-
+.content-wrapper{
+    max-height: 100%;
+    width: 960px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
 #sidebar
 {
 	padding: 20px 20px 20px 0;
@@ -38,29 +44,35 @@ body
 	margin: 10px 20px;
 	font-size: 0.8em;
 	text-align: center;
-	border-top: 1px solid #C9E0ED;
+	border-top: 1px solid #1d315a;
 }
 
 #logo
 {
+    display:none;
 	padding: 10px 20px;
 	font-size: 200%;
+    color: #BF7E1D;
 }
 
 #mainmenu
 {
-	background:white url(bg.gif) repeat-x left top;
+	/*background:white url(bg.gif) repeat-x left top; */
+    background: #1d315a;
+    height: 75px;
+   /* float: left; */
 }
 
 #mainmenu ul
 {
-	padding:6px 20px 5px 20px;
-	margin:0px;
+	padding: 25px 20px 8px 20px;
+	margin: 0px;
 }
 
 #mainmenu ul li
 {
 	display: inline;
+    height: 100%;
 }
 
 #mainmenu ul li a
@@ -70,14 +82,16 @@ body
 	font-size:12px;
 	font-weight:bold;
 	text-decoration:none;
-	padding:5px 8px;
+	padding: 7px 8px;
 }
 
 #mainmenu ul li a:hover, #mainmenu ul li.active a
 {
-	color: #6399cd;
-	background-color:#EFF4FA;
+	color: #000;
+	background-color:#fff;
 	text-decoration:none;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
 div.flash-error, div.flash-notice, div.flash-success
@@ -146,40 +160,40 @@ div.breadcrumbs span
 	font-weight: bold;
 }
 
-div.search-form
-{
+div.search-form {
 	padding: 10px;
 	margin: 10px 0;
 	background: #eee;
 }
 
-.portlet
-{
-
+.portlet{
+   /* border: 1px solid #5c5c5c; */
 }
 
-.portlet-decoration
-{
-	padding: 3px 8px;
-	background: #B7D6E7;
-	border-left: 5px solid #6FACCF;
+.portlet-decoration {
+	padding: 8px 8px;
+    border-top-right-radius: 8px;
+	background: #1d315a;
+	/*border-left: 5px solid #BF7E1D;*/
+    color: #fff;
 }
 
-.portlet-title
-{
+.portlet-title{
 	font-size: 12px;
 	font-weight: bold;
 	padding: 0;
 	margin: 0;
-	color: #298dcd;
+	color: #fff;
 }
 
-.portlet-content
-{
-	font-size:0.9em;
-	margin: 0 0 15px 0;
-	padding: 5px 8px;
-	background:#EFFDFF;
+.portlet-content{
+	font-size: 12px;
+	/*margin: 0 0 15px 0;*/
+	padding: 5px 0px;
+	background: #ffffff;
+    border: 1px solid #888888;
+    border-top: none;
+    border-bottom-right-radius: 8px;
 }
 
 .portlet-content ul
@@ -205,13 +219,13 @@ div.search-form
 
 .operations li
 {
-	padding-bottom: 2px;
+	padding-bottom: 5px;
 }
 
 .operations li a
 {
 	font: bold 12px Arial;
-	color: #0066A4;
+	color: #BF7E1D;
 	display: block;
 	padding: 2px 0 2px 8px;
 	line-height: 15px;
@@ -225,5 +239,7 @@ div.search-form
 
 .operations li a:hover
 {
-	background: #80CFFF;
+    border-left: 5px solid #BF7E1D;
+	background: #f0f0f0;
+    color: #000;
 }

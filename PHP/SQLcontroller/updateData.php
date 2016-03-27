@@ -43,7 +43,7 @@
 	function shoppingEvent($playerName,$db){
         /** @var $db PDO */
         $echoobject = "";
-		$loginFollowID = $_POST['loginFollowID'];//tätä voidaan käyttää myös shipIDnä sillä sama luku
+		$loginFollowID = $_POST['loginFollowID'];
         $weapons = $_POST['weapons'];
         $abilities = $_POST['abilities'];
         $playerMoney = $_POST['money'];
@@ -82,7 +82,6 @@
             $query->execute();
         }
     }
-	
 	function finishedGame($playerName,$db){
         /** @var $db PDO */
         date_default_timezone_set('Europe/Helsinki');
@@ -91,8 +90,6 @@
 		$attackID = $_POST['attackID'];
 		$attackLoot = $_POST['attackLoot'];
 		$points = (integer)$_POST['points'];
-		//$scoreID = $_POST['scoreID'];
-		//$scoreToUpdate = $_POST['scoreToUpdate'];
         //haetaan aallon omistajan rahat päivitystä varten
         $select = "SELECT playerID FROM attackWaves WHERE attackID = '$attackID'";
         $query = $db->prepare($select);
@@ -102,10 +99,6 @@
         
         $attackOwnerMoney = getFromDB("SELECT money FROM playerData WHERE playerID = '$attackOwner'","money",$db);
         $attackOwnerMoney += $attackLoot;
-		/*echo $attackOwner;*/
-		//tässä päivitetään aallon tiedot
-        
-        // POISTETAAN vvvvvv
         $wasTester = false;
         for($i = 0;$i<15;$i++){//kannassa on 15 testikäyttäjää, katsotaan ettei ollut heidän aaltonsa
 			echo "testi".($i+1)."ja tulos: ".$attackOwner == "testi".($i+1);
@@ -113,8 +106,6 @@
                 $wasTester = true;
             }
         }
-        // POISTETAAN ^^^^^^
-        
         if(!$wasTester) {
             $select = "UPDATE attackWaves SET attackState = 'Destroyed', attackLoot = $attackLoot WHERE playerID = '$attackOwner'";
             $query = $db->prepare($select);
@@ -165,8 +156,39 @@
             $query->execute();
         }
     }
+    function updateShipPowers($playerName, $db, $shipStates, $money){
+        $loginFollowID = $_POST['loginFollowID'];
+        $loggedIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
+        if($loggedIn == "in") {
+            //tietokannan kenttien ja pelin muuttujat ovat eri nimellä, joka korjataan alla olevalla.  
+            $correlationTable = array("powerReloadBonus"=>"powerReloadBonus","powerAOEBonus"=>"powerAOEBonus","powerEffectTime"=>"powerEffectTimeBonus");
+            $shipStates = json_decode($shipStates);
+            //selvitetään ensiksi shipID
+            $shipID = getFromDB("SELECT shipID FROM shipStates WHERE playerID = '$playerName'","shipID",$db);
+            //Ja nyt päivitetään
+            $toUpdate = "";
+
+            foreach($shipStates as $state => $value){
+                // prepare must inside loop because column name changes...
+                $query = $db->prepare("UPDATE shipStates SET $correlationTable[$state]=? WHERE shipID=?");
+                $query->execute(array($value, $shipID));
+            }
+            $select = "UPDATE playerData set money = $money WHERE playerData.playerID = '$playerName'";
+            $query = $db->prepare($select);
+            $query->execute();
+        }
+        
+        /*$shipPowersStats = '"powers": {';
+            powerReloadBonus":'.$row["powerReloadBonus"].',';
+            powerAOEBonus":'.$row["powerAOEbonus"].',';
+            powerEffectTime":'.$row["powerEffectTimeBonus"].'}';
+            */
+        
+        
+    }
+    //tällä voimme varmistua käytön mukaan mitkä parametrin on asetettu, samalla voimme toteuttaa injektiotarkistukset näissä
     if($playerName == $_SESSION["playerName"]){
-        //tällä voimme varmistua käytön mukaan mitkä parametrin on asetettu, samalla voimme toteuttaa injektiotarkistukset näissä
+        //funcktiot eri käyttötarkoituksen mukaan
         if($usage == 1){
             updateAccountInfo();
         }
@@ -185,10 +207,14 @@
             $shipStates = $_POST["shipStats"];
             $money = $_POST["money"];
             updateShipGuns($playerName,$db,$shipStates, $money);
+        } else if($usage == 7){
+            $shipStates = $_POST["shipStats"];
+            $money = $_POST["money"];
+            updateShipPowers($playerName,$db,$shipStates, $money);
         }
     }
-
-    function getFromDB($query,$toGet,$db){//tällä säästetään saman prepare->query->fetch rimpsun kirjoittelu
+    //tällä säästetään saman prepare->query->fetch rimpsun kirjoittelu
+    function getFromDB($query,$toGet,$db){
         /** @var $db PDO */
         $prepared = $db->prepare($query);
         $prepared->execute();

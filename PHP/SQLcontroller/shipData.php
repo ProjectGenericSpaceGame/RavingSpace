@@ -39,7 +39,7 @@ $shipGunsStats .= '"gunReloadBoost":'.$row["gunReloadBonus"].'}';
 
 $shipPowersStats = '"powers": {';
 $shipPowersStats .= '"powerReloadBonus":'.$row["powerReloadBonus"].',';
-$shipPowersStats .= '"powerAOEBonus":'.$row["powerAOEBonus"].',';
+$shipPowersStats .= '"powerAOEBonus":'.$row["powerAOEbonus"].',';
 $shipPowersStats .= '"powerEffectTime":'.$row["powerEffectTimeBonus"].'}';
 
 

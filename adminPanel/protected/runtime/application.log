@@ -1228,3 +1228,21 @@ Stack trace:
 REQUEST_URI=/RavingSpace/adminPanel/index.php?r=henkilot/about
 HTTP_REFERER=http://localhost:509/RavingSpace/adminPanel/index.php?r=site/login
 ---
+2016/03/26 16:09:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "henkilot/about".' in D:\php\RavingSpace\adminPanel\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\php\RavingSpace\adminPanel\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('henkilot/about')
+#1 D:\php\RavingSpace\adminPanel\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#2 D:\php\RavingSpace\adminPanel\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/RavingSpace/adminPanel/index.php?r=henkilot/about
+HTTP_REFERER=http://localhost/RavingSpace/adminPanel/index.php?r=attackWaves/index
+---
+2016/03/26 16:43:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "henkilot/about".' in D:\php\RavingSpace\adminPanel\yii\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\php\RavingSpace\adminPanel\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('henkilot/about')
+#1 D:\php\RavingSpace\adminPanel\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#2 D:\php\RavingSpace\adminPanel\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/RavingSpace/adminPanel/index.php?r=henkilot/about
+HTTP_REFERER=http://localhost/RavingSpace/adminPanel/index.php?r=attackWaves/index
+---

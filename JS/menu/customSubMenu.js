@@ -33,7 +33,7 @@ customSubMenu.prototype = {
 
         //tämä painike avaa workshopin
         this.workshopButton = this.game.add.button(200, 450, 'buttonSprite', this.workshopStart, this, 0, 1, 2);
-        var text3 = this.game.add.text(150,20,"Workshop", textStyle);
+        var text3 = this.game.add.text(100,20,"Workshop", textStyle);
         this.workshopButton.addChild(text3);
 
         //alustetaan takaisin nappula

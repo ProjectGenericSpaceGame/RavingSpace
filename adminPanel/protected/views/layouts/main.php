@@ -38,14 +38,15 @@
 			),
 		)); ?>
 	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
+    <div class="content-wrapper">
+        <?php if(isset($this->breadcrumbs)):?>
+            <?php $this->widget('zii.widgets.CBreadcrumbs', array(
+                'links'=>$this->breadcrumbs,
+            )); ?><!-- breadcrumbs -->
+        <?php endif?>
 
-	<?php echo $content; ?>
-
+        <?php echo $content; ?>
+    </div>
 	<div class="clear"></div>
 
 	<div id="footer">

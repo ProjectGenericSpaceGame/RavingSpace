@@ -66,8 +66,8 @@ function powerSystemEditor(self){
     AOELine.name = "powerAOEBonus";
     AOELine.price = 1000*self.playerRelatedData.shipStats.powers.powerAOEBonus;
     var efcTmiLine = self.game.add.group();
-    efcTmiLine.name = "powerEffectTimeBonus";
-    efcTmiLine.price = 1000*self.playerRelatedData.shipStats.powers.powerEffectTimeBonus;
+    efcTmiLine.name = "powerEffectTime";
+    efcTmiLine.price = 1000*self.playerRelatedData.shipStats.powers.powerEffectTime;
 
     //pwer reload line
     var reloadPic = self.game.add.image(32.5,110,'destroyer');
@@ -133,13 +133,13 @@ function powerSystemEditor(self){
     //commander line
     var efcTmiPic = self.game.add.image(25,290,'commander');
     efcTmiPic.scale.setTo(0.35,0.32);
-    lineName = self.game.add.text(100,310,"Tweaked Power Supply Mod "+levels[self.playerRelatedData.shipStats.powers.powerEffectTimeBonus]+"",style);
-    lineInfo = self.game.add.text(100,350,"Your powers last "+(self.playerRelatedData.shipStats.powers.powerEffectTimeBonus+0.25)+" times longer",styleSmall);
+    lineName = self.game.add.text(100,310,"Tweaked Power Supply Mod "+levels[self.playerRelatedData.shipStats.powers.powerEffectTime]+"",style);
+    lineInfo = self.game.add.text(100,350,"Your powers last "+(self.playerRelatedData.shipStats.powers.powerEffectTime+0.25)+" times longer",styleSmall);
     efcTmiLine.addChild(efcTmiPic);
     efcTmiLine.addChild(lineName);
     efcTmiLine.addChild(lineInfo);
-    if(levels[self.playerRelatedData.shipStats.powers.powerEffectTimeBonus] != 5){
-        linePrice = self.game.add.text(100,330,"Price: "+(1000*self.playerRelatedData.shipStats.powers.powerEffectTimeBonus),styleSmall);
+    if(levels[self.playerRelatedData.shipStats.powers.powerEffectTime] != 5){
+        linePrice = self.game.add.text(100,330,"Price: "+(1000*self.playerRelatedData.shipStats.powers.powerEffectTime),styleSmall);
          /* minus = self.game.add.button(480,300,'minus',function() {
          if (self.waveCreateData[self.subMenu - 1][2] > 0){
          self.waveCreateData[self.subMenu - 1][2] -= 1;
@@ -155,7 +155,7 @@ function powerSystemEditor(self){
         efcTmiLine.addChild(linePrice);
         efcTmiLine.addChild(plus);
     } else {
-        lineInfo.text = "Your powers last "+self.playerRelatedData.shipStats.powers.powerEffectTimeBonus+" times longer";
+        lineInfo.text = "Your powers last "+self.playerRelatedData.shipStats.powers.powerEffectTime+" times longer";
     }
     /*efcTmiLine.addChild(shipAmount);
      efcTmiLine.addChild(minus);*/
@@ -275,6 +275,7 @@ function powerSystemEditor(self){
              self.wave3Btn.setFrames(0, 1, 2);*/
             self.checkoutBtn.selected = selected;
         } else {
+            // jos pelaajalla ei ole tarpeeksi rahaa
             if(self.playerRelatedData.playerData.money < self.checkoutBtn.selected.price && self.tweenActive == false){
                 //do some animation
                 var newstyle = { font:'35px calibri', fill:'red'};
@@ -286,27 +287,33 @@ function powerSystemEditor(self){
                     money.setStyle(newstyle);
                     self.tweenActive = false;
                 },self);
-            } else if(self.checkoutBtn.selected.price > 0 && self.playerRelatedData.playerData.money >= self.checkoutBtn.selected.price){//jos tarpeeksi rahaa
+                //jos pelaajalla on tarpeeksi rahaa
+            } else if(self.checkoutBtn.selected.price > 0 && self.playerRelatedData.playerData.money >= self.checkoutBtn.selected.price){
                 self.playerRelatedData.playerData.money -= self.checkoutBtn.selected.price;
                 self.playerRelatedData.shipStats.powers[self.checkoutBtn.selected.name] += 0.25;
-               /* var saveShipState = $.ajax({
-                 method:"POST",
-                 url:"PHP/SQLcontroller/updateData.php",
-                 data:{
-                 usage:6,
-                 location:window.location.href,
-                 loginFollowID: self.playerRelatedData.loginFollowID,
-                 playerName:self.playerRelatedData.playerData.playerName,
-                 shipStats:self.playerRelatedData.shipStats.powers
-                 }
+                var shipStat = JSON.stringify(self.playerRelatedData.shipStats.powers);
+                var saveShipState = $.ajax({
+                    method:"POST",
+                    url:"PHP/SQLcontroller/updateData.php",
+                    data:{
+                        usage:7,
+                        location:window.location.href,
+                        loginFollowID: self.playerRelatedData.loginFollowID,
+                        playerName:self.playerRelatedData.playerData.playerName,
+                       // shipStats:self.playerRelatedData.shipStats.powers
+                        shipStats:shipStat,
+                        money:self.playerRelatedData.playerData.money
+                    }
                  });
                  saveShipState.done(function(returnValue){
-                 alert("Saved successfully");
+                    alert("Saved successfully");
+                    console.log(returnValue);
                  });
-                 saveShipState.fail(function(returndata){
-                 alert("Couldn't create new wave, database unreachable");
-                 });*/
-                console.log(JSON.stringify(self.playerRelatedData.shipStats));
+                 saveShipState.fail(function(returnData){
+                    console.log(returnData);
+                    alert("Couldn't create new wave, database unreachable");
+                 });
+                //console.log(JSON.stringify(self.playerRelatedData.shipStats));
                 money.text = self.playerRelatedData.playerData.money;
                 self.surroundings.menuheader.getChildAt(2).text = "Money: "+self.playerRelatedData.playerData.money;
                 powerSystemEditor(self);

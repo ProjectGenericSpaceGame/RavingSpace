@@ -199,6 +199,7 @@ menuLoad.prototype = {
                 }
             });
             getFromDB.done(function(returnValue) {
+                console.log(returnValue);
                 var shipData = returnValue.split("§");
                 self.playerRelatedData.shipStats = JSON.parse(shipData[0]);//devausta varten, tulee myöhemmin kannasta
                 self.playerRelatedData.gunData = JSON.parse(shipData[1]);//devausta varten, tulee myöhemmin kannasta

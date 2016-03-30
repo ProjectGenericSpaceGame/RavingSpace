@@ -1,6 +1,8 @@
 <?php
 	//alustetaan tiedot
     session_start();
+    include('../CryptoHandler/cryptoClass.php');
+    $bcrypt = new Bcrypt(15);
 	$returnObject = "";
 	$usage = $_POST['usage'];
     // $usage memory list:    
@@ -188,30 +190,41 @@
     }
     //tällä voimme varmistua käytön mukaan mitkä parametrin on asetettu, samalla voimme toteuttaa injektiotarkistukset näissä
     if($playerName == $_SESSION["playerName"]){
-        //funcktiot eri käyttötarkoituksen mukaan
-        if($usage == 1){
-            updateAccountInfo();
+        $loginFollowID = $_POST['loginFollowID'];
+        $isIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
+        $IP = getFromDB("SELECT lastKnownIP FROM loginAttempts WHERE loginFollowID = $loginFollowID","lastKnownIP",$db);
+        if($isIn == "in" && $bcrypt->verify($_SERVER["REMOTE_ADDR"],$IP)){
+            //funcktiot eri käyttötarkoituksen mukaan
+            if($usage == 1){
+                updateAccountInfo();
+            }
+            else if($usage == 2){
+                newWave($playerName,$db);
+            }
+            else if($usage == 3){
+                shoppingEvent($playerName,$db);
+            }
+            else if($usage == 4){
+                finishedGame($playerName,$db);
+            }
+            else if($usage == 5){
+                logOff($returnObject,$db);
+            } else if($usage == 6){
+                $shipStates = $_POST["shipStats"];
+                $money = $_POST["money"];
+                updateShipGuns($playerName,$db,$shipStates, $money);
+            } else if($usage == 7){
+                $shipStates = $_POST["shipStats"];
+                $money = $_POST["money"];
+                updateShipPowers($playerName,$db,$shipStates, $money);
+            }
         }
-        else if($usage == 2){
-            newWave($playerName,$db);
+        else {
+            $db = null;
+            echo "IPchange";
+            die();
         }
-        else if($usage == 3){
-            shoppingEvent($playerName,$db);
-        }
-        else if($usage == 4){
-            finishedGame($playerName,$db);
-        }
-        else if($usage == 5){
-            logOff($returnObject,$db);
-        } else if($usage == 6){
-            $shipStates = $_POST["shipStats"];
-            $money = $_POST["money"];
-            updateShipGuns($playerName,$db,$shipStates, $money);
-        } else if($usage == 7){
-            $shipStates = $_POST["shipStats"];
-            $money = $_POST["money"];
-            updateShipPowers($playerName,$db,$shipStates, $money);
-        }
+
     }
     //tällä säästetään saman prepare->query->fetch rimpsun kirjoittelu
     function getFromDB($query,$toGet,$db){

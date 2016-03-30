@@ -5,7 +5,7 @@
  * Date: 17/03/2016
  * Time: 11:12
  */
-
+session_start();
 include('../CryptoHandler/cryptoClass.php');
 $bcrypt = new Bcrypt(15);
 if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
@@ -13,7 +13,7 @@ if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/gam
 } else {
     require_once('../db-initDEV.php');
 }
-function tryUpdate($data,$bcrypt,$db){
+function tryUpdate($data,$bcrypt,$db,$playerName){
     /** @var PDO $db*/
     /** @var Bcrypt $bcrypt*/
     $returnValue = array();
@@ -36,6 +36,9 @@ function tryUpdate($data,$bcrypt,$db){
         $toHash = substr($givenHash, 0, -10);
         $newPass = $bcrypt->hash($toHash).$newRandom;
         $select .= 'passHash="'.$newPass.'"';
+    } else {
+        $select = substr($select,0,-2);
+        $newPass = "";
     }
     if($data["password"] == "N/A" && $data["email"] == "N/A"){
         $returnValue[0] = "noChange";
@@ -43,14 +46,15 @@ function tryUpdate($data,$bcrypt,$db){
         return $returnValue;
     }
 
-    $select .= 'WHERE playerID="'.$data["playerName"].'"';
+    $select .= 'WHERE playerID="'.$playerName.'"';
+    echo $select;
     $query = $db->prepare($select);
     $query->execute();
-    $select = "SELECT passHash, email FROM playerData WHERE playerID='".$data["playerName"]."'";
+    $select = "SELECT passHash, email FROM playerData WHERE playerID='".$playerName."'";
     $query = $db->prepare($select);
     $query->execute();
     $row = $query->fetch(PDO::FETCH_ASSOC);
-    if($row["passHash"] == $newPass){
+    if($row["passHash"] == $newPass || $newPass == ""){
         $returnValue[1] = "success";
         if($row["email"] == $data["email"] || $data["email"] == "N/A"){
             $returnValue[0] = "success";
@@ -67,10 +71,10 @@ function tryUpdate($data,$bcrypt,$db){
     }
     return $returnValue;
 }
-function resetAll($data,$db){
+function resetAll($data,$db,$playerName){
     /** @var PDO $db*/
     try{
-        $select = "SELECT shipID, playerID FROM shipStates WHERE playerID = '".$data["playerName"]."'";
+        $select = "SELECT shipID, playerID FROM shipStates WHERE playerID = '".$playerName."'";
         $query = $db->prepare($select);//tulokset ovat $query muuttujassa
         $query->execute();
         $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -82,7 +86,7 @@ function resetAll($data,$db){
         $select = 'UPDATE attackWaves SET playerID = "testi1" WHERE playerID="'.$playerID.'"';//poista kaikki aaltojen omistussuhteet (jättää aallot)
         $query = $db->prepare($select);//tulokset ovat $query muuttujassa
         $query->execute();
-        $select = 'UPDATE shipStates SET speed = "100", hp=1000, model="basic", gunDmgBonus="1"  WHERE shipID='.$shipID.'';//Perusalus
+        $select = 'UPDATE shipStates SET speed = "100", hp=1000, model="basic", gunDmgBonus="1"  WHERE shipID='.$shipID;//Perusalus
         $query = $db->prepare($select);//tulokset ovat $query muuttujassa
         $query->execute();
         $select = 'DELETE FROM shipGuns WHERE shipID="'.$shipID.'" AND has <> "basic"';//poista kaikki paitsi perusase
@@ -101,22 +105,27 @@ $db = new DBcon();
 $db = $db->returnCon();
 //alustetaan tiedot
 $returnObject = "";
-$playerName = $_POST['playerName'];
+$playerName = $_SESSION['playerName'];
 //$playerName = "testi1";
 $loginFollowID = (integer)$_POST['loginFollow'];
 //$loginFollowID = 1;
 $isIn = false;
 //query
-$select = "select loggedIn from loginAttempts where loginFollowID = $loginFollowID";
-$query = $db->prepare($select);//tulokset ovat $query muuttujassa
-$query->execute();
-$row = $query->fetch(PDO::FETCH_ASSOC);
-if($row['loggedIn'] == "in"){
+$isIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
+$IP = getFromDB("SELECT lastKnownIP FROM loginAttempts WHERE loginFollowID = $loginFollowID","lastKnownIP",$db);
+if($isIn == "in" && $bcrypt->verify($_SERVER["REMOTE_ADDR"],$IP)){
     if($_POST["usage"] == "updateAccountData"){
-        echo json_encode(tryUpdate($_POST,$bcrypt,$db));//tryUpdate palauttaa päivityksen tuloksen
+        echo json_encode(tryUpdate($_POST,$bcrypt,$db,$playerName));//tryUpdate palauttaa päivityksen tuloksen
         $db = null;
     } else if($_POST["usage"] == "resetAll"){
-        echo resetAll($_POST,$db);
+        echo resetAll($_POST,$db,$playerName);
         $db = null;
     }
+}
+function getFromDB($query,$toGet,$db){
+    /** @var $db PDO */
+    $prepared = $db->prepare($query);
+    $prepared->execute();
+    $row = $prepared->fetch(PDO::FETCH_ASSOC);
+    return $row[$toGet];
 }

@@ -64,7 +64,8 @@ if($bcrypt->verify($toCompare, $DBhash) == 1 && $failedAttempts < 4 && (time()-$
     $query->execute();
     //echo "daa?";
     $timestamp = date('l jS \of F Y h:i:s A');
-    $select = "update loginAttempts set failedTries = $failedAttempts, loggedIn = 'in', lastSuccesful = '$timestamp' where loginFollowID = $loginFollowID";
+    $knownIP = $bcrypt->hash($_SERVER["REMOTE_ADDR"]);
+    $select = "update loginAttempts set failedTries = $failedAttempts, loggedIn = 'in', lastSuccesful = '$timestamp', lastKnownIP='$knownIP' where loginFollowID = $loginFollowID";
     $query = $DBcon->prepare($select);
     $query->execute();
     /*$select = "update loginAttempts set  where loginFollowID = $loginFollowID";

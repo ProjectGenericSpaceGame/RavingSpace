@@ -172,7 +172,7 @@ menuLoad.prototype = {
                     self.logout();
                 } else {
                     self.playerRelatedData = JSON.parse(returnValue);
-                    self.playerRelatedData.shipStats = {//devausta varten, tulee myöhemmin kannasta TODO: siirrä hakemaan kannasta
+                   /* self.playerRelatedData.shipStats = {//devausta varten, tulee myöhemmin kannasta TODO: siirrä hakemaan kannasta
                         guns:{
                             gunDmgBoost:1,
                             gunSpeedBoost:1.75,
@@ -184,7 +184,7 @@ menuLoad.prototype = {
                             powerEffectTimeBonus:1
                         }
                     };
-                    console.log("Pelaajan data"+self.playerRelatedData.shipPowers[0]);
+                    console.log("Pelaajan data"+self.playerRelatedData.shipPowers[0]);*/
                 }
             });
             getFromDB.fail(function(){alert("database unreachable!")});
@@ -201,8 +201,8 @@ menuLoad.prototype = {
             getFromDB.done(function(returnValue) {
                 console.log(returnValue);
                 var shipData = returnValue.split("§");
-                self.playerRelatedData.shipStats = JSON.parse(shipData[0]);//devausta varten, tulee myöhemmin kannasta
-                self.playerRelatedData.gunData = JSON.parse(shipData[1]);//devausta varten, tulee myöhemmin kannasta
+                self.playerRelatedData.shipStats = JSON.parse(shipData[0]);
+                self.playerRelatedData.shipRelatedItems = JSON.parse(shipData[1]);//TODO:rename and take off of playerRelatedData (isn't player related)
             });
             getFromDB.fail(function(){alert("database unreachable!")});
             //

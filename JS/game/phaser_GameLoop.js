@@ -96,6 +96,7 @@ mainGame.prototype = {
         this.pickedAbilityExists = false;
         this.pickedAbilityShield = false;
         this.attackLoot = 0;
+        this.bulletSpeedBonus = this.playerRelatedData.shipStats.guns.gunSpeedBoost;
         this.HUDchangeEvent = false; //mahdollistaa tehoste HUDin käytön hiiren rullalla ilman että tehoste laukeaa
 
         this.clipSizes = [35, 30, 5, 1];
@@ -275,7 +276,7 @@ mainGame.prototype = {
             }
             //lataus
             if (this.cursors.reload.isDown && !this.reloading[this.HUD.webTray.trayPosition - 1]) {
-                reload(this.reloadSprite, this.clips, this.HUD.webTray.trayPosition - 1, this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), 1, this.reloading);
+                reload(this.reloadSprite, this.clips, this.HUD.webTray.trayPosition - 1, this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), 1, this.reloading,this.playerRelatedData.shipStats.guns.gunReloadBoost);
             }
             //aseen&abilityn vaihto
             if (this.cursors.abil1.isDown || this.cursors.abil2.isDown || this.cursors.abil3.isDown || this.cursors.wep1.isDown || this.cursors.wep2.isDown || this.cursors.wep3.isDown) {
@@ -306,7 +307,7 @@ mainGame.prototype = {
             //fire palauttaa true mikäli ammutiin panos
             if (this.game.input.activePointer.leftButton.isDown && this.clips[this.HUD.webTray.trayPosition - 1] > 0 && !this.reloading[this.HUD.webTray.trayPosition - 1] && this.ship.alive) {
                 if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "basic") {
-                    if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
+                    if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship,null,this.bulletSpeedBonus)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
                         musics.sounds.playerBasic.currentTime = 0;
                         musics.sounds.playerBasic.play();
@@ -317,12 +318,12 @@ mainGame.prototype = {
                     }
                     laserFire();
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "mines") {
-                    if (fire(this.minesBul, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
+                    if (fire(this.minesBul, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship,null,this.bulletSpeedBonus)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
                     }
                  
                 } else if (this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).name == "shotgun") {
-                    if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship)) {
+                    if (fire(this.bullets, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), this.guns.getChildAt(this.HUD.webTray.trayPosition - 1).fireRate, corRot, this.ship,null,this.bulletSpeedBonus)) {
                         this.clips[this.HUD.webTray.trayPosition - 1]--;
                         musics.sounds.playerShotgun.currentTime = 0;
                         musics.sounds.playerShotgun.play();
@@ -330,7 +331,7 @@ mainGame.prototype = {
                 }
                 //mikäli panokset loppuivat, aktivoidaan lataus
             } else if (!this.reloading[this.HUD.webTray.trayPosition - 1] && this.clips[this.HUD.webTray.trayPosition - 1] <= 0) {
-                reload(this.reloadSprite, this.clips, this.HUD.webTray.trayPosition - 1, this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), 1, this.reloading);
+                reload(this.reloadSprite, this.clips, this.HUD.webTray.trayPosition - 1, this.HUD, this.guns.getChildAt(this.HUD.webTray.trayPosition - 1), 1, this.reloading,this.playerRelatedData.shipStats.guns.gunReloadBoost);
             }
             //tehosteet
             if (this.game.input.activePointer.rightButton.justReleased(40) && !this.abilityReloading[this.HUD.abTray.trayPosition - 1] && !this.HUDchangeEvent && this.shipAccessories.getChildAt(0).length != 0) {
@@ -342,7 +343,7 @@ mainGame.prototype = {
                         this.game.time.events.add(1000, function () {
                             this.ship.body.mass = mass + 1 - 1;
                             mass = null;
-                            reload(null, null, this.HUD.abTray.trayPosition - 1, this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading);
+                            reload(null, null, this.HUD.abTray.trayPosition - 1, this.HUD, this.shipAccessories.getChildAt(0).getChildAt(this.HUD.abTray.trayPosition - 1), 2, this.abilityReloading,this.playerRelatedData.shipStats.powers.powerReloadBonus);
                         }, this);
                         this.ship.body.mass *= 0.1;
                         this.abilityReloading[this.HUD.abTray.trayPosition - 1] = true;

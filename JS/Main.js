@@ -148,7 +148,7 @@ function randNumber(lap){
 }
 
 //Ampumisfunktio
-function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
+function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup,speedBonus) {
 
     if (game.time.now > nextFire && bullets.countDead() > 0)
     {
@@ -161,14 +161,14 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
             //bullet.scale.setTo(1,4);
             bullet.rotation = ship.rotation;
             bullet.name = "laser";
-            game.physics.arcade.moveToPointer(bullet, 2000);
+            game.physics.arcade.moveToPointer(bullet, gun.bulletSpeed);
 
         } else if(gun.name == 'mines'){
             bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet.name = "mine";
 
         } else if (gun.name == 'shotgun'){
-            
+            var speed = gun.bulletSpeed*speedBonus;
             var x = game.input.worldX;
             var y = game.input.worldY;
             var distance = game.math.distance(x,y,gun.world.x,gun.world.y);
@@ -177,37 +177,37 @@ function fire(bullets,gun,fireRate,deg,ship,enemiesCollisonGroup) {
             bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet.scale.setTo(1,1);
             bullet.name = "shotgun";
-            game.physics.arcade.moveToXY(bullet, x, y, 330);
+            game.physics.arcade.moveToXY(bullet, x, y, speed);
 
             var bullet2 = bullets.getFirstDead();
             bullet2.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet2.scale.setTo(1,1);
             bullet2.name = "shotgun";
-            game.physics.arcade.moveToXY(bullet2, x-(0.25*distance)-offsetX, y-(0.25*distance)-offsetY, 330);
+            game.physics.arcade.moveToXY(bullet2, x-(0.25*distance)-offsetX, y-(0.25*distance)-offsetY, speed);
 
             var bullet3 = bullets.getFirstDead();
             bullet3.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet3.scale.setTo(1,1);
             bullet3.name = "shotgun";
-            game.physics.arcade.moveToXY(bullet3, x-(0.5*distance)-offsetX, y-(0.25*distance)-offsetY, 330);
+            game.physics.arcade.moveToXY(bullet3, x-(0.5*distance)-offsetX, y-(0.25*distance)-offsetY, speed);
 
             var bullet4 = bullets.getFirstDead();
             bullet4.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet4.scale.setTo(1,1);
             bullet4.name = "shotgun";
-            game.physics.arcade.moveToXY(bullet4, x+(0.25*distance)+offsetX, y+(0.25*distance)+offsetY, 330);
+            game.physics.arcade.moveToXY(bullet4, x+(0.25*distance)+offsetX, y+(0.25*distance)+offsetY, speed);
 
             var bullet5 = bullets.getFirstDead();
             bullet5.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet5.scale.setTo(1,1);
             bullet5.name = "shotgun";
-            game.physics.arcade.moveToXY(bullet5, x+(0.5*distance)+offsetX, y+(0.5*distance)+offsetY, 330);
+            game.physics.arcade.moveToXY(bullet5, x+(0.5*distance)+offsetX, y+(0.5*distance)+offsetY, speed);
 
-        } else {
+        } else {/*basic*/
             bullet.reset(Math.round(gun.world.x*10)/10, Math.round(gun.world.y*10)/10);
             bullet.scale.setTo(1,1);
             bullet.name = "basic";
-            game.physics.arcade.moveToPointer(bullet, 330);
+            game.physics.arcade.moveToPointer(bullet, gun.bulletSpeed*speedBonus);
         }
         return true;
     } else {
@@ -246,16 +246,17 @@ function enemyFire(user,gun,enemyBullets,fireRate,target,destroyerBullets){
 function hitDetector(bullet, enemy, enemyAmount,lap,HPbar,dropBoom,dropAbi,playerRelatedData){
     var dmg;
     if(bullet.name == "laser" || bullet.name == "shotgun" || bullet.name == "basic"){
-        dmg = playerRelatedData.gunData.attachments[bullet.name].basedmg*playerRelatedData.shipStats.guns.gunDmgBoost/1000;
+        dmg = playerRelatedData.shipRelatedItems.attachments[bullet.name].basedmg*playerRelatedData.shipStats.guns.gunDmgBoost/1000;
         if(bullet.name != "laser"){
             bullet.kill();
         }
     } else if(bullet.name == "mine") {
         bullet.kill();
     } else if(bullet.key == "boom") {
-        dmg = playerRelatedData.gunData.attachments["mines"].basedmg;
+        dmg = playerRelatedData.shipRelatedItems.attachments["mines"].basedmg;
     } else if(bullet.name != "drop"){
         bullet.kill();
+        dmg = 0.25;//enemy
     } else{
         bullet.kill();
     }
@@ -473,7 +474,7 @@ function acquireTarget(target,enemy){
     Xcoord = null;
     return parseFloat(degr+1-1);
 }
-function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading){
+function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading,reloadBonus){
     if(usage == 1) {
         //vaihdetaan kursori
         if (reloadSprite.alive == false) {
@@ -491,7 +492,7 @@ function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading){
         tray.alpha = 1;
         var trayTween = game.add.tween(tray);
         trayTween.frameBased = true;
-        trayTween.to({y: (tray.y + tray.height)}, gun.reload, "Linear", true, 0);
+        trayTween.to({y: (tray.y + tray.height)}, gun.reload/reloadBonus, "Linear", true, 0);
         trayTween.onComplete.add(function () {
             tray.y = 22;
             tray.alpha = 0;
@@ -505,11 +506,14 @@ function reload(reloadSprite,clips,pos,HUD,gun,usage,reloading){
         reloading[pos] = true;
         $("canvas").css("cursor", "none");
     } else if(usage == 2){
+        /*Ei asetettu kannassa, arvona -999 joka ylikirjoitetaan. TODO: poista */
+        reloadBonus = 1;
+        /**/
         var trayAb = HUD.abTray.getChildAt(1).getChildAt((HUD.abTray.trayPosition) * 2 - 1);
         trayAb.alpha = 1;
         var trayTweenAb = game.add.tween(trayAb);
         trayTweenAb.frameBased = true;
-        trayTweenAb.to({y: (trayAb.y + trayAb.height)}, gun.reload, "Linear", true, 0);
+        trayTweenAb.to({y: (trayAb.y + trayAb.height)}, gun.reload/reloadBonus, "Linear", true, 0);
         trayTweenAb.onComplete.add(function () {
             trayAb.y = 22;
             trayAb.alpha = 0;

@@ -48,14 +48,14 @@ shopMenu.prototype = {
         
         // lajitellaan pelaajan ostamat aseet
         this.availableWeapons = [];
-        for(var i = 0; i <= SET_GUNS-1; i++){
-            this.availableWeapons[i] = this.playerRelatedData.shipGuns[i];
-        }
+        /*for(var i = 0; i <= SET_GUNS-1; i++){*/
+            this.availableWeapons = this.playerRelatedData.shipGuns;
+       /* }*/
         // lajitellaan pelaajan ostamat tehosteet
         this.availableAbilities = [];
-        for(var i = 0; i <= SET_ABILITIES-1; i++){
-            this.availableAbilities[i] = this.playerRelatedData.shipPowers[i];
-        }
+       /* for(var i = 0; i <= SET_ABILITIES-1; i++){*/
+            this.availableAbilities = this.playerRelatedData.shipPowers;
+       /* }*/
         // console.log("available wep: "+this.availableWeapons);
         // console.log("available ab: "+this.availableAbilities);
         
@@ -261,8 +261,8 @@ shopMenu.prototype = {
         // ostettujen aseiden tarkastus
         boughtCheck: function(){
         for (var i = 0; i < this.weaponsGroup.length; i++){
-            for(var i = 0; i < this.availableWeapons.length;i++){
-                if (this.availableWeapons[i] == this.weaponsGroup.getChildAt(i).name){
+            for(var q = 0; q < this.availableWeapons.length;q++){
+                if (this.availableWeapons[q] == this.weaponsGroup.getChildAt(i).name){
                     //console.log("Aseita ostettu: "+i);
                     //asetetaan ostetut aseet läpinäkyväksi
                     this.weaponsGroup.getChildAt(i).getChildAt(0).alpha = 0.5;
@@ -270,15 +270,15 @@ shopMenu.prototype = {
                     this.weaponsGroup.getChildAt(i).getChildAt(2).alpha = 0.5;
                     this.weaponsGroup.getChildAt(i).getChildAt(3).alpha = 0.5;
                     this.weaponsGroup.getChildAt(i).getChildAt(3).setFrames(2,2,2);
-
+                    break;
                 }
             }
             // tarkistetaan onko pelaaja ostanut aseen
         }
         for (var j = 0; j < this.abilitiesGroup.length; j++){
             // tarkistetaan onko pelaaja ostanut abilityn
-            for(i = 0;i < this.availableAbilities.length;i++){
-                if (this.availableAbilities[i] == this.abilitiesGroup.getChildAt(j).name){
+            for(q = 0;q < this.availableAbilities.length;q++){
+                if (this.availableAbilities[q] == this.abilitiesGroup.getChildAt(j).name){
                     //console.log("Kykyja ostettu: "+j);
                     //asetetaan ostetut kyvyt läpinäkyväksi
                     this.abilitiesGroup.getChildAt(j).getChildAt(0).alpha = 0.5;
@@ -346,6 +346,7 @@ shopMenu.prototype = {
         
         // osto-painikkeen toiminto
         purchase: function() {
+            var self = this;
             if(this.aindex == null || this.aindex == undefined){
                 var j = null;
             }else{
@@ -362,7 +363,7 @@ shopMenu.prototype = {
                  if (this.playerRelatedData.playerData.money >= 200){
                     this.playerRelatedData.playerData.money -= 200;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
-                    this.availableWeapons[i] = wep;
+                    this.availableWeapons.push(wep);
                     console.log("Weapon "+wep+" bought.");
                     this.windex = null;
                     }
@@ -371,7 +372,7 @@ shopMenu.prototype = {
                     console.log("Weapon "+wep+" bought.");
                     this.playerRelatedData.playerData.money -= 600;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
-                    this.availableWeapons[i] = wep;
+                    this.availableWeapons.push(wep);
                     this.windex = null;
                  }
              } else if (i == 3){
@@ -379,7 +380,7 @@ shopMenu.prototype = {
                     console.log("Weapon "+wep+" bought.");
                     this.playerRelatedData.playerData.money -= 1000;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
-                    this.availableWeapons[i] = wep;
+                    this.availableWeapons.push(wep);
                     this.windex = null;
                  }
              } else if (j == 0) {
@@ -387,7 +388,7 @@ shopMenu.prototype = {
                     this.playerRelatedData.playerData.money -= 250;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
-                    this.availableAbilities[j] = ab;
+                    this.availableAbilities.push(ab);
                     this.aindex = null;
                  }
              } else if (j == 1) {
@@ -395,7 +396,7 @@ shopMenu.prototype = {
                     this.playerRelatedData.playerData.money -= 450;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
-                    this.availableAbilities[j] = ab;
+                    this.availableAbilities.push(ab);
                     this.aindex = null;
                  }
              } else if (j == 2) {
@@ -403,7 +404,7 @@ shopMenu.prototype = {
                     this.playerRelatedData.playerData.money -= 700;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
-                    this.availableAbilities[j] = ab;
+                    this.availableAbilities.push(ab);
                     this.aindex = null;
                  }
              } else if (j == 3) {
@@ -411,7 +412,7 @@ shopMenu.prototype = {
                     this.playerRelatedData.playerData.money -= 900;
                     this.surroundings.menuheader.getChildAt(2).text = "Money: "+this.playerRelatedData.playerData.money;
                     console.log("Ability "+ab+" bought.");
-                    this.availableAbilities[j] = ab;
+                    this.availableAbilities.push(ab);
                     this.aindex = null;
                  }
              }
@@ -433,7 +434,9 @@ shopMenu.prototype = {
                         }
                     });
             thingBought.done(function(returnValue){
-                     alert("Purchase completed successfully");
+                alert("Purchase completed successfully");
+                self.playerRelatedData.shipGuns = self.availableWeapons;
+                self.playerRelatedData.shipPowers = self.availableAbilities;
                 console.log(returnValue);
                     });
             thingBought.fail(function(returndata){

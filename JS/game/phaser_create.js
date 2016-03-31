@@ -199,27 +199,30 @@ gameLoad.prototype = {
         // perusaseen tiedot
         this.gun = this.game.add.image(0, -90);
         this.gun.name = "basic";
-        this.gun.reload = 3000;
+        this.gun.reload = this.playerRelatedData.shipRelatedItems.attachments.basic.reload;
         this.gun.fireRate = 450;
-        this.gun.clip = 35;
+        this.gun.bulletSpeed = this.playerRelatedData.shipRelatedItems.attachments.basic.bulletSpeed;
+        this.gun.clip = this.playerRelatedData.shipRelatedItems.attachments.basic.clip;
         // laserin tiedot
         this.laser = this.game.add.image(0, -70);
         this.laser.name = "laser";
         this.laser.fireRate = 0.1;
-        this.laser.reload = 6000;
-        this.laser.clip = 30;
+        this.laser.bulletSpeed = this.playerRelatedData.shipRelatedItems.attachments.laser.bulletSpeed;
+        this.laser.reload = this.playerRelatedData.shipRelatedItems.attachments.laser.reload;
+        this.laser.clip = this.playerRelatedData.shipRelatedItems.attachments.laser.clip;
         // haulikon tiedot
         this.shotgun = this.game.add.image(0, -90);
         this.shotgun.name = "shotgun";
         this.shotgun.fireRate = 1500;
-        this.shotgun.reload = 3000;
-        this.shotgun.clip = 5;
+        this.shotgun.bulletSpeed = this.playerRelatedData.shipRelatedItems.attachments.shotgun.bulletSpeed;
+        this.shotgun.reload = this.playerRelatedData.shipRelatedItems.attachments.shotgun.reload;
+        this.shotgun.clip = this.playerRelatedData.shipRelatedItems.attachments.shotgun.clip;
         // miinojen tiedot
         this.mines = this.game.add.image(0, 40);
         this.mines.name = "mines";
         this.mines.fireRate = 0;
-        this.mines.reload = 20000;
-        this.mines.clip = 1;
+        this.mines.reload = this.playerRelatedData.shipRelatedItems.attachments.mines.reload;
+        this.mines.clip = this.playerRelatedData.shipRelatedItems.attachments.mines.clip;
         this.guns.laserLocation = null;
         //supernopeus
         this.superSpeed = this.game.add.image(0, 0);

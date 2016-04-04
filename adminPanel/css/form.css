@@ -53,6 +53,10 @@ div.form fieldset
     -moz-border-radius:7px;
 }
 
+table.detail-view td{
+    padding: 10px;
+}
+
 div.form label
 {
 	font-weight: bold;

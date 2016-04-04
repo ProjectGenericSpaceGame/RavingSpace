@@ -39,7 +39,30 @@ class PlayerDataController extends Controller
 			),*/
 		);
 	}
-
+    // get the ship data when viewing and/or editing a player
+    public function getShipData($name){
+        $username=$name;
+        $connection=Yii::app()->db;
+        $sql="SELECT * FROM shipStates WHERE playerID=:id"; 
+        $command = $connection->createCommand($sql);
+        $command->setFetchMode(PDO::FETCH_OBJ);
+        $command->bindParam(":id",$username, PDO::PARAM_STR);
+        foreach($command->queryAll() as $row){
+            return array(
+                'Color' => $row->color,  
+                'Speed' => $row->speed,
+                'gunReloadBonus' => $row->gunReloadBonus,
+                'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
+                'powerReloadBonus' => $row->powerReloadBonus,
+                'powerAOEbonus' => $row->powerAOEbonus,
+                'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
+                'HP' => $row->hp,
+                'Model' => $row->model,
+                'weaponDamageBonus' => $row->gunDmgBonus,
+                'shipID' => $row->shipID
+            );
+        }
+    }
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed

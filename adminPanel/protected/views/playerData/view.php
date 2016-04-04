@@ -18,7 +18,11 @@ $this->menu=array(
 
 <h1>View PlayerData #<?php echo $model->playerID; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+
+
+<?php 
+
+$this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'playerID',
@@ -28,4 +32,27 @@ $this->menu=array(
 		'points',
 		'loginFollowID',
 	),
-)); ?>
+)); 
+
+echo "<h1 class='shipHeader'>ShipData</h1>";
+
+$name = $model->playerID;
+$shipdata=$this->getShipData($name);
+$this->widget('zii.widgets.CDetailView', array(
+    'data'=>$shipdata,
+        'attributes'=>array(
+            'Color',
+            'Speed',
+            'gunReloadBonus',
+            'gunBltSpeedBonus',
+            'powerReloadBonus',
+            'powerAOEbonus',
+            'powerEffectDurationTimeBonus',
+            'HP',
+            'Model',
+            'weaponDamageBonus',
+            'shipID',
+        ),
+)); 
+
+?>

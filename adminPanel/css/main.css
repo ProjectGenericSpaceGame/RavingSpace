@@ -173,6 +173,10 @@ div.search-form {
    /* border: 1px solid #5c5c5c; */
 }
 
+.shipHeader{
+    margin: 20px auto;
+}
+
 .portlet-decoration {
 	padding: 8px 8px;
     border-top-right-radius: 8px;

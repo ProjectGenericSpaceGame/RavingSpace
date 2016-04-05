@@ -1,24 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "playerData".
+ * This is the model class for table "assets".
  *
- * The followings are the available columns in table 'playerData':
- * @property string $playerID
- * @property string $passHash
- * @property string $email
- * @property integer $money
- * @property integer $points
- * @property integer $loginFollowID
+ * The followings are the available columns in table 'assets':
+ * @property string $name
+ * @property string $asset
+ * @property string $cacheKey
+ * @property string $usedFor
  */
-class PlayerData extends CActiveRecord
+class Assets extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'playerData';
+		return 'assets';
 	}
 
 	/**
@@ -29,13 +27,12 @@ class PlayerData extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('playerID, passHash, loginFollowID', 'required'),
-			array('money, points, loginFollowID', 'numerical', 'integerOnly'=>true),
-			array('playerID, email', 'length', 'max'=>45),
-			array('passHash', 'length', 'max'=>150),
+			array('name', 'required'),
+			array('name, asset', 'length', 'max'=>100),
+			array('cacheKey, usedFor', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('playerID, passHash, email, money, points, loginFollowID', 'safe', 'on'=>'search'),
+			array('name, asset, cacheKey, usedFor', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,12 +53,10 @@ class PlayerData extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'playerID' => 'Player',
-			'passHash' => 'Pass Hash',
-			'email' => 'Email',
-			'money' => 'Money',
-			'points' => 'Points',
-			'loginFollowID' => 'Login Follow',
+			'name' => 'Name',
+			'asset' => 'Asset',
+			'cacheKey' => 'Cache Key',
+			'usedFor' => 'Used For',
 		);
 	}
 
@@ -83,32 +78,21 @@ class PlayerData extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('playerID',$this->playerID,true);
-		$criteria->compare('passHash',$this->passHash,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('money',$this->money);
-		$criteria->compare('points',$this->points);
-		$criteria->compare('loginFollowID',$this->loginFollowID);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('asset',$this->asset,true);
+		$criteria->compare('cacheKey',$this->cacheKey,true);
+		$criteria->compare('usedFor',$this->usedFor,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-	public function test($name){
-		$songs = Yii::app()->db->createCommand()
-			->select('songs.songName')
-			->from('hasSongs')
-			->join('songs','songs.songID = hassongs.songID')
-			->where('playerID=:name');
-		$songs->setFetchMode(PDO::FETCH_BOTH);
-		$songs->bindParam(":name",$name, PDO::PARAM_STR);
-		return $songs->queryAll();
-	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return PlayerData the static model class
+	 * @return Assets the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

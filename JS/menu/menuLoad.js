@@ -17,7 +17,7 @@ menuLoad.prototype = {
             this.game.load.image('playerShip', 'assets/sprites/VS_peli_ship_Old.png');
             // loadouttiin
             this.game.load.image('availableTray', 'assets/placeholders/availableTray.png');
-            // aseet
+            // aseet/*ILMEISESTI EI KÄYTÖSSÄ TODO: poista*/
             this.game.load.image('weapon_basic', 'assets/placeholders/weapon0_final.png');
             this.game.load.image('weapon_laser', 'assets/placeholders/weapon1_final.png');
             this.game.load.image('weapon_shotgun', 'assets/placeholders/weapon2_final.png');

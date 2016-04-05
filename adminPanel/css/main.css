@@ -35,6 +35,9 @@ body
     margin: 0 auto;
     margin-top: 20px;
 }
+.extraWide{
+	width:1280px!important;
+}
 #sidebar
 {
 	padding: 20px 20px 20px 0;

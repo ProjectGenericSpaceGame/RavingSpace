@@ -1,0 +1,13 @@
+.portlet-content{/*Extend existing styles when on assets page*/
+    height: 80vh;
+    overflow: scroll;
+}
+
+.scanResultWrapper {
+    /*float:right;*/
+    text-align: center;
+}
+.folderScanResult img {
+    max-width: 200px;
+    max-height: 150px;
+}

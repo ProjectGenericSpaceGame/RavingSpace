@@ -16,7 +16,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View PlayerData #<?php echo $model->playerID; ?></h1>
+<h2>View PlayerData #<?php echo $model->playerID; ?></h2>
 
 
 
@@ -34,7 +34,7 @@ $this->widget('zii.widgets.CDetailView', array(
 	),
 )); 
 
-echo "<h1 class='shipHeader'>ShipData</h1>";
+echo "<h2 class='shipHeader'>ShipData</h2>";
 
 $name = $model->playerID;
 $shipdata=$this->getShipData($name);
@@ -53,6 +53,10 @@ $this->widget('zii.widgets.CDetailView', array(
             'weaponDamageBonus',
             'shipID',
         ),
-)); 
+));
+echo "<h2 class='shipHeader'>Owned Songs</h2>";
+$this->widget('zii.widgets.CMenu', array(
+	'items'=>$this->getTest($model)
+));
 
 ?>

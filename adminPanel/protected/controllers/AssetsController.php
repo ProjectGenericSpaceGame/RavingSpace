@@ -1,12 +1,13 @@
 <?php
 
-class PlayerDataController extends Controller
+class AssetsController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/assetLayout';
+	public $serverImages=array();
 
 	/**
 	 * @return array action filters
@@ -27,51 +28,24 @@ class PlayerDataController extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>array('@'),
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
 			),
-			array('deny',  // allow all users to perform 'index' and 'view' actions
+			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
-
-			/*array('deny',  // deny all users
-				'users'=>array('*'),
-			),*/
 		);
 	}
-    // get the ship data when viewing and/or editing a player
-    public function getShipData($name){
-        $username=$name;
-        $connection=Yii::app()->db;
-        $sql="SELECT * FROM shipStates WHERE playerID=:id"; 
-        $command = $connection->createCommand($sql);
-        $command->setFetchMode(PDO::FETCH_OBJ);
-        $command->bindParam(":id",$username, PDO::PARAM_STR);
-        foreach($command->queryAll() as $row){
-            return array(
-                'Color' => $row->color,  
-                'Speed' => $row->speed,
-                'gunReloadBonus' => $row->gunReloadBonus,
-                'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
-                'powerReloadBonus' => $row->powerReloadBonus,
-                'powerAOEbonus' => $row->powerAOEBonus,
-                'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
-                'HP' => $row->hp,
-                'Model' => $row->model,
-                'weaponDamageBonus' => $row->gunDmgBonus,
-                'shipID' => $row->shipID
-            );
-        }
-    }
-	/*Poista test pasktat myöhemmin*/
-	public function getTest($model){
-		/*$val  = array("Song Name"=>$model->test($model->playerID));*/
-		$val = array();
-		foreach($model->test($model->playerID) as $row) {
-			array_push($val,array("label"=>$row["songName"]));
-		};
-		return $val;
-	}
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -89,16 +63,16 @@ class PlayerDataController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new PlayerData;
+		$model=new Assets;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['PlayerData']))
+		if(isset($_POST['Assets']))
 		{
-			$model->attributes=$_POST['PlayerData'];
+			$model->attributes=$_POST['Assets'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->playerID));
+				$this->redirect(array('view','id'=>$model->name));
 		}
 
 		$this->render('create',array(
@@ -118,11 +92,11 @@ class PlayerDataController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['PlayerData']))
+		if(isset($_POST['Assets']))
 		{
-			$model->attributes=$_POST['PlayerData'];
+			$model->attributes=$_POST['Assets'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->playerID));
+				$this->redirect(array('view','id'=>$model->name));
 		}
 
 		$this->render('update',array(
@@ -145,13 +119,48 @@ class PlayerDataController extends Controller
 	}
 
 	/**
-	 * Lists all models.
+	 * Lists all models. Also list all pics in assets folder
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('PlayerData');
+		$dataProvider=new CActiveDataProvider('Assets');
+
+		//get all images in assets folder and build HTML element
+		function dirToArray($dir,$subdir) {
+
+			$result = array();
+			$re = "/.png$|.gif$|.GIF$|.jpg$|.jpeg$|.JPG$|.JPEG$|.SVG$|.svg$|.BMP$|.bmp$|.tiff$|.TIFF$/";
+
+			$cdir = scandir($dir);
+			foreach ($cdir as $key => $value)
+			{
+				if (!in_array($value,array(".","..")))
+				{
+					if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
+					{
+						$result[$value] = dirToArray($dir . DIRECTORY_SEPARATOR . $value,$value);
+					}
+					else if(preg_match($re,$value))
+					{
+						$elem = "<li class='folderScanResult'><img src='../";
+						if($subdir != null){
+							$imgname = "assets/$subdir/".$value;
+						} else {
+							 $imgname = "assets/".$value;
+						}
+						$elem .= $imgname."' alt='".$imgname."' /><p>$imgname</p></li>";
+						$result[] = $elem;
+				}
+				}
+			}
+
+			return $result;
+		}
+		$jutska = dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null);
+
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'jutska'=>$jutska
 		));
 	}
 
@@ -160,10 +169,10 @@ class PlayerDataController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new PlayerData('search');
+		$model=new Assets('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['PlayerData']))
-			$model->attributes=$_GET['PlayerData'];
+		if(isset($_GET['Assets']))
+			$model->attributes=$_GET['Assets'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -174,12 +183,12 @@ class PlayerDataController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return PlayerData the loaded model
+	 * @return Assets the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=PlayerData::model()->findByPk($id);
+		$model=Assets::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -187,11 +196,11 @@ class PlayerDataController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param PlayerData $model the model to be validated
+	 * @param Assets $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='player-data-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='assets-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

@@ -1,13 +1,66 @@
 .portlet-content{/*Extend existing styles when on assets page*/
-    height: 80vh;
+    height: 68vh;
     overflow: scroll;
 }
-
+#sidebar{
+    padding-top:126px!important;
+}
+.span-23 {
+    margin-right: 0!important;
+}
+#content{
+    padding-right:0!important;
+}
+/**/
 .scanResultWrapper {
     /*float:right;*/
     text-align: center;
 }
 .folderScanResult img {
-    max-width: 200px;
-    max-height: 150px;
+    max-width: 160px;
+    max-height: 130px;
+}
+.assetBlock {
+    width:45%;
+    display:inline-block;
+    margin:1% 2.5%;
+    text-align: center;
+}
+.assetBlock .wrapper {
+    margin-top:10px;
+    margin-bottom:5px;
+}
+.assetBlock img {
+    display:block;
+    margin:0 auto;
+    height:75px;
+}
+.assetBlock input[type=text]{
+    width:75%;
+    text-align: center;
+}
+.fa-check{
+    color:green!important;
+}
+.savingStatus{
+    margin:0 auto;
+}
+.iconWrapper{
+    height:27px;
+    width:27px;
+    float:right;
+}
+.assetBlock h3 {
+    height:27px;
+    vertical-align: top;
+    margin-left:27px;
+    display: inline-block;
+    margin-bottom: 0.5em!important;
+}
+.items{
+    overflow-y: scroll;
+    height:72vh;
+    border:1px solid #1d315a;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }

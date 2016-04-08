@@ -1,4 +1,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/assets.css">
+<script src="../JS/libs/jquery-1.11.2.min.js"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/JS/assets.js"></script>
+<!--<script src="JS/assets.js"></script>-->
+
 <?php /* @var $this Controller */ ?>
 <?php $this->beginContent('//layouts/main'); ?>
     <div class="span-23">

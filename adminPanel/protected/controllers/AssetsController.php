@@ -8,6 +8,7 @@ class AssetsController extends Controller
 	 */
 	public $layout='//layouts/assetLayout';
 	public $serverImages=array();
+	public $assetList=array();
 
 	/**
 	 * @return array action filters
@@ -29,7 +30,7 @@ class AssetsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','ajaxUpdateSingle'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -37,7 +38,7 @@ class AssetsController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','ajaxUpdateSingle'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -94,6 +95,7 @@ class AssetsController extends Controller
 
 		if(isset($_POST['Assets']))
 		{
+			print_r($_POST['Assets']);
 			$model->attributes=$_POST['Assets'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->name));
@@ -103,7 +105,20 @@ class AssetsController extends Controller
 			'model'=>$model,
 		));
 	}
+	/*Saves asset block data*/
+	public function actionajaxUpdateSingle(){
 
+		$model=$this->loadModel($_POST["Name"]);
+		if(isset($_POST['Assets']))
+		{
+			/*print_r($_POST['Assets']);*/
+			$model->attributes=$_POST['Assets'];
+			if($model->save())
+				$result = "success";
+		} else {
+			$result = "fail";
+		}
+	}
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -124,11 +139,12 @@ class AssetsController extends Controller
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('Assets');
-
+		$noHTML = array();
 		//get all images in assets folder and build HTML element
-		function dirToArray($dir,$subdir) {
+		function dirToArray($dir,$subdir,&$noHTML) {
 
 			$result = array();
+
 			$re = "/.png$|.gif$|.GIF$|.jpg$|.jpeg$|.JPG$|.JPEG$|.SVG$|.svg$|.BMP$|.bmp$|.tiff$|.TIFF$/";
 
 			$cdir = scandir($dir);
@@ -138,29 +154,32 @@ class AssetsController extends Controller
 				{
 					if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
 					{
-						$result[$value] = dirToArray($dir . DIRECTORY_SEPARATOR . $value,$value);
+						$result[$value] = dirToArray($dir . DIRECTORY_SEPARATOR . $value,$value,$noHTML);
 					}
 					else if(preg_match($re,$value))
 					{
 						$elem = "<li class='folderScanResult'><img src='../";
 						if($subdir != null){
 							$imgname = "assets/$subdir/".$value;
+							array_push($noHTML,"assets/$subdir/".$value);
 						} else {
 							 $imgname = "assets/".$value;
+							 array_push($noHTML,"assets/".$value);
 						}
 						$elem .= $imgname."' alt='".$imgname."' /><p>$imgname</p></li>";
 						$result[] = $elem;
 				}
 				}
-			}
+			}/*array_push($result,$noHTML);*/
 
 			return $result;
 		}
-		$jutska = dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null);
+		$jutska = dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
 
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
-			'jutska'=>$jutska
+			'jutska'=>$jutska,
+			'assetList'=>$noHTML
 		));
 	}
 

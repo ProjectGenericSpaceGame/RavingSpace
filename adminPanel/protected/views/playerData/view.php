@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>'Create PlayerData', 'url'=>array('create')),
 	array('label'=>'Update PlayerData', 'url'=>array('update', 'id'=>$model->playerID)),
 	array('label'=>'Delete PlayerData', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->playerID),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage PlayerData', 'url'=>array('admin')),
+	//array('label'=>'Manage PlayerData', 'url'=>array('admin')),
 );
 ?>
 
@@ -37,7 +37,7 @@ $this->widget('zii.widgets.CDetailView', array(
 echo "<h2 class='shipHeader'>ShipData</h2>";
 
 $name = $model->playerID;
-$shipdata=$this->getShipData($name);
+$shipdata = $this->getShipData($name);
 $this->widget('zii.widgets.CDetailView', array(
     'data'=>$shipdata,
         'attributes'=>array(
@@ -52,6 +52,27 @@ $this->widget('zii.widgets.CDetailView', array(
             'Model',
             'weaponDamageBonus',
             'shipID',
+        ),
+));
+echo "<h2 class='shipHeader'>ShipPowers</h2>";
+$this->widget('zii.widgets.CDetailView', array(
+    'data'=>$shipdata,
+        'attributes'=>array(
+           'Power0',
+           'Power1',
+           'Power2',
+           'Power3',
+        ),
+));
+echo "<h2 class='shipHeader'>ShipWeapons</h2>";
+$this->widget('zii.widgets.CDetailView', array(
+    'data'=>$shipdata,
+        'attributes'=>array(
+           'Weapon0',
+           'Weapon1',
+           'Weapon2',
+           'Weapon3',
+           
         ),
 ));
 echo "<h2 class='shipHeader'>Owned Songs</h2>";

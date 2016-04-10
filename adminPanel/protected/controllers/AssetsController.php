@@ -65,7 +65,8 @@ class AssetsController extends Controller
 	public function actionCreate()
 	{
 		$model=new Assets;
-
+		$noHTML = array();
+		$jutska = $this->dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -78,6 +79,8 @@ class AssetsController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+			'imageListNOHTML'=>$noHTML,
+			'imageList'=>$jutska
 		));
 	}
 
@@ -141,40 +144,8 @@ class AssetsController extends Controller
 		$dataProvider=new CActiveDataProvider('Assets');
 		$noHTML = array();
 		//get all images in assets folder and build HTML element
-		function dirToArray($dir,$subdir,&$noHTML) {
 
-			$result = array();
-
-			$re = "/.png$|.gif$|.GIF$|.jpg$|.jpeg$|.JPG$|.JPEG$|.SVG$|.svg$|.BMP$|.bmp$|.tiff$|.TIFF$/";
-
-			$cdir = scandir($dir);
-			foreach ($cdir as $key => $value)
-			{
-				if (!in_array($value,array(".","..")))
-				{
-					if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
-					{
-						$result[$value] = dirToArray($dir . DIRECTORY_SEPARATOR . $value,$value,$noHTML);
-					}
-					else if(preg_match($re,$value))
-					{
-						$elem = "<li class='folderScanResult'><img src='../";
-						if($subdir != null){
-							$imgname = "assets/$subdir/".$value;
-							array_push($noHTML,"assets/$subdir/".$value);
-						} else {
-							 $imgname = "assets/".$value;
-							 array_push($noHTML,"assets/".$value);
-						}
-						$elem .= $imgname."' alt='".$imgname."' /><p>$imgname</p></li>";
-						$result[] = $elem;
-				}
-				}
-			}/*array_push($result,$noHTML);*/
-
-			return $result;
-		}
-		$jutska = dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
+		$jutska = $this->dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
 
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
@@ -212,7 +183,39 @@ class AssetsController extends Controller
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+	public function dirToArray($dir,$subdir,&$noHTML) {
 
+		$result = array();
+
+		$re = "/.png$|.gif$|.GIF$|.jpg$|.jpeg$|.JPG$|.JPEG$|.SVG$|.svg$|.BMP$|.bmp$|.tiff$|.TIFF$/";
+
+		$cdir = scandir($dir);
+		foreach ($cdir as $key => $value)
+		{
+			if (!in_array($value,array(".","..")))
+			{
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
+				{
+					$result[$value] = $this->dirToArray($dir . DIRECTORY_SEPARATOR . $value,$value,$noHTML);
+				}
+				else if(preg_match($re,$value))
+				{
+					$elem = "<li class='folderScanResult'><img src='../";
+					if($subdir != null){
+						$imgname = "assets/$subdir/".$value;
+						array_push($noHTML,"assets/$subdir/".$value);
+					} else {
+						$imgname = "assets/".$value;
+						array_push($noHTML,"assets/".$value);
+					}
+					$elem .= $imgname."' alt='".$imgname."' /><p>$imgname</p></li>";
+					$result[] = $elem;
+				}
+			}
+		}/*array_push($result,$noHTML);*/
+
+		return $result;
+	}
 	/**
 	 * Performs the AJAX validation.
 	 * @param Assets $model the model to be validated

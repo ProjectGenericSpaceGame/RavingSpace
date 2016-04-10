@@ -40,29 +40,7 @@ class PlayerDataController extends Controller
 		);
 	}
     // get the ship data when viewing and/or editing a player
-    public function getShipData($name){
-        $username=$name;
-        $connection=Yii::app()->db;
-        $sql="SELECT * FROM shipStates WHERE playerID=:id"; 
-        $command = $connection->createCommand($sql);
-        $command->setFetchMode(PDO::FETCH_OBJ);
-        $command->bindParam(":id",$username, PDO::PARAM_STR);
-        foreach($command->queryAll() as $row){
-            return array(
-                'Color' => $row->color,  
-                'Speed' => $row->speed,
-                'gunReloadBonus' => $row->gunReloadBonus,
-                'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
-                'powerReloadBonus' => $row->powerReloadBonus,
-                'powerAOEbonus' => $row->powerAOEBonus,
-                'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
-                'HP' => $row->hp,
-                'Model' => $row->model,
-                'weaponDamageBonus' => $row->gunDmgBonus,
-                'shipID' => $row->shipID
-            );
-        }
-    }
+   
 	/*Poista test pasktat myöhemmin*/
 	public function getTest($model){
 		/*$val  = array("Song Name"=>$model->test($model->playerID));*/
@@ -82,30 +60,94 @@ class PlayerDataController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
-
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
 	{
-		$model=new PlayerData;
+		$model = new PlayerData();
+        $ship = new shipStates();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['PlayerData']))
+		if(isset($_POST['PlayerData'], $_POST['shipStates']))
 		{
 			$model->attributes=$_POST['PlayerData'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->playerID));
+            $ship->attributes=$_POST['shipStates'];
+            
+            $valid=$model->validate();
+            $valid=$ship->validate() && $valid;            
+
+            if($valid){
+                $model->save(false);
+                $ship->save(false);
+                $this->redirect(array('view','id'=>$model->playerID));
+            }
+			//if($model->save())
+			//	
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+            'ship'=>$ship
 		));
 	}
-
+    public function getShipData($name){
+        $username=$name;
+        $connection=Yii::app()->db;
+        $sql="SELECT * FROM shipStates WHERE playerID=:id"; 
+        $command = $connection->createCommand($sql);
+        $command->setFetchMode(PDO::FETCH_OBJ);
+        $command->bindParam(":id",$username, PDO::PARAM_STR);
+        // $fp = fopen('lidn.txt', 'w');
+        foreach($command->queryAll() as $row){
+            $shipID = $row->shipID;
+           //  fwrite($fp, $row);
+            $return = array(
+                'Color' => $row->color,  
+                'Speed' => $row->speed,
+                'gunReloadBonus' => $row->gunReloadBonus,
+                'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
+                'powerReloadBonus' => $row->powerReloadBonus,
+                'powerAOEbonus' => $row->powerAOEbonus,
+                'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
+                'HP' => $row->hp,
+                'Model' => $row->model,
+                'weaponDamageBonus' => $row->gunDmgBonus,
+                'shipID' => $row->shipID
+            );
+        }
+        //if player doesnt have shipData
+        if(!(isset($return))){
+            $return = array(); 
+        }else{
+            $sql="SELECT * FROM shipPowers WHERE shipID=:id";
+            $command = $connection->createCommand($sql);
+            $command->setFetchMode(PDO::FETCH_OBJ);
+            $command->bindParam(":id",$shipID, PDO::PARAM_STR);
+            $returnPower = array();
+            $i = 0;
+            foreach($command->queryAll() as $row){
+                $returnPower['Power'.$i] = $row->has;
+                $i += 1;
+            }
+            $sql="SELECT * FROM shipGuns WHERE shipID=:id";
+            $command = $connection->createCommand($sql);
+            $command->setFetchMode(PDO::FETCH_OBJ);
+            $command->bindParam(":id",$shipID, PDO::PARAM_STR);
+            $returnGun = array();
+            $i = 0;
+            foreach($command->queryAll() as $row){
+                $returnGun['Weapon'.$i] = $row->has;
+                $i += 1;
+            }
+            $return = array_merge($return, $returnPower, $returnGun);
+        }
+       // fclose($fp);
+        return $return;
+    }
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -113,20 +155,37 @@ class PlayerDataController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+        
 		$model=$this->loadModel($id);
-
+        $condition = 'WHERE';
+        $post = shipStates::model()->find('playerID=:playerID', array(':playerID'=>$id));
+       /* $fp = fopen('lidn.txt', 'w');
+        fwrite($fp, $id);
+       fclose($fp); */
+        $ship = $this->loadShipModel($post->shipID);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['PlayerData']))
+       if(isset($_POST['PlayerData'], $_POST['shipStates']))
 		{
 			$model->attributes=$_POST['PlayerData'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->playerID));
+            $ship->attributes=$_POST['shipStates'];
+            
+            $valid=$model->validate();
+            $valid=$ship->validate() && $valid;            
+
+            if($valid){
+                $model->save(false);
+                $ship->save(false);
+                $this->redirect(array('view','id'=>$model->playerID));
+            }
+			//if($model->save())
+			//	
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+            'ship'=>$ship
 		));
 	}
 
@@ -179,12 +238,17 @@ class PlayerDataController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=PlayerData::model()->findByPk($id);
+		$model = PlayerData::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
-
+    public function loadShipModel($id){
+        $ship = shipStates::model()->findByPk($id);
+		if($ship===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $ship;
+    }
 	/**
 	 * Performs the AJAX validation.
 	 * @param PlayerData $model the model to be validated

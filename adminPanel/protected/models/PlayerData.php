@@ -33,6 +33,9 @@ class PlayerData extends CActiveRecord
 			array('money, points, loginFollowID', 'numerical', 'integerOnly'=>true),
 			array('playerID, email', 'length', 'max'=>45),
 			array('passHash', 'length', 'max'=>150),
+           /*  */
+             array('color', 'length', 'max'=>150),
+            array('shipID', 'length', 'max'=>150),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('playerID, passHash, email, money, points, loginFollowID', 'safe', 'on'=>'search'),
@@ -46,7 +49,18 @@ class PlayerData extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
+        return array(
+            'shipID' => array(self::BELONGS_TO, 'shipStates', 'shipID'),
+            'color' => array(self::BELONGS_TO, 'shipStates', 'color'),
+            'speed' => array(self::BELONGS_TO, 'shipStates', 'speed'),
+            'gunReloadBonus' => array(self::BELONGS_TO, 'shipStates', 'gunReloadBonus'),
+            'gunBltSpeedBonus' => array(self::BELONGS_TO, 'shipStates', 'gunBltSpeedBonus'),
+            'powerReloadBonus' => array(self::BELONGS_TO, 'shipStates', 'powerReloadBonus'),
+            'powerAOEbonus' => array(self::BELONGS_TO, 'shipStates', 'powerAOEbonus'),
+            'powerEffectTimeBonus' => array(self::BELONGS_TO, 'shipStates', 'powerEffectTimeBonus'),
+            'hp' => array(self::BELONGS_TO, 'shipStates', 'hp'),
+            'model' => array(self::BELONGS_TO, 'shipStates', 'model'),
+            'gunDmgBonus' => array(self::BELONGS_TO, 'shipStates', 'gunDmgBonus'),
 		);
 	}
 
@@ -62,6 +76,19 @@ class PlayerData extends CActiveRecord
 			'money' => 'Money',
 			'points' => 'Points',
 			'loginFollowID' => 'Login Follow',
+            'shipID' => 'shipID', 
+            'Color' => 'Color',  
+            'Speed' => 'Speed',
+            'gunReloadBonus' => 'gunReloadBonus',
+            'gunBulletSpeedBonus' => 'gunBulletSpeedBonus',
+            'powerReloadBonus' => 'powerReloadBonus',
+            'powerAOEbonus' => 'powerAOEbonus',
+            'powerEffectDurationTimeBonus' => 'powerEffectDurationTimeBonus',
+            'HP' => 'HP',
+            'model' => 'Model',
+            'weaponDamageBonus' => 'weaponDamageBonus',
+            'shipID' =>'shipID',
+            
 		);
 	}
 
@@ -89,6 +116,7 @@ class PlayerData extends CActiveRecord
 		$criteria->compare('money',$this->money);
 		$criteria->compare('points',$this->points);
 		$criteria->compare('loginFollowID',$this->loginFollowID);
+		$criteria->compare('shipID',$this->shipID);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

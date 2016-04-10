@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Create PlayerData', 'url'=>array('create')),
-	array('label'=>'Manage PlayerData', 'url'=>array('admin')),
+	//array('label'=>'Manage PlayerData', 'url'=>array('admin')),
 );
 ?>
 

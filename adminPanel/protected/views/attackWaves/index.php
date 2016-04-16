@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Create AttackWaves', 'url'=>array('create')),
-	array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
+	//array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
 );
 ?>
 

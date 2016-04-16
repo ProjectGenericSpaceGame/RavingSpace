@@ -14,7 +14,12 @@ $this->menu=array(
 
 <h1>Player Datas</h1>
 
-<?php $this->widget('zii.widgets.CListView', array(
+<?php
+  //  $data = new PlayerDataController;
+    //$data->actionIndex();
+
+
+     $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
 )); ?>

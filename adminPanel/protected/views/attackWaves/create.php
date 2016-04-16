@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'List AttackWaves', 'url'=>array('index')),
-	array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
+	//array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
 );
 ?>
 

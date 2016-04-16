@@ -29,13 +29,10 @@ class PlayerData extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('playerID, passHash, loginFollowID', 'required'),
+			array('playerID, passHash', 'required'),
 			array('money, points, loginFollowID', 'numerical', 'integerOnly'=>true),
 			array('playerID, email', 'length', 'max'=>45),
-			array('passHash', 'length', 'max'=>150),
-           /*  */
-             array('color', 'length', 'max'=>150),
-            array('shipID', 'length', 'max'=>150),
+			//array('passHash', 'filter', 'filter'=>'hashPassword'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('playerID, passHash, email, money, points, loginFollowID', 'safe', 'on'=>'search'),

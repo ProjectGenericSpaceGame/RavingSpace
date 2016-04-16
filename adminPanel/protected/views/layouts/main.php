@@ -29,7 +29,7 @@
         	<div id="mainmenu">
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
+				//array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'Control players', 'url'=>array('/playerData/index', 'view'=>'about')),
 				array('label'=>'Control waves', 'url'=>array('/attackWaves/index')),
 				array('label'=>'Control guns and abilities', 'url'=>array('/henkilot/about')),

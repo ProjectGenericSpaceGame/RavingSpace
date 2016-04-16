@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>'List AttackWaves', 'url'=>array('index')),
 	array('label'=>'Create AttackWaves', 'url'=>array('create')),
 	array('label'=>'View AttackWaves', 'url'=>array('view', 'id'=>$model->attackID)),
-	array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
+	//array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
 );
 ?>
 

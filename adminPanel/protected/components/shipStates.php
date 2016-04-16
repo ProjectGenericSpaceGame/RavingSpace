@@ -27,12 +27,13 @@ class shipStates extends CActiveRecord{
             array('gunReloadBonus', 'length', 'max'=>150),
             array('gunBltSpeedBonus', 'length', 'max'=>150),
             array('powerReloadBonus', 'length', 'max'=>150),
-            array('powerAOEbonus', 'length', 'max'=>150),
+            array('powerAOEBonus', 'length', 'max'=>150),
             array('powerEffectTimeBonus', 'length', 'max'=>150),
             array('hp', 'length', 'max'=>150),
             array('model', 'length', 'max'=>150),
             array('gunDmgBonus', 'length', 'max'=>150),
-            array('shipID', 'length', 'max'=>150),   
+            array('shipID', 'length', 'max'=>150),
+            array('playerID', 'length', 'max'=>150),   
             //array('color', 'speed', 'gunReloadBonus', 'gunBulletSpeedBonus', 'powerReloadBonus', 'powerAOEbonus', 'powerEffectDurationTimeBonus', 'HP', 'Model', 'weaponDamageBonus', 'shipID', 'on'=>'search'),
         );
     }
@@ -45,10 +46,10 @@ class shipStates extends CActiveRecord{
 		$criteria->compare('color',$this->color,true);
 		$criteria->compare('speed',$this->speed,true);
 		$criteria->compare('gunReloadBonus',$this->gunReloadBonus,true);
-		$criteria->compare('gunBulletSpeedBonus',$this->gunBulletSpeedBonus);
+		$criteria->compare('gunBltSpeedBonus',$this->gunBltSpeedBonus);
 		$criteria->compare('powerReloadBonus',$this->powerReloadBonus);
-		$criteria->compare('powerAOEbonus',$this->powerAOEbonus);
-		$criteria->compare('powerEffectDurationTimeBonus',$this->powerEffectDurationTimeBonus);
+		$criteria->compare('powerAOEBonus',$this->powerAOEBonus);
+		$criteria->compare('powerEffectTimeBonus',$this->powerEffectTimeBonus);
 		$criteria->compare('HP',$this->HP);
 		$criteria->compare('Model',$this->Model);
 		$criteria->compare('weaponDamageBonus',$this->weaponDamageBonus);

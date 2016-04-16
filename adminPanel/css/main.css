@@ -57,7 +57,7 @@ body
 	padding: 18px 20px;
 	font-size: 200%;
     color: #BF7E1D;
-    width: 30%;
+    width: 300px;
     float: left;
 }
 
@@ -72,7 +72,7 @@ body
 {
     margin: 0 auto;
 	padding: 25px 20px 8px 20px;
-	margin: 0px;
+    width: 575px;
 }
 
 #mainmenu ul li
@@ -93,11 +93,10 @@ body
 
 #mainmenu ul li a:hover, #mainmenu ul li.active a
 {
-	color: #000;
-	background-color:#fff;
+	/*background-color:#fff; */
 	text-decoration:none;
-    border-top-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    border-bottom: 4px solid #BF7E1D;
+   
 }
 
 div.flash-error, div.flash-notice, div.flash-success
@@ -150,15 +149,16 @@ div.form .rememberMe label
 
 div.view
 {
-	padding: 10px;
+	padding: 15px;
 	margin: 10px 0;
-	border: 1px solid #C9E0ED;
+	border: 1px solid #e0e0e0;
+    border-radius: 4px;
 }
-
 div.breadcrumbs
 {
 	font-size: 0.9em;
 	padding: 5px 20px;
+   
 }
 
 div.breadcrumbs span
@@ -252,4 +252,19 @@ div.search-form {
     border-left: 5px solid #BF7E1D;
 	background: #f0f0f0;
     color: #000;
+}
+input{
+    padding: 7px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+}
+.formContainer{
+    margin: 0 auto;
+}
+.buttons > input{
+    background: white;
+}
+.buttons > input:hover{
+    cursor: pointer;
+    background: #e0e0e0;
 }

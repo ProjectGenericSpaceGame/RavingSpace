@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>'Create AttackWaves', 'url'=>array('create')),
 	array('label'=>'Update AttackWaves', 'url'=>array('update', 'id'=>$model->attackID)),
 	array('label'=>'Delete AttackWaves', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->attackID),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
+	//array('label'=>'Manage AttackWaves', 'url'=>array('admin')),
 );
 ?>
 

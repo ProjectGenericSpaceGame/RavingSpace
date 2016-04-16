@@ -2,6 +2,10 @@
 /* @var $this AssetsController */
 /* @var $model Assets */
 /* @var $form CActiveForm */
+
+/*create associate array*/
+$assocArr = array_combine($this->assetList,$this->assetList);
+$assocArr = array("empty"=>"")+$assocArr;
 ?>
 
 <div class="form">
@@ -25,21 +29,22 @@
 		<?php echo $form->error($model,'name'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row" id="assetField">
+		<img id="chosenAsset" src="" alt="">
 		<?php echo $form->labelEx($model,'asset'); ?>
-		<?php echo $form->textField($model,'asset',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->dropDownList($model,'asset',$assocArr); ?>
 		<?php echo $form->error($model,'asset'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'cacheKey'); ?>
-		<?php echo $form->textField($model,'cacheKey',array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->textField($model,'cacheKey',array('size'=>60,'maxlength'=>60)); ?>
 		<?php echo $form->error($model,'cacheKey'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'usedFor'); ?>
-		<?php echo $form->textField($model,'usedFor',array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->dropDownList($model,'usedFor',array('both'=>"Both",'menu'=>"Menu","game"=>"Game")); ?>
 		<?php echo $form->error($model,'usedFor'); ?>
 	</div>
 

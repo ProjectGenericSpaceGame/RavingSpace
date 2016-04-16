@@ -19,6 +19,8 @@ $this->serverImages = $jutska;
 
 <h1>Assets</h1>
 <button onclick="window.location.href='<?php echo Yii::app()->request->url;?>'">Reset All</button>
+<button onclick="window.location.href='<?php echo Yii::app()->request->baseUrl;?>/index.php?r=assets/create'">Add new asset</button>
+<button onclick="window.location.href='<?php echo Yii::app()->request->baseUrl;?>/index.php?r=assets/imageManager'">Manage server files</button>
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view'

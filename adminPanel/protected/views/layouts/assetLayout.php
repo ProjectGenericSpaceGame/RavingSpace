@@ -20,7 +20,9 @@
                 'items'=>$this->menu,
                 'htmlOptions'=>array('class'=>'operations'),
             ));*/
-            echo "<ul class='scanResultWrapper'>";print_r($this->serverImages);echo "</ul>";
+            if(count($this->serverImages) > 0){
+                echo "<ul class='scanResultWrapper'>";print_r($this->serverImages);echo "</ul>";
+            }
             $this->endWidget();
             ?>
         </div><!-- sidebar -->

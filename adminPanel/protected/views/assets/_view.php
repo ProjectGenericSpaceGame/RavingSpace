@@ -12,7 +12,7 @@
 			<input type="hidden" name="<?php echo CHtml::encode($data->getAttributeLabel('name')); ?>" value="<?php echo CHtml::encode($data->name); ?>">
 			<br />
 		</div>
-		<img src="../<?php echo CHtml::encode($data->asset); ?>" alt="assetPic">
+		<img src="../<?php echo CHtml::encode($data->asset); ?>" alt="assetPic" class="assetImg">
 
 		<div class="wrapper">
 			<b><?php echo CHtml::encode($data->getAttributeLabel('asset')); ?>:</b><br>
@@ -67,7 +67,8 @@
             			$("#yt"+currentIndex).parent().parent().find(".fa-pulse").show();
             			$("#yt"+currentIndex).parent().parent().find(".fa-check").hide();
         			}',
-					'complete' => 'function(){
+					'complete' => 'function(retVal){
+								
 								$("#yt"+currentIndex).parent().parent().find(".fa-pulse").hide();
 								$("#yt"+currentIndex).parent().parent().find(".fa-check").show();
 								var height = $("#yt"+currentIndex).parent().parent().find(".fa-check").css("font-size");

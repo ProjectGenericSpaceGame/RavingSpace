@@ -111,7 +111,7 @@ class PlayerDataController extends Controller
                 'gunReloadBonus' => $row->gunReloadBonus,
                 'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
                 'powerReloadBonus' => $row->powerReloadBonus,
-                'powerAOEbonus' => $row->powerAOEbonus,
+                'powerAOEbonus' => $row->powerAOEBonus,
                 'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
                 'HP' => $row->hp,
                 'Model' => $row->model,

@@ -54,9 +54,9 @@
 	<div class="clear"></div>
 
 	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by Virtuasity Inc<br/>
+		Copyright &copy; <?php echo date('Y'); ?> by Virtuasity Inc<br/
+		<?php echo Yii::powered(); ?>>
 		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
 	</div><!-- footer -->
 
 </div><!-- page -->

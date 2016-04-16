@@ -31,10 +31,16 @@
     margin-top:10px;
     margin-bottom:5px;
 }
-.assetBlock img {
+.assetImg {
     display:block;
     margin:0 auto;
     height:75px;
+}
+.serverImg {
+    display:block;
+    margin:0 auto;
+    max-height:75px;
+    max-width:100%;
 }
 .assetBlock input[type=text]{
     width:75%;
@@ -68,4 +74,13 @@
 #chosenAsset {
     max-width: 160px;
     max-height: 130px;
+}
+#displayChosenImg{
+    max-width:100px;
+    max-height:75px;
+    margin:15px;
+    display:block;
+}
+.uploaderH1{
+    margin-top:25px;
 }

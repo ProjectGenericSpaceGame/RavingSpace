@@ -38,7 +38,7 @@ class AssetsController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','ajaxUpdateSingle'),
+				'actions'=>array('admin','delete','ajaxUpdateSingle','imageManager','ajaxUpdateImage','imageUploader'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -83,7 +83,95 @@ class AssetsController extends Controller
 			'imageList'=>$jutska
 		));
 	}
+	/*
+	 Renders server image manager
+	If image was set to be removed, removes image
+	*/
+	public function actionImageManager(){
+		
+		if(isset($_POST["nukeImg"])){
+			unlink("../".$_POST["imageName"]);
+		}
 
+		$noHTML = array();
+		$jutska = $this->dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
+		$dataProvider=new CArrayDataProvider($noHTML,array(
+			'id'=>'serverImages',
+			'keyField'=>false,
+			'pagination'=>false
+		));
+		$this->render('imageManager',array(
+			'imageList'=>$noHTML,
+			'dataProvider'=>$dataProvider
+		));
+	}
+	/*
+	 * Renders uploading subview
+	 * Uploads image to server if such image is given
+	 */
+	public function actionImageUploader(){
+		$error = "";
+		$success = "";
+		if(isset($_FILES["fileToUpload"]) && isset($_POST["directory"])){
+			if(count($_FILES) == 1){
+				$fileNameParts = pathinfo($_FILES['fileToUpload']['name']);
+				if($fileNameParts["extension"] == "jpg" || $fileNameParts["extension"] == "png"){
+					$imagename = $_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets/".$_POST["directory"]."/".$fileNameParts["filename"].".".$fileNameParts["extension"];
+					if(!file_exists($imagename)){
+						if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $imagename)) {
+							$success = "success";
+						} else {
+							$error = "Something went wrong while uploading";
+						}
+					} else {
+						$error = "File with this name already exists!";
+					}
+
+				} else {
+					$error = "Wrong format in picture";
+				}
+			} else {
+				$error = "Too many files, only one allowed";
+			}
+
+		} else {
+			$error = "";
+		}
+
+		$dirs = $this->mapDirs($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets");
+		$htmlized = "<ul>";/*form is build in view*/
+		/*array_shift($dirs);*/
+		function HTMLize($dir,$htmlized){
+			if(count($dir)> 0){
+				$htmlized .= "<ul>";
+			}
+			foreach($dir as $key => $value){
+				$htmlized .= "<input type='radio' name='directory' value='$key'>$key<br>";
+				$htmlized = HTMLize($value,$htmlized);
+			}
+			if(count($dir)> 0){
+				$htmlized .= "</ul>";
+			}
+			return $htmlized;
+		}
+		foreach($dirs as $key => $value){
+			$htmlized .= "<input type='radio' name='directory' value='$key'>$key<br>";
+			$htmlized = HTMLize($value,$htmlized);
+		}
+		$htmlized .= "</ul>";
+		/*for($i = 0;$i<substr_count($htmlized,"<ul>");$i++){
+			$htmlized .= "</ul>";
+		}*/
+		/*foreach($dirs as $key=>$val){
+			$htmlized .= $key."-JA-";
+		}*/
+
+		$this->render('imageUploader',array(
+			'dirList'=>$htmlized,
+			'error'=>$error,
+			'success'=>$success,
+		));
+	}
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -107,6 +195,23 @@ class AssetsController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 		));
+	}
+	/*Renames a picture*/
+	public function actionajaxUpdateImage(){
+		if(isset($_POST["imageName"]) && isset($_POST["fileName"])){
+			$path = explode("/",$_POST["imageName"]);
+			$oldName = array_pop($path);
+			$fixedFileName = implode("/",$path).'/'.$_POST["fileName"];
+			if(!(file_exists("../".$fixedFileName))){
+				if(rename("../".implode('/',$path).'/'.$oldName,"../".$fixedFileName)){/*TODO päivitä kentät formissa*/
+					echo "true";
+				} else {echo "../".implode("/",$path).'/'.$oldName."../".$fixedFileName;}
+			} else {
+				echo "exists";
+			}
+		} else {
+			echo "something is not right";
+		}
 	}
 	/*Saves asset block data*/
 	public function actionajaxUpdateSingle(){
@@ -210,6 +315,28 @@ class AssetsController extends Controller
 					}
 					$elem .= $imgname."' alt='".$imgname."' /><p>$imgname</p></li>";
 					$result[] = $elem;
+				}
+			}
+		}/*array_push($result,$noHTML);*/
+
+		return $result;
+	}
+	/*Similar to one above but maps only directories*/
+	public function mapDirs($dir){
+		$result = array();
+		$cdir = scandir($dir);
+		foreach ($cdir as $key => $value)
+		{
+			if (!in_array($value,array(".","..")))
+			{
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
+				{
+					$result[$value] = array();
+					$result[$value] = $this->mapDirs($dir . DIRECTORY_SEPARATOR . $value);
+				}
+				else
+				{
+					/*Do nothing as we don't wan't files*/
 				}
 			}
 		}/*array_push($result,$noHTML);*/

@@ -15,7 +15,8 @@ $this->menu=array(
 ?>
 
 <h1>Create Assets</h1>
-
+<button onclick="window.location.href='<?php echo Yii::app()->request->baseUrl;?>/index.php?r=assets/'">Back</button>
+<button onclick="window.location.href='<?php echo Yii::app()->request->baseUrl;?>/index.php?r=assets/imageManager'">Manage server files</button>
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>
 <script>
 	document.addEventListener("DOMContentLoaded", function() {

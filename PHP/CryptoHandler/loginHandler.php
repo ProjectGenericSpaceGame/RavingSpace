@@ -12,6 +12,10 @@ $bcrypt = new Bcrypt(15);
 $userName = $_POST['userName'];
 $givenHash = $_POST['givenHash'];
 $newPassWord = $_POST['newPass'];
+
+
+
+
 if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
     require_once('../db-init.php');
 } else {

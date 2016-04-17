@@ -8,11 +8,6 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'player-data-form',
-    'enableClientValidation'=>true,
-    'clientOptions'=>array(
-        'validateOnSubmit'=>true,
-        'beforeValidate'=>'js:hashPassword',
-    ),
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// There is a call to performAjaxValidation() commented in generated controller code.
@@ -70,7 +65,7 @@
 	</div>
     
      <div class="row">
-		<?php echo $form->labelEx($ship,'gunReloadBonus'); ?>
+		<?php echo $form->labelEx($ship,'gunRelsoadBonus'); ?>
 		<?php echo $form->textField($ship,'gunReloadBonus'); ?>
 		<?php echo $form->error($ship,'gunReloadBonus'); ?>
 	</div>
@@ -118,7 +113,7 @@
 	</div>
     
 	   <div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('id' => 'form_submit') ); ?>
 	   </div>
     <?php $this->endWidget(); ?>
 
@@ -133,19 +128,21 @@
 
 $(document).ready(function(){
 
-        // create / update -painikkeet
-    hashPassword = function(){
+    $('#form_submit').click(function(ev) {
+        ev.preventDefault();
+        hashPassword();
+    });
+    function hashPassword(){
         var givenUserName = $('#PlayerData_playerID').val();
         var pass =  $('#PlayerData_passHash').val();
         var genSalt = getRandom();
         var saltyhash = pass + genSalt;
         var sh = hashPass(saltyhash)+genSalt;
         $('#PlayerData_passHash').val(sh);
-        alert('minä toimin. '+sh);
-        return true;
+        $('#player-data-form').submit();
     }
     // hankitaan uusi suola
-    getRandom = function(){
+    function getRandom(){
         var possible = "b8EFGHdefMNTUXYZVghiOC#%KaIJP)=?@56opAQRL&WtSjklmyncu/(\$\^\*vw34sxD79Bqrz012\!";
         var length = 10;
         var rnd = new Chance();
@@ -161,14 +158,12 @@ $(document).ready(function(){
         return randString;
     }
     // tiivistetään salasana
-    hashPass = function(pss){
+    function hashPass(pss){
         var shaObj = new jsSHA("SHA-512", "TEXT");
         shaObj.update(pss);
         var hash = shaObj.getHash("HEX");
         return hash;
-    }
-
-   
+    }  
 });
 
 </script>

@@ -115,11 +115,7 @@ class PlayerDataController extends Controller
             'ship'=>$ship
 		));
 	}
-    // hash the password before sending to db
-    public function hashPassword($password){
-        $bcrypt = new Bcrypt(15);
-        
-    }
+   
     public function getShipData($name){
         $username=$name;
         $connection=Yii::app()->db;

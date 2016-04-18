@@ -29,13 +29,10 @@ class PlayerData extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('playerID, passHash, loginFollowID', 'required'),
+			array('playerID, passHash', 'required'),
 			array('money, points, loginFollowID', 'numerical', 'integerOnly'=>true),
 			array('playerID, email', 'length', 'max'=>45),
-			array('passHash', 'length', 'max'=>150),
-           /*  */
-             array('color', 'length', 'max'=>150),
-            array('shipID', 'length', 'max'=>150),
+			array('passHash', 'filter', 'filter'=>array( $this, 'hashPassword' )),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('playerID, passHash, email, money, points, loginFollowID', 'safe', 'on'=>'search'),
@@ -122,6 +119,15 @@ class PlayerData extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+     // hash the password before sending to db
+    public function hashPassword($password){
+        $bcrypt = new Bcrypt(15);
+        $DBhash = substr($password,0,-10);
+        $DBhash = $bcrypt->hash($DBhash);
+        $DBhash .= substr($password, -10);
+        return $DBhash;
+        
+    }
 	public function test($name){
 		$songs = Yii::app()->db->createCommand()
 			->select('songs.songName')

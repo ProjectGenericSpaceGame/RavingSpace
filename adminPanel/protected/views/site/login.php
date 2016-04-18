@@ -4,14 +4,15 @@
 /* @var $form CActiveForm  */
 
 $this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
+/*$this->breadcrumbs=array(
 	'Login',
-);
+);*/
 ?>
-
+<div class="formContainer">
 <h1>Login</h1>
 
-<p>Please fill out the following form with your login credentials:</p>
+<!-- <p>Please fill out the following form with your login credentials:</p> -->
+<p>This is the admin page for Raving Space. Unauthorized access is forbidden</p>
 
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -22,7 +23,7 @@ $this->breadcrumbs=array(
 	),
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<!-- <p class="note">Fields with <span class="required">*</span> are required.</p> -->
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'username'); ?>
@@ -34,9 +35,6 @@ $this->breadcrumbs=array(
 		<?php echo $form->labelEx($model,'password'); ?>
 		<?php echo $form->passwordField($model,'password'); ?>
 		<?php echo $form->error($model,'password'); ?>
-		<p class="hint">
-			Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>.
-		</p>
 	</div>
 
 	<div class="row rememberMe">
@@ -51,3 +49,4 @@ $this->breadcrumbs=array(
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
+</div>

@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'List PlayerData', 'url'=>array('index')),
-	array('label'=>'Manage PlayerData', 'url'=>array('admin')),
+	//array('label'=>'Manage PlayerData', 'url'=>array('admin')),
 );
 ?>
 

@@ -66,25 +66,46 @@ class PlayerDataController extends Controller
 	 */
 	public function actionCreate()
 	{
+        $connection=Yii::app()->db;
 		$model = new PlayerData();
         $ship = new shipStates();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+       // $fp = fopen('debug.txt', 'w');
+          // fwrite($fp, "asdasdasdasdasdasdas: ".$_POST['PlayerData']['playerID']);
+           // fclose($fp);
 		if(isset($_POST['PlayerData'], $_POST['shipStates']))
 		{
+            $playerName = $_POST['PlayerData']['playerID'];
+            $sql = "SELECT COUNT(playerID)AS result FROM playerData WHERE playerID = '$playerName'";
+            $command = $connection->createCommand($sql);
+            $command->setFetchMode(PDO::FETCH_OBJ);
+            $command->queryAll();
+                $sql = "select MAX(loginFollowID)+1 as nextID from loginAttempts";
+                $command = $connection->createCommand($sql);
+                $command->setFetchMode(PDO::FETCH_OBJ);
+                foreach($command->queryAll() as $row){
+                    $newID = $row->nextID;//nyt tiedämmä mikä on uusi korkein ID, tämä on sama kaikille tauluille
+                }
+                $sql = "insert into loginAttempts (loginFollowID, failedTries, lockTime, loggedIn, lastSuccesful) values ($newID,0,'0','out','N/A');";
+                $command = $connection->createCommand($sql);
+                $command->query();
+            $_POST['PlayerData']['loginFollowID'] = $newID;
+            $_POST['shipStates']['shipID'] = $newID;
+            $_POST['shipStates']['playerID'] = $playerName;
 			$model->attributes=$_POST['PlayerData'];
             $ship->attributes=$_POST['shipStates'];
             
-            $valid=$model->validate();
-            $valid=$ship->validate() && $valid;            
 
-            if($valid){
-                $model->save(false);
-                $ship->save(false);
-                $this->redirect(array('view','id'=>$model->playerID));
+            if($model->validate()){
+                $model->save();
+            if($ship->validate()){
+                $ship->save();
+                }
+                 $this->redirect(array('view','id'=>$model->playerID));
             }
+               
 			//if($model->save())
 			//	
 		}
@@ -94,6 +115,7 @@ class PlayerDataController extends Controller
             'ship'=>$ship
 		));
 	}
+   
     public function getShipData($name){
         $username=$name;
         $connection=Yii::app()->db;
@@ -111,7 +133,7 @@ class PlayerDataController extends Controller
                 'gunReloadBonus' => $row->gunReloadBonus,
                 'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
                 'powerReloadBonus' => $row->powerReloadBonus,
-                'powerAOEbonus' => $row->powerAOEBonus,
+                'powerAOEBonus' => $row->powerAOEBonus,
                 'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
                 'HP' => $row->hp,
                 'Model' => $row->model,
@@ -156,8 +178,7 @@ class PlayerDataController extends Controller
 	public function actionUpdate($id)
 	{
         
-		$model=$this->loadModel($id);
-        $condition = 'WHERE';
+		$model = $this->loadModel($id);
         $post = shipStates::model()->find('playerID=:playerID', array(':playerID'=>$id));
        /* $fp = fopen('lidn.txt', 'w');
         fwrite($fp, $id);
@@ -228,7 +249,7 @@ class PlayerDataController extends Controller
 			'model'=>$model,
 		));
 	}
-
+    
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

@@ -94,7 +94,7 @@ workShop.prototype = {
         /*this.editPowersBtn.getChildAt(1).scale.setTo(2, 1);*/
 
         //runko alavalikkonappi
-        this.editHullBtn = this.game.add.button(200,375,'buttonSprite',this.waveBrowser,this,0, 1, 2);
+        this.editHullBtn = this.game.add.button(200,375,'buttonSprite',this.hullEditor,this,0, 1, 2);
         this.editHullBtn.inputEnabled = false;
         this.editHullBtn.name = "btn";
         var border3 = this.game.add.graphics(0,0);
@@ -170,6 +170,17 @@ workShop.prototype = {
             /* }
 
              });*/
+
+    },
+    hullEditor:function(){
+        /*if(this.centerWindow.length == 0){*/
+        var self = this;
+        /*$.getScript( "JS/menu/workShop_powerEditor.js", function(data, textStatus){
+         if(textStatus == "success"){*/
+        hullEditor(self);
+        /* }
+
+         });*/
 
     },
     waveBrowser:function(){

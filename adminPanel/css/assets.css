@@ -49,6 +49,9 @@
 .fa-check{
     color:green!important;
 }
+.fa-times {
+    color:red!important;
+}
 .savingStatus{
     margin:0 auto;
 }

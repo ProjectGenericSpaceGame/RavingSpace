@@ -132,40 +132,56 @@ $(document).ready(function(){
     });
     // login -painike rekisteröitymisruudussa
     $('.register').click(function(){
-        $('#loader').css("display","block");
-        var givenUserName = $('.username-register').val();
-        var email = $('.email').val();
-        var check = checkRegisterInfo();
-        // tarkistetaan, että salanat ovat samat ja käyttäjänimeksi on syötetty jotain
-        if(check == true && givenUserName.length != 0){
-            var pass =  $('.password-register').val();
-            var genSalt = getRandom();
-            var saltyhash = pass + genSalt;
-            var sh = hashPass(saltyhash)+genSalt;
-            var checkUser = $.ajax({
+        if($('.register').find("#resetPass").length == 0){
+            $('#loader').css("display","block");
+            var givenUserName = $('.username-register').val();
+            var email = $('.email').val();
+            var check = checkRegisterInfo();
+            // tarkistetaan, että salanat ovat samat ja käyttäjänimeksi on syötetty jotain
+            if(check == true && givenUserName.length != 0){
+                var pass =  $('.password-register').val();
+                var genSalt = getRandom();
+                var saltyhash = pass + genSalt;
+                var sh = hashPass(saltyhash)+genSalt;
+                var checkUser = $.ajax({
                     method:"POST",
                     //sync:false,
                     url:"PHP/CryptoHandler/newUser.php",
                     data:{newPass:sh, playerName:givenUserName,location:window.location.href, email:email}
-            });
-            checkUser.done(function(returnValue){
-                if(returnValue == "success") {
-                    $('#loader').css("display","none");
-                    $('.signupDialog').css("display", "none");
-                    $('.loginDialog').css("display", "block");
-                    alert("registeration completed. Please Log in");
-                } else if(returnValue == "taken"){
-                    alert("This username was already taken!");
-                    $('#loader').css("display","none");
-                }
-                    
-            });
-            checkUser.fail(function(){
-                alert("database failure");               
-            });
-        } else {
-            $('#loader').css("display","none");
-            alert("please input valid user info");
+                });
+                checkUser.done(function(returnValue){
+                    if(returnValue == "success") {
+                        $('#loader').css("display","none");
+                        $('.signupDialog').css("display", "none");
+                        $('.loginDialog').css("display", "block");
+                        alert("registeration completed. Please Log in");
+                    } else if(returnValue == "taken"){
+                        alert("This username was already taken!");
+                        $('#loader').css("display","none");
+                    }
+
+                });
+                checkUser.fail(function(){
+                    alert("database failure");
+                });
+            } else {
+                $('#loader').css("display","none");
+                alert("please input valid user info");
+            }
+        }
+
+    });
+    $("#resetPass").click(function(e){
+        e.preventDefault();
+        var check = checkRegisterInfo();
+        if(check == true){
+            var pass =  $('.password-register').val();
+            var genSalt = getRandom();
+            var saltyhash = pass + genSalt;
+            var sh = hashPass(saltyhash)+genSalt;
+            $('.password-register').val(sh);
+            /*$("#resetForm").find("#hidden").val("sumthing");*/
+            $("#resetForm").submit();
         }
     });
     // kenttien tarkistus

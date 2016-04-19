@@ -32,7 +32,7 @@ class PlayerData extends CActiveRecord
 			array('playerID, passHash', 'required'),
 			array('money, points, loginFollowID', 'numerical', 'integerOnly'=>true),
 			array('playerID, email', 'length', 'max'=>45),
-			array('passHash', 'filter', 'filter'=>array( $this, 'hashPassword' )),
+			array('passHash', 'filter', 'filter'=>array($this, 'hashPassworder' )),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('playerID, passHash, email, money, points, loginFollowID', 'safe', 'on'=>'search'),
@@ -84,7 +84,6 @@ class PlayerData extends CActiveRecord
             'HP' => 'HP',
             'model' => 'Model',
             'weaponDamageBonus' => 'weaponDamageBonus',
-            'shipID' =>'shipID',
             
 		);
 	}
@@ -120,15 +119,19 @@ class PlayerData extends CActiveRecord
 		));
 	}
      // hash the password before sending to db
-    public function hashPassword($password){
+    public function hashPassworder($password){
         $bcrypt = new Bcrypt(15);
         $DBhash = substr($password,0,-10);
+		$len = strlen($DBhash);
         $DBhash = $bcrypt->hash($DBhash);
         $DBhash .= substr($password, -10);
+		$out = fopen("out.txt", "w");
+		fwrite($out, $password);
+		fclose($out);
         return $DBhash;
         
     }
-	public function test($name){
+	public function songs($name){
 		$songs = Yii::app()->db->createCommand()
 			->select('songs.songName')
 			->from('hasSongs')

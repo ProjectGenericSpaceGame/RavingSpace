@@ -136,12 +136,19 @@
 		$query = $db->prepare($select);
         $query->execute();
 	}
-    function updateShipGuns($playerName, $db, $shipStates,$money){
+    function updateShipStats($playerName, $db, $shipStates,$money,$usage){
         /** @var $db PDO */
         $loginFollowID = $_POST['loginFollowID'];
         $isIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
         if($isIn == "in") {
-            $correlationTable = array("gunDmgBoost"=>"gunDmgBonus","gunSpeedBoost"=>"gunBltSpeedBonus","gunReloadBoost"=>"gunReloadBonus");
+            //tietokannan kenttien ja pelin muuttujat ovat eri nimellä, joka korjataan alla olevalla.
+            if($usage == 6){
+                $correlationTable = array("gunDmgBoost"=>"gunDmgBonus","gunSpeedBoost"=>"gunBltSpeedBonus","gunReloadBoost"=>"gunReloadBonus");
+            } else if($usage == 7){
+                $correlationTable = array("powerReloadBonus"=>"powerReloadBonus","powerAOEBonus"=>"powerAOEBonus","powerEffectTime"=>"powerEffectTimeBonus");
+            } else if($usage == 8){
+                $correlationTable = array("HP"=>"HP","speed"=>"speed","color"=>"color","model"=>"model");
+            }
             $shipStates = json_decode($shipStates);
             //selvitetään ensiksi shipID
             $shipID = getFromDB("SELECT shipID FROM shipStates WHERE playerID = '$playerName'","shipID",$db);
@@ -149,7 +156,7 @@
             $toUpdate = "";
 
             foreach($shipStates as $state => $value){
-                // prepare must inside loop because column name changes...
+                // prepare must be inside loop because column name changes...
                 $query = $db->prepare("UPDATE shipStates SET $correlationTable[$state]=? WHERE shipID=?");
                 $query->execute(array($value, $shipID));
             }
@@ -158,36 +165,7 @@
             $query->execute();
         }
     }
-    function updateShipPowers($playerName, $db, $shipStates, $money){
-        $loginFollowID = $_POST['loginFollowID'];
-        $loggedIn = getFromDB("SELECT loggedIn FROM loginAttempts WHERE loginFollowID = $loginFollowID","loggedIn",$db);
-        if($loggedIn == "in") {
-            //tietokannan kenttien ja pelin muuttujat ovat eri nimellä, joka korjataan alla olevalla.  
-            $correlationTable = array("powerReloadBonus"=>"powerReloadBonus","powerAOEBonus"=>"powerAOEBonus","powerEffectTime"=>"powerEffectTimeBonus");
-            $shipStates = json_decode($shipStates);
-            //selvitetään ensiksi shipID
-            $shipID = getFromDB("SELECT shipID FROM shipStates WHERE playerID = '$playerName'","shipID",$db);
-            //Ja nyt päivitetään
-            $toUpdate = "";
-
-            foreach($shipStates as $state => $value){
-                // prepare must inside loop because column name changes...
-                $query = $db->prepare("UPDATE shipStates SET $correlationTable[$state]=? WHERE shipID=?");
-                $query->execute(array($value, $shipID));
-            }
-            $select = "UPDATE playerData set money = $money WHERE playerData.playerID = '$playerName'";
-            $query = $db->prepare($select);
-            $query->execute();
-        }
-        
-        /*$shipPowersStats = '"powers": {';
-            powerReloadBonus":'.$row["powerReloadBonus"].',';
-            powerAOEBonus":'.$row["powerAOEbonus"].',';
-            powerEffectTime":'.$row["powerEffectTimeBonus"].'}';
-            */
-        
-        
-    }
+   
     //tällä voimme varmistua käytön mukaan mitkä parametrin on asetettu, samalla voimme toteuttaa injektiotarkistukset näissä
     if($playerName == $_SESSION["playerName"]){
         $loginFollowID = $_POST['loginFollowID'];
@@ -209,14 +187,10 @@
             }
             else if($usage == 5){
                 logOff($returnObject,$db);
-            } else if($usage == 6){
+            } else if($usage == 6 || $usage == 7 || $usage == 8){
                 $shipStates = $_POST["shipStats"];
                 $money = $_POST["money"];
-                updateShipGuns($playerName,$db,$shipStates, $money);
-            } else if($usage == 7){
-                $shipStates = $_POST["shipStats"];
-                $money = $_POST["money"];
-                updateShipPowers($playerName,$db,$shipStates, $money);
+                updateShipStats($playerName,$db,$shipStates, $money,$usage);
             }
         }
         else {

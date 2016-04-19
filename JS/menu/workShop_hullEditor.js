@@ -275,11 +275,11 @@ function hullEditor(self){
                 self.playerRelatedData.playerData.money -= self.checkoutBtn.selected.price;
                 self.playerRelatedData.shipStats.hull[self.checkoutBtn.selected.name]  += self.checkoutBtn.selectedAdd;
                 var shipStat = JSON.stringify(self.playerRelatedData.shipStats.hull);
-              /*  var saveShipState = $.ajax({
+                var saveShipState = $.ajax({
                     method:"POST",
                     url:"PHP/SQLcontroller/updateData.php",
                     data:{
-                        usage:6,
+                        usage:8,
                         location:window.location.href,
                         loginFollowID: self.playerRelatedData.loginFollowID,
                         playerName:self.playerRelatedData.playerData.playerName,
@@ -292,7 +292,7 @@ function hullEditor(self){
                 });
                 saveShipState.fail(function(returndata){
                     alert("Couldn't create new wave, database unreachable");
-                });*/
+                });
                 money.text = self.playerRelatedData.playerData.money;
                 self.surroundings.menuheader.getChildAt(2).text = "Money: "+self.playerRelatedData.playerData.money;
                 hullEditor(self);

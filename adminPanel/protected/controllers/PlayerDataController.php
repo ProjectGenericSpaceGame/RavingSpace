@@ -42,10 +42,11 @@ class PlayerDataController extends Controller
     // get the ship data when viewing and/or editing a player
    
 	/*Poista test pasktat myöhemmin*/
-	public function getTest($model){
+	public function getSongs($model){
 		/*$val  = array("Song Name"=>$model->test($model->playerID));*/
 		$val = array();
-		foreach($model->test($model->playerID) as $row) {
+		/** @var PlayerData $model */
+		foreach($model->songs($model->playerID) as $row) {
 			array_push($val,array("label"=>$row["songName"]));
 		};
 		return $val;
@@ -97,11 +98,12 @@ class PlayerDataController extends Controller
 			$model->attributes=$_POST['PlayerData'];
             $ship->attributes=$_POST['shipStates'];
             
-
+			
+			
             if($model->validate()){
-                $model->save();
+                $model->save(false);
             if($ship->validate()){
-                $ship->save();
+                $ship->save(false);
                 }
                  $this->redirect(array('view','id'=>$model->playerID));
             }

@@ -258,14 +258,14 @@ mainGame.prototype = {
 
             //cursors
             if (this.cursors.up.isDown) {
-                this.ship.body.thrust(250);
+                this.ship.body.thrust(this.ship.speed);
                 this.shipTrail.forEach(function (em) {
                     em.emitParticle();
                     ///em.emitParticle();
                 });
             }
             else if (this.cursors.down.isDown) {
-                this.ship.body.reverse(250);
+                this.ship.body.reverse(this.ship.speed);
             }
             if (this.cursors.left.isDown) {
                 //tämä kohdistaa alukseen voimavektorin joka lasketaan aluksen kulman perusteella

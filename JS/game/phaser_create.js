@@ -96,6 +96,11 @@ gameLoad.prototype = {
         this.surroundings = surroundings;
     },
     create: function () {
+
+        /*Näitä käytetään koska tietokannan arvot ovat eri asteikolla kuin pelissä toimivat. Esim kannassa perus HP = 1000 kun taas pelissä 3000 joten oikea arvo on kantaHP+korrelaatio*/
+        var HPcorrelator = 2000;
+        var speedCorrelator = 150;
+
         //this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(this.start,this);
         this.game.input.keyboard.addKey(Phaser.Keyboard.BACKSPACE).onDown.add(this.back, this);
         var self = this;
@@ -321,7 +326,8 @@ gameLoad.prototype = {
         pickUpAbilities.getChildAt(2).kill();
         this.shipAccessories.add(pickUpAbilities);
         this.shipAccessories.pickUpStartSlotIndex = abilities.length;//tästä tiedetään mistä eteenpäin HUDissa on poimittu tehoste
-        this.ship.health = 3;
+        this.ship.health = (this.playerRelatedData.shipStats.hull.HP+2000)/HPcorrelator;
+        this.ship.speed = this.playerRelatedData.shipStats.hull.speed+speedCorrelator;
         this.ship.dying = false;
         this.ship.shield = false;
 

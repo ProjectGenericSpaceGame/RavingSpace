@@ -77,7 +77,7 @@ $this->widget('zii.widgets.CDetailView', array(
 ));
 echo "<h2 class='shipHeader'>Owned Songs</h2>";
 $this->widget('zii.widgets.CMenu', array(
-	'items'=>$this->getTest($model)
+	'items'=>$this->getSongs($model)
 ));
 
 ?>

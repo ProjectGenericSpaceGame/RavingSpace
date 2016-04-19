@@ -27,7 +27,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'passHash'); ?>
-		<?php echo $form->textField($model,'passHash',array('size'=>60,'maxlength'=>150)); ?>
+		<?php echo $form->textField($model,'passHash'); ?>
 		<?php echo $form->error($model,'passHash'); ?>
 	</div>
 
@@ -113,7 +113,7 @@
 	</div>
     
 	   <div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('id' => 'form_submit') ); ?>
+		<?php echo CHtml::Button($model->isNewRecord ? 'Create' : 'Save', array('id' => 'form_submit') ); ?>
 	   </div>
     <?php $this->endWidget(); ?>
 
@@ -131,6 +131,7 @@ $(document).ready(function(){
     $('#form_submit').click(function(ev) {
         ev.preventDefault();
         hashPassword();
+		$('#player-data-form').submit();
     });
     function hashPassword(){
         var givenUserName = $('#PlayerData_playerID').val();
@@ -139,7 +140,6 @@ $(document).ready(function(){
         var saltyhash = pass + genSalt;
         var sh = hashPass(saltyhash)+genSalt;
         $('#PlayerData_passHash').val(sh);
-        $('#player-data-form').submit();
     }
     // hankitaan uusi suola
     function getRandom(){

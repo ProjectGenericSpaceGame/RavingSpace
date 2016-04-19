@@ -27,7 +27,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'passHash'); ?>
-		<?php echo $form->textField($model,'passHash',array('size'=>60,'maxlength'=>150)); ?>
+		<?php echo $form->textField($model,'passHash',array('size'=>60)); ?>
 		<?php echo $form->error($model,'passHash'); ?>
 	</div>
 

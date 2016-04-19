@@ -40,7 +40,6 @@ class PlayerDataController extends Controller
 		);
 	}
     // get the ship data when viewing and/or editing a player
-   
 	/*Poista test pasktat myöhemmin*/
 	public function getSongs($model){
 		/*$val  = array("Song Name"=>$model->test($model->playerID));*/
@@ -49,6 +48,11 @@ class PlayerDataController extends Controller
 		foreach($model->songs($model->playerID) as $row) {
 			array_push($val,array("label"=>$row["songName"]));
 		};
+        /*$sql = "SELECT songName result FROM playerData WHERE playerID = '$playerName'";
+        foreach($command->queryAll() as $row){
+                $val['song'.$i] = $row->["songName"];
+                $i += 1;
+            } */
 		return $val;
 	}
 	/**
@@ -79,17 +83,17 @@ class PlayerDataController extends Controller
 		if(isset($_POST['PlayerData'], $_POST['shipStates']))
 		{
             $playerName = $_POST['PlayerData']['playerID'];
-            $sql = "SELECT COUNT(playerID)AS result FROM playerData WHERE playerID = '$playerName'";
+            $sql = "SELECT COUNT(playerID) AS result FROM playerData WHERE playerID = '$playerName'";
             $command = $connection->createCommand($sql);
             $command->setFetchMode(PDO::FETCH_OBJ);
             $command->queryAll();
-                $sql = "select MAX(loginFollowID)+1 as nextID from loginAttempts";
+                $sql = "SELECT MAX(loginFollowID)+1 as nextID from loginAttempts";
                 $command = $connection->createCommand($sql);
                 $command->setFetchMode(PDO::FETCH_OBJ);
                 foreach($command->queryAll() as $row){
                     $newID = $row->nextID;//nyt tiedämmä mikä on uusi korkein ID, tämä on sama kaikille tauluille
                 }
-                $sql = "insert into loginAttempts (loginFollowID, failedTries, lockTime, loggedIn, lastSuccesful) values ($newID,0,'0','out','N/A');";
+                $sql = "INSERT INTO loginAttempts (loginFollowID, failedTries, lockTime, loggedIn, lastSuccesful) values ($newID,0,'0','out','N/A');";
                 $command = $connection->createCommand($sql);
                 $command->query();
             $_POST['PlayerData']['loginFollowID'] = $newID;
@@ -98,12 +102,21 @@ class PlayerDataController extends Controller
 			$model->attributes=$_POST['PlayerData'];
             $ship->attributes=$_POST['shipStates'];
             
-			
-			
+
             if($model->validate()){
                 $model->save(false);
-            if($ship->validate()){
-                $ship->save(false);
+                if($ship->validate()){
+                    $ship->save(false);
+                }
+                   //Add basic gun for ship";
+                $sql = "insert into shipGuns(shipID,has) values($newID,'basic')";
+                $command = $connection->createCommand($sql);
+                $command->query();
+                //basic songs
+                for($i = 1;$i <= 4;$i++){
+                    $sql = "insert into hasSongs(playerID,songID) values('$playerName', '$i')";
+                    $command = $connection->createCommand($sql);
+                    $command->query();
                 }
                  $this->redirect(array('view','id'=>$model->playerID));
             }

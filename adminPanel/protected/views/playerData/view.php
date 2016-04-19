@@ -37,7 +37,7 @@ $this->widget('zii.widgets.CDetailView', array(
 echo "<h2 class='shipHeader'>ShipData</h2>";
 
 $name = $model->playerID;
-$shipdata = $this->getShipData($name);
+$shipdata = $this->getShipData($name);s
 $this->widget('zii.widgets.CDetailView', array(
     'data'=>$shipdata,
         'attributes'=>array(
@@ -75,9 +75,16 @@ $this->widget('zii.widgets.CDetailView', array(
            
         ),
 ));
+$songs = $this->getSongs($model);
 echo "<h2 class='shipHeader'>Owned Songs</h2>";
-$this->widget('zii.widgets.CMenu', array(
-	'items'=>$this->getSongs($model)
+$this->widget('zii.widgets.CDetailView', array(
+	'data'=>$songs,
+     'attributes'=>array(
+           'song0',
+           'song1',
+           'song2',
+           'song3',
+        ),
 ));
 
 ?>

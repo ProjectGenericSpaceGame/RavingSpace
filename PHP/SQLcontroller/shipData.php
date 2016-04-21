@@ -16,7 +16,7 @@ $playerName = $_SESSION['playerName'];
 /** @var PDO $db */
 $db = new DBcon();
 $db = $db->returnCon();
-$query = "SELECT * FROM shipstates WHERE playerID=:name";
+$query = "SELECT * FROM shipStates WHERE playerID=:name";
 $prepared = $db->prepare($query);
 $prepared->execute(array(":name"=>$playerName));
 $row = $prepared->fetch(PDO::FETCH_ASSOC);

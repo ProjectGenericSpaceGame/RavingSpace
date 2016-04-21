@@ -47,7 +47,7 @@
             <p class="passLabel">Password</p>
             <input class="password input password-login" type="password" value="" autocomplete="off"/>
 
-            <p class="forgot"><a href="forgotyourpass.html">Forgot your password or username?</a></p>
+            <p class="forgot"><a id="requestResetPass" href="forgotyourpass.html">Forgot your password or username?</a></p>
 
             <div class="loginCheck">
                 <p class="log">Login</p>
@@ -83,6 +83,22 @@
             <p class="log">Cancel</p>
         </div>
         
+    </div>
+	<!-- Salasanan nollausken pyyntö-->
+	<div class="requestResetDialog">
+            <h class="dialogHeader">Forgot your password?</h>
+            <div class="line"></div>
+            <p class="userLabel">Your email?</p>
+            <input class="username input username-login" id="resetEmail" type="text"/>
+            
+            <span class="capsLockWarning" style="display:none">CAPS LOCK is active</span>
+
+            <div class="resetBtn">
+                <p id="checkResetBtn" class="log">Send reset link</p>
+            </div>
+            <div class="cancelLogin resetBtn">
+                <p class="log out">Cancel</p>
+            </div>
     </div>
     <div class="infoDialog">
         <p class="infoText">You can only reset your password if you add your email. <br> Fields marked with * are mandatory</p>

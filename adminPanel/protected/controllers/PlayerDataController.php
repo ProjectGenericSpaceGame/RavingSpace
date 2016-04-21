@@ -40,7 +40,6 @@ class PlayerDataController extends Controller
 		);
 	}
     // get the ship data when viewing and/or editing a player
-	/*Poista test pasktat myöhemmin*/
 	public function getSongs($model){
 		/*$val  = array("Song Name"=>$model->test($model->playerID));*/
 		$val = array();
@@ -146,10 +145,10 @@ class PlayerDataController extends Controller
                 'Color' => $row->color,  
                 'Speed' => $row->speed,
                 'gunReloadBonus' => $row->gunReloadBonus,
-                'gunBulletSpeedBonus' => $row->gunBltSpeedBonus,
+                'gunBltSpeedBonus' => $row->gunBltSpeedBonus,
                 'powerReloadBonus' => $row->powerReloadBonus,
                 'powerAOEBonus' => $row->powerAOEBonus,
-                'powerEffectDurationTimeBonus' => $row->powerEffectTimeBonus,
+                'powerEffectTimeBonus' => $row->powerEffectTimeBonus,
                 'HP' => $row->hp,
                 'Model' => $row->model,
                 'weaponDamageBonus' => $row->gunDmgBonus,
@@ -204,9 +203,10 @@ class PlayerDataController extends Controller
 
        if(isset($_POST['PlayerData'], $_POST['shipStates']))
 		{
+			$_POST['shipStates']['playerID'] = $_POST['PlayerData']['playerID'];
 			$model->attributes=$_POST['PlayerData'];
             $ship->attributes=$_POST['shipStates'];
-            
+           
             $valid=$model->validate();
             $valid=$ship->validate() && $valid;            
 

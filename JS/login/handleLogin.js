@@ -19,12 +19,14 @@ $(document).ready(function(){
         if(other == "block"){
             $('.signupDialog').css("display","none");
         }
+		$(".requestResetDialog").css("display","none");
         $('.loginDialog').css("display","block");
     });
 
     $('.cancelLogin').click(function(){
         $('.loginDialog').css("display","none");
         $('.signupDialog').css("display","none");
+		$(".requestResetDialog").css("display","none");
     });
     
     $('.loginCheck').click(function(){
@@ -171,6 +173,7 @@ $(document).ready(function(){
         }
 
     });
+	//tämä pätkä on saliksen nollaussivulle:
     $("#resetPass").click(function(e){
         e.preventDefault();
         var check = checkRegisterInfo();
@@ -183,6 +186,35 @@ $(document).ready(function(){
             /*$("#resetForm").find("#hidden").val("sumthing");*/
             $("#resetForm").submit();
         }
+    });
+	//Kun käyttäjä painaa unohtaneensa saliksen
+	$("#requestResetPass").click(function(e){
+		e.preventDefault();
+        $('.loginDialog').css("display","none");
+        $('.signupDialog').css("display","none");
+		$(".requestResetDialog").css("display","block");
+		
+	});
+    //Annettuuaa spostin edellisessissä
+    $(".resetBtn").click(function(){
+         var generateResetLink = $.ajax({
+             method:"POST",
+             //sync:false,
+             url:"PHP/SQLcontroller/sendResetLink.php",
+             data:{email:$("#resetEmail").val(), location:window.location.href}
+         });
+        generateResetLink.done(function(returnValue){
+            var returns = JSON.parse(returnValue);
+            if(returns[0] == "success") {
+                alert("Email sent! File can be found at: "+returns[1]);
+            } else if(returnValue == "notfound"){
+                alert("Email sent!");
+            }
+
+        });
+        generateResetLink.fail(function(){
+            alert("database failure");
+        });
     });
     // kenttien tarkistus
     checkRegisterInfo = function(){
@@ -209,6 +241,7 @@ $(document).ready(function(){
         if(other == "block"){
             $('.loginDialog').css("display","none");
         }
+		$(".requestResetDialog").css("display","none");
         $('.signupDialog').css("display","block");
     });
 

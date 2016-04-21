@@ -47,7 +47,6 @@ function tryUpdate($data,$bcrypt,$db,$playerName){
     }
 
     $select .= 'WHERE playerID="'.$playerName.'"';
-    echo $select;
     $query = $db->prepare($select);
     $query->execute();
     $select = "SELECT passHash, email FROM playerData WHERE playerID='".$playerName."'";

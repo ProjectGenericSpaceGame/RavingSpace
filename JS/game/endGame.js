@@ -98,6 +98,7 @@ endGame.prototype = {
                 url:"PHP/SQLcontroller/updateData.php",
                 data:{
 					playerName:this.playerRelatedData.playerData.playerName,
+					loginFollowID: this.playerRelatedData.loginFollowID,
 					location:window.location.href,
                     attackLoot:this.attackLoot,
                     attackID:this.attackID,

@@ -51,8 +51,8 @@ class shipStates extends CActiveRecord{
 		$criteria->compare('powerAOEBonus',$this->powerAOEBonus);
 		$criteria->compare('powerEffectTimeBonus',$this->powerEffectTimeBonus);
 		$criteria->compare('HP',$this->HP);
-		$criteria->compare('Model',$this->Model);
-		$criteria->compare('weaponDamageBonus',$this->weaponDamageBonus);
+		$criteria->compare('Model',$this->model);
+		$criteria->compare('gunDmgBonus',$this->gunDmgBonus);
 		$criteria->compare('shipID',$this->shipID);
 
 		return new CActiveDataProvider($this, array(

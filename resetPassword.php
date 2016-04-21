@@ -11,8 +11,8 @@ $DBcon = new DBcon();
 $DBcon = $DBcon->returnCon();
 if(isset($_GET["id"]) && isset($_GET["name"])){
     $prepped = $DBcon->prepare("SELECT resetIdentifier, resetRequestDate
-        FROM loginattempts
-        WHERE loginFollowID = (SELECT loginFollowID FROM playerdata WHERE playerID = ?)");
+        FROM loginAttempts
+        WHERE loginFollowID = (SELECT loginFollowID FROM playerData WHERE playerID = ?)");
     $prepped->execute(array($_GET["name"]));
     $row = $prepped->fetch(PDO::FETCH_ASSOC);
     if($row["resetIdentifier"] == $_GET["id"] && $row["resetRequestDate"] > 0 && is_int($row["resetRequestDate"]) && time()-$row["resetRequestDate"] < 900){
@@ -27,18 +27,18 @@ if(isset($_GET["id"]) && isset($_GET["name"])){
             $DBhash .= substr($pass, -10);
             $prepped = $DBcon->prepare("UPDATE playerData SET passHash=? WHERE playerID=?");
             $prepped->execute(array($DBhash,$_GET["name"]));
-            $prepped = $DBcon->prepare("UPDATE loginAttempts SET resetIdentifier=NULL, resetRequestDate=NULL WHERE loginFollowID=(SELECT loginFollowID FROM playerdata WHERE playerID = ?)");
+            $prepped = $DBcon->prepare("UPDATE loginAttempts SET resetIdentifier=NULL, resetRequestDate=NULL WHERE loginFollowID=(SELECT loginFollowID FROM playerData WHERE playerID = ?)");
             $prepped->execute(array($_GET["name"]));
             header("Location: http://localhost:509/RavingSpace/index.php?msg=passResetSuccess");
             die();
         }
     } else {
-        header("Location: http://localhost:509/RavingSpace/index.php?msg=nobusinesshere");
+        header("Location: http://localhost:509/RavingSpace/index.php?msg=nobusinessherewat");
         die();
     }
 
 } else {
-    header("Location: http://localhost:509/RavingSpace/index.php?msg=nobusinesshere");
+    header("Location: http://localhost:509/RavingSpace/index.php?msg=nobusinessherewut");
     die();
 }
 ?>

@@ -93,7 +93,7 @@
 		$attackLoot = $_POST['attackLoot'];
 		$points = (integer)$_POST['points'];
         //haetaan aallon omistajan rahat päivitystä varten
-        $select = "SELECT playerID FROM attackWaves WHERE attackID = '$attackID'";
+        $select = "SELECT playerID FROM attackWaves WHERE attackID = $attackID";
         $query = $db->prepare($select);
         $query->execute();
         $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -115,7 +115,7 @@
             
         }
 		//päivitetään käytetyn aallon omistajan tiedot
-        $select = "UPDATE playerData SET money = $attackOwnerMoney WHERE playerID = '$playerName'";
+        $select = "UPDATE playerData SET money = $attackOwnerMoney WHERE playerID = '$attackOwner'";
         echo $select;
 		$query = $db->prepare($select);
         $query->execute();
@@ -128,6 +128,7 @@
         $select = "INSERT INTO highScores (score, date, playerID) VALUES ($score, '$date', '$playerName');";
         $query = $db->prepare($select);
         $query->execute();
+		echo "intersting..".$attackOwner."-JA-".$attackLoot."-JA-".$attackOwnerMoney;
     }
 	function logOff($returnObject,$db){
         /** @var $db PDO */

@@ -77,10 +77,10 @@ class PlayerData extends CActiveRecord
             'Color' => 'Color',  
             'Speed' => 'Speed',
             'gunReloadBonus' => 'gunReloadBonus',
-            'gunBulletSpeedBonus' => 'gunBulletSpeedBonus',
+            'gunBltSpeedBonus' => 'gunBltSpeedBonus',
             'powerReloadBonus' => 'powerReloadBonus',
             'powerAOEbonus' => 'powerAOEbonus',
-            'powerEffectDurationTimeBonus' => 'powerEffectDurationTimeBonus',
+            'powerEffectTimeBonus' => 'powerEffectTimeBonus',
             'HP' => 'HP',
             'model' => 'Model',
             'weaponDamageBonus' => 'weaponDamageBonus',
@@ -135,7 +135,7 @@ class PlayerData extends CActiveRecord
 		$songs = Yii::app()->db->createCommand()
 			->select('songs.songName')
 			->from('hasSongs')
-			->join('songs','songs.songID = hassongs.songID')
+			->join('songs','songs.songID = hasSongs.songID')
 			->where('playerID=:name');
 		$songs->setFetchMode(PDO::FETCH_BOTH);
 		$songs->bindParam(":name",$name, PDO::PARAM_STR);

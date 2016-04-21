@@ -1,0 +1,1 @@
+Tämä on kuvitteellinen lähtenyt sähköposti:You requested reset link for your Raving Space account. Follow the link below to reset your password:http://localhost:509/resetPassword.php?id=2629292867447780203286402165556556389598867544826077148021739149288837241863544575545319114094125794&name=testerAcc

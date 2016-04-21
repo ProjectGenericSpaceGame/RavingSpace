@@ -16,7 +16,7 @@ $newPassWord = $_POST['newPass'];
 
 
 
-if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/game.php"){
+if($_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/index.php" ||$_POST['location'] == "http://student.labranet.jamk.fi/~H3492/RavingSpace/"){
     require_once('../db-init.php');
 } else {
     require_once('../db-initDEV.php');

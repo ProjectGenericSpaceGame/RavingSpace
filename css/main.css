@@ -85,7 +85,7 @@ canvas{
     background-color: #cccccc;
 }
 
-.loginCheck, .register{
+.loginCheck, .register,.resetBtn{
     float: right;
     margin: 0 0 0 130px;
     width: 80px;
@@ -95,6 +95,7 @@ canvas{
     border-radius: 4px;
     background-color: #cccccc;
     float: left;
+    cursor: pointer;
 }
 
 .cancelLogin{
@@ -106,6 +107,13 @@ canvas{
     border-color: darkgray;
     border-radius: 4px;
     background-color: #cccccc;
+}
+.resetBtn {
+	height:50px!important;
+	width:100px!important;
+}
+.resetBtn .out{
+	padding-top: 10px;
 }
 
 .log{
@@ -119,7 +127,7 @@ canvas{
     border-color: #000000;
 }
 
-.loginDialog, .signupDialog{
+.loginDialog, .signupDialog, .requestResetDialog{
     opacity: 0.93;
     position: fixed;
     background-color: #f0f0f0;
@@ -164,6 +172,7 @@ canvas{
     margin: 10px 200px;
     float: left;
     font-size: 20px;
+	text-align: center;
 }
 
 .input{

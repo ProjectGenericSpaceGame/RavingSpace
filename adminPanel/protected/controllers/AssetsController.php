@@ -66,7 +66,13 @@ class AssetsController extends Controller
 	{
 		$model=new Assets;
 		$noHTML = array();
-		$jutska = $this->dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
+		$serverRoot = $_SERVER["DOCUMENT_ROOT"];
+		if(substr($serverRoot,-1) == "/"){
+			$dir = "/home/H3492/public_html/RavingSpace/assets";
+		} else{
+			$dir = "R:/RavingSpace/public_html/RavingSpace/assets";
+		}
+		$jutska = $this->dirToArray($dir,null,$noHTML);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -94,7 +100,13 @@ class AssetsController extends Controller
 		}
 
 		$noHTML = array();
-		$jutska = $this->dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
+		$serverRoot = $_SERVER["DOCUMENT_ROOT"];
+		if(substr($serverRoot,-1) == "/"){
+			$dir = "/home/H3492/public_html/RavingSpace/assets";
+		} else{
+			$dir = "R:/RavingSpace/public_html/RavingSpace/assets";
+		}
+		$jutska = $this->dirToArray($dir,null,$noHTML);
 		$dataProvider=new CArrayDataProvider($noHTML,array(
 			'id'=>'serverImages',
 			'keyField'=>false,
@@ -116,7 +128,13 @@ class AssetsController extends Controller
 			if(count($_FILES) == 1){
 				$fileNameParts = pathinfo($_FILES['fileToUpload']['name']);
 				if($fileNameParts["extension"] == "jpg" || $fileNameParts["extension"] == "png"){
-					$imagename = $_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets/".$_POST["directory"]."/".$fileNameParts["filename"].".".$fileNameParts["extension"];
+					$serverRoot = $_SERVER["DOCUMENT_ROOT"];
+					if(substr($serverRoot,-1) == "/"){
+						$dir = "/home/H3492/public_html/RavingSpace/assets/";
+					} else{
+						$dir = "R:/RavingSpace/public_html/RavingSpace/assets/";
+					}
+					$imagename = $dir.$_POST["directory"]."/".$fileNameParts["filename"].".".$fileNameParts["extension"];
 					if(!file_exists($imagename)){
 						if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $imagename)) {
 							$success = "success";
@@ -137,8 +155,13 @@ class AssetsController extends Controller
 		} else {
 			$error = "";
 		}
-
-		$dirs = $this->mapDirs($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets");
+		$serverRoot = $_SERVER["DOCUMENT_ROOT"];
+		if(substr($serverRoot,-1) == "/"){
+			$dir = "/home/H3492/public_html/RavingSpace/assets";
+		} else{
+			$dir = "R:/RavingSpace/public_html/RavingSpace/assets";
+		}
+		$dirs = $this->mapDirs($dir);
 		$htmlized = "<ul>";/*form is build in view*/
 		/*array_shift($dirs);*/
 		function HTMLize($dir,$htmlized){
@@ -249,8 +272,14 @@ class AssetsController extends Controller
 		$dataProvider=new CActiveDataProvider('Assets');
 		$noHTML = array();
 		//get all images in assets folder and build HTML element
-
-		$jutska = $this->dirToArray($_SERVER["DOCUMENT_ROOT"]."/RavingSpace/assets",null,$noHTML);
+		$serverRoot = $_SERVER["DOCUMENT_ROOT"];
+		if(substr($serverRoot,-1) == "/"){
+			$dir = "/home/H3492/public_html/RavingSpace/assets";
+		} else{
+			$dir = "R:/RavingSpace/public_html/RavingSpace/assets";
+		}
+		/*$dir = "../../".dirname(__FILE__);*/
+		$jutska = $this->dirToArray($dir,null,$noHTML);
 
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

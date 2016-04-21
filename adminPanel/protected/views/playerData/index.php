@@ -12,12 +12,15 @@ $this->menu=array(
 );
 ?>
 
-<h1>Player Datas</h1>
-
+<h1>PlayerData</h1>
+<form method="get">
+    <input type="search" class="searchField" placeholder="Search by playerID or email" name="search" value="<?=isset($_GET['search']) ? CHtml::encode($_GET['search']) : ''; ?>" />
+    <input type="submit" value="Search" />
+</form>
 <?php
   //  $data = new PlayerDataController;
     //$data->actionIndex();
-
+    
 
      $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

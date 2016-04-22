@@ -20,6 +20,10 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
+        <p><b>WaveData info</b></p>
+        <p>First 6 numbers are the ammount of enemies in the first round. Next 6 the ammount in the second and then the ammount on the third round</p>
+        <p>Ammount of each enemy in the round is marked with two numbers. First 2 numbers are for the Asteroid Destroyers, second 2 are for the Player Hunters and last 2 two are for Boss Shipz.</p>
+        <p>For examble <b>101010111111222222</b> means theres ten of each enemy in the first round, 11 of each in the second and 22 of each in the third.</p>
 		<?php echo $form->labelEx($model,'waveData'); ?>
 		<?php echo $form->textField($model,'waveData',array('size'=>18,'maxlength'=>18)); ?>
 		<?php echo $form->error($model,'waveData'); ?>

@@ -22,18 +22,19 @@ class shipStates extends CActiveRecord{
     }
     public function rules(){
         return array(
+            array('gunReloadBonus, gunBltSpeedBonus, powerReloadBonus, powerAOEBonus, powerEffectTimeBonus, gunDmgBonus, hp ','numerical', 'integerOnly'=>true),
             array('color', 'length', 'max'=>150),
             array('speed', 'length', 'max'=>150),
-            array('gunReloadBonus', 'length', 'max'=>150),
-            array('gunBltSpeedBonus', 'length', 'max'=>150),
-            array('powerReloadBonus', 'length', 'max'=>150),
-            array('powerAOEBonus', 'length', 'max'=>150),
-            array('powerEffectTimeBonus', 'length', 'max'=>150),
-            array('hp', 'length', 'max'=>150),
-            array('model', 'length', 'max'=>150),
-            array('gunDmgBonus', 'length', 'max'=>150),
-            array('shipID', 'length', 'max'=>150),
-            array('playerID', 'length', 'max'=>150),   
+            array('gunReloadBonus', 'length', 'max'=>15),
+            array('gunBltSpeedBonus', 'length', 'max'=>15),
+            array('powerReloadBonus', 'length', 'max'=>15),
+            array('powerAOEBonus', 'length', 'max'=>15),
+            array('powerEffectTimeBonus', 'length', 'max'=>15),
+            array('hp', 'length', 'max'=>15),
+            array('model', 'length', 'max'=>15),
+            array('gunDmgBonus', 'length', 'max'=>15),
+            array('shipID', 'length', 'max'=>15),
+            array('playerID', 'length', 'max'=>15),   
             //array('color', 'speed', 'gunReloadBonus', 'gunBulletSpeedBonus', 'powerReloadBonus', 'powerAOEbonus', 'powerEffectDurationTimeBonus', 'HP', 'Model', 'weaponDamageBonus', 'shipID', 'on'=>'search'),
         );
     }

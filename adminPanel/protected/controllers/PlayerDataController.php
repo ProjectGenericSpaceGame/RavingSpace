@@ -243,13 +243,26 @@ class PlayerDataController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	/*public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('PlayerData');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
-	}
+	}*/
+    public function actionIndex(){
+        $criteria = new CDbCriteria();
+
+        if(isset($_GET['search'])){
+            $query = $_GET['search'];
+            $criteria->compare('playerID', $query, true, 'OR');
+            $criteria->compare('email', $query, true, 'OR');
+        }
+        $dataProvider=new CActiveDataProvider("PlayerData", array('criteria'=>$criteria));
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
 
 	/**
 	 * Manages all models.

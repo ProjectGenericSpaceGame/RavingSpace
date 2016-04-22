@@ -7,7 +7,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-;(function($) {
+/*;(function($) {*/
 
 $.yii = {
 	version : '1.0',
@@ -49,4 +49,4 @@ $.yii = {
 	}
 };
 
-})(jQuery);
+/*})(jQuery);*/

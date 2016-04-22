@@ -7,7 +7,6 @@ class PlayerDataController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
 	/**
 	 * @return array action filters
 	 */
@@ -60,6 +59,7 @@ class PlayerDataController extends Controller
 	 */
 	public function actionView($id)
 	{
+		Yii::app()->getClientScript()->registerCoreScript('yii');
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -69,7 +69,7 @@ class PlayerDataController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
-	{
+	{	Yii::app()->getClientScript()->registerCoreScript('jquery');
         $connection=Yii::app()->db;
 		$model = new PlayerData();
         $ship = new shipStates();
@@ -232,6 +232,7 @@ class PlayerDataController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+		Yii::app()->getClientScript()->registerCoreScript('yii');
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

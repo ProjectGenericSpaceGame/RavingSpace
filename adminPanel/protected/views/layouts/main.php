@@ -32,7 +32,8 @@
 				//array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'Control players', 'url'=>array('/playerData/index', 'view'=>'about')),
 				array('label'=>'Control waves', 'url'=>array('/attackWaves/index')),
-				array('label'=>'Control guns and abilities', 'url'=>array('/henkilot/about')),
+				array('label'=>'Control guns','url'=>array('/weapons/index')),
+				array('label'=>'Control powers','url'=>array('/powers/index')),
 				array('label'=>'Control assets', 'url'=>array('/assets/index')),
 				/*array('label'=>'Control assets', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				*/array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)

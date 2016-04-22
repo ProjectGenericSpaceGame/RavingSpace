@@ -1,7 +1,8 @@
 <?php
 /* @var $this PlayerDataController */
 /* @var $model PlayerData */
-
+Yii::app()->getClientScript()->registerCoreScript('yii');
+Yii::app()->getClientScript()->registerCoreScript('yiitab');
 $this->breadcrumbs=array(
 	'Player Datas'=>array('index'),
 	$model->playerID,

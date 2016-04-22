@@ -1,7 +1,7 @@
 <?php /* @var $this Controller */ 
 require_once('../PHP/CryptoHandler/cryptoClass.php');
 $this->beginContent('//layouts/main'); ?>
-<script src="../JS/libs/jquery-1.11.2.min.js"></script>
+<!--<script src="../JS/libs/jquery-1.11.2.min.js"></script>-->
 <script src="../JS/libs/jssha/src/sha512.js"></script>
 <script src="../JS/libs/chance.js"></script>
 <div class="span-19">

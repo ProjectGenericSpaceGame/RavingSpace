@@ -126,12 +126,10 @@ class PlayerData extends CActiveRecord
 		$len = strlen($DBhash);
         $DBhash = $bcrypt->hash($DBhash);
         $DBhash .= substr($password, -10);
-		$out = fopen("out.txt", "w");
-		fwrite($out, $password);
-		fclose($out);
         return $DBhash;
         
     }
+    // this function is not used
     public function checkEmail($email){
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return "";    

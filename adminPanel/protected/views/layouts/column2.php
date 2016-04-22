@@ -1,5 +1,4 @@
-<?php /* @var $this Controller */ 
-require_once('../PHP/CryptoHandler/cryptoClass.php');
+<?php /* @var $this Controller */
 $this->beginContent('//layouts/main'); ?>
 <!--<script src="../JS/libs/jquery-1.11.2.min.js"></script>-->
 <script src="../JS/libs/jssha/src/sha512.js"></script>

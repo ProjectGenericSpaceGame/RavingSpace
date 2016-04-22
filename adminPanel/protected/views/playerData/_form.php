@@ -2,6 +2,7 @@
 /* @var $this PlayerDataController */
 /* @var $model PlayerData */
 /* @var $form CActiveForm */
+Yii::app()->getClientScript()->registerCoreScript('yii');
 ?>
 
 <div class="form">

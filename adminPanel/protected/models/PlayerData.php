@@ -36,7 +36,7 @@ class PlayerData extends CActiveRecord
             array('playerID, email', 'required'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('playerID, passHsh', 'safe', 'on'=>'search'),
+			array('playerID, passHash', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -121,7 +121,7 @@ class PlayerData extends CActiveRecord
 	}
      // hash the password before sending to db
     public function hashPassworder($password){
-        $bcrypt = new Bcrypt(15);
+		$bcrypt = new Bcrypt(15);
         $DBhash = substr($password,0,-10);
 		$len = strlen($DBhash);
         $DBhash = $bcrypt->hash($DBhash);

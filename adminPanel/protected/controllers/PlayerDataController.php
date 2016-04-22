@@ -68,8 +68,8 @@ class PlayerDataController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
-	{	Yii::app()->getClientScript()->registerCoreScript('jquery');
+	public function actionCreate(){
+		Yii::app()->getClientScript()->registerCoreScript('yii');
         $connection=Yii::app()->db;
 		$model = new PlayerData();
         $ship = new shipStates();
@@ -208,7 +208,7 @@ class PlayerDataController extends Controller
             $ship->attributes=$_POST['shipStates'];
            
             $valid=$model->validate();
-            $valid=$ship->validate() && $valid;            
+            $valid=$ship->validate() && $valid;
 
             if($valid){
                 $model->save(false);
